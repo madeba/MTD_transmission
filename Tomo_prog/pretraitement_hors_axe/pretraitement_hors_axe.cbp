@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="pretraitement_hors_axe" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/pretaitement_hors_axe" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/pretraitement_hors_axe" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-march=corei7-avx" />
+					<Add option="-O3" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions  -lpthread -std=c++11 `pkg-config --cppflags opencv`" />
+			<Add directory="/usr/include/opencv" />
+		</Compiler>
+		<Linker>
+			<Add option="`pkg-config --libs opencv` -lpthread -lm -lopencv_core -lopencv_imgproc" />
+			<Add option="-lopencv_highgui -ltiff -lgomp -lfftw3 -lm -lfftw3_threads" />
+			<Add library="/usr/lib/x86_64-linux-gnu/libfftw3.so" />
+			<Add library="/usr/lib/x86_64-linux-gnu/libfftw3_threads.so" />
+			<Add directory="/usr/lib/x86_64-linux-gnu/" />
+		</Linker>
+		<Unit filename="Correction_aberration.cpp" />
+		<Unit filename="Correction_aberration.h" />
+		<Unit filename="FFT_fonctions.cpp" />
+		<Unit filename="FFT_fonctions.h" />
+		<Unit filename="deroulement_herraez.cpp" />
+		<Unit filename="deroulement_herraez.h" />
+		<Unit filename="deroulement_volkov.cpp" />
+		<Unit filename="deroulement_volkov.h" />
+		<Unit filename="fonctions.cpp" />
+		<Unit filename="fonctions.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="manip.cpp" />
+		<Unit filename="manip.h" />
+		<Unit filename="projet.h" />
+		<Unit filename="src/vecteur.cpp" />
+		<Unit filename="src/vecteur.h" />
+		<Unit filename="struct.h" />
+		<Extensions>
+			<envvars />
+			<code_completion />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

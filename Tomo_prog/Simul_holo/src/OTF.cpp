@@ -1,0 +1,295 @@
+#include "OTF.h"
+#include "fonctions.h"
+#include <fstream>
+
+using namespace std;
+
+//OTF::OTF(manip m1):manipOTF(m1.dim_final),Obj3D::Obj3D(m1.dim_final)
+OTF::OTF(int dimROI, manip m1):manipOTF(dimROI),Valeur(pow(m1.dim_final,3))
+{
+
+    int nbPix=pow(m1.dim_final,3);
+    cout<<"OTf dimfinal="<<m1.dim_final<<endl;
+    cout<<"nbpix="<<nbPix<<endl;
+    for(size_t cpt=0;cpt<nbPix;cpt++)
+    {
+      Valeur[cpt].real(0);
+      Valeur[cpt].imag(0);
+    }
+}
+
+
+
+
+OTF::~OTF()
+{
+    //dtor
+}
+
+
+void OTF::retropropag(Point2D spec)
+{
+    int Nmax=manipOTF.NXMAX;
+    int dim_final=manipOTF.dim_final;
+    double fmcarre=pow(Nmax,2);
+   // cout<<"fmcarre="<<fmcarre<<endl;
+    double rcarre=pow(manipOTF.R_EwaldPix,2);
+    //cout<<"rcarre"<<rcarre<<endl;
+    if(rcarre-spec.x*spec.x-spec.y*spec.y<0)
+          cout<<"problème : ki imaginaire"<<endl;
+    Point3D ki(spec,round(sqrt(rcarre-spec.x*spec.x-spec.y*spec.y)),dim_final);
+    Point3D kobj(0,0,0,dim_final);
+    Point3D kd(0,0,0,dim_final);//dim espace erronée mais sinon problème soustraction
+
+        for(kd.x=-Nmax; kd.x<=Nmax; kd.x++){
+            for(kd.y=-Nmax; kd.y<=Nmax; kd.y++){
+                kd.z=round(sqrt(rcarre-(kd.x)*(kd.x)-(kd.y)*(kd.y)));
+                if(round(kd.x*kd.x)+round(kd.y*kd.y)<fmcarre){//le spectre est dans un disque de rayon NXMAX
+                    kobj=kd-ki;
+
+                    if(Valeur[kobj.coordI().cpt3D()].real()==0){
+                    Valeur[kobj.coordI().cpt3D()].real(1);
+                    Valeur[kobj.coordI().cpt3D()].imag(1);
+                    nbPixEff++;
+                    }
+                    else{
+                       // Valeur[kobj.coordI().cpt3D()].real(1+Valeur[kobj.coordI().cpt3D()].real());//supredon
+                        nbPixRedon++;
+                    }
+                }
+            }
+        }
+}
+
+
+void OTF::symetrize_xoy()
+{   int dimcarre=manipOTF.dim_final*manipOTF.dim_final;
+
+    for(int cpt=0;cpt<Valeur.size();cpt++){
+    int zi=cpt/(dimcarre), cpt2D=cpt-zi*dimcarre, yi=cpt2D/manipOTF.dim_final,xi=cpt2D%manipOTF.dim_final;
+
+   // cout<<"("<<xi<<","<<yi<<","<<zi<<")"<<endl;
+
+    Point3D k_orig(xi-manipOTF.dim_final/2,yi-manipOTF.dim_final/2,zi-manipOTF.dim_final/2,manipOTF.dim_final),
+    k_sym(xi-manipOTF.dim_final/2,yi-manipOTF.dim_final/2,-zi+manipOTF.dim_final/2,manipOTF.dim_final);
+    int cpt3D=k_sym.coordI().cpt3D();
+
+    if(cpt3D>Valeur.size())
+     {
+    /* cout<<"cpt="<<cpt<<endl;
+     cout<<"(xi,yi,zi)=("<<xi<<","<<yi<<","<<zi<<")"<<endl;
+     cout<<"(x,y,z)=("<<xi-dim_finale3D/2<<","<<yi<<","<<zi<<")"<<endl;
+     cout<<"(xsym,ysym,zsym)=("<<xi-dim_finale3D/2<<","<<yi-dim_finale3D/2<<","<<-zi+dim_finale3D/2<<")"<<endl;
+ cout<<"cpt3D="<<cpt3D<<endl;*/
+    }
+    if(Valeur[cpt].real()!=0)
+        Valeur[k_sym.coordI().cpt3D()].real(1);
+    }
+   // SAVCplx(Valeur,"Re","/home/mat/tomo_test/otf_sym__Re.bin",t_float,"wb");
+    SAV3D_Tiff(Valeur,"Re","/home/mat/tomo_test/otf_sym__Re.tif",1);
+}
+
+void OTF::bMultiCercleUNI(int nb_cercle)
+{
+    int Nmax_cond=manipOTF.NXMAX_cond;
+    int dim_Uborn=manipOTF.dim_Uborn;
+    double rcarre=pow(Nmax_cond,2);
+    vector<double> centre(dim_Uborn*dim_Uborn,0);
+    Point2D spec(0,0,dim_Uborn);
+    double longTot=0;
+    int nbSpec=0;
+
+    //calculer la longueur totale des périmètres des cercles
+    for(double R_cercle=0; R_cercle<Nmax_cond+1;R_cercle=R_cercle+Nmax_cond/nb_cercle){
+    cout<<"R_cercle="<<R_cercle<<endl;
+    longTot=longTot+2*M_PI*R_cercle;
+    }
+    cout<<"longueur totale="<<longTot<<endl;
+    cout<<"Nmax_cond="<<Nmax_cond<<endl;
+    for(double R_cercle=Nmax_cond-5; R_cercle>0; R_cercle=R_cercle-Nmax_cond/nb_cercle)
+    {
+    double perimetre=2*M_PI*R_cercle;
+
+     int nb_ki=round(manipOTF.nbHolo*perimetre/longTot);
+     cout<<"nb_ki=="<<nb_ki<<endl;
+    for(double theta=0;theta<=2*M_PI;theta=theta+2*M_PI/nb_ki)
+       {
+        spec.x=round(R_cercle*cos(theta));
+        spec.y=round((R_cercle*sin(theta)));
+        if(spec.x*spec.x+spec.y*spec.y<rcarre){
+        centre[spec.coordI().cpt2D()]=1;
+        retropropag(spec);
+        nbSpec++;
+        }
+       }
+    }
+    spec.x=0,spec.y=0;
+    centre[spec.coordI().cpt2D()]=1;
+    retropropag(spec);
+
+//SAVCplx(Valeur,"Re","/home/mat/tomo_test/otf_Re.bin",t_float,"wb");
+SAV2(centre,"/home/mat/tomo_test/centre.bin",t_float,"wb");
+}
+
+void OTF::bCercle(int pourcentage_NA)
+{
+    int Nmax=manipOTF.NXMAX;
+    int dim_Uborn=manipOTF.dim_Uborn;
+    double rcarre=Nmax*Nmax;
+    vector<double> centre(dim_Uborn*dim_Uborn,0);
+    Point2D spec(0,0,dim_Uborn);
+    int nbSpec=0;
+    double R_cercle=round(Nmax*pourcentage_NA/100);
+    double perimetre=2*M_PI*R_cercle;
+
+
+    for(double theta=0;theta<=2*M_PI;theta=theta+2*M_PI/manipOTF.nbHolo)
+       {
+        spec.x=round(R_cercle*cos(theta));
+        spec.y=round((R_cercle*sin(theta)));
+        if(spec.x*spec.x+spec.y*spec.y<rcarre){
+        centre[spec.coordI().cpt2D()]=1;
+        retropropag(spec);
+        nbSpec++;
+        }
+       }
+SAV3D_Tiff(Valeur,"Re","/home/mat/tomo_test/otf.tif",1);
+//SAVCplx(Valeur,"Re","/home/mat/tomo_test/otf_Re.bin",t_float,"wb");
+SAV2(centre,"/home/mat/tomo_test/centre.bin",t_float,"wb");
+}
+
+
+void OTF::bDblSpiral()
+{
+    int Nmax=manipOTF.NXMAX;
+    int dim_Uborn=manipOTF.dim_Uborn;
+ vector<double> centre(dim_Uborn*dim_Uborn,0);
+ double a=4,rho=0;///amplification du rayon polaire rho par raport à l'angle, rayon polaire
+ Point2D spec(0,0,dim_Uborn),spec_anti(0,0,dim_Uborn);
+ double rayon_float=Nmax;
+ double theta_m=Nmax/a;
+ double rcarre=Nmax*Nmax;
+ double L=a/2*(log(theta_m+sqrt(theta_m*theta_m+1))+theta_m*sqrt(theta_m*theta_m+1));
+int nbSpec=0;
+
+ // for(double theta=0;theta<=theta_m;theta=theta+12*M_PI/(round(nbHolo/2)))
+ for(double theta=0;theta<=theta_m;theta=theta+2*L/(a*manipOTF.nbHolo*sqrt(theta*theta+1)))
+  {
+      rho=a*theta;
+     // cout<<"rho="<<rho<<endl;
+      spec.x=round(rho*cos(theta));
+      spec.y=round((rho*sin(theta)));
+      spec_anti.x=-round(rho*cos(theta));
+      spec_anti.y=-round(rho*sin(theta));
+
+    if(spec.x*spec.x+spec.y*spec.y<rcarre){
+        centre[spec.coordI().cpt2D()]=1;
+        centre[spec_anti.coordI().cpt2D()]=1;
+        retropropag(spec);
+        retropropag(spec_anti);
+        nbSpec++;
+    }
+  }
+//cout<<"nbspec="<<2*nbSpec<<endl;
+SAVCplx(Valeur,"Re","/home/mat/tomo_test/otf_Re.bin",t_float,"wb");
+SAV2(centre,"/home/mat/tomo_test/centre.bin",t_float,"wb");
+}
+
+void OTF::bSpiral(){
+    int Nmax=manipOTF.NXMAX;
+    int dim_Uborn=manipOTF.dim_Uborn;
+ vector<double> centre(dim_Uborn*dim_Uborn,0);
+ double a=2,rho=0,theta_m=Nmax/a;///amplification du rayon polaire rho par rapport à l'angle, rayon polaire
+ Point2D spec(0,0,dim_Uborn);
+double fmcarre=Nmax*Nmax;
+ int nbSpec=0;
+
+ double L=a/2*(log(theta_m+sqrt(theta_m*theta_m+1))+theta_m*sqrt(theta_m*theta_m+1));
+  //for(double theta=0;theta<rayon/a;theta=theta+Nmax/(a*nbHolo)){
+cout<<"Longueur spirale="<<L<<endl;
+cout<<"nombre de spires="<<Nmax/(2*a*M_PI)<<endl;
+nbPixEff=0;
+nbPixRedon=0;
+  for(double theta=0.01;theta<theta_m;theta=theta+L/(a*manipOTF.nbHolo*sqrt(theta*theta+1))){
+   // cout<<"theta="<<theta<<endl;
+   // cout<<"delta_theta="<<Nmax*Nmax/(a*a*nbHolo*theta)<<endl;
+    rho=a*theta;
+    spec.x=round(rho*cos(theta));
+    spec.y=round((rho*sin(theta)));
+
+    if(spec.x*spec.x+spec.y*spec.y<fmcarre){
+        centre[spec.coordI().cpt2D()]=1;
+        retropropag(spec);
+        nbSpec++;
+        }
+  }
+
+cout<<"nbSpec="<<nbSpec<<endl;
+SAVCplx(Valeur,"Re","/home/mat/tomo_test/otf_Re.bin",t_float,"wb");
+SAV2(centre,"/home/mat/tomo_test/centre.bin",t_float,"wb");
+}
+
+
+void OTF::bSpiralNU(){
+int Nmax=manipOTF.NXMAX;
+    int dim_Uborn=manipOTF.dim_Uborn;
+ vector<double> centre(dim_Uborn*dim_Uborn,0);
+ double a=2,rho=0,theta_m=Nmax/a;///amplification du rayon polaire rho par raport à l'angle, rayon polaire
+ Point2D spec(0,0,dim_Uborn);
+ double rcarre=Nmax*Nmax;
+ int nbSpec=0;
+
+ double L=a/2*(log(theta_m+sqrt(theta_m*theta_m+1))+theta_m*sqrt(theta_m*theta_m+1));
+  //for(double theta=0;theta<rayon/a;theta=theta+Nmax/(a*nbHolo)){
+cout<<"Longueur spirale="<<L<<endl;
+cout<<"nombre de spires="<<Nmax/(2*a*M_PI)<<endl;
+  ofstream myfile;
+  myfile.open ("spiral_uni_400.txt");
+  for(double theta=0.01;theta<theta_m;theta=theta+theta_m/manipOTF.nbHolo){
+   // cout<<"theta="<<theta<<endl;
+   // cout<<"delta_theta="<<Nmax*Nmax/(a*a*nbHolo*theta)<<endl;
+    rho=a*theta;
+    spec.x=(rho*cos(theta));
+    spec.y=((rho*sin(theta)));
+
+    if(spec.x*spec.x+spec.y*spec.y<rcarre){
+    myfile<<"x "<<spec.x<<", y "<<spec.y<<endl;
+        centre[spec.coordI().cpt2D()]=nbSpec;
+        retropropag(spec);
+        nbSpec++;
+        }
+  }
+myfile.close();
+//cout<<"nbSpec="<<nbSpec<<endl;
+SAVCplx(Valeur,"Re","/home/mat/tomo_test/otf_Re.bin",t_float,"wb");
+SAV2(centre,"/home/mat/tomo_test/centre.bin",t_float,"wb");
+}
+
+void OTF::bFleur(){
+int Nmax=manipOTF.NXMAX;
+int dim_Uborn=manipOTF.dim_Uborn;
+vector<double> centre(dim_Uborn*dim_Uborn,0);
+size_t nb=4;///controle du nombre de branches
+Point2D spec(0,0,dim_Uborn);
+//cout<<"Nxmax====="<<Nmax<<endl;
+double rcarre=Nmax*Nmax;
+int nbSpec=0;
+
+for(double theta=0;theta<2*M_PI;theta=theta+2*M_PI/manipOTF.nbHolo){
+         spec.x=round(Nmax*cos(nb*theta)*cos(theta));
+         spec.y=round(Nmax*cos(nb*theta)*sin(theta));//arrondi trop tot?
+
+        if(spec.x*spec.x+spec.y*spec.y<=rcarre){
+            nbSpec++;
+            centre[spec.coordI().cpt2D()]=1;
+            retropropag(spec);
+        }
+    }
+SAVCplx(Valeur,"Re","/home/mat/tomo_test/otf_Re.bin",t_float,"wb");
+SAV2(centre,"/home/mat/tomo_test/centre.bin",t_float,"wb");
+//cout<<"nbspec="<<nbSpec<<endl;
+}
+
+
+
+

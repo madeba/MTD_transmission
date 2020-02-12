@@ -1,0 +1,68 @@
+# -*- mode: shell-script -*-
+# taille de la fenêtre de découpe
+CCD_DIMX 1024
+CCD_DIMY 1024
+#thread FFTW
+FFTW_THREADS 3
+#Deroulement de phase/phase unwrapping on/off 
+DEROUL 1
+#Volkov=1, Herraez =0
+VOLKOV 1
+#Correction abberation/aberration correction on/off
+C_ABER 1
+#Born=1, Rytov=0
+BORN 1
+
+# -----------------------------
+
+PREMIER_ANGLE 0
+NB_HOLO_RECON 400
+# -----------------------------
+DIM_FINAL 512
+GERCHBERG 1
+EXPORT_OTF 1
+DELTA_NMAX 0.50
+DELTA_NMIN -0.50
+KAPPA_MIN 0.00
+KAPPA_MAX 100000.00
+NB_ITER_GPS 50
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

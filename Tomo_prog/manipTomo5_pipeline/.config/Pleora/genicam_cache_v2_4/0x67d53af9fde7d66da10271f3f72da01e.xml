@@ -1,0 +1,764 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?><RegisterDescription MajorVersion="1" MinorVersion="0" ModelName="ModelName" ProductGuid="CB9328DB-1273-42a3-90C7-EB3224537C39" SchemaMajorVersion="1" SchemaMinorVersion="1" SchemaSubMinorVersion="1" StandardNameSpace="GEV" SubMinorVersion="0" ToolTip="Model Description" VendorName="VendorName" VersionGuid="321DAFF5-A243-42ae-8B5D-B5BD18C31488">
+	
+		<Category Name="Root" NameSpace="Custom">
+			<pFeature>Communication</pFeature>
+			<pFeature>Heartbeat</pFeature>
+			<pFeature>Connection</pFeature>
+			<pFeature>Statistics</pFeature>
+			<pFeature>StreamingPacketSize</pFeature>
+			<pFeature>DeviceGenICamXMLAccess</pFeature>
+			<pFeature>Recovery</pFeature>
+			<pFeature>Internal</pFeature>
+		<IsFeature>Yes</IsFeature></Category>
+	
+	
+		<Category Name="Communication" NameSpace="Custom">
+			<DisplayName>Communication</DisplayName>
+			<pFeature>AnswerTimeout</pFeature>
+			<pFeature>CommandRetryCount</pFeature>
+			<pFeature>DefaultMCTT</pFeature>
+			<pFeature>DefaultMCRC</pFeature>
+		<pDependent>Root</pDependent><IsFeature>Yes</IsFeature></Category>
+		<Integer Name="AnswerTimeout" NameSpace="Custom">
+			<ToolTip>Time the GigE Vision Device can take for responding to a command from the application.</ToolTip>
+			<Description>Time the GigE Vision Device can take for responding to a command from the application.</Description>
+			<DisplayName>Answer Timeout</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<Streamable>Yes</Streamable>
+			<pValue>AnswerTimeoutReg</pValue>
+			<Min>1</Min>
+			<Max>32767</Max>
+			<Inc>1</Inc>
+			<Representation>Linear</Representation>
+		<pDependent>Communication</pDependent><pDependent>Root</pDependent><pTerminal>AnswerTimeoutReg</pTerminal><IsFeature>Yes</IsFeature></Integer>
+		<IntReg Name="AnswerTimeoutReg" NameSpace="Custom">
+			<Address>0xE800</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>Communication</pDependent><pDependent>AnswerTimeout</pDependent><pDependent>Root</pDependent><pTerminal>AnswerTimeoutReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<Integer Name="CommandRetryCount" NameSpace="Custom">
+			<ToolTip>Number of times a command is attempted before it is considered as failed.</ToolTip>
+			<Description>Number of times a command is attempted before it is considered as failed.</Description>
+			<DisplayName>Command Retry Count</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<Streamable>Yes</Streamable>
+			<pValue>CommandRetryCountReg</pValue>
+			<Min>1</Min>
+			<Max>255</Max>
+			<Inc>1</Inc>
+			<Representation>Linear</Representation>
+		<pDependent>Communication</pDependent><pDependent>Root</pDependent><pTerminal>CommandRetryCountReg</pTerminal><IsFeature>Yes</IsFeature></Integer>
+		<IntReg Name="CommandRetryCountReg" NameSpace="Custom">
+			<Address>0xE804</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>Communication</pDependent><pDependent>CommandRetryCount</pDependent><pDependent>Root</pDependent><pTerminal>CommandRetryCountReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<Integer Name="DefaultMCTT" NameSpace="Custom">
+			<ToolTip>Value written to the message channel transmission timeout register (MCTT) at the time of connection</ToolTip>
+			<Description>Value written to the message channel transmission timeout register (MCTT) at the time of connection. The MCTT is the amount of time (in milliseconds) the GigE Vision device must wait before either timing out or receiving acknowledgment for a message (interrupt).</Description>
+			<DisplayName>Default MCTT</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pIsLocked>Connected</pIsLocked>
+			<Streamable>Yes</Streamable>
+			<pValue>DefaultMCTTReg</pValue>
+			<Min>0</Min>
+			<Max>65535</Max>
+			<Inc>1</Inc>
+			<Representation>Linear</Representation>
+		<pDependent>Communication</pDependent><pDependent>Root</pDependent><pTerminal>DefaultMCTTReg</pTerminal><IsFeature>Yes</IsFeature></Integer>
+		<IntReg Name="DefaultMCTTReg" NameSpace="Custom">
+			<Address>0xE808</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>Communication</pDependent><pDependent>DefaultMCTT</pDependent><pDependent>Root</pDependent><pTerminal>DefaultMCTTReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<Integer Name="DefaultMCRC" NameSpace="Custom">
+			<ToolTip>Value written to the message channel retry count register (MCRC) at the time of connection</ToolTip>
+			<Description>Value written to the message channel retry count register (MCRC) at the time of connection. The MCRC is the number of retransmissions allowed when the GigE Vision device times out waiting for acknowledgement of a message (interrupt).</Description>
+			<DisplayName>Default MCRC</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pIsLocked>Connected</pIsLocked>
+			<Streamable>Yes</Streamable>
+			<pValue>DefaultMCRCReg</pValue>
+			<Min>0</Min>
+			<Max>255</Max>
+			<Inc>1</Inc>
+			<Representation>Linear</Representation>
+		<pDependent>Communication</pDependent><pDependent>Root</pDependent><pTerminal>DefaultMCRCReg</pTerminal><IsFeature>Yes</IsFeature></Integer>
+		<IntReg Name="DefaultMCRCReg" NameSpace="Custom">
+			<Address>0xE80C</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>Communication</pDependent><pDependent>DefaultMCRC</pDependent><pDependent>Root</pDependent><pTerminal>DefaultMCRCReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+	
+	
+		<Category Name="Heartbeat" NameSpace="Custom">
+			<DisplayName>Heartbeat</DisplayName>
+			<pFeature>HeartbeatInterval</pFeature>
+			<pFeature>DefaultHeartbeatTimeout</pFeature>
+		<pDependent>Root</pDependent><IsFeature>Yes</IsFeature></Category> 
+		<Integer Name="HeartbeatInterval" NameSpace="Custom">
+			<ToolTip>Time between each heartbeat sent by the software.</ToolTip>
+			<Description>Time in milliseconds between each heartbeat sent to the GigE Vision device.</Description>
+			<DisplayName>Heartbeat Interval</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<Streamable>Yes</Streamable>
+			<pValue>HeartbeatIntervalReg</pValue>
+			<Min>500</Min>
+			<Max>65535</Max>
+			<Inc>1</Inc>
+			<Representation>Linear</Representation>
+		<pDependent>Heartbeat</pDependent><pDependent>Root</pDependent><pTerminal>HeartbeatIntervalReg</pTerminal><IsFeature>Yes</IsFeature></Integer>
+		<IntReg Name="HeartbeatIntervalReg" NameSpace="Custom">
+			<Address>0xE810</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>HeartbeatInterval</pDependent><pDependent>Heartbeat</pDependent><pDependent>Root</pDependent><pDependent>DefaultHeartbeatTimeoutMinExpr</pDependent><pDependent>DefaultHeartbeatTimeout</pDependent><pTerminal>HeartbeatIntervalReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<Integer Name="DefaultHeartbeatTimeout" NameSpace="Custom">
+			<ToolTip>Default heartbeat timeout value applied on connection.</ToolTip>
+			<Description>Default heartbeat timeout value applied on connection, in milliseconds. Applied on device connection. To change this value once the device is already connected, refer to the GevHeartbeatTimeout feature of your GigE Vision device.</Description>
+			<DisplayName>Default Heartbeat Timeout</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pIsLocked>Connected</pIsLocked>
+			<Streamable>Yes</Streamable>
+			<pValue>DefaultHeartbeatTimeoutReg</pValue>
+			<pMin>DefaultHeartbeatTimeoutMinExpr</pMin>
+			<Max>4294967295</Max>
+			<Inc>1</Inc>
+			<Representation>Linear</Representation>
+		<pDependent>Heartbeat</pDependent><pDependent>Root</pDependent><pTerminal>DefaultHeartbeatTimeoutReg</pTerminal><IsFeature>Yes</IsFeature></Integer>
+		<IntReg Name="DefaultHeartbeatTimeoutReg" NameSpace="Custom">
+			<Address>0xE814</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>Heartbeat</pDependent><pDependent>Root</pDependent><pDependent>DefaultHeartbeatTimeout</pDependent><pTerminal>DefaultHeartbeatTimeoutReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<IntSwissKnife Name="DefaultHeartbeatTimeoutMinExpr" NameSpace="Custom">
+			<pVariable Name="VAR_HEARTBEATINTERVAL">HeartbeatIntervalReg</pVariable>
+			<Formula>VAR_HEARTBEATINTERVAL</Formula>
+		<pDependent>Heartbeat</pDependent><pDependent>Root</pDependent><pDependent>DefaultHeartbeatTimeout</pDependent><IsFeature>No</IsFeature></IntSwissKnife>
+	
+	
+		<Category Name="Connection" NameSpace="Custom">
+			<DisplayName>Connection</DisplayName>
+			<pFeature>IPAddress</pFeature>
+			<pFeature>CommandPort</pFeature>
+			<pFeature>MessagingPort</pFeature>
+			<pFeature>ForcedCommandPortEnabled</pFeature>
+			<pFeature>ForcedCommandPort</pFeature>
+			<pFeature>ForcedMessagingPortEnabled</pFeature>
+			<pFeature>ForcedMessagingPort</pFeature>
+		<pDependent>Root</pDependent><IsFeature>Yes</IsFeature></Category>  
+		<Integer Name="IPAddress" NameSpace="Custom">
+			<ToolTip>Local IP address used for communication.</ToolTip>
+			<Description>Local IP address used for communication.</Description>
+			<DisplayName>IP Address</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pValue>IPAddressReg</pValue>
+			<Inc>1</Inc>
+			<Representation>Linear</Representation>
+		<pDependent>Root</pDependent><pDependent>Connection</pDependent><pTerminal>IPAddressReg</pTerminal><IsFeature>Yes</IsFeature></Integer>
+		<IntReg Name="IPAddressReg" NameSpace="Custom">
+			<Address>0xE818</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>Root</pDependent><pDependent>IPAddress</pDependent><pDependent>Connection</pDependent><pTerminal>IPAddressReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<Integer Name="CommandPort" NameSpace="Custom">
+			<ToolTip>Local UDP port used for commands.</ToolTip>
+			<Description>Local UDP port used for the command link to the device.</Description>
+			<DisplayName>Command Port</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pValue>CommandPortReg</pValue>
+			<Min>0</Min>
+			<Max>65535</Max>
+			<Inc>1</Inc>
+			<Representation>Linear</Representation>
+		<pDependent>Root</pDependent><pDependent>Connection</pDependent><pTerminal>CommandPortReg</pTerminal><IsFeature>Yes</IsFeature></Integer>
+		<IntReg Name="CommandPortReg" NameSpace="Custom">
+			<Address>0xE81C</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>Root</pDependent><pDependent>Connection</pDependent><pDependent>CommandPort</pDependent><pTerminal>CommandPortReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<Integer Name="MessagingPort" NameSpace="Custom">
+			<ToolTip>Local UDP port used for messaging channel.</ToolTip>
+			<Description>Local UDP port used for messaging channel.</Description>
+			<DisplayName>Messaging Port</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pValue>MessagingPortReg</pValue>
+			<Min>0</Min>
+			<Max>65535</Max>
+			<Inc>1</Inc>
+			<Representation>Linear</Representation>
+		<pDependent>Root</pDependent><pDependent>Connection</pDependent><pTerminal>MessagingPortReg</pTerminal><IsFeature>Yes</IsFeature></Integer>
+		<IntReg Name="MessagingPortReg" NameSpace="Custom">
+			<Address>0xE820</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>Root</pDependent><pDependent>Connection</pDependent><pDependent>MessagingPort</pDependent><pTerminal>MessagingPortReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<Boolean Name="ForcedCommandPortEnabled" NameSpace="Custom">
+			<ToolTip>Enables the use of ForcedCommandPort for CommandPort.</ToolTip>
+			<Description>Enables the use of ForcedCommandPort for CommandPort. If not enabled, a system-assigned port number is used. If enabled, uses ForcedCommandPort.</Description>
+			<DisplayName>Forced Command Port Enabled</DisplayName>
+			<Visibility>Guru</Visibility>
+			<Streamable>Yes</Streamable>
+			<pValue>ForcedCommandPortEnabledReg</pValue>
+		<pDependent>Root</pDependent><pDependent>ForcedCommandPort</pDependent><pDependent>Connection</pDependent><pTerminal>ForcedCommandPortEnabledReg</pTerminal><IsFeature>Yes</IsFeature></Boolean>
+		<IntReg Name="ForcedCommandPortEnabledReg" NameSpace="Custom">
+			<Address>0xE824</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>Root</pDependent><pDependent>ForcedCommandPort</pDependent><pDependent>ForcedCommandPortEnabled</pDependent><pDependent>Connection</pDependent><pTerminal>ForcedCommandPortEnabledReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<Integer Name="ForcedCommandPort" NameSpace="Custom">
+			<ToolTip>Port to use for CommandPort.</ToolTip>
+			<Description>Port to use for CommandPort when connecting to the device. Used by the command link UDP socket. This parameter is only considered when connecting to the device.</Description>
+			<DisplayName>Forced Command Port</DisplayName>
+			<Visibility>Guru</Visibility>
+		<pIsAvailable>ForcedCommandPortEnabled</pIsAvailable>
+			<Streamable>Yes</Streamable>
+			<pValue>ForcedCommandPortReg</pValue>
+			<Min>0</Min>
+			<Max>65535</Max>
+			<Inc>1</Inc>
+			<Representation>Linear</Representation>
+		<pDependent>Root</pDependent><pDependent>Connection</pDependent><pTerminal>ForcedCommandPortReg</pTerminal><IsFeature>Yes</IsFeature></Integer>
+		<IntReg Name="ForcedCommandPortReg" NameSpace="Custom">
+			<Address>0xE828</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>Root</pDependent><pDependent>ForcedCommandPort</pDependent><pDependent>Connection</pDependent><pTerminal>ForcedCommandPortReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<Boolean Name="ForcedMessagingPortEnabled" NameSpace="Custom">
+			<ToolTip>Enables the use of ForcedMessagingPort for MessagingPort.</ToolTip>
+			<Description>Enables the use of ForcedMessagingPort for MessagingPort. If not enabled, a system-assigned port number is used. If enabled, uses ForcedMessagingPort.</Description>
+			<DisplayName>Forced Messaging Port Enabled</DisplayName>
+			<Visibility>Guru</Visibility>
+			<Streamable>Yes</Streamable>
+			<pValue>ForcedMessagingPortEnabledReg</pValue>
+		<pDependent>Root</pDependent><pDependent>Connection</pDependent><pDependent>ForcedMessagingPort</pDependent><pTerminal>ForcedMessagingPortEnabledReg</pTerminal><IsFeature>Yes</IsFeature></Boolean>
+		<IntReg Name="ForcedMessagingPortEnabledReg" NameSpace="Custom">
+			<Address>0xE82C</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>ForcedMessagingPortEnabled</pDependent><pDependent>Root</pDependent><pDependent>Connection</pDependent><pDependent>ForcedMessagingPort</pDependent><pTerminal>ForcedMessagingPortEnabledReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<Integer Name="ForcedMessagingPort" NameSpace="Custom">
+			<ToolTip>Port to use for MessagingPort.</ToolTip>
+			<Description>Port to use for MessagingPort when connecting to the device. Used by the messaging channel UDP socket. This parameter is only considered when connecting to the device.</Description>
+			<DisplayName>Forced Messaging Port</DisplayName>
+			<Visibility>Guru</Visibility>
+		<pIsAvailable>ForcedMessagingPortEnabled</pIsAvailable>
+			<Streamable>Yes</Streamable>
+			<pValue>ForcedMessagingPortReg</pValue>
+			<Min>0</Min>
+			<Max>65535</Max>
+			<Inc>1</Inc>
+			<Representation>Linear</Representation>
+		<pDependent>Root</pDependent><pDependent>Connection</pDependent><pTerminal>ForcedMessagingPortReg</pTerminal><IsFeature>Yes</IsFeature></Integer>
+		<IntReg Name="ForcedMessagingPortReg" NameSpace="Custom">
+			<Address>0xE830</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>Root</pDependent><pDependent>Connection</pDependent><pDependent>ForcedMessagingPort</pDependent><pTerminal>ForcedMessagingPortReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+	
+	
+		<Category Name="Statistics" NameSpace="Custom">
+			<DisplayName>Statistics</DisplayName>
+			<pFeature>StatisticsReset</pFeature>
+			<pFeature>CommandPendingAcknowledges</pFeature>
+			<pFeature>CommandRetries</pFeature>
+			<pFeature>CommandRetriesMax</pFeature>
+			<pFeature>CommandSendFailures</pFeature>
+			<pFeature>MessagingRetries</pFeature>
+			<pFeature>MessagingRetriesMax</pFeature>
+			<pFeature>MessagingAckSendFailures</pFeature>
+		<pDependent>Root</pDependent><IsFeature>Yes</IsFeature></Category>   
+		<Command Name="StatisticsReset" NameSpace="Custom">
+			<ToolTip>Resets the communication statistics.</ToolTip>
+			<Description>Resets the communication statistics.</Description>
+			<DisplayName>Statistics Reset</DisplayName>
+			<Visibility>Expert</Visibility>
+			<pValue>StatisticsResetReg</pValue>
+			<CommandValue>0</CommandValue>
+		<pDependent>Statistics</pDependent><pDependent>Root</pDependent><pTerminal>StatisticsResetReg</pTerminal><IsFeature>Yes</IsFeature></Command>
+		<IntReg Name="StatisticsResetReg" NameSpace="Custom">
+			<Address>0xE834</Address>
+			<Length>4</Length>
+			<AccessMode>WO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>Statistics</pDependent><pDependent>Root</pDependent><pDependent>StatisticsReset</pDependent><pTerminal>StatisticsResetReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<Integer Name="CommandPendingAcknowledges" NameSpace="Custom">
+			<ToolTip>Count of pending acknowledges on the command link.</ToolTip>
+			<Description>Count of pending acknowledges since the device was connected or the statistics were reset. Pending acknowledges on the command link are sent by the device when performning longer command processing to avoid GVCP timeouts.</Description>
+			<DisplayName>Command Pending Acknowledges</DisplayName>
+			<Visibility>Guru</Visibility>
+			<pValue>CommandPendingAcknowledgesReg</pValue>
+			<Inc>1</Inc>
+			<Representation>Linear</Representation>
+		<pDependent>Statistics</pDependent><pDependent>Root</pDependent><pTerminal>CommandPendingAcknowledgesReg</pTerminal><IsFeature>Yes</IsFeature></Integer>
+		<IntReg Name="CommandPendingAcknowledgesReg" NameSpace="Custom">
+			<Address>0xE838</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>Statistics</pDependent><pDependent>CommandPendingAcknowledges</pDependent><pDependent>Root</pDependent><pTerminal>CommandPendingAcknowledgesReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<Integer Name="CommandRetries" NameSpace="Custom">
+			<ToolTip>Count of retries on the command link.</ToolTip>
+			<Description>Count of retries since the device was connected or the statistics were reset. Retries on the command link are initiated by the host if the command acknowledge is not received whithin AnswerTimeout.</Description>
+			<DisplayName>Command Retries</DisplayName>
+			<Visibility>Expert</Visibility>
+			<pValue>CommandRetriesReg</pValue>
+			<Inc>1</Inc>
+			<Representation>Linear</Representation>
+		<pDependent>Statistics</pDependent><pDependent>Root</pDependent><pTerminal>CommandRetriesReg</pTerminal><IsFeature>Yes</IsFeature></Integer>
+		<IntReg Name="CommandRetriesReg" NameSpace="Custom">
+			<Address>0xE83C</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>Statistics</pDependent><pDependent>CommandRetries</pDependent><pDependent>Root</pDependent><pTerminal>CommandRetriesReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<Integer Name="CommandRetriesMax" NameSpace="Custom">
+			<ToolTip>Maximum retries used for a single command.</ToolTip>
+			<Description>Maximum retries sent to the device for a single command.</Description>
+			<DisplayName>Command Retries Max</DisplayName>
+			<Visibility>Expert</Visibility>
+			<pValue>CommandRetriesMaxReg</pValue>
+			<Inc>1</Inc>
+			<Representation>Linear</Representation>
+		<pDependent>Statistics</pDependent><pDependent>Root</pDependent><pTerminal>CommandRetriesMaxReg</pTerminal><IsFeature>Yes</IsFeature></Integer>
+		<IntReg Name="CommandRetriesMaxReg" NameSpace="Custom">
+			<Address>0xE840</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>Statistics</pDependent><pDependent>CommandRetriesMax</pDependent><pDependent>Root</pDependent><pTerminal>CommandRetriesMaxReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<Integer Name="CommandSendFailures" NameSpace="Custom">
+			<ToolTip>Count of command link transmission failures.</ToolTip>
+			<Description>Counts the number of transmission failures of the command link. As UDP does not garantee delivery, only failures by the network stack to put the packet on the wire are reported.</Description>
+			<DisplayName>Command Send Failures</DisplayName>
+			<Visibility>Guru</Visibility>
+			<pValue>CommandSendFailuresReg</pValue>
+			<Inc>1</Inc>
+			<Representation>Linear</Representation>
+		<pDependent>Statistics</pDependent><pDependent>Root</pDependent><pTerminal>CommandSendFailuresReg</pTerminal><IsFeature>Yes</IsFeature></Integer>
+		<IntReg Name="CommandSendFailuresReg" NameSpace="Custom">
+			<Address>0xE844</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>Statistics</pDependent><pDependent>CommandSendFailures</pDependent><pDependent>Root</pDependent><pTerminal>CommandSendFailuresReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<Integer Name="MessagingRetries" NameSpace="Custom">
+			<ToolTip>Count of retries on the messaging channel.</ToolTip>
+			<Description>Count of messaging channel retries since the device was connected or the statistics were reset. Retries on the messaging channel are initiated by the device if the event acknowledge is not received whithin the period of time specified in the MCTT register. See DefaultMCTT and DefaultMCRC.</Description>
+			<DisplayName>Messaging Retries</DisplayName>
+			<Visibility>Expert</Visibility>
+			<pValue>MessagingRetriesReg</pValue>
+			<Inc>1</Inc>
+			<Representation>Linear</Representation>
+		<pDependent>Statistics</pDependent><pDependent>Root</pDependent><pTerminal>MessagingRetriesReg</pTerminal><IsFeature>Yes</IsFeature></Integer>
+		<IntReg Name="MessagingRetriesReg" NameSpace="Custom">
+			<Address>0xE848</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>MessagingRetries</pDependent><pDependent>Statistics</pDependent><pDependent>Root</pDependent><pTerminal>MessagingRetriesReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<Integer Name="MessagingRetriesMax" NameSpace="Custom">
+			<ToolTip>Maximum retries used for a single event.</ToolTip>
+			<Description>Maximum retries requested by the device (and received by the host) for a single event.</Description>
+			<DisplayName>Messaging Retries Max</DisplayName>
+			<Visibility>Expert</Visibility>
+			<pValue>MessagingRetriesMaxReg</pValue>
+			<Inc>1</Inc>
+			<Representation>Linear</Representation>
+		<pDependent>Statistics</pDependent><pDependent>Root</pDependent><pTerminal>MessagingRetriesMaxReg</pTerminal><IsFeature>Yes</IsFeature></Integer>
+		<IntReg Name="MessagingRetriesMaxReg" NameSpace="Custom">
+			<Address>0xE84C</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>MessagingRetriesMax</pDependent><pDependent>Statistics</pDependent><pDependent>Root</pDependent><pTerminal>MessagingRetriesMaxReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<Integer Name="MessagingAckSendFailures" NameSpace="Custom">
+			<ToolTip>Count of messaging channel event acknowledge transmission failures.</ToolTip>
+			<Description>Counts the number of transmission failures of event acknowledges on the messaging channel. As UDP does not garantee delivery, only failures by the network stack to put the packet on the wire are reported.</Description>
+			<DisplayName>Messaging Ack Send Failures</DisplayName>
+			<Visibility>Guru</Visibility>
+			<pValue>MessagingAckSendFailuresReg</pValue>
+			<Inc>1</Inc>
+			<Representation>Linear</Representation>
+		<pDependent>Statistics</pDependent><pDependent>Root</pDependent><pTerminal>MessagingAckSendFailuresReg</pTerminal><IsFeature>Yes</IsFeature></Integer>
+		<IntReg Name="MessagingAckSendFailuresReg" NameSpace="Custom">
+			<Address>0xE850</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>MessagingAckSendFailures</pDependent><pDependent>Statistics</pDependent><pDependent>Root</pDependent><pTerminal>MessagingAckSendFailuresReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+	
+	
+		<Category Name="StreamingPacketSize" NameSpace="Custom">
+			<DisplayName>Streaming Packet Size</DisplayName>
+			<pFeature>AutoNegotiation</pFeature>
+			<pFeature>DefaultPacketSize</pFeature>
+		<pDependent>Root</pDependent><IsFeature>Yes</IsFeature></Category>
+		<Boolean Name="AutoNegotiation" NameSpace="Custom">
+			<ToolTip>Application level parameter used by eBUS Player and Net Command. When true, automatic packet size negotiation is performed.</ToolTip>
+			<Description>Application level parameter used by eBUS Player and Net Command. When true, automatic packet size negotiation is performed. Note that this does not affect the behaviour of PvDeviceGEV::Connect. From an API perspective, automatic packet size negotiation may be performed using PvDeviceGEV::NegotiatePacketSize.</Description>
+			<DisplayName>Auto Negotiation</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<Streamable>Yes</Streamable>
+			<pValue>AutoNegotiationReg</pValue>
+		<pDependent>StreamingPacketSize</pDependent><pDependent>Root</pDependent><pTerminal>AutoNegotiationReg</pTerminal><IsFeature>Yes</IsFeature></Boolean>
+		<IntReg Name="AutoNegotiationReg" NameSpace="Custom">
+			<Address>0xE854</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>StreamingPacketSize</pDependent><pDependent>AutoNegotiation</pDependent><pDependent>DefaultPacketSize</pDependent><pDependent>DefaultPacketSizeAvailExpr</pDependent><pDependent>Root</pDependent><pTerminal>AutoNegotiationReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<Integer Name="DefaultPacketSize" NameSpace="Custom">
+			<ToolTip>Application level parameter used by eBUS Player and NetCommand. Packet size initially assigned to the device for streaming if packet size auto negotiation is disabled. </ToolTip>
+			<Description>Application level parameter used by eBUS Player and NetCommand. Packet size initially assigned to the device for streaming if packet size auto negotiation is disabled. If this value is refused by the device, a fallback value of 576 is used. Note that this does not affect the behaviour of PvDeviceGEV::Connect. From an API perspective, automatic packet size negotiation may be performed using PvDeviceGEV::NegotiatePacketSize. </Description>
+			<DisplayName>Default Packet Size</DisplayName>
+			<Visibility>Beginner</Visibility>
+		<pIsAvailable>DefaultPacketSizeAvailExpr</pIsAvailable>
+			<Streamable>Yes</Streamable>
+			<pValue>DefaultPacketSizeReg</pValue>
+			<Min>576</Min>
+			<Max>65024</Max>
+			<Inc>4</Inc>
+			<Representation>Linear</Representation>
+		<pDependent>StreamingPacketSize</pDependent><pDependent>Root</pDependent><pTerminal>DefaultPacketSizeReg</pTerminal><IsFeature>Yes</IsFeature></Integer>
+		<IntReg Name="DefaultPacketSizeReg" NameSpace="Custom">
+			<Address>0xE858</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>StreamingPacketSize</pDependent><pDependent>DefaultPacketSize</pDependent><pDependent>Root</pDependent><pTerminal>DefaultPacketSizeReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<IntSwissKnife Name="DefaultPacketSizeAvailExpr" NameSpace="Custom">
+			<pVariable Name="VAR_AUTONEGOTIATION">AutoNegotiationReg</pVariable>
+			<Formula>VAR_AUTONEGOTIATION = 0</Formula>
+		<pDependent>StreamingPacketSize</pDependent><pDependent>DefaultPacketSize</pDependent><pDependent>Root</pDependent><IsFeature>No</IsFeature></IntSwissKnife>
+	
+	
+		<Category Name="DeviceGenICamXMLAccess" NameSpace="Custom">
+			<DisplayName>Device GenICam XML Access</DisplayName>
+			<pFeature>DeviceGenICamXMLLocation</pFeature>
+			<pFeature>DeviceGenICamXMLFile</pFeature>
+			<pFeature>UseManifests</pFeature>
+		<pDependent>Root</pDependent><IsFeature>Yes</IsFeature></Category> 
+		<EnumEntry Name="EnumEntry_DeviceGenICamXMLLocation_Default" NameSpace="Custom">
+				<DisplayName>Default</DisplayName>
+				<Value>0</Value>
+			<Symbolic>Default</Symbolic>
+<pDependent>DeviceGenICamXMLLocation</pDependent><pDependent>DeviceGenICamXMLAccess</pDependent><pDependent>Root</pDependent><pTerminal>EnumEntry_DeviceGenICamXMLLocation_Default</pTerminal><IsFeature>No</IsFeature></EnumEntry>
+<EnumEntry Name="EnumEntry_DeviceGenICamXMLLocation_URL1" NameSpace="Custom">
+				<DisplayName>URL1</DisplayName>
+				<Value>1</Value>
+			<Symbolic>URL1</Symbolic>
+<pDependent>DeviceGenICamXMLLocation</pDependent><pDependent>DeviceGenICamXMLAccess</pDependent><pDependent>Root</pDependent><pTerminal>EnumEntry_DeviceGenICamXMLLocation_URL1</pTerminal><IsFeature>No</IsFeature></EnumEntry>
+<EnumEntry Name="EnumEntry_DeviceGenICamXMLLocation_URL2" NameSpace="Custom">
+				<DisplayName>URL2</DisplayName>
+				<Value>2</Value>
+			<Symbolic>URL2</Symbolic>
+<pDependent>DeviceGenICamXMLLocation</pDependent><pDependent>DeviceGenICamXMLAccess</pDependent><pDependent>Root</pDependent><pTerminal>EnumEntry_DeviceGenICamXMLLocation_URL2</pTerminal><IsFeature>No</IsFeature></EnumEntry>
+<EnumEntry Name="EnumEntry_DeviceGenICamXMLLocation_File" NameSpace="Custom">
+				<DisplayName>File</DisplayName>
+				<Value>3</Value>
+			<Symbolic>File</Symbolic>
+<pDependent>DeviceGenICamXMLLocation</pDependent><pDependent>DeviceGenICamXMLAccess</pDependent><pDependent>Root</pDependent><pTerminal>EnumEntry_DeviceGenICamXMLLocation_File</pTerminal><IsFeature>No</IsFeature></EnumEntry>
+<EnumEntry Name="EnumEntry_DeviceGenICamXMLLocation_ManifestEntry1" NameSpace="Custom">
+				<DisplayName>Manifest Entry 1</DisplayName>
+				<pIsAvailable>UseManifests</pIsAvailable>
+				<Value>4</Value>
+			<Symbolic>ManifestEntry1</Symbolic>
+<pDependent>DeviceGenICamXMLLocation</pDependent><pDependent>DeviceGenICamXMLAccess</pDependent><pDependent>Root</pDependent><pTerminal>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry1</pTerminal><IsFeature>No</IsFeature></EnumEntry>
+<EnumEntry Name="EnumEntry_DeviceGenICamXMLLocation_ManifestEntry2" NameSpace="Custom">
+				<DisplayName>Manifest Entry 2</DisplayName>
+				<pIsAvailable>UseManifests</pIsAvailable>
+				<Value>5</Value>
+			<Symbolic>ManifestEntry2</Symbolic>
+<pDependent>DeviceGenICamXMLLocation</pDependent><pDependent>DeviceGenICamXMLAccess</pDependent><pDependent>Root</pDependent><pTerminal>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry2</pTerminal><IsFeature>No</IsFeature></EnumEntry>
+<EnumEntry Name="EnumEntry_DeviceGenICamXMLLocation_ManifestEntry3" NameSpace="Custom">
+				<DisplayName>Manifest Entry 3</DisplayName>
+				<pIsAvailable>UseManifests</pIsAvailable>
+				<Value>6</Value>
+			<Symbolic>ManifestEntry3</Symbolic>
+<pDependent>DeviceGenICamXMLLocation</pDependent><pDependent>DeviceGenICamXMLAccess</pDependent><pDependent>Root</pDependent><pTerminal>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry3</pTerminal><IsFeature>No</IsFeature></EnumEntry>
+<EnumEntry Name="EnumEntry_DeviceGenICamXMLLocation_ManifestEntry4" NameSpace="Custom">
+				<DisplayName>Manifest Entry 4</DisplayName>
+				<pIsAvailable>UseManifests</pIsAvailable>
+				<Value>7</Value>
+			<Symbolic>ManifestEntry4</Symbolic>
+<pDependent>DeviceGenICamXMLLocation</pDependent><pDependent>DeviceGenICamXMLAccess</pDependent><pDependent>Root</pDependent><pTerminal>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry4</pTerminal><IsFeature>No</IsFeature></EnumEntry>
+<EnumEntry Name="EnumEntry_DeviceGenICamXMLLocation_ManifestEntry5" NameSpace="Custom">
+				<DisplayName>Manifest Entry 5</DisplayName>
+				<pIsAvailable>UseManifests</pIsAvailable>
+				<Value>8</Value>
+			<Symbolic>ManifestEntry5</Symbolic>
+<pDependent>DeviceGenICamXMLLocation</pDependent><pDependent>DeviceGenICamXMLAccess</pDependent><pDependent>Root</pDependent><pTerminal>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry5</pTerminal><IsFeature>No</IsFeature></EnumEntry>
+<EnumEntry Name="EnumEntry_DeviceGenICamXMLLocation_ManifestEntry6" NameSpace="Custom">
+				<DisplayName>Manifest Entry 6</DisplayName>
+				<pIsAvailable>UseManifests</pIsAvailable>
+				<Value>9</Value>
+			<Symbolic>ManifestEntry6</Symbolic>
+<pDependent>DeviceGenICamXMLLocation</pDependent><pDependent>DeviceGenICamXMLAccess</pDependent><pDependent>Root</pDependent><pTerminal>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry6</pTerminal><IsFeature>No</IsFeature></EnumEntry>
+<EnumEntry Name="EnumEntry_DeviceGenICamXMLLocation_ManifestEntry7" NameSpace="Custom">
+				<DisplayName>Manifest Entry 7</DisplayName>
+				<pIsAvailable>UseManifests</pIsAvailable>
+				<Value>10</Value>
+			<Symbolic>ManifestEntry7</Symbolic>
+<pDependent>DeviceGenICamXMLLocation</pDependent><pDependent>DeviceGenICamXMLAccess</pDependent><pDependent>Root</pDependent><pTerminal>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry7</pTerminal><IsFeature>No</IsFeature></EnumEntry>
+<EnumEntry Name="EnumEntry_DeviceGenICamXMLLocation_ManifestEntry8" NameSpace="Custom">
+				<DisplayName>Manifest Entry 8</DisplayName>
+				<pIsAvailable>UseManifests</pIsAvailable>
+				<Value>11</Value>
+			<Symbolic>ManifestEntry8</Symbolic>
+<pDependent>DeviceGenICamXMLLocation</pDependent><pDependent>DeviceGenICamXMLAccess</pDependent><pDependent>Root</pDependent><pTerminal>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry8</pTerminal><IsFeature>No</IsFeature></EnumEntry>
+<Enumeration Name="DeviceGenICamXMLLocation" NameSpace="Custom">
+			<ToolTip>Selects which GenICam XML file SDK will use to build the device node map on  the next connect.</ToolTip>
+			<Description>Selects which GenICam configuration file the SDK will use for the next connect. "Default" goes through all manifest entries (if supported and enabled) and then URL1, URL2 until the device node map can be successfully built. "File" reads from the XML file in the location specified by DeviceGenICamXMLFile.</Description>
+			<DisplayName>GenICam XML Location</DisplayName>
+			<Visibility>Guru</Visibility>
+			<Streamable>Yes</Streamable>
+			<pEnumEntry>EnumEntry_DeviceGenICamXMLLocation_Default</pEnumEntry>
+			<pEnumEntry>EnumEntry_DeviceGenICamXMLLocation_URL1</pEnumEntry>
+			<pEnumEntry>EnumEntry_DeviceGenICamXMLLocation_URL2</pEnumEntry>
+			<pEnumEntry>EnumEntry_DeviceGenICamXMLLocation_File</pEnumEntry>
+			<pEnumEntry>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry1</pEnumEntry>
+			<pEnumEntry>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry2</pEnumEntry>
+			<pEnumEntry>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry3</pEnumEntry>
+			<pEnumEntry>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry4</pEnumEntry>
+			<pEnumEntry>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry5</pEnumEntry>
+			<pEnumEntry>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry6</pEnumEntry>
+			<pEnumEntry>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry7</pEnumEntry>
+			<pEnumEntry>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry8</pEnumEntry>
+			<pValue>DeviceGenICamXMLLocationReg</pValue>
+		<pDependent>DeviceGenICamXMLAccess</pDependent><pDependent>Root</pDependent><pTerminal>DeviceGenICamXMLLocationReg</pTerminal><IsFeature>Yes</IsFeature></Enumeration>
+		<IntReg Name="DeviceGenICamXMLLocationReg" NameSpace="Custom">
+			<Address>0xE85C</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>DeviceGenICamXMLLocation</pDependent><pDependent>DeviceGenICamXMLAccess</pDependent><pDependent>Root</pDependent><pDependent>DeviceGenICamXMLFile</pDependent><pDependent>DeviceGenICamXMLFileAvailExpr</pDependent><pTerminal>DeviceGenICamXMLLocationReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<StringReg Name="DeviceGenICamXMLFile" NameSpace="Custom">
+			<ToolTip>The location on the hard drive (absolute path) where the local XML file is loaded from when DeviceXMLLocation is set to "File".</ToolTip>
+			<Description>The location on the hard drive (absolute path) where the local XML file is loaded from when DeviceXMLLocation is set to "File".</Description>
+			<DisplayName>GenICam XML File</DisplayName>
+			<Visibility>Guru</Visibility>
+		<pIsAvailable>DeviceGenICamXMLFileAvailExpr</pIsAvailable>
+			<Streamable>Yes</Streamable>
+			<Address>0xE860</Address>
+			<Length>512</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+		<pDependent>DeviceGenICamXMLAccess</pDependent><pDependent>Root</pDependent><pTerminal>DeviceGenICamXMLFile</pTerminal><IsFeature>Yes</IsFeature></StringReg>
+		<IntSwissKnife Name="DeviceGenICamXMLFileAvailExpr" NameSpace="Custom">
+			<pVariable Name="VAR_DEVICEGENICAMXMLLOCATION">DeviceGenICamXMLLocationReg</pVariable>
+			<Formula>VAR_DEVICEGENICAMXMLLOCATION=3</Formula>
+		<pDependent>DeviceGenICamXMLAccess</pDependent><pDependent>Root</pDependent><pDependent>DeviceGenICamXMLFile</pDependent><IsFeature>No</IsFeature></IntSwissKnife>
+		<Boolean Name="UseManifests" NameSpace="Custom">
+			<ToolTip>Enables the use of the manifest when retrieving the GenICam XML file from the device.</ToolTip>
+			<Description>Enables the use of the manifest when retrieving the GenICam XML file from the device.</Description>
+			<DisplayName>Use Manifest</DisplayName>
+			<Visibility>Guru</Visibility>
+			<Streamable>Yes</Streamable>
+			<pValue>UseManifestsReg</pValue>
+		<pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry5</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry6</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry7</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry8</pDependent><pDependent>DeviceGenICamXMLLocation</pDependent><pDependent>DeviceGenICamXMLAccess</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry1</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry2</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry3</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry4</pDependent><pDependent>Root</pDependent><pTerminal>UseManifestsReg</pTerminal><IsFeature>Yes</IsFeature></Boolean>
+		<IntReg Name="UseManifestsReg" NameSpace="Custom">
+			<Address>0xEA60</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry5</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry6</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry7</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry8</pDependent><pDependent>DeviceGenICamXMLLocation</pDependent><pDependent>DeviceGenICamXMLAccess</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry1</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry2</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry3</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry4</pDependent><pDependent>Root</pDependent><pDependent>UseManifests</pDependent><pTerminal>UseManifestsReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+	
+	
+		<Category Name="Recovery" NameSpace="Custom">
+			<DisplayName>Recovery</DisplayName>
+			<pFeature>LinkRecoveryEnabled</pFeature>
+			<pFeature>RecoveryStatus</pFeature>
+		<pDependent>Root</pDependent><IsFeature>Yes</IsFeature></Category>  
+		<Boolean Name="LinkRecoveryEnabled" NameSpace="Custom">
+			<ToolTip>When enabled, SDK attempts to automatically reconnect to the same device when the connection is lost. SDK does not recover the stream. Application is responsible for stream recovery. </ToolTip>
+			<Description>When enabled, SDK attempts to automatically reconnect to the same device when the connection is lost. SDK does not recover the stream. Application is responsible for stream recovery. </Description>
+			<DisplayName>Link Recovery Enabled</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<Streamable>Yes</Streamable>
+			<pValue>LinkRecoveryEnabledReg</pValue>
+		<pDependent>Root</pDependent><pDependent>Recovery</pDependent><pTerminal>LinkRecoveryEnabledReg</pTerminal><IsFeature>Yes</IsFeature></Boolean>
+		<IntReg Name="LinkRecoveryEnabledReg" NameSpace="Custom">
+			<Address>0xEA64</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>Root</pDependent><pDependent>Recovery</pDependent><pDependent>LinkRecoveryEnabled</pDependent><pTerminal>LinkRecoveryEnabledReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+		<EnumEntry Name="EnumEntry_RecoveryStatus_StatusOK" NameSpace="Custom">
+				<DisplayName>Status OK</DisplayName>
+				<Value>0</Value>
+			<Symbolic>StatusOK</Symbolic>
+<pDependent>Root</pDependent><pDependent>Recovery</pDependent><pDependent>RecoveryStatus</pDependent><pTerminal>EnumEntry_RecoveryStatus_StatusOK</pTerminal><IsFeature>No</IsFeature></EnumEntry>
+<EnumEntry Name="EnumEntry_RecoveryStatus_StatusLinkLost" NameSpace="Custom">
+				<DisplayName>Status Link Lost</DisplayName>
+				<Value>1</Value>
+			<Symbolic>StatusLinkLost</Symbolic>
+<pDependent>Root</pDependent><pDependent>Recovery</pDependent><pDependent>RecoveryStatus</pDependent><pTerminal>EnumEntry_RecoveryStatus_StatusLinkLost</pTerminal><IsFeature>No</IsFeature></EnumEntry>
+<Enumeration Name="RecoveryStatus" NameSpace="Custom">
+			<ToolTip>Status of the connection and stream state machine.</ToolTip>
+			<Description>Status of the connection and stream state machine.</Description>
+			<DisplayName>Recovery Status</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pEnumEntry>EnumEntry_RecoveryStatus_StatusOK</pEnumEntry>
+			<pEnumEntry>EnumEntry_RecoveryStatus_StatusLinkLost</pEnumEntry>
+			<pValue>RecoveryStatusReg</pValue>
+		<pDependent>Root</pDependent><pDependent>Recovery</pDependent><pTerminal>RecoveryStatusReg</pTerminal><IsFeature>Yes</IsFeature></Enumeration>
+		<IntReg Name="RecoveryStatusReg" NameSpace="Custom">
+			<Address>0xEA68</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>Root</pDependent><pDependent>Recovery</pDependent><pDependent>RecoveryStatus</pDependent><pTerminal>RecoveryStatusReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+	
+	
+		<Category Name="Internal" NameSpace="Custom">
+			<DisplayName>Internal</DisplayName>
+			<pFeature>Connected</pFeature>
+		<pDependent>Root</pDependent><IsFeature>Yes</IsFeature></Category>   
+		<Integer Name="Connected" NameSpace="Custom">
+			<ToolTip>ToolTip</ToolTip>
+			<Description>Description</Description>
+			<DisplayName>Connected</DisplayName>
+			<Visibility>Invisible</Visibility>
+			<pValue>ConnectedReg</pValue>
+			<Inc>1</Inc>
+			<Representation>Linear</Representation>
+		<pDependent>Heartbeat</pDependent><pDependent>Communication</pDependent><pDependent>DefaultMCRC</pDependent><pDependent>DefaultMCTT</pDependent><pDependent>Root</pDependent><pDependent>DefaultHeartbeatTimeout</pDependent><pDependent>Internal</pDependent><pTerminal>ConnectedReg</pTerminal><IsFeature>Yes</IsFeature></Integer>
+		<IntReg Name="ConnectedReg" NameSpace="Custom">
+			<Address>0xEA6C</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		<pDependent>Heartbeat</pDependent><pDependent>Communication</pDependent><pDependent>DefaultMCRC</pDependent><pDependent>DefaultMCTT</pDependent><pDependent>Root</pDependent><pDependent>DefaultHeartbeatTimeout</pDependent><pDependent>Internal</pDependent><pDependent>Connected</pDependent><pTerminal>ConnectedReg</pTerminal><IsFeature>No</IsFeature></IntReg>
+	
+	<Port Name="Device" NameSpace="Custom">
+		<ToolTip>Port giving access to the device.</ToolTip>
+	<pDependent>MessagingRetries</pDependent><pDependent>MessagingRetriesReg</pDependent><pDependent>MessagingRetriesMax</pDependent><pDependent>MessagingRetriesMaxReg</pDependent><pDependent>MessagingAckSendFailures</pDependent><pDependent>DefaultMCRCReg</pDependent><pDependent>HeartbeatInterval</pDependent><pDependent>DefaultMCTTReg</pDependent><pDependent>Heartbeat</pDependent><pDependent>Statistics</pDependent><pDependent>Communication</pDependent><pDependent>CommandPendingAcknowledges</pDependent><pDependent>CommandPendingAcknowledgesReg</pDependent><pDependent>CommandRetries</pDependent><pDependent>CommandRetriesReg</pDependent><pDependent>MessagingAckSendFailuresReg</pDependent><pDependent>StreamingPacketSize</pDependent><pDependent>AutoNegotiation</pDependent><pDependent>AutoNegotiationReg</pDependent><pDependent>DefaultPacketSize</pDependent><pDependent>AnswerTimeout</pDependent><pDependent>CommandRetryCountReg</pDependent><pDependent>DefaultMCRC</pDependent><pDependent>ForcedMessagingPortEnabled</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry5</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry6</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry7</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry8</pDependent><pDependent>DeviceGenICamXMLLocation</pDependent><pDependent>DeviceGenICamXMLLocationReg</pDependent><pDependent>CommandRetriesMax</pDependent><pDependent>CommandRetriesMaxReg</pDependent><pDependent>CommandSendFailures</pDependent><pDependent>CommandSendFailuresReg</pDependent><pDependent>DefaultPacketSizeReg</pDependent><pDependent>DefaultPacketSizeAvailExpr</pDependent><pDependent>DeviceGenICamXMLAccess</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry1</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry2</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry3</pDependent><pDependent>EnumEntry_DeviceGenICamXMLLocation_ManifestEntry4</pDependent><pDependent>CommandRetryCount</pDependent><pDependent>DefaultMCTT</pDependent><pDependent>AnswerTimeoutReg</pDependent><pDependent>Root</pDependent><pDependent>ForcedCommandPortEnabledReg</pDependent><pDependent>ForcedCommandPort</pDependent><pDependent>ForcedCommandPortReg</pDependent><pDependent>ForcedMessagingPortEnabledReg</pDependent><pDependent>DefaultHeartbeatTimeoutReg</pDependent><pDependent>DefaultHeartbeatTimeoutMinExpr</pDependent><pDependent>ForcedCommandPortEnabled</pDependent><pDependent>IPAddress</pDependent><pDependent>IPAddressReg</pDependent><pDependent>HeartbeatIntervalReg</pDependent><pDependent>DefaultHeartbeatTimeout</pDependent><pDependent>Connection</pDependent><pDependent>DeviceGenICamXMLFile</pDependent><pDependent>DeviceGenICamXMLFileAvailExpr</pDependent><pDependent>UseManifests</pDependent><pDependent>UseManifestsReg</pDependent><pDependent>Recovery</pDependent><pDependent>LinkRecoveryEnabled</pDependent><pDependent>CommandPort</pDependent><pDependent>CommandPortReg</pDependent><pDependent>MessagingPort</pDependent><pDependent>MessagingPortReg</pDependent><pDependent>LinkRecoveryEnabledReg</pDependent><pDependent>RecoveryStatus</pDependent><pDependent>RecoveryStatusReg</pDependent><pDependent>Internal</pDependent><pDependent>Connected</pDependent><pDependent>ConnectedReg</pDependent><pDependent>ForcedMessagingPort</pDependent><pDependent>ForcedMessagingPortReg</pDependent><pDependent>StatisticsReset</pDependent><pDependent>StatisticsResetReg</pDependent><IsFeature>No</IsFeature></Port>
+</RegisterDescription>

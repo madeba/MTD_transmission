@@ -1,0 +1,2325 @@
+# depslib dependency file v1.0
+1448633809 source:/home/mat/Dropbox/projet_c/2015/Reconstruction_Tr_hors_axe/Correction_aberration.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+	"fonctions.h"
+	"Correction_aberration.h"
+
+1411092226 /usr/include/opencv/cxcore.h
+	"opencv2/core/core_c.h"
+	"opencv2/core/core.hpp"
+
+1411092226 /usr/include/opencv/highgui.h
+	"opencv2/core/core_c.h"
+	"opencv2/core/core.hpp"
+	"opencv2/highgui/highgui_c.h"
+	"opencv2/highgui/highgui.hpp"
+
+1411092226 /usr/include/opencv/cv.h
+	"opencv2/core/core_c.h"
+	"opencv2/core/core.hpp"
+	"opencv2/imgproc/imgproc_c.h"
+	"opencv2/imgproc/imgproc.hpp"
+	"opencv2/video/tracking.hpp"
+	"opencv2/features2d/features2d.hpp"
+	"opencv2/flann/flann.hpp"
+	"opencv2/calib3d/calib3d.hpp"
+	"opencv2/objdetect/objdetect.hpp"
+	"opencv2/legacy/compat.hpp"
+	"opencv2/core/internal.hpp"
+
+1445263776 /home/mat/Dropbox/projet_c/2015/Reconstruction_Tr_hors_axe/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	"projet.h"
+
+1441901559 /home/mat/Dropbox/projet_c/2015/Reconstruction_Tr_hors_axe/struct.h
+
+1445287137 /home/mat/Dropbox/projet_c/2015/Reconstruction_Tr_hors_axe/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<Magick++.h>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1420493559 /usr/include/ImageMagick/Magick++.h
+	<Magick++/Include.h>
+	<Magick++/Functions.h>
+	<Magick++/Image.h>
+	<Magick++/Pixels.h>
+	<Magick++/ResourceLimits.h>
+	<Magick++/STL.h>
+
+1420493559 /usr/include/ImageMagick/Magick++/Include.h
+	"magick/magick-config.h"
+	"magick-config.h"
+	<stdio.h>
+	<stdarg.h>
+	<stdlib.h>
+	<time.h>
+	<math.h>
+	<sys/types.h>
+	<vcl.h>
+	<magick/MagickCore.h>
+	<wand/MagickWand.h>
+
+1420493559 /usr/include/ImageMagick/magick/magick-config.h
+	"magick/magick-baseconfig.h"
+
+1531433051 /usr/include/x86_64-linux-gnu/ImageMagick-6//magick/magick-baseconfig.h
+
+1420493559 /usr/include/ImageMagick/magick/MagickCore.h
+	"magick/magick-config.h"
+	"magick-config.h"
+	<stdio.h>
+	<stdarg.h>
+	<stdlib.h>
+	<sys/types.h>
+	<time.h>
+	"magick/method-attribute.h"
+	"magick/methods.h"
+	"magick/magick-type.h"
+	"magick/accelerate.h"
+	"magick/animate.h"
+	"magick/annotate.h"
+	"magick/artifact.h"
+	"magick/attribute.h"
+	"magick/blob.h"
+	"magick/cache.h"
+	"magick/cache-view.h"
+	"magick/channel.h"
+	"magick/cipher.h"
+	"magick/client.h"
+	"magick/coder.h"
+	"magick/color.h"
+	"magick/colorspace.h"
+	"magick/colormap.h"
+	"magick/compare.h"
+	"magick/composite.h"
+	"magick/compress.h"
+	"magick/configure.h"
+	"magick/constitute.h"
+	"magick/decorate.h"
+	"magick/delegate.h"
+	"magick/deprecate.h"
+	"magick/display.h"
+	"magick/distort.h"
+	"magick/distribute-cache.h"
+	"magick/draw.h"
+	"magick/effect.h"
+	"magick/enhance.h"
+	"magick/exception.h"
+	"magick/feature.h"
+	"magick/fourier.h"
+	"magick/fx.h"
+	"magick/gem.h"
+	"magick/geometry.h"
+	"magick/hashmap.h"
+	"magick/histogram.h"
+	"magick/identify.h"
+	"magick/image.h"
+	"magick/image-view.h"
+	"magick/layer.h"
+	"magick/list.h"
+	"magick/locale_.h"
+	"magick/log.h"
+	"magick/magic.h"
+	"magick/magick.h"
+	"magick/matrix.h"
+	"magick/memory_.h"
+	"magick/module.h"
+	"magick/mime.h"
+	"magick/monitor.h"
+	"magick/montage.h"
+	"magick/morphology.h"
+	"magick/opencl.h"
+	"magick/option.h"
+	"magick/paint.h"
+	"magick/pixel.h"
+	"magick/pixel-accessor.h"
+	"magick/policy.h"
+	"magick/prepress.h"
+	"magick/profile.h"
+	"magick/property.h"
+	"magick/quantize.h"
+	"magick/quantum.h"
+	"magick/registry.h"
+	"magick/random_.h"
+	"magick/resample.h"
+	"magick/resize.h"
+	"magick/resource_.h"
+	"magick/segment.h"
+	"magick/shear.h"
+	"magick/signature.h"
+	"magick/splay-tree.h"
+	"magick/stream.h"
+	"magick/statistic.h"
+	"magick/string_.h"
+	"magick/timer.h"
+	"magick/token.h"
+	"magick/transform.h"
+	"magick/threshold.h"
+	"magick/type.h"
+	"magick/utility.h"
+	"magick/version.h"
+	"magick/vision.h"
+	"magick/xml-tree.h"
+	"magick/xwindow.h"
+
+1420493559 /usr/include/ImageMagick/magick/method-attribute.h
+
+1420493559 /usr/include/ImageMagick/magick/methods.h
+
+1420493559 /usr/include/ImageMagick/magick/magick-type.h
+	"magick/magick-config.h"
+
+1420493559 /usr/include/ImageMagick/magick/accelerate.h
+	"magick/fx.h"
+	"magick/morphology.h"
+	"magick/resample.h"
+	"magick/resize.h"
+	"magick/statistic.h"
+
+1420493559 /usr/include/ImageMagick/magick/fx.h
+	"magick/draw.h"
+
+1420493559 /usr/include/ImageMagick/magick/draw.h
+	"magick/geometry.h"
+	"magick/image.h"
+	"magick/pixel.h"
+	"magick/type.h"
+
+1420493559 /usr/include/ImageMagick/magick/geometry.h
+
+1420493559 /usr/include/ImageMagick/magick/image.h
+	"magick/color.h"
+	"magick/blob.h"
+	"magick/colorspace.h"
+	"magick/cache-view.h"
+	"magick/color.h"
+	"magick/composite.h"
+	"magick/compress.h"
+	"magick/effect.h"
+	"magick/geometry.h"
+	"magick/layer.h"
+	"magick/locale_.h"
+	"magick/monitor.h"
+	"magick/pixel.h"
+	"magick/profile.h"
+	"magick/quantum.h"
+	"magick/resample.h"
+	"magick/resize.h"
+	"magick/semaphore.h"
+	"magick/stream.h"
+	"magick/timer.h"
+
+1420493559 /usr/include/ImageMagick/magick/color.h
+	"magick/pixel.h"
+	"magick/exception.h"
+
+1420493559 /usr/include/ImageMagick/magick/pixel.h
+	"magick/colorspace.h"
+	"magick/constitute.h"
+
+1420493559 /usr/include/ImageMagick/magick/colorspace.h
+
+1420493559 /usr/include/ImageMagick/magick/constitute.h
+
+1420493559 /usr/include/ImageMagick/magick/exception.h
+	<stdarg.h>
+	"magick/semaphore.h"
+
+1420493559 /usr/include/ImageMagick/magick/semaphore.h
+
+1420493559 /usr/include/ImageMagick/magick/blob.h
+	"magick/image.h"
+	"magick/stream.h"
+
+1420493559 /usr/include/ImageMagick/magick/stream.h
+
+1420493559 /usr/include/ImageMagick/magick/cache-view.h
+	"magick/pixel.h"
+
+1420493559 /usr/include/ImageMagick/magick/composite.h
+
+1420493559 /usr/include/ImageMagick/magick/compress.h
+
+1420493559 /usr/include/ImageMagick/magick/effect.h
+	"magick/morphology.h"
+
+1420493559 /usr/include/ImageMagick/magick/morphology.h
+	"magick/geometry.h"
+
+1420493559 /usr/include/ImageMagick/magick/layer.h
+
+1420493559 /usr/include/ImageMagick/magick/locale_.h
+	"magick/hashmap.h"
+
+1420493559 /usr/include/ImageMagick/magick/hashmap.h
+
+1420493559 /usr/include/ImageMagick/magick/monitor.h
+
+1420493559 /usr/include/ImageMagick/magick/profile.h
+	"magick/string_.h"
+
+1420493559 /usr/include/ImageMagick/magick/string_.h
+	<stdarg.h>
+	<time.h>
+	"magick/exception.h"
+
+1420493559 /usr/include/ImageMagick/magick/quantum.h
+	"magick/image.h"
+	"magick/semaphore.h"
+
+1420493559 /usr/include/ImageMagick/magick/resample.h
+	"magick/cache-view.h"
+
+1420493559 /usr/include/ImageMagick/magick/resize.h
+
+1420493559 /usr/include/ImageMagick/magick/timer.h
+
+1420493559 /usr/include/ImageMagick/magick/type.h
+
+1420493559 /usr/include/ImageMagick/magick/statistic.h
+	"magick/draw.h"
+
+1420493559 /usr/include/ImageMagick/magick/animate.h
+
+1420493559 /usr/include/ImageMagick/magick/annotate.h
+	"magick/draw.h"
+
+1420493559 /usr/include/ImageMagick/magick/artifact.h
+
+1420493559 /usr/include/ImageMagick/magick/attribute.h
+	"magick/image.h"
+	"magick/exception.h"
+
+1420493559 /usr/include/ImageMagick/magick/cache.h
+	"magick/blob.h"
+
+1420493559 /usr/include/ImageMagick/magick/channel.h
+	"magick/image.h"
+
+1420493559 /usr/include/ImageMagick/magick/cipher.h
+
+1420493559 /usr/include/ImageMagick/magick/client.h
+
+1420493559 /usr/include/ImageMagick/magick/coder.h
+
+1420493559 /usr/include/ImageMagick/magick/colormap.h
+
+1420493559 /usr/include/ImageMagick/magick/compare.h
+	"magick/image.h"
+
+1420493559 /usr/include/ImageMagick/magick/configure.h
+	"magick/hashmap.h"
+
+1420493559 /usr/include/ImageMagick/magick/decorate.h
+
+1420493559 /usr/include/ImageMagick/magick/delegate.h
+	<stdarg.h>
+	"magick/semaphore.h"
+
+1420493559 /usr/include/ImageMagick/magick/deprecate.h
+	<stdarg.h>
+	"magick/blob.h"
+	"magick/cache-view.h"
+	"magick/draw.h"
+	"magick/constitute.h"
+	"magick/magick-config.h"
+	"magick/pixel.h"
+	"magick/quantize.h"
+	"magick/quantum.h"
+	"magick/registry.h"
+	"magick/semaphore.h"
+
+1420493559 /usr/include/ImageMagick/magick/quantize.h
+	"magick/colorspace.h"
+
+1420493559 /usr/include/ImageMagick/magick/registry.h
+
+1420493559 /usr/include/ImageMagick/magick/display.h
+
+1420493559 /usr/include/ImageMagick/magick/distort.h
+
+1420493559 /usr/include/ImageMagick/magick/distribute-cache.h
+	"magick/exception.h"
+
+1420493559 /usr/include/ImageMagick/magick/enhance.h
+	"magick/pixel.h"
+
+1420493559 /usr/include/ImageMagick/magick/feature.h
+
+1420493559 /usr/include/ImageMagick/magick/fourier.h
+
+1420493559 /usr/include/ImageMagick/magick/gem.h
+	"magick/fx.h"
+	"magick/random_.h"
+
+1420493559 /usr/include/ImageMagick/magick/random_.h
+	"magick/string_.h"
+
+1420493559 /usr/include/ImageMagick/magick/histogram.h
+
+1420493559 /usr/include/ImageMagick/magick/identify.h
+
+1420493559 /usr/include/ImageMagick/magick/image-view.h
+
+1420493559 /usr/include/ImageMagick/magick/list.h
+
+1420493559 /usr/include/ImageMagick/magick/log.h
+	<stdarg.h>
+	"magick/exception.h"
+
+1420493559 /usr/include/ImageMagick/magick/magic.h
+
+1420493559 /usr/include/ImageMagick/magick/magick.h
+	<stdarg.h>
+	"magick/semaphore.h"
+
+1420493559 /usr/include/ImageMagick/magick/matrix.h
+
+1420493559 /usr/include/ImageMagick/magick/memory_.h
+
+1420493559 /usr/include/ImageMagick/magick/module.h
+	<time.h>
+	"magick/version.h"
+
+1420493559 /usr/include/ImageMagick/magick/version.h
+
+1420493559 /usr/include/ImageMagick/magick/mime.h
+
+1420493559 /usr/include/ImageMagick/magick/montage.h
+
+1420493559 /usr/include/ImageMagick/magick/opencl.h
+
+1420493559 /usr/include/ImageMagick/magick/option.h
+
+1420493559 /usr/include/ImageMagick/magick/paint.h
+	"magick/color.h"
+	"magick/draw.h"
+
+1420493559 /usr/include/ImageMagick/magick/pixel-accessor.h
+	<math.h>
+	"magick/gem.h"
+	"magick/pixel.h"
+
+1420493559 /usr/include/ImageMagick/magick/policy.h
+	"magick/pixel.h"
+	"magick/exception.h"
+
+1420493559 /usr/include/ImageMagick/magick/prepress.h
+
+1420493559 /usr/include/ImageMagick/magick/property.h
+
+1420493559 /usr/include/ImageMagick/magick/resource_.h
+
+1420493559 /usr/include/ImageMagick/magick/segment.h
+
+1420493559 /usr/include/ImageMagick/magick/shear.h
+
+1420493559 /usr/include/ImageMagick/magick/signature.h
+
+1420493559 /usr/include/ImageMagick/magick/splay-tree.h
+
+1420493559 /usr/include/ImageMagick/magick/token.h
+
+1420493559 /usr/include/ImageMagick/magick/transform.h
+
+1420493559 /usr/include/ImageMagick/magick/threshold.h
+
+1420493559 /usr/include/ImageMagick/magick/utility.h
+
+1420493559 /usr/include/ImageMagick/magick/vision.h
+
+1420493559 /usr/include/ImageMagick/magick/xml-tree.h
+	"magick/exception.h"
+	"magick/splay-tree.h"
+
+1420493559 /usr/include/ImageMagick/magick/xwindow.h
+
+1420493559 /usr/include/ImageMagick/wand/MagickWand.h
+	"magick/magick-config.h"
+	"magick-config.h"
+	<stdio.h>
+	<stdarg.h>
+	<stdlib.h>
+	<math.h>
+	<sys/types.h>
+	<time.h>
+	"wand/method-attribute.h"
+	"magick/MagickCore.h"
+	"wand/animate.h"
+	"wand/compare.h"
+	"wand/composite.h"
+	"wand/conjure.h"
+	"wand/convert.h"
+	"wand/deprecate.h"
+	"wand/display.h"
+	"wand/drawing-wand.h"
+	"wand/identify.h"
+	"wand/import.h"
+	"wand/magick-property.h"
+	"wand/magick-image.h"
+	"wand/mogrify.h"
+	"wand/montage.h"
+	"wand/pixel-iterator.h"
+	"wand/pixel-wand.h"
+	"wand/stream.h"
+	"wand/wand-view.h"
+
+1420493559 /usr/include/ImageMagick/wand/method-attribute.h
+
+1420493559 /usr/include/ImageMagick/wand/animate.h
+
+1420493559 /usr/include/ImageMagick/wand/compare.h
+
+1420493559 /usr/include/ImageMagick/wand/composite.h
+
+1420493559 /usr/include/ImageMagick/wand/conjure.h
+
+1420493559 /usr/include/ImageMagick/wand/convert.h
+
+1420493559 /usr/include/ImageMagick/wand/deprecate.h
+	"wand/drawing-wand.h"
+	"wand/magick-wand.h"
+	"wand/pixel-iterator.h"
+	"wand/pixel-wand.h"
+
+1420493559 /usr/include/ImageMagick/wand/drawing-wand.h
+	"wand/pixel-wand.h"
+
+1420493559 /usr/include/ImageMagick/wand/pixel-wand.h
+
+1420493559 /usr/include/ImageMagick/wand/magick-wand.h
+	"wand/MagickWand.h"
+
+1420493559 /usr/include/ImageMagick/wand/pixel-iterator.h
+	"wand/magick-wand.h"
+	"wand/pixel-wand.h"
+
+1420493559 /usr/include/ImageMagick/wand/display.h
+
+1420493559 /usr/include/ImageMagick/wand/identify.h
+
+1420493559 /usr/include/ImageMagick/wand/import.h
+
+1420493559 /usr/include/ImageMagick/wand/magick-property.h
+
+1420493559 /usr/include/ImageMagick/wand/magick-image.h
+
+1420493559 /usr/include/ImageMagick/wand/mogrify.h
+
+1420493559 /usr/include/ImageMagick/wand/montage.h
+
+1420493559 /usr/include/ImageMagick/wand/stream.h
+
+1420493559 /usr/include/ImageMagick/wand/wand-view.h
+
+1420493559 /usr/include/ImageMagick/Magick++/Functions.h
+	"Magick++/Include.h"
+	<string>
+
+1420493559 /usr/include/ImageMagick/Magick++/Image.h
+	"Magick++/Include.h"
+	<string>
+	<list>
+	"Magick++/Blob.h"
+	"Magick++/ChannelMoments.h"
+	"Magick++/Color.h"
+	"Magick++/Drawable.h"
+	"Magick++/Exception.h"
+	"Magick++/Geometry.h"
+	"Magick++/TypeMetric.h"
+
+1420493559 /usr/include/ImageMagick/Magick++/Blob.h
+	"Magick++/Include.h"
+	<string>
+
+1420493559 /usr/include/ImageMagick/Magick++/ChannelMoments.h
+	"Magick++/Include.h"
+	<vector>
+
+1420493559 /usr/include/ImageMagick/Magick++/Color.h
+	"Magick++/Include.h"
+	<string>
+
+1420493559 /usr/include/ImageMagick/Magick++/Drawable.h
+	"Magick++/Include.h"
+	<functional>
+	<string>
+	<list>
+	<utility>
+	"Magick++/Color.h"
+	"Magick++/Geometry.h"
+
+1420493559 /usr/include/ImageMagick/Magick++/Geometry.h
+	"Magick++/Include.h"
+	<string>
+
+1420493559 /usr/include/ImageMagick/Magick++/Exception.h
+	"Magick++/Include.h"
+	<string>
+	<exception>
+
+1420493559 /usr/include/ImageMagick/Magick++/TypeMetric.h
+	"Magick++/Include.h"
+
+1420493559 /usr/include/ImageMagick/Magick++/Pixels.h
+	"Magick++/Include.h"
+	"Magick++/Color.h"
+	"Magick++/Image.h"
+
+1420493559 /usr/include/ImageMagick/Magick++/ResourceLimits.h
+	"Magick++/Include.h"
+
+1420493559 /usr/include/ImageMagick/Magick++/STL.h
+	"Magick++/Include.h"
+	<algorithm>
+	<functional>
+	<iterator>
+	<map>
+	<utility>
+	"Magick++/CoderInfo.h"
+	"Magick++/Drawable.h"
+	"Magick++/Exception.h"
+	"Magick++/Montage.h"
+
+1420493559 /usr/include/ImageMagick/Magick++/CoderInfo.h
+	"Magick++/Include.h"
+	<string>
+
+1420493559 /usr/include/ImageMagick/Magick++/Montage.h
+	"Magick++/Include.h"
+	<string>
+	"Magick++/Color.h"
+	"Magick++/Geometry.h"
+
+1433929977 /home/mat/Dropbox/projet_c/2015/Reconstruction_Tr_hors_axe/Correction_aberration.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+
+1431981507 source:/home/mat/Dropbox/projet_c/2015/Reconstruction_Tr_hors_axe/deroulement.cpp
+	"deroulement.h"
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	<math.h>
+
+1431981255 /home/mat/Dropbox/projet_c/2015/Reconstruction_Tr_hors_axe/deroulement.h
+	"struct.h"
+
+1445440635 source:/home/mat/Dropbox/projet_c/2015/Reconstruction_Tr_hors_axe/fonctions.cpp
+	"fonctions.h"
+
+1457691948 source:/home/mat/Dropbox/projet_c/2015/Reconstruction_Tr_hors_axe/main.cpp
+	"projet.h"
+	"fonctions.h"
+	"deroulement.h"
+	"Correction_aberration.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<Magick++.h>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1531433051 /usr/include/ImageMagick-6/Magick++.h
+	<Magick++/Include.h>
+	<Magick++/Functions.h>
+	<Magick++/Image.h>
+	<Magick++/Pixels.h>
+	<Magick++/ResourceLimits.h>
+	<Magick++/STL.h>
+
+1531433051 /usr/include/ImageMagick-6/Magick++/Include.h
+	"magick/magick-config.h"
+	"magick-config.h"
+	<stdio.h>
+	<stdarg.h>
+	<stdlib.h>
+	<time.h>
+	<math.h>
+	<sys/types.h>
+	<vcl.h>
+	<magick/MagickCore.h>
+	<wand/MagickWand.h>
+
+1531433051 /usr/include/ImageMagick-6/magick/magick-config.h
+	"magick/magick-baseconfig.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/MagickCore.h
+	"magick/magick-config.h"
+	"magick-config.h"
+	<stdio.h>
+	<stdarg.h>
+	<stdlib.h>
+	<sys/types.h>
+	<time.h>
+	"magick/method-attribute.h"
+	"magick/methods.h"
+	"magick/magick-type.h"
+	"magick/animate.h"
+	"magick/annotate.h"
+	"magick/artifact.h"
+	"magick/attribute.h"
+	"magick/blob.h"
+	"magick/cache.h"
+	"magick/cache-view.h"
+	"magick/channel.h"
+	"magick/cipher.h"
+	"magick/client.h"
+	"magick/coder.h"
+	"magick/color.h"
+	"magick/colorspace.h"
+	"magick/colormap.h"
+	"magick/compare.h"
+	"magick/composite.h"
+	"magick/compress.h"
+	"magick/configure.h"
+	"magick/constitute.h"
+	"magick/decorate.h"
+	"magick/delegate.h"
+	"magick/deprecate.h"
+	"magick/display.h"
+	"magick/distort.h"
+	"magick/distribute-cache.h"
+	"magick/draw.h"
+	"magick/effect.h"
+	"magick/enhance.h"
+	"magick/exception.h"
+	"magick/feature.h"
+	"magick/fourier.h"
+	"magick/fx.h"
+	"magick/gem.h"
+	"magick/geometry.h"
+	"magick/hashmap.h"
+	"magick/histogram.h"
+	"magick/identify.h"
+	"magick/image.h"
+	"magick/image-view.h"
+	"magick/layer.h"
+	"magick/list.h"
+	"magick/locale_.h"
+	"magick/log.h"
+	"magick/magic.h"
+	"magick/magick.h"
+	"magick/matrix.h"
+	"magick/memory_.h"
+	"magick/module.h"
+	"magick/mime.h"
+	"magick/monitor.h"
+	"magick/montage.h"
+	"magick/morphology.h"
+	"magick/opencl.h"
+	"magick/option.h"
+	"magick/paint.h"
+	"magick/pixel.h"
+	"magick/pixel-accessor.h"
+	"magick/policy.h"
+	"magick/prepress.h"
+	"magick/profile.h"
+	"magick/property.h"
+	"magick/quantize.h"
+	"magick/quantum.h"
+	"magick/registry.h"
+	"magick/random_.h"
+	"magick/resample.h"
+	"magick/resize.h"
+	"magick/resource_.h"
+	"magick/segment.h"
+	"magick/shear.h"
+	"magick/signature.h"
+	"magick/splay-tree.h"
+	"magick/stream.h"
+	"magick/statistic.h"
+	"magick/string_.h"
+	"magick/timer.h"
+	"magick/token.h"
+	"magick/transform.h"
+	"magick/threshold.h"
+	"magick/type.h"
+	"magick/utility.h"
+	"magick/version.h"
+	"magick/vision.h"
+	"magick/xml-tree.h"
+	"magick/xwindow.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/method-attribute.h
+
+1531433051 /usr/include/ImageMagick-6/magick/methods.h
+
+1531433051 /usr/include/ImageMagick-6/magick/magick-type.h
+	"magick/magick-config.h"
+
+1489349262 /usr/include/ImageMagick-6/magick/accelerate.h
+	"magick/fx.h"
+	"magick/morphology.h"
+	"magick/resample.h"
+	"magick/resize.h"
+	"magick/statistic.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/fx.h
+	"magick/draw.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/draw.h
+	"magick/geometry.h"
+	"magick/image.h"
+	"magick/pixel.h"
+	"magick/type.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/geometry.h
+
+1531433051 /usr/include/ImageMagick-6/magick/image.h
+	"magick/color.h"
+	"magick/blob.h"
+	"magick/colorspace.h"
+	"magick/cache-view.h"
+	"magick/color.h"
+	"magick/composite.h"
+	"magick/compress.h"
+	"magick/effect.h"
+	"magick/geometry.h"
+	"magick/layer.h"
+	"magick/locale_.h"
+	"magick/monitor.h"
+	"magick/pixel.h"
+	"magick/profile.h"
+	"magick/quantum.h"
+	"magick/resample.h"
+	"magick/resize.h"
+	"magick/semaphore.h"
+	"magick/stream.h"
+	"magick/timer.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/color.h
+	"magick/pixel.h"
+	"magick/exception.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/pixel.h
+	"magick/colorspace.h"
+	"magick/constitute.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/colorspace.h
+
+1531433051 /usr/include/ImageMagick-6/magick/constitute.h
+
+1531433051 /usr/include/ImageMagick-6/magick/exception.h
+	<stdarg.h>
+	"magick/semaphore.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/semaphore.h
+
+1531433051 /usr/include/ImageMagick-6/magick/blob.h
+	"magick/image.h"
+	"magick/stream.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/stream.h
+
+1531433051 /usr/include/ImageMagick-6/magick/cache-view.h
+	"magick/pixel.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/composite.h
+
+1531433051 /usr/include/ImageMagick-6/magick/compress.h
+
+1531433051 /usr/include/ImageMagick-6/magick/effect.h
+	"magick/morphology.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/morphology.h
+	"magick/geometry.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/layer.h
+
+1531433051 /usr/include/ImageMagick-6/magick/locale_.h
+	"magick/hashmap.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/hashmap.h
+
+1531433051 /usr/include/ImageMagick-6/magick/monitor.h
+
+1531433051 /usr/include/ImageMagick-6/magick/profile.h
+	"magick/string_.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/string_.h
+	<stdarg.h>
+	<time.h>
+	"magick/exception.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/quantum.h
+	"magick/image.h"
+	"magick/semaphore.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/resample.h
+	"magick/cache-view.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/resize.h
+
+1531433051 /usr/include/ImageMagick-6/magick/timer.h
+
+1531433051 /usr/include/ImageMagick-6/magick/type.h
+
+1531433051 /usr/include/ImageMagick-6/magick/statistic.h
+	"magick/draw.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/animate.h
+
+1531433051 /usr/include/ImageMagick-6/magick/annotate.h
+	"magick/draw.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/artifact.h
+
+1531433051 /usr/include/ImageMagick-6/magick/attribute.h
+	"magick/image.h"
+	"magick/exception.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/cache.h
+	"magick/blob.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/channel.h
+	"magick/image.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/cipher.h
+
+1531433051 /usr/include/ImageMagick-6/magick/client.h
+
+1531433051 /usr/include/ImageMagick-6/magick/coder.h
+
+1531433051 /usr/include/ImageMagick-6/magick/colormap.h
+
+1531433051 /usr/include/ImageMagick-6/magick/compare.h
+	"magick/image.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/configure.h
+	"magick/hashmap.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/decorate.h
+
+1531433051 /usr/include/ImageMagick-6/magick/delegate.h
+	<stdarg.h>
+	"magick/semaphore.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/deprecate.h
+	<stdarg.h>
+	"magick/blob.h"
+	"magick/cache-view.h"
+	"magick/draw.h"
+	"magick/constitute.h"
+	"magick/magick-config.h"
+	"magick/pixel.h"
+	"magick/quantize.h"
+	"magick/quantum.h"
+	"magick/registry.h"
+	"magick/semaphore.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/quantize.h
+	"magick/colorspace.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/registry.h
+
+1531433051 /usr/include/ImageMagick-6/magick/display.h
+
+1531433051 /usr/include/ImageMagick-6/magick/distort.h
+
+1531433051 /usr/include/ImageMagick-6/magick/distribute-cache.h
+	"magick/exception.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/enhance.h
+	"magick/pixel.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/feature.h
+
+1531433051 /usr/include/ImageMagick-6/magick/fourier.h
+
+1531433051 /usr/include/ImageMagick-6/magick/gem.h
+	"magick/fx.h"
+	"magick/random_.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/random_.h
+	"magick/string_.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/histogram.h
+
+1531433051 /usr/include/ImageMagick-6/magick/identify.h
+
+1531433051 /usr/include/ImageMagick-6/magick/image-view.h
+
+1531433051 /usr/include/ImageMagick-6/magick/list.h
+
+1531433051 /usr/include/ImageMagick-6/magick/log.h
+	<stdarg.h>
+	"magick/exception.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/magic.h
+
+1531433051 /usr/include/ImageMagick-6/magick/magick.h
+	<stdarg.h>
+	"magick/semaphore.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/matrix.h
+
+1531433051 /usr/include/ImageMagick-6/magick/memory_.h
+
+1531433051 /usr/include/ImageMagick-6/magick/module.h
+	<time.h>
+	"magick/version.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/version.h
+
+1531433051 /usr/include/ImageMagick-6/magick/mime.h
+
+1531433051 /usr/include/ImageMagick-6/magick/montage.h
+
+1531433051 /usr/include/ImageMagick-6/magick/opencl.h
+
+1531433051 /usr/include/ImageMagick-6/magick/option.h
+
+1531433051 /usr/include/ImageMagick-6/magick/paint.h
+	"magick/color.h"
+	"magick/draw.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/pixel-accessor.h
+	<math.h>
+	"magick/gem.h"
+	"magick/pixel.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/policy.h
+	"magick/pixel.h"
+	"magick/exception.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/prepress.h
+
+1531433051 /usr/include/ImageMagick-6/magick/property.h
+
+1531433051 /usr/include/ImageMagick-6/magick/resource_.h
+
+1531433051 /usr/include/ImageMagick-6/magick/segment.h
+
+1531433051 /usr/include/ImageMagick-6/magick/shear.h
+
+1531433051 /usr/include/ImageMagick-6/magick/signature.h
+
+1531433051 /usr/include/ImageMagick-6/magick/splay-tree.h
+
+1531433051 /usr/include/ImageMagick-6/magick/token.h
+
+1531433051 /usr/include/ImageMagick-6/magick/transform.h
+
+1531433051 /usr/include/ImageMagick-6/magick/threshold.h
+
+1531433051 /usr/include/ImageMagick-6/magick/utility.h
+
+1531433051 /usr/include/ImageMagick-6/magick/vision.h
+
+1531433051 /usr/include/ImageMagick-6/magick/xml-tree.h
+	"magick/exception.h"
+	"magick/splay-tree.h"
+
+1531433051 /usr/include/ImageMagick-6/magick/xwindow.h
+
+1531433051 /usr/include/ImageMagick-6/wand/MagickWand.h
+	"magick/magick-config.h"
+	"magick-config.h"
+	<stdio.h>
+	<stdarg.h>
+	<stdlib.h>
+	<math.h>
+	<sys/types.h>
+	<time.h>
+	"wand/method-attribute.h"
+	"magick/MagickCore.h"
+	"wand/animate.h"
+	"wand/compare.h"
+	"wand/composite.h"
+	"wand/conjure.h"
+	"wand/convert.h"
+	"wand/deprecate.h"
+	"wand/display.h"
+	"wand/drawing-wand.h"
+	"wand/identify.h"
+	"wand/import.h"
+	"wand/magick-property.h"
+	"wand/magick-image.h"
+	"wand/mogrify.h"
+	"wand/montage.h"
+	"wand/pixel-iterator.h"
+	"wand/pixel-wand.h"
+	"wand/stream.h"
+	"wand/wand-view.h"
+
+1531433051 /usr/include/ImageMagick-6/wand/method-attribute.h
+
+1531433051 /usr/include/ImageMagick-6/wand/animate.h
+
+1531433051 /usr/include/ImageMagick-6/wand/compare.h
+
+1531433051 /usr/include/ImageMagick-6/wand/composite.h
+
+1531433051 /usr/include/ImageMagick-6/wand/conjure.h
+
+1531433051 /usr/include/ImageMagick-6/wand/convert.h
+
+1531433051 /usr/include/ImageMagick-6/wand/deprecate.h
+	"wand/drawing-wand.h"
+	"wand/magick-wand.h"
+	"wand/pixel-iterator.h"
+	"wand/pixel-wand.h"
+
+1531433051 /usr/include/ImageMagick-6/wand/drawing-wand.h
+	"wand/pixel-wand.h"
+
+1531433051 /usr/include/ImageMagick-6/wand/pixel-wand.h
+
+1531433051 /usr/include/ImageMagick-6/wand/magick-wand.h
+	"wand/MagickWand.h"
+
+1531433051 /usr/include/ImageMagick-6/wand/pixel-iterator.h
+	"wand/magick-wand.h"
+	"wand/pixel-wand.h"
+
+1531433051 /usr/include/ImageMagick-6/wand/display.h
+
+1531433051 /usr/include/ImageMagick-6/wand/identify.h
+
+1531433051 /usr/include/ImageMagick-6/wand/import.h
+
+1531433051 /usr/include/ImageMagick-6/wand/magick-property.h
+
+1531433051 /usr/include/ImageMagick-6/wand/magick-image.h
+
+1531433051 /usr/include/ImageMagick-6/wand/mogrify.h
+
+1531433051 /usr/include/ImageMagick-6/wand/montage.h
+
+1531433051 /usr/include/ImageMagick-6/wand/stream.h
+
+1531433051 /usr/include/ImageMagick-6/wand/wand-view.h
+
+1531433051 /usr/include/ImageMagick-6/Magick++/Functions.h
+	"Magick++/Include.h"
+	<string>
+
+1531433051 /usr/include/ImageMagick-6/Magick++/Image.h
+	"Magick++/Include.h"
+	<string>
+	<list>
+	"Magick++/Blob.h"
+	"Magick++/ChannelMoments.h"
+	"Magick++/Color.h"
+	"Magick++/Drawable.h"
+	"Magick++/Exception.h"
+	"Magick++/Geometry.h"
+	"Magick++/TypeMetric.h"
+
+1531433051 /usr/include/ImageMagick-6/Magick++/Blob.h
+	"Magick++/Include.h"
+	<string>
+
+1531433051 /usr/include/ImageMagick-6/Magick++/ChannelMoments.h
+	"Magick++/Include.h"
+	<vector>
+
+1531433051 /usr/include/ImageMagick-6/Magick++/Color.h
+	"Magick++/Include.h"
+	<string>
+
+1531433051 /usr/include/ImageMagick-6/Magick++/Drawable.h
+	"Magick++/Include.h"
+	<functional>
+	<string>
+	<list>
+	<utility>
+	"Magick++/Color.h"
+	"Magick++/Geometry.h"
+
+1531433051 /usr/include/ImageMagick-6/Magick++/Geometry.h
+	"Magick++/Include.h"
+	<string>
+
+1531433051 /usr/include/ImageMagick-6/Magick++/Exception.h
+	"Magick++/Include.h"
+	<string>
+	<exception>
+
+1531433051 /usr/include/ImageMagick-6/Magick++/TypeMetric.h
+	"Magick++/Include.h"
+
+1531433051 /usr/include/ImageMagick-6/Magick++/Pixels.h
+	"Magick++/Include.h"
+	"Magick++/Color.h"
+	"Magick++/Image.h"
+
+1531433051 /usr/include/ImageMagick-6/Magick++/ResourceLimits.h
+	"Magick++/Include.h"
+
+1531433051 /usr/include/ImageMagick-6/Magick++/STL.h
+	"Magick++/Include.h"
+	<algorithm>
+	<functional>
+	<iterator>
+	<map>
+	<utility>
+	"Magick++/CoderInfo.h"
+	"Magick++/Drawable.h"
+	"Magick++/Exception.h"
+	"Magick++/Montage.h"
+
+1531433051 /usr/include/ImageMagick-6/Magick++/CoderInfo.h
+	"Magick++/Include.h"
+	<string>
+
+1531433051 /usr/include/ImageMagick-6/Magick++/Montage.h
+	"Magick++/Include.h"
+	<string>
+	"Magick++/Color.h"
+	"Magick++/Geometry.h"
+
+1448633809 source:/home/mat/Dropbox/projet_c/2016/Reconstruction_Tr_hors_axe/Correction_aberration.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+	"fonctions.h"
+	"Correction_aberration.h"
+
+1463135756 /home/mat/Dropbox/projet_c/2016/Reconstruction_Tr_hors_axe/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<tiffio.h>
+	"projet.h"
+
+1441901559 /home/mat/Dropbox/projet_c/2016/Reconstruction_Tr_hors_axe/struct.h
+
+1464018113 /home/mat/Dropbox/projet_c/2016/Reconstruction_Tr_hors_axe/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<Magick++.h>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1433929977 /home/mat/Dropbox/projet_c/2016/Reconstruction_Tr_hors_axe/Correction_aberration.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+
+1431981507 source:/home/mat/Dropbox/projet_c/2016/Reconstruction_Tr_hors_axe/deroulement.cpp
+	"deroulement.h"
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	<math.h>
+
+1431981255 /home/mat/Dropbox/projet_c/2016/Reconstruction_Tr_hors_axe/deroulement.h
+	"struct.h"
+
+1478093036 source:/home/mat/Dropbox/projet_c/2016/Reconstruction_Tr_hors_axe/fonctions.cpp
+	"fonctions.h"
+	<chrono>
+
+1478171041 source:/home/mat/Dropbox/projet_c/2016/Reconstruction_Tr_hors_axe/main.cpp
+	"projet.h"
+	"fonctions.h"
+	"deroulement.h"
+	"Correction_aberration.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<chrono>
+	<Magick++.h>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<omp.h>
+
+1448633809 source:/home/mat/Dropbox/projet_c/2017/Reconstruction_Tr_hors_axe/Correction_aberration.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+	"fonctions.h"
+	"Correction_aberration.h"
+
+1463135756 /home/mat/Dropbox/projet_c/2017/Reconstruction_Tr_hors_axe/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<tiffio.h>
+	"projet.h"
+
+1441901559 /home/mat/Dropbox/projet_c/2017/Reconstruction_Tr_hors_axe/struct.h
+
+1464018113 /home/mat/Dropbox/projet_c/2017/Reconstruction_Tr_hors_axe/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<Magick++.h>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1433929977 /home/mat/Dropbox/projet_c/2017/Reconstruction_Tr_hors_axe/Correction_aberration.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+
+1431981507 source:/home/mat/Dropbox/projet_c/2017/Reconstruction_Tr_hors_axe/deroulement.cpp
+	"deroulement.h"
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	<math.h>
+
+1431981255 /home/mat/Dropbox/projet_c/2017/Reconstruction_Tr_hors_axe/deroulement.h
+	"struct.h"
+
+1483526652 source:/home/mat/Dropbox/projet_c/2017/Reconstruction_Tr_hors_axe/fonctions.cpp
+	"fonctions.h"
+	<chrono>
+
+1483524459 source:/home/mat/Dropbox/projet_c/2017/Reconstruction_Tr_hors_axe/main.cpp
+	"projet.h"
+	"fonctions.h"
+	"deroulement.h"
+	"Correction_aberration.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<chrono>
+	<Magick++.h>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<omp.h>
+
+1485448528 source:/home/tomo/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/Correction_aberration.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+	"fonctions.h"
+	"Correction_aberration.h"
+
+1485448532 /home/tomo/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<tiffio.h>
+	"projet.h"
+
+1485448532 /home/tomo/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/struct.h
+
+1485448530 /home/tomo/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<Magick++.h>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1485448532 /home/tomo/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/Correction_aberration.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+
+1485448530 source:/home/tomo/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/deroulement.cpp
+	"deroulement.h"
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	<math.h>
+
+1485448532 /home/tomo/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/deroulement.h
+	"struct.h"
+
+1486053854 source:/home/tomo/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/fonctions.cpp
+	"fonctions.h"
+	<chrono>
+
+1486053143 source:/home/tomo/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/main.cpp
+	"projet.h"
+	"fonctions.h"
+	"deroulement.h"
+	"Correction_aberration.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<chrono>
+	<Magick++.h>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<omp.h>
+
+1485448528 source:/home/aziz/Projet_Tomo/Tomo_prog/Reconstruction_Tr_hors_axe/Correction_aberration.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+	"fonctions.h"
+	"Correction_aberration.h"
+
+1485448532 /home/aziz/Projet_Tomo/Tomo_prog/Reconstruction_Tr_hors_axe/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<tiffio.h>
+	"projet.h"
+
+1485448532 /home/aziz/Projet_Tomo/Tomo_prog/Reconstruction_Tr_hors_axe/struct.h
+
+1485448530 /home/aziz/Projet_Tomo/Tomo_prog/Reconstruction_Tr_hors_axe/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<Magick++.h>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1485448532 /home/aziz/Projet_Tomo/Tomo_prog/Reconstruction_Tr_hors_axe/Correction_aberration.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+
+1485448530 source:/home/aziz/Projet_Tomo/Tomo_prog/Reconstruction_Tr_hors_axe/deroulement.cpp
+	"deroulement.h"
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	<math.h>
+
+1485448532 /home/aziz/Projet_Tomo/Tomo_prog/Reconstruction_Tr_hors_axe/deroulement.h
+	"struct.h"
+
+1485448528 source:/home/aziz/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/Correction_aberration.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+	"fonctions.h"
+	"Correction_aberration.h"
+
+1485448532 /home/aziz/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<tiffio.h>
+	"projet.h"
+
+1485448532 /home/aziz/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/struct.h
+
+1485448530 /home/aziz/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<Magick++.h>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1485448532 /home/aziz/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/Correction_aberration.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+
+1485448530 source:/home/aziz/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/deroulement.cpp
+	"deroulement.h"
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	<math.h>
+
+1485448532 /home/aziz/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/deroulement.h
+	"struct.h"
+
+1486053854 source:/home/aziz/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/fonctions.cpp
+	"fonctions.h"
+	<chrono>
+
+1489154446 source:/home/aziz/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/main.cpp
+	"projet.h"
+	"fonctions.h"
+	"deroulement.h"
+	"Correction_aberration.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<chrono>
+	<Magick++.h>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<omp.h>
+
+1493393559 source:/home/mat/Dropbox/projet_c/2017/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/Correction_aberration.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+	"fonctions.h"
+	"Correction_aberration.h"
+
+1493393559 /home/mat/Dropbox/projet_c/2017/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<tiffio.h>
+	"projet.h"
+
+1493393559 /home/mat/Dropbox/projet_c/2017/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/struct.h
+
+1493393559 /home/mat/Dropbox/projet_c/2017/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<Magick++.h>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1493393559 /home/mat/Dropbox/projet_c/2017/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/Correction_aberration.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+
+1493393559 source:/home/mat/Dropbox/projet_c/2017/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/deroulement.cpp
+	"deroulement.h"
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	<math.h>
+
+1493393559 /home/mat/Dropbox/projet_c/2017/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/deroulement.h
+	"struct.h"
+
+1512665727 source:/home/mat/Dropbox/projet_c/2017/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/fonctions.cpp
+	"fonctions.h"
+	<chrono>
+
+1512493274 source:/home/mat/Dropbox/projet_c/2017/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/main.cpp
+	"projet.h"
+	"fonctions.h"
+	"deroulement.h"
+	"Correction_aberration.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<chrono>
+	<Magick++.h>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<omp.h>
+
+1516895738 source:/home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/Correction_aberration.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+	"fonctions.h"
+	"Correction_aberration.h"
+
+1519298108 /home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<tiffio.h>
+	"projet.h"
+
+1493393559 /home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/struct.h
+
+1519209882 /home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1493393559 /home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/Correction_aberration.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+
+1493393559 source:/home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/deroulement.cpp
+	"deroulement.h"
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	<math.h>
+
+1493393559 /home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/deroulement.h
+	"struct.h"
+
+1523614145 source:/home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/fonctions.cpp
+	"fonctions.h"
+	<chrono>
+	<vector>
+	<algorithm>
+
+1522319088 source:/home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/main.cpp
+	"projet.h"
+	"fonctions.h"
+	"deroulement.h"
+	"Correction_aberration.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<chrono>
+	<Magick++.h>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<omp.h>
+
+1516895738 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/Correction_aberration.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+	"fonctions.h"
+	"Correction_aberration.h"
+
+1549726673 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<tiffio.h>
+	<vector>
+	<complex>
+	"projet.h"
+	"manip.h"
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+
+1493393559 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/struct.h
+
+1548758173 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1493393559 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/Correction_aberration.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+
+1493393559 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/deroulement.cpp
+	"deroulement.h"
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	<math.h>
+
+1493393559 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/deroulement.h
+	"struct.h"
+
+1549727421 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/fonctions.cpp
+	"fonctions.h"
+	<chrono>
+	<vector>
+	<algorithm>
+	"FFT_encaps.h"
+	"FFT_fonctions.h"
+
+1549376313 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/main.cpp
+	"projet.h"
+	"fonctions.h"
+	"deroulement.h"
+	"Correction_aberration.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<chrono>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<omp.h>
+	"manip.h"
+	"FFT_fonctions.h"
+
+1549457996 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/src/manip.cpp
+	"manip.h"
+	<iostream>
+	"fonctions.h"
+	"projet.h"
+
+1548780298 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/include/manip.h
+	<cstdlib>
+	<iostream>
+
+1549726673 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe//fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<tiffio.h>
+	<vector>
+	<complex>
+	"projet.h"
+	"manip.h"
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+
+1493393559 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe//struct.h
+
+1548758173 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe//projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1549641328 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/src/FFT_encaps.cpp
+	"FFT_encaps.h"
+
+1544194816 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/include/FFT_encaps.h
+	"Point3D.h"
+	"Point2D.h"
+	<fftw3.h>
+
+1531839117 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/include/Point3D.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	<iostream>
+	"Point2D.h"
+
+1544202478 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/include/Point2D.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	<vector>
+	<complex>
+
+1549643640 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/include/FFT_fonctions.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	"manip.h"
+	"FFT_encaps.h"
+
+1549643640 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/src/FFT_fonctions.cpp
+	"FFT_fonctions.h"
+	"fonctions.h"
+	"manip.h"
+
+1544202725 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/src/Point2D.cpp
+	"Point2D.h"
+
+1544112250 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction_Tr_hors_axe/src/Point3D.cpp
+	"Point3D.h"
+
+1493393559 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction/deroulement.cpp
+	"deroulement.h"
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	<math.h>
+
+1493393559 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction/deroulement.h
+	"struct.h"
+
+1493393559 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction/struct.h
+
+1555515194 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction/fonctions.cpp
+	"fonctions.h"
+	<chrono>
+	<vector>
+	<algorithm>
+	"FFT_encaps.h"
+	"FFT_fonctions.h"
+
+1555515175 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<tiffio.h>
+	<vector>
+	<complex>
+	"projet.h"
+	"manip.h"
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+
+1548758173 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1555514102 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction/include/manip.h
+	<cstdlib>
+	<iostream>
+
+1544194816 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction/include/FFT_encaps.h
+	"Point3D.h"
+	"Point2D.h"
+	<fftw3.h>
+
+1531839117 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction/include/Point3D.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	<iostream>
+	"Point2D.h"
+
+1544202478 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction/include/Point2D.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	<vector>
+	<complex>
+
+1549643640 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction/include/FFT_fonctions.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	"manip.h"
+	"FFT_encaps.h"
+
+1557494298 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction/main.cpp
+	"projet.h"
+	"fonctions.h"
+	"deroulement.h"
+	"Correction_aberration.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<chrono>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<omp.h>
+	"manip.h"
+	"FFT_fonctions.h"
+
+1493393559 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction/Correction_aberration.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+
+1549641328 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction/src/FFT_encaps.cpp
+	"FFT_encaps.h"
+
+1549986800 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction/src/FFT_fonctions.cpp
+	"FFT_fonctions.h"
+	"fonctions.h"
+	"manip.h"
+
+1557493939 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction/src/manip.cpp
+	"manip.h"
+	<iostream>
+	"fonctions.h"
+	"projet.h"
+
+1544202725 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction/src/Point2D.cpp
+	"Point2D.h"
+
+1544112250 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction/src/Point3D.cpp
+	"Point3D.h"
+
+1555515175 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction//fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<tiffio.h>
+	<vector>
+	<complex>
+	"projet.h"
+	"manip.h"
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+
+1493393559 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction//struct.h
+
+1548758173 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Reconstruction//projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1493393559 source:/home/tomo/Projet_tomo/Tomo_prog/Reconstruction/deroulement.cpp
+	"deroulement.h"
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	<math.h>
+
+1493393559 /home/tomo/Projet_tomo/Tomo_prog/Reconstruction/deroulement.h
+	"struct.h"
+
+1493393559 /home/tomo/Projet_tomo/Tomo_prog/Reconstruction/struct.h
+
+1557501800 source:/home/tomo/Projet_tomo/Tomo_prog/Reconstruction/fonctions.cpp
+	"fonctions.h"
+	<chrono>
+	<vector>
+	<algorithm>
+	"FFT_encaps.h"
+	"FFT_fonctions.h"
+
+1555515175 /home/tomo/Projet_tomo/Tomo_prog/Reconstruction/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<tiffio.h>
+	<vector>
+	<complex>
+	"projet.h"
+	"manip.h"
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+
+1548758173 /home/tomo/Projet_tomo/Tomo_prog/Reconstruction/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1555514102 /home/tomo/Projet_tomo/Tomo_prog/Reconstruction/include/manip.h
+	<cstdlib>
+	<iostream>
+
+1544194816 /home/tomo/Projet_tomo/Tomo_prog/Reconstruction/include/FFT_encaps.h
+	"Point3D.h"
+	"Point2D.h"
+	<fftw3.h>
+
+1531839117 /home/tomo/Projet_tomo/Tomo_prog/Reconstruction/include/Point3D.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	<iostream>
+	"Point2D.h"
+
+1544202478 /home/tomo/Projet_tomo/Tomo_prog/Reconstruction/include/Point2D.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	<vector>
+	<complex>
+
+1549643640 /home/tomo/Projet_tomo/Tomo_prog/Reconstruction/include/FFT_fonctions.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	"manip.h"
+	"FFT_encaps.h"
+
+1557494298 source:/home/tomo/Projet_tomo/Tomo_prog/Reconstruction/main.cpp
+	"projet.h"
+	"fonctions.h"
+	"deroulement.h"
+	"Correction_aberration.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<chrono>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<omp.h>
+	"manip.h"
+	"FFT_fonctions.h"
+
+1493393559 /home/tomo/Projet_tomo/Tomo_prog/Reconstruction/Correction_aberration.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+
+1549641328 source:/home/tomo/Projet_tomo/Tomo_prog/Reconstruction/src/FFT_encaps.cpp
+	"FFT_encaps.h"
+
+1557501609 source:/home/tomo/Projet_tomo/Tomo_prog/Reconstruction/src/FFT_fonctions.cpp
+	"FFT_fonctions.h"
+	"fonctions.h"
+	"manip.h"
+
+1555515175 /home/tomo/Projet_tomo/Tomo_prog/Reconstruction//fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<tiffio.h>
+	<vector>
+	<complex>
+	"projet.h"
+	"manip.h"
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+
+1493393559 /home/tomo/Projet_tomo/Tomo_prog/Reconstruction//struct.h
+
+1548758173 /home/tomo/Projet_tomo/Tomo_prog/Reconstruction//projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1557506180 source:/home/tomo/Projet_tomo/Tomo_prog/Reconstruction/src/manip.cpp
+	"manip.h"
+	<iostream>
+	"fonctions.h"
+	"projet.h"
+
+1544202725 source:/home/tomo/Projet_tomo/Tomo_prog/Reconstruction/src/Point2D.cpp
+	"Point2D.h"
+
+1544112250 source:/home/tomo/Projet_tomo/Tomo_prog/Reconstruction/src/Point3D.cpp
+	"Point3D.h"
+

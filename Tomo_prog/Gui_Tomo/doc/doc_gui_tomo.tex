@@ -1,0 +1,127 @@
+
+
+
+%%% LaTeX Template: Two column article
+%%%
+%%% Source: http://www.howtotex.com/
+%%% Feel free to distribute this template, but please keep to referal to http://www.howtotex.com/ here.
+%%% Date: February 2011
+
+%%% Preamble
+\documentclass[	french,DIV=calc,%
+							paper=a4,%
+							fontsize=11pt,%
+							twocolumn]{scrartcl}	 					% KOMA-article class
+
+\usepackage{lipsum}													% Package to create dummy text
+\usepackage[utf8x]{inputenc}
+\usepackage[francais]{babel}	
+% English language/hyphenation
+\usepackage[protrusion=true,expansion=true]{microtype}				% Better typography
+\usepackage{amsmath,amsfonts,amsthm}					% Math packages
+\usepackage[pdftex]{graphicx}									% Enable pdflatex
+\usepackage[svgnames]{xcolor}									% Enabling colors by their 'svgnames'
+\usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption}	% Custom captions under/above floats
+\usepackage{epstopdf}												% Converts .eps to .pdf
+\usepackage{subfig}													% Subfigures
+\usepackage{booktabs}												% Nicer tables
+\usepackage{fix-cm}													% Custom fontsizes
+
+\usepackage[squaren,Gray]{SIunits}
+
+%%% Custom sectioning (sectsty package)
+\usepackage{sectsty}													% Custom sectioning (see below)
+\allsectionsfont{%															% Change font of al section commands
+	\usefont{OT1}{phv}{b}{n}%										% bch-b-n: CharterBT-Bold font
+	}
+
+\sectionfont{%																% Change font of \section command
+	\usefont{OT1}{phv}{b}{n}%										% bch-b-n: CharterBT-Bold font
+	}
+
+
+
+%%% Headers and footers
+\usepackage{fancyhdr}												% Needed to define custom headers/footers
+	\pagestyle{fancy}														% Enabling the custom headers/footers
+\usepackage{lastpage}	
+
+% Header (empty)
+\lhead{}
+\chead{}
+\rhead{}
+% Footer (you may change this to your own needs)
+\lfoot{\footnotesize \texttt{Manip tomo} \textbullet Réglages optiques et logiciels}
+\cfoot{}
+\rfoot{\footnotesize page \thepage\ of \pageref{LastPage}}	% "Page 1 of 2"
+\renewcommand{\headrulewidth}{0.0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\newcommand{\code}[1]{\texttt{#1}}
+
+
+%%% Creating an initial of the very first character of the content
+\usepackage{lettrine}
+\newcommand{\initial}[1]{%
+     \lettrine[lines=3,lhang=0.3,nindent=0em]{
+     				\color{DarkGoldenrod}
+     				{\textsf{#1}}}{}}
+
+
+
+%%% Title, author and date metadata
+\usepackage{titling}															% For custom titles
+
+\newcommand{\HorRule}{\color{DarkGoldenrod}%			% Creating a horizontal rule
+									  	\rule{\linewidth}{1pt}%
+										}
+
+\pretitle{\vspace{-30pt} \begin{flushleft} \HorRule 
+				\fontsize{50}{50} \usefont{OT1}{phv}{b}{n} \color{DarkRed} \selectfont 
+				}
+\title{Documentation Tomo}					% Title of your article goes here
+\posttitle{\par\end{flushleft}\vskip 0.5em}
+
+\preauthor{\begin{flushleft}
+					\large \lineskip 0.5em \usefont{OT1}{phv}{b}{sl} \color{DarkRed}}
+\author{Matthieu Debailleul, }											% Author name goes here
+\postauthor{\footnotesize \usefont{OT1}{phv}{m}{sl} \color{Black} 
+					Laboratoire MIPS 								% Institution of author
+					\par\end{flushleft}\HorRule}
+
+\date{}																				% No date
+
+
+
+%%% Begin document
+\begin{document}
+\maketitle
+\thispagestyle{fancy} 			% Enabling the custom headers/footers for the first page 
+% The first character should be within \initial{}
+%\initial{D}\textbf{escription succincte des réglages optiques et des logiciels utilisés.}
+
+
+\section{Principes}
+
+L'interface graphique écrit dans 2 fichiers de configuration : \code{recon.txt}, \code{config\_manip.txt}. Les chemins utiles au démarrage se trouvent dans \$HOME/.config/gui\_tomo.config.
+
+
+Pour enregistrer une modif dans un fichier sur le disque dur, il faut en fait réenregistrer toutes les données.
+On utilise pour cela des tableaux de stockage, contiennent l'ensemble des données du fichier.
+Ces tableaux stockés en mémoire sont modifiés à chaque clic sur un bouton.
+
+À l'acquisition, les fichiers contenus dans \code{Projet\_tomo/tomo\_config} sont copiés dans le répertoire des données acquises (par défaut \code{/ramdisk/ACQUIS/}), afin de conserver les paramètres expérimentaux. 
+
+\section{Pc d'acquisition}
+\begin{enumerate}
+ \item Le fichier de \code{config\_manip.txt} doit être modifié uniquement sur le PC d'acquisition. C'est pourquoi il existe un 2e chemin, spécifique au Pc d'acquisition, indiqué par \code{config\_manip\_pc\_acquis}. 
+Sur un Pc de reconstruction uniquement, ce fichier \code{config\_manip.txt} ne doit jamais être modifié (c'est un fichier de sauvegarde qui informe sur les conditions d'acquisition).
+
+\item L'endroit de sauvegarde du fichier  \code{recon.txt} n'est pas critique, et il est enregistré dans le répertoire des données. 
+\item 
+Le fichier \code{gui\_tomo.conf} est toujours sauvegardé dans \code{\$HOME/.config/} quelle que soit la machine. 
+\end{enumerate}
+
+
+
+\end{document}
