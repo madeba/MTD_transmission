@@ -76,7 +76,7 @@ class Gui_TomoFrame: public wxFrame
 
 
         ///Déclaration des attributs de type Boutons et menus en protected
-        std::string chemin_config_GUI,chemin_recon, chemin_config_manip,chemin_acquis,chemin_result,repertoire_config;
+        std::string chemin_config_GUI,chemin_recon, chemin_config_manip,chemin_rep_acquis,chemin_result,repertoire_config;
         //std::string repertoire_config_pc_acquis,chemin_config_manip_pc_acquis;
         wxButton* BoutonManip;
         wxButton* BoutonTraitement;

@@ -114,9 +114,9 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     repertoire_config=extract_string("CHEMIN_CONFIG_PC_ACQUIS",home+fin_chemin_gui_tomo);///repertoire config_manip.txt si pc acquisition
     //repertoire_config=extract_string("CHEMIN_CONFIG_ACQUIS",home+fin_chemin_gui_tomo);///repertoire config_manip.txt : Inutile ?
     cout<<"Repertoire_config="<<repertoire_config<<endl;
-    chemin_acquis=extract_string("CHEMIN_ACQUIS",home+fin_chemin_gui_tomo);///repertoire des données
+    chemin_rep_acquis=extract_string("CHEMIN_ACQUIS",home+fin_chemin_gui_tomo);///repertoire des données
     chemin_result=extract_string("CHEMIN_RESULT",home+fin_chemin_gui_tomo);///repertoire des résultats
-    chemin_recon=repertoire_config+"/recon.txt";
+    chemin_recon=chemin_rep_acquis+"/recon.txt";
     chemin_config_manip=repertoire_config+"/config_manip.txt";
 //    chemin_config_manip_pc_acquis=repertoire_config_pc_acquis+"/config_manip.txt";///chemin vers config_manip.txt  si on est sur un pc acquisition
     cout<<"config_manip="<<chemin_config_manip<<endl;
@@ -241,7 +241,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     zone13->SetBackgroundColour(*wxLIGHT_GREY);
     /// Dialog fichier;
     BoutonOpenDir=new wxButton(zone13, idBoutonOpenDir, wxT("&Données"), wxPoint(5,10), wxDefaultSize, 0);
-    editDirAcquis=new wxTextCtrl(zone13,-1,chemin_acquis,wxPoint(105,14), wxSize(175,26));
+    editDirAcquis=new wxTextCtrl(zone13,-1,chemin_rep_acquis,wxPoint(105,14), wxSize(175,26));
     editDirAcquis->SetToolTip(wxT("Répertoire des acquisitions"));
     // textFicManip=new wxTextCtrl(zone10,-1,"",wxPoint(160,195),wxSize(100,20));
     BoutonManip= new wxButton(zone13, idBoutonManip, wxT("&Acquisition"), wxPoint(195,75), wxDefaultSize, 0);
@@ -297,7 +297,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     sizer_vertical1->Add(zone22, 2, wxALL | wxEXPAND, 1);
     /// Dialog fichier;
     BoutonOpenMask=new wxButton(zone22, idBoutonOpenMask, wxT("&Masque"), wxPoint(5,10), wxSize(70,30), 0);
-    editFicMask=new wxTextCtrl(zone22,-1,chemin_acquis+"/Mask.png",wxPoint(85,6), wxSize(200,40));
+    editFicMask=new wxTextCtrl(zone22,-1,chemin_rep_acquis+"/Mask.png",wxPoint(85,6), wxSize(200,40));
     editFicMask->SetToolTip(wxT("Masque pour correction d'aberration"));
 
     BoutonRecons= new wxButton(zone22, idBoutonTraitement, wxT("&Prétraitement"), wxPoint(184,94), wxDefaultSize, 0);
@@ -377,7 +377,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     BoutonRecons= new wxButton(zone32, idBoutonRecons, wxT("&Reconstruction"), wxPoint(175,118), wxDefaultSize, 0);
 
    // BoutonOpenDir=new wxButton(zone13, idBoutonOpenDir, wxT("&Données"), wxPoint(5,10), wxDefaultSize, 0);
-   // editDirAcquis=new wxTextCtrl(zone13,-1,chemin_acquis,wxPoint(105,14), wxSize(175,26));
+   // editDirAcquis=new wxTextCtrl(zone13,-1,chemin_rep_acquis,wxPoint(105,14), wxSize(175,26));
   //  editDirAcquis->SetToolTip(wxT("Répertoire des acquisitions"));
 
     panel_droit->SetSizer(sizer_vertical2);//affecter l'organiseur (sizer) horizontal à l'onglet  1.
@@ -605,7 +605,7 @@ void Gui_TomoFrame::OnBoutonAber(wxCommandEvent& WXUNUSED(event))
 
 void Gui_TomoFrame::OnBoutonOpenDir(wxCommandEvent& WXUNUSED(event))
 {
-    wxString defaultPath = chemin_acquis;//wxT("/ramdisk/Acquis/");
+    wxString defaultPath = chemin_rep_acquis;//wxT("/ramdisk/Acquis/");
     wxDirDialog* OpenDirDial = new wxDirDialog(this, _("Choisir un répertoire"),defaultPath);
 
     if ( OpenDirDial->ShowModal() == wxID_OK )
@@ -629,7 +629,7 @@ void Gui_TomoFrame::OnBoutonOpenDirResult(wxCommandEvent& WXUNUSED(event))
 
 void Gui_TomoFrame::OnBoutonOpenMask(wxCommandEvent& WXUNUSED(event))
 {
-    wxString defaultPath = chemin_acquis;
+    wxString defaultPath = chemin_rep_acquis;
     wxFileDialog* OpenFileDial = new wxFileDialog(this, _("Choisissez un répertoire"),defaultPath);
     if ( OpenFileDial->ShowModal() == wxID_OK )
         {
