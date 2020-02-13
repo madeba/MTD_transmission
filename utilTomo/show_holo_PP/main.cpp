@@ -18,6 +18,7 @@ using namespace cv;
 using namespace std;
 #include <string>
 #include <sstream>
+///Genicam/pleora
 #include <PvSampleUtils.h>
 #include <PvDevice.h>
 #include <PvDeviceGEV.h>
@@ -27,7 +28,10 @@ using namespace std;
 #include <PvStreamU3V.h>
 #include <PvPipeline.h>
 #include <PvBuffer.h>
-
+///labjack
+#include "Ljack.h"
+#include "Ljack_DAC.h"
+///-----------------
 #include "macros.h"
 #include "vectra.h"
 #include "string.h"
@@ -51,22 +55,21 @@ using namespace std;
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-typedef enum PRECISION {CHAR, UINT, INT, FLOAT, DOUBLE};
+#include "fonctions.h"
+#include "manip.h"
+#include <complex>
+
+#include "Point2D.h";
+
 using namespace std;
 using namespace cv;
 typedef struct{
 int a,b,c;
 }coord3D;
-typedef struct {
-  double Re,Im;
-}nbCplx;
+
 typedef struct {
 float x,y;
 }float2D;
-typedef struct {
-float x,y;
-}Var2D;
-
 
 int _kbhit(void)//fction attente clavier->openCV?
 {
@@ -118,23 +121,20 @@ PvDevice *ConnectToDevice( const PvDeviceInfo *aDeviceInfo );
 PvStream *OpenStream( const PvDeviceInfo *aDeviceInfo );
 void ConfigureStream( PvDevice *aDevice, PvStream *aStream );
 PvPipeline* CreatePipeline( PvDevice *aDevice, PvStream *aStream );
-void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline, coord3D cercle );
+void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline, coord3D cercle, int64_t dim, int64_t offset);
 string IntToString ( int number );
-void TF2D(double *entree, double *fft, int taille);
-void TF2Dcplx(nbCplx *entree, nbCplx *fft, Var2D dim);
-void circshift2D(double* entree, double* sortie, int taille, int decal);
-void double2mat(double* entree, Mat sortie, int taille);
-void mat2double(Mat entree, double* sortie, int taille);
-void SAV_Tiff(double *var_sav, char *chemin, int dim);
-void normlog(nbCplx* entree, double* sortie, int taille);
-void coupe_double(double *src, double *dest, Var2D dim_src, Var2D dim_dest, Var2D coin);
-void coupe_cplx(nbCplx *src, nbCplx *dest, Var2D dim_src, Var2D dim_dest, Var2D coin);
-void mat2cplx(Mat entree, nbCplx* sortie, int taille);
-void cplxMod2mat(nbCplx* entree, Mat sortie, int taille);
-void SAV_Tiff_Re(nbCplx *var_sav, char *chemin, int dim);
-void decal2DCplxGen(nbCplx* entree, nbCplx* result, Var2D dim,Var2D decal);
-void SAV_Re(nbCplx *var_sav, size_t NbPix2D, char *chemin, enum PRECISION precision, char options[]);
-void SAV(double *var_sav, int NbPix2D, char *chemin, PRECISION precision, char options[]);
+//void TF2D(double *entree, double *fft, int taille);
+//void circshift2D(double* entree, double* sortie, int taille, int decal);
+void double2mat(vector<complex<double>> entree, Mat &sortie);
+//void mat2double(Mat entree, double* sortie, int taille);
+void mat2double(Mat entree,vector<double> &sortie);
+//void SAV_Tiff(double *var_sav, char *chemin, int dim);
+void normlog(double* entree, double* sortie, int taille);
+void calcul_histo(Mat src, Mat dst, int hist_h, int hist_w);
+//void decal2DCplxGen(nbCplx* entree, nbCplx* result, Var2D dim,Var2D decal);
+//void TF2Dcplx(nbCplx *entree, nbCplx *fft, Var2D dim);
+//void TF2Dcplx(double *entree, nbCplx *fft, double dim);
+//float extract_val(string token,  string chemin_fic);
 /* -------------------------------------------------------------------------- */
 // Usage
 /* -------------------------------------------------------------------------- */
@@ -144,7 +144,7 @@ static void
 usage(int argc, char **argv)
 {
         if ((argc - 1) == 0) {
-                printf("Afficahe de la TF pour hors-axe\n");
+                printf("Affichage de la TF pour hors-axe\n");
                 printf("Usage: %s <paramètres obligatoires> <paramètres optionnels>\n", argv[0]);
                 printf("Paramètres obligatoires: \n");
                 printf("-r <rayon du cercle>:  \n");
@@ -157,31 +157,78 @@ usage(int argc, char **argv)
 //
 // Main function
 //
+
 int main(int argc, char *argv[])
 {
-    usage(argc, argv);
-    int cx=770,cy=220,rayon=110;
-    while (argc > 0) {
-                if (!strcmp(argv[0], "-r") && (argc > 1)) {
-                        rayon = atoi(argv[1]);
-                        argc--;
-                        argv++;
-                }
-                if (!strcmp(argv[0], "-c") && (argc > 2)) {
-                        cx = atoi(argv[1]);
-                        cy = atoi(argv[2]);
-
-                        argc-=2;
-                        argv+=2;
-                }
-
-                argc--;
-                argv++;
-        }
+//    usage(argc, argv);
 
 
 
+       ///Initialiser les deux tableaux stockant les valeurs de recon.txt et config_manip.txt en mémoire
+
+    manip m1;
+    int cx,cy,rayon;
+
+    cx = m1.circle_cx;
+    cy = m1.circle_cy;
+    rayon =m1.NXMAX; //attentino, il s'agit du rayon du disque dans l'hologramme.
+//    while (argc > 0) {
+//                if (!strcmp(argv[0], "-r") && (argc > 1)) {
+//                        rayon = atoi(argv[1]);
+//                        argc--;
+//                        argv++;
+//                }
+//                if (!strcmp(argv[0], "-c") && (argc > 2)) {
+//                        cx = atoi(argv[1]);
+//                        cy = atoi(argv[2]);
+//
+//                        argc-=2;
+//                        argv+=2;
+//                }
+//
+//                argc--;
+//                argv++;
+//        }
+    ///Initialiser les deux tableaux stockant les valeurs de recon.txt et config_manip.txt en mémoire
+    string chemin_config_GUI,chemin_recon, chemin_config_manip,chemin_result,repertoire_config;
+    string home=getenv("HOME");
+    string fin_chemin_gui_tomo="/.config/gui_tomo.conf";
+    chemin_config_GUI=getenv("HOME")+fin_chemin_gui_tomo;
+    cout<<"lecture des chemins dans le fichier "<<chemin_config_GUI<<endl;
+
+    repertoire_config=extract_string("CHEMIN_CONFIG",home+fin_chemin_gui_tomo);
+
+    chemin_result=extract_string("CHEMIN_RESULT",home+fin_chemin_gui_tomo);
+    chemin_recon=repertoire_config+"recon.txt";
+    chemin_config_manip=repertoire_config+"config_manip.txt";
+float tiptilt_factor_x = 0;//init rayon X en volt
+float tiptilt_factor_y = 0;//init rayon  Y en volt
+float2D VfOffset={-0, -0};
+tiptilt_factor_x=(abs(extract_val("VXMIN", chemin_config_manip))+abs(extract_val("VXMAX", chemin_config_manip)))/20;///amplitude de tension/10=(|vmax|+|vmin|)/10
+tiptilt_factor_y=(abs(extract_val("VYMIN", chemin_config_manip))+abs(extract_val("VYMAX", chemin_config_manip)))/20;
+VfOffset.x=extract_val("VXMIN", chemin_config_manip)+tiptilt_factor_x*10;///offset en volt=amplitude tension+Vmin
+VfOffset.y=extract_val("VYMIN", chemin_config_manip)+tiptilt_factor_y*10;
+///----déclaration LabJack
+  /*  Ljack LU3HV;
+    Ljack_DAC ljDAC_phase(LU3HV);
+    ASSERT(ljDAC_phase.connect(FIO7_6));
+
+    Ljack_DAC ljDAC_flower(LU3HV);
+    ASSERT(ljDAC_flower.connect(FIO5_4));
+
+
+    ljDAC_flower.set_A_output(VfOffset.x);
+    ljDAC_flower.set_B_output(VfOffset.y);
+*/
+///------------------------------------------
     coord3D Param_cercle={cx,cy,rayon};
+    cout<<"###############################"<<endl;
+    cout<<"# paramètres hors axe :       #"<<endl<<"#"<<" cx="<<cx<<", cy="<<cy<<", rayon : "<<rayon<<" #"<<endl;
+    cout<<"# ou                          #"<<endl<<"#"<<"cx="<<cx<<", cy="<<-cy+m1.dimROI<<"(bas droit) #"<<endl;
+    cout<<"###############################"<<endl;
+    cout<<"##################################################"<<endl;
+    cout<<"#Pressez 's' pour screenshot, 'Esc' pour quitter.#"<<endl;
+    cout<<"##################################################"<<endl;
     const PvDeviceInfo *lDeviceInfo = NULL;
     PvDevice *lDevice = NULL;
     PvStream *lStream = NULL;
@@ -200,7 +247,8 @@ int main(int argc, char *argv[])
 
         if ( lDevice != NULL )
         {
-            //changer la largeur de la ROI---------
+            ///-------------------------------------------------------changer la largeur de la ROI---------------------------------------
+
             PvGenParameterArray* lParameters = lDevice->GetParameters();
             // Get width parameter - mandatory GigE Vision parameter, it should be there.
             PvGenParameter *lParameter = lParameters->Get( "Width" );
@@ -210,24 +258,41 @@ int main(int argc, char *argv[])
             {
                 cout << "Unable to get the width parameter." << endl;
             }
-
-            int64_t lWidth=1024;
+            int64_t lWidth=m1.dimROI;
             lWidthParameter->SetValue( lWidth );
 
-              //changer la hauteur de la ROI---------
-
-            // Get ROI width parameter -
+            ///changer la hauteur de la ROI---------
             lParameter = lParameters->Get( "Height" );
             PvGenInteger *lHeightParameter = dynamic_cast<PvGenInteger *>( lParameter );
-
             if ( lHeightParameter == NULL )
             {
                 cout << "Unable to get the width parameter." << endl;
             }
-            int64_t lHeight=1024;
+            int64_t lHeight=m1.dimROI;///;
             lHeightParameter->SetValue( lHeight );
-            cout<<"coucou height"<<endl;
-            //-------fin changement ROI
+
+            ///changer OffsetX de la ROI---------
+            lParameter = lParameters->Get( "OffsetX" );
+            PvGenInteger *lOffsetXParameter = dynamic_cast<PvGenInteger *>( lParameter );
+
+            if ( lOffsetXParameter == NULL )
+            {
+                cout << "Unable to get the OffsetX parameter." << endl;
+            }
+            int64_t lOffsetX=m1.dimROI/2;
+            lOffsetXParameter->SetValue( lOffsetX );
+
+            ///changer OffsetY de la ROI---------
+            lParameter = lParameters->Get( "OffsetY" );
+            PvGenInteger *lOffsetYParameter = dynamic_cast<PvGenInteger *>( lParameter );
+            if ( lOffsetYParameter == NULL )
+            {
+                cout << "Unable to get the OffsetY parameter." << endl;
+            }
+            int64_t lOffsetY=m1.dimROI/2;
+            lOffsetYParameter->SetValue( lOffsetY );
+
+///--------------------------------------------------------fin changement ROI------------------------------------------------
 
             lStream = OpenStream( lDeviceInfo );
 
@@ -240,7 +305,7 @@ int main(int argc, char *argv[])
                 if( lPipeline )
                 {
 
-                    AcquireImages( lDevice, lStream, lPipeline, Param_cercle );
+                    AcquireImages( lDevice, lStream, lPipeline, Param_cercle,lHeight,lOffsetX );
                     delete lPipeline;
                 }
                 // Close the stream
@@ -374,14 +439,18 @@ PvPipeline *CreatePipeline( PvDevice *aDevice, PvStream *aStream )
     return lPipeline;
 }
 
-void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline, coord3D cercle)
+void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline, coord3D cercle, int64_t dim, int64_t offset)
 {
     Mat image;
-    Var2D
-    dim_holo={2*cercle.c,2*cercle.c},
-    coin={512,512};//{round(cercle.a-cercle.c/2),round(cercle.b-cercle.c/2)};
-    Var2D dim_src={1024,1024},dim_src_decal={round(dim_src.x/2),round(dim_src.y/2)};
-    size_t NbPix2D=dim_src.x*dim_src.y, NbPixMini=2*cercle.c*2*cercle.c;
+    Mat image_double(4*cercle.c,4*cercle.c,CV_64F);
+        cv::Mat MatUborn(2*cercle.c,2*cercle.c,CV_64F);
+    Point2D dim2DUBorn(2*cercle.c,2*cercle.c,2*cercle.c);
+    Point2D dim2DROI(dim,dim,dim);
+    Var2D dimROI={dim,dim}, decalROI={dim/2,dim/2};
+    FFT_encaps tf2DROi(dim2DROI);
+    FFT_encaps tf2DUborn(dim2DUBorn);
+    Var2D coinCropHA={cercle.a-cercle.c,cercle.b-cercle.c};
+
     // Get device parameters need to control streaming
     PvGenParameterArray *lDeviceParams = aDevice->GetParameters();
 
@@ -420,28 +489,28 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
     unsigned char c;
     bool SAVE_IMAGE = false;
 
-    nbCplx* tmp= new nbCplx [NbPix2D];
-    nbCplx* tmp_mini=new nbCplx [NbPixMini];//image 2D recalée
-    nbCplx* fft_mini=new nbCplx [NbPixMini];//TF image 2D recalée
-    nbCplx* fft= new nbCplx [NbPix2D];
-    nbCplx* fft_shift= new nbCplx [NbPix2D];
-    double* fft_modlog= new double [NbPix2D];
-    double* fft_modlog_mini= new double [NbPix2D];
-    double* tmp_mini_log=new double [NbPix2D];
+   // double* tmp= new double [dim*dim];
+    vector<double> tmp(dim*dim);
+   // nbCplx* fft= new nbCplx [dim*dim];
+    vector <complex<double>> fft2D_UBorn(4*cercle.c*cercle.c);
+    vector <complex<double>> fft2D_ROI(dim*dim);
+    vector <complex <double>> UBorn(4*cercle.c*cercle.c);
+//    cv::Mat MatUborn(2*cercle.c,2*cercle.c,CV_8UC1,Scalar( 0,0,0), cv::Mat::AUTO_STEP);
 
-
-    int bool_wisdom3D=fftw_import_wisdom_from_filename("/home/bailleul/Documents/show_holo_PP/test1024.wisdom");//charger ou calculer le fichier wisdom
-                if(bool_wisdom3D==0){
-                        cout<<"Calcul wisdom 1024 (~10 min)"<<endl;
-                        //prepare_wisdom(dimROI,"test1024.wisdom");
-                }
+    //double* fft_shift= new double [dim*dim];
+    //double* fft_log= new double [dim*dim];
+//           int bool_wisdom3D=fftw_import_wisdom_from_filename("/home/mat/tomo_test/wisdom/test1024.wisdom");//charger ou calculer le fichier wisdom
+//                if(bool_wisdom3D==0){
+//                        cout<<"Calcul wisdom 1024 (~10 min)"<<endl;
+//                        //prepare_wisdom(dimROI,"test1024.wisdom");
+//                }
 
     //while(short int numImg=0;numImg<400;numImg++ )
     size_t continuer=1;
     /// Create Window for image
-    namedWindow("Image", CV_WINDOW_AUTOSIZE);
+    //namedWindow("Image", CV_WINDOW_AUTOSIZE);
     /// Create Window for spectrum
-    namedWindow("TF", CV_WINDOW_AUTOSIZE);
+    //namedWindow("TF", CV_WINDOW_AUTOSIZE);
 
     //while ( ! _kbhit() )
     while(continuer)
@@ -487,65 +556,85 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
 
                     // Copy/convert Pleora Vision image pointer to cv::Mat container
                     cv::Mat lframe(lHeight,lWidth,CV_8UC1,img, cv::Mat::AUTO_STEP);
+                    mat2double(lframe,tmp);
                     //------- write images to disk
                     //string racine="/ramdisk/ACQUIS/";
 
-                    //imwrite("/ramdisk/ACQUIS/.pgm", lframe);
+                    imwrite("/home/tomo/lframe.pgm", lframe);
                     //cvStartWindowThread();
                     /// Create Window
                     //char* source_window_img = "Image";
                     //namedWindow( source_window_img, CV_WINDOW_AUTOSIZE );
-                    imshow("Image", lframe );
+                    imshow("Image", lframe);
 
-                    //mat2double(lframe, tmp, lHeight);
-                    mat2cplx(lframe, tmp, lHeight);
+                    int hist_w = 512; int hist_h = 400;
+                    Mat histImage( hist_h, hist_w, CV_8UC3, Scalar( 0,0,0) );
+                    calcul_histo(lframe, histImage, hist_h, hist_w);
+                    /// Display
+                    namedWindow("Histogramme_plan_image", WINDOW_NORMAL);
+                    imshow("Histogramme_plan_image", histImage);
 
+                    holo2TF_UBorn(tmp,fft2D_UBorn,coinCropHA,tf2DROi);
+                    TF2Dcplx_INV(fftshift2D(fft2D_UBorn),UBorn,tf2DUborn, 1);
 
-                    //SAV_Tiff_Re(tmp, "home/mat/tomo_test/truc.pgm", lHeight);
-                    //SAV_Tiff(tmp, "/home/bailleul/image.tif", lHeight);
-                    TF2Dcplx(tmp, fft, dim_src);
+                     double2mat(fftshift2D(UBorn),MatUborn);
+                    // resize(MatUborn, image_double, cv::Size(8*cercle.c,8*cercle.c));
+                   // normalize(image_double, image_double, 0, 1, cv::NORM_MINMAX);
+                    normalize(MatUborn, MatUborn, 0, 1, cv::NORM_MINMAX);
+                    namedWindow("Champ complexe", WINDOW_NORMAL);
+                     imshow("Champ complexe",MatUborn);
 
-                    decal2DCplxGen(fft, fft_shift, dim_src, dim_src_decal);
-                    normlog(fft_shift, fft_modlog, lHeight);
-                    //SAV(fft_modlog,NbPix2D,"/home/mat/tomo_test/fft_mod_log.raw",FLOAT,"wb");
-                   /* //SAV_Tiff(fft_log, "/home/bailleul/image_fft.tif", lHeight);
+                   // SAV_Tiff2D(UBorn,"Im", "/home/tomo/Uborn.tif", 1);
+                   // TF2D(tmp, fft,tf2DROi,1);
+
+                   // decal2DCplxGen(fft, fft_shift, decalROI);
+                  //  normlog(fft_shift, fft_modlog, lHeight);
+                   /* circshift2D(fft, fft_shift, lHeight, lHeight/2);
+                    normlog(fft_shift, fft_log, lHeight);
+                    //SAV_Tiff(fft_log, "/home/bailleul/image_fft.tif", lHeight);
 
                     Mat fft_mat(lHeight,lWidth,CV_64F);
-                    double2mat(fft_modlog, fft_mat, lHeight);
-                    // int r=110;
-                    circle(fft_mat, Point(cercle.a,cercle.b), cercle.c,(0,0,255),1,8,0);
+                    double2mat(fft_log, fft_mat, lHeight);
+                    //int r=cercle.rayon;
+                    int y2=-cercle.b+dim;
+                    circle(fft_mat, Point(cercle.a,cercle.b), cercle.c,(0,0,255),1,8,0);//tracer cercle hors-axe sur (image, coordonnée, rayon, couleur,epaisseur, typede ligne, ?))
+                    circle(fft_mat, Point(dim/2,dim/2),2*cercle.c,(0,0,255),1,8,0);
 
-                    imshow("TF", fft_mat/100 );*/
-                    coupe_cplx(fft_shift, fft_mini, dim_src, dim_holo, coin);
+                    circle(fft_mat, Point(cercle.a,y2), cercle.c,(0,0,255),1,8,0);//tracer cercle hors-axe sur (image, coordonnée, rayon, couleur,epaisseur, typede ligne, ?))
 
-                    normlog(fft_mini, fft_modlog_mini, 2*cercle.c);
-                    //coupe_double(fft_modlog,fft_modlog_mini,dim_src, dim_holo, coin);
+                    //ligne en x et en y, ordre 1 haut droit
+                    line(fft_mat, Point(cercle.a-1.15*cercle.c,cercle.b),Point(cercle.a+1.15*cercle.c,cercle.b),(0,0,255),1,8,0);
+                    line(fft_mat, Point(cercle.a,cercle.b-1.15*cercle.c),Point(cercle.a,cercle.b+1.15*cercle.c),(0,0,255),1,8,0);
 
-                    //SAV(fft_modlog_mini,NbPixMini,"/home/mat/tomo_test/fft_modlog_mini.raw",FLOAT,"wb");
-                    //SAV_Tiff(fft_modlog, "/home/mat/tomo_test/image_fft_crop.tif", 1024);
-                    TF2Dcplx(fft_mini, tmp_mini, dim_holo);
-                    normlog(tmp_mini, tmp_mini_log, 2*cercle.c);
-                    //SAV(tmp_mini_log,NbPix2D,"/home/mat/tomo_test/img_mod.raw",FLOAT,"wb");
+                    //ligne en x et en y, ordre 1 bas droit
+                    line(fft_mat, Point(cercle.a-1.15*cercle.c,y2),Point(cercle.a+1.15*cercle.c,y2),(0,0,255),1,8,0);
+                    line(fft_mat, Point(cercle.a,y2-1.15*cercle.c),Point(cercle.a,y2+1.15*cercle.c),(0,0,255),1,8,0);
+*/
+//                    int dstWidth=lframe.cols * 2;
+//                    int dstHeight=lframe.rows;
+//                    Mat dst(dstHeight,dstWidth, CV_64F);
+//                    Rect roi(Rect(0,0,lframe.cols, lframe.rows));
+//                    Mat targetROI = dst(roi);
+//                    lframe.copyTo(targetROI);
+//                    targetROI = dst(Rect(lframe.cols,0,lframe.cols, lframe.rows));
+//                    fft_mat=fft_mat/100;
+//                    fft_mat.copyTo(targetROI);
+//                    imshow("Image et sa TF", dst);
 
-                    int taille=2*cercle.c;
-                    Mat demodule(taille, taille, CV_64F);
-                    double2mat(tmp_mini_log, demodule, taille);
+               //     imshow("TF", fft_mat/100 );
 
-                    /// Create Window
-                    char* source_window_img = "Demodule";
-                    namedWindow( source_window_img, CV_WINDOW_AUTOSIZE );
-                    imshow("Demodule", demodule);
+                   //circle(Mat& img, Point center, int radius, const Scalar& color, int thickness=1, int lineType=8, int shift=0)
 
                     c = cvWaitKey(10);
                     if (c == 's')
 	                   SAVE_IMAGE = true;
-
                     else
 	                   SAVE_IMAGE = false;
 
                     if (SAVE_IMAGE)
                     {
-	                    //imwrite("last_fmod.pgm", fft_mat);
+	                   // imwrite("last_fmod.pgm", fft_mat);
+	                    imwrite("image_show_fourier.pgm",lframe);
 	                }
 	                if(c==27)//27=code ascii Escape
                     {
@@ -571,7 +660,7 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
         }
         else
         {
-            // Retrieve buffer failuredim
+            // Retrieve buffer failure
             cout << lDoodle[ lDoodleIndex ] << " " << lResult.GetCodeString().GetAscii() << "\r";
         }
 
@@ -582,19 +671,12 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
     waitKey(1);
     destroyWindow("TF");
     waitKey(1);
-
-
+    destroyWindow("Histogramme_plan_image");
+    waitKey(1);
     cout<<endl<<"sortie boucle d'aquisition"<<endl;
 
-    delete [] tmp;
-    delete [] fft;
-    delete [] tmp_mini;
 
-    delete [] fft_mini;
-    delete [] fft_shift;
-    delete [] fft_modlog;
-     delete [] fft_modlog_mini;
-       delete [] tmp_mini_log;
+
 
     PvGetChar(); // Flush key buffer for next stop.
     cout << endl << endl;
@@ -624,88 +706,9 @@ std::string IntToString ( int number )
   return oss.str();
 }
 
-/*void SAV(double *var_sav, int NbPix2D, char *chemin, enum PRECISION precision, char options[])
+void mat2double(Mat entree,vector<double> &sortie)
 {
-        FILE *fichier_ID;
-        fichier_ID= fopen(chemin, options);
-        if(fichier_ID==0)
-                cout<<"Erreur d'ouverture du fichier "<<chemin<<endl;
-
-        switch(precision) {
-        case DOUBLE: //64 bit
-
-                for(unsigned int cpt=0; cpt<NbPix2D; cpt++) {
-                        double tampon=var_sav[cpt];
-                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
-                }
-                break;
-        case FLOAT://32 bits float
-
-                for(unsigned int cpt=0; cpt<NbPix2D; cpt++) {
-                        float tampon=var_sav[cpt];
-                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
-                }
-                break;
-
-        case INT: //32 bit signé
-
-                for(unsigned int cpt=0; cpt<NbPix2D; cpt++) {
-                        int tampon=var_sav[cpt];
-                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
-                }
-                break;
-        case UINT://32 bit non signé
-
-                for(unsigned int cpt=0; cpt<NbPix2D; cpt++) {
-                        unsigned int tampon=var_sav[cpt];
-                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
-                }
-                break;
-        case CHAR: //8 bits
-
-                for(unsigned int cpt=0; cpt<NbPix2D; cpt++) {
-                        char tampon=var_sav[cpt];
-                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
-                }
-                break;
-        default:
-                break;
-        }
-
-        fclose(fichier_ID);
-}*/
-
-void TF2D(double *entree, double *fft, int taille)
-{
-        int fftwThreadInit;
-        fftwThreadInit=fftw_init_threads();
-        //int nthreads=3;
-        fftw_plan_with_nthreads(4);
-        int N=taille*taille;
-        fftw_complex *in, *out;//Déclaration des variables pour la FFT : entree,sortie et "fftplan"
-        fftw_plan p;
-        //Réservation memoire
-        in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
-        out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
-        //Récupération de l'image dans la partie reelle de l'entree
-        for(int cpt=0; cpt<N; cpt++) {
-                in[cpt][0]=entree[cpt];
-                in[cpt][1]=0;
-        }
-        //calcul du plan, parametre servant a calculer et optimiser le FFT
-        p=fftw_plan_dft_2d(taille, taille, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
-        fftw_execute(p); /* repeat as needed */
-
-        for(int cpt=0; cpt<(N); cpt++) {
-                fft[cpt]=out[cpt][0]/N; //division par N^2 pour normaliser la fftw qui n'est pas normalisée
-        }
-        fftw_destroy_plan(p);
-        fftw_free(in);
-        fftw_free(out);
-}
-
-void mat2double(Mat entree, double* sortie, int taille)
-{
+    int taille=sqrt(sortie.size());
     for(int y=0; y<taille; y++)
     {
         for(int x=0; x<taille; x++)
@@ -716,39 +719,15 @@ void mat2double(Mat entree, double* sortie, int taille)
     }
 }
 
-void mat2cplx(Mat entree, nbCplx* sortie, int taille)
+void double2mat(vector<complex<double>> entree, Mat& sortie)
 {
+    int taille=sqrt(entree.size());
     for(int y=0; y<taille; y++)
     {
         for(int x=0; x<taille; x++)
             {
                 int cpt=y*taille+x;
-                sortie[cpt].Re=entree.at<unsigned char>(y,x);
-
-                sortie[cpt].Im=0;
-            }
-    }
-}
-
-void double2mat(double* entree, Mat sortie, int taille)
-{
-    for(int y=0; y<taille; y++)
-    {
-        for(int x=0; x<taille; x++)
-            {
-                int cpt=y*taille+x;
-                sortie.at<double>(y,x)=entree[cpt];
-            }
-    }
-}
-void cplxMod2mat(nbCplx * entree, Mat sortie, int taille)
-{
-    for(int y=0; y<taille; y++)
-    {
-        for(int x=0; x<taille; x++)
-            {
-                int cpt=y*taille+x;
-                sortie.at<double>(y,x)=entree[cpt].Re*entree[cpt].Re+entree[cpt].Im*entree[cpt].Im;
+                sortie.at<double>(y,x)=(entree[cpt].imag());
             }
     }
 }
@@ -808,14 +787,14 @@ void circshift2D(double* entree, double* sortie, int taille, int decal)
     }
 }
 
-void normlog(nbCplx* entree, double* sortie, int taille)
+void normlog(double* entree, double* sortie, int taille)
 {
     for (size_t j = 0; j < taille; j++)
     {
         for (size_t i = 0; i < taille; i++)
         {
             int cpt = j* taille + i;
-            sortie[cpt] = log(1+sqrt(entree[cpt].Re*entree[cpt].Re+entree[cpt].Im*entree[cpt].Im));
+            sortie[cpt] = log(1+sqrt(entree[cpt]*entree[cpt]));
         }
     }
 
@@ -845,58 +824,74 @@ void normlog(nbCplx* entree, double* sortie, int taille)
     }
 
 }
-
-
-///découpe une une fenetre de dimension dim_dest, coin haut gauche coin, dans src de taille dim_src.
-void coupe_double(double *src, double *dest, Var2D dim_src, Var2D dim_dest, Var2D coin)
+void calcul_histo(Mat src, Mat dst, int hist_h, int hist_w)
 {
-    size_t nbPixSrc=dim_src.x*dim_src.y;
-    size_t cpt_destX,cpt_destY, cpt_dest1D,
-            cpt_srcX,cpt_srcY, cpt_src1D;
 
-    for(cpt_destX=0; cpt_destX<dim_dest.x; cpt_destX++){
-        for(cpt_destY=0; cpt_destY<dim_dest.y; cpt_destY++){
+    /// Establish the number of bins
+    int histSize = 256;
 
-            cpt_dest1D=cpt_destX+cpt_destY*dim_dest.x;///coord 1D destination
+    float range[] = { 0, 256 } ;
+    const float* histRange = { range };
 
-            cpt_srcX=coin.x+cpt_destX;///coord X src
-            cpt_srcY=coin.y+cpt_destY;///coord Y src
-            cpt_src1D=cpt_srcX+cpt_srcY*dim_src.x;///coord 1D source
+    bool uniform = true; bool accumulate = false;
 
-            dest[cpt_dest1D]=src[cpt_src1D];
+    Mat r_hist;
 
-        }
+    /// Compute the histograms:
+    calcHist( &src, 1, 0, Mat(), r_hist, 1, &histSize, &histRange, uniform, accumulate );
 
+    int bin_w = cvRound( (double) hist_w/histSize );
+
+    /// Normalize the result to [ 0, dst.rows ]
+    normalize(r_hist, r_hist, 0, dst.rows, NORM_MINMAX, -1, Mat() );
+
+    /// Draw for each channel
+    for( int i = 1; i < histSize; i++ )
+    {
+        line( dst, Point( bin_w*(i-1), hist_h - cvRound(r_hist.at<float>(i-1)) ) ,
+                         Point( bin_w*(i), hist_h - cvRound(r_hist.at<float>(i)) ),
+                         Scalar( 0, 0, 255), 2, 8, 0  );
     }
 
 }
-
-///découpe une une fenetre de dimension dim_dest, coin haut gauche coin, dans src de taille dim_src.
-void coupe_cplx(nbCplx *src, nbCplx *dest, Var2D dim_src, Var2D dim_dest, Var2D coin)
+/*
+float extract_val(string token,  string chemin_fic)
 {
-    size_t nbPixSrc=dim_src.x*dim_src.y;
-    size_t cpt_destX,cpt_destY, cpt_dest1D,
-            cpt_srcX,cpt_srcY, cpt_src1D;
+    ifstream fichier(chemin_fic.c_str(), ios::in);  // on ouvre en lecture
+    string ligne,motcle,valeurMot,separ=" ";
+    float valeur=0;
+    vector<std::string> tokens;
 
-    for(cpt_destX=0; cpt_destX<dim_dest.x; cpt_destX++){
-        for(cpt_destY=0; cpt_destY<dim_dest.y; cpt_destY++){
-
-            cpt_dest1D=cpt_destX+cpt_destY*dim_dest.x;///coord 1D destination
-
-
-            cpt_srcX=coin.x+cpt_destX;///coord X src
-            cpt_srcY=coin.y+cpt_destY;///coord Y src
-            cpt_src1D=cpt_srcX+cpt_srcY*dim_src.x;///coord 1D source
-
-            dest[cpt_dest1D].Re=src[cpt_src1D].Re;
-            dest[cpt_dest1D].Im=src[cpt_src1D].Im;
-
+    if(fichier)  // si l'ouverture a fonctionné
+    {
+        while(!fichier.eof()){
+            getline(fichier,ligne,'\n');//extrait chaque ligne du fichier (séparateur=retour chariot)
+            if(ligne[0]!='#')//si pas ligne de commentaire
+            tokens.push_back(ligne);
         }
-
     }
+    else
+        cerr << "Impossible d'ouvrir le fichier !"<< chemin_fic<< endl;
 
+    int nb_tok=tokens.size();
+    for(int cpt=0;cpt<nb_tok;cpt++){
+        ligne=tokens[cpt];
+        if(ligne!=""){
+            int pos_separ=ligne.find(separ);
+            int long_separ=separ.length();
+            motcle = ligne.substr(0, pos_separ);//sbstr(pos_debut,pos_fin)
+            if(motcle==token){
+            valeurMot=ligne.substr(pos_separ+long_separ,ligne.size()-(motcle.size()+long_separ));
+            cout<<motcle<<"="<<valeurMot<<endl;
+            valeur=atof(valeurMot.c_str());
+            }
+        }
+    }
+    fichier.close();
+    return valeur;
 }
-
+*/
+/*
 void decal2DCplxGen(nbCplx* entree, nbCplx* result, Var2D dim,Var2D decal)
 {
         //si décalage supérieure à dim, on fait plus d'un tour, donc on prend le modulo
@@ -935,7 +930,38 @@ void decal2DCplxGen(nbCplx* entree, nbCplx* result, Var2D dim,Var2D decal)
                 }
         }
 }
+*/
+/*
+void TF2Dcplx(double *entree, nbCplx *fft, Var2D dim)
+{
+        int fftwThreadInit;
+        fftwThreadInit=fftw_init_threads();
+        //int nthreads=3;
+        fftw_plan_with_nthreads(4);
+        int N=dim.x*dim.y;
+        fftw_complex *in, *out;//Déclaration des variables pour la FFT : entree,sortie et "fftplan"
+        fftw_plan p;
+        //Réservation memoire
+        in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
+        out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
+        //Récupération de l'image dans la partie reelle de l'entree
+        for(int cpt=0; cpt<N; cpt++) {
+                in[cpt][0]=entree[cpt];
+                in[cpt][1]=0;
+        }
+        //calcul du plan, parametre servant a calculer et optimiser le FFT
+        p=fftw_plan_dft_2d( dim.x,  dim.y, in, out,FFTW_FORWARD, FFTW_ESTIMATE);
+          // p=fftw_plan_dft_2d( dim.x,  dim.y, in, out,FFTW_FORWARD,FFTW_USE_WISDOM);
+        fftw_execute(p);
 
+        for(int cpt=0; cpt<(N); cpt++) {
+                fft[cpt].Re=out[cpt][0]/N; //division par N (dim*dim) pour normaliser la fftw qui n'est pas normalisée
+                fft[cpt].Im=out[cpt][1]/N;
+        }
+        fftw_destroy_plan(p);
+        fftw_free(in);
+        fftw_free(out);
+}
 
 void TF2Dcplx(nbCplx *entree, nbCplx *fft, Var2D dim)
 {
@@ -957,7 +983,7 @@ void TF2Dcplx(nbCplx *entree, nbCplx *fft, Var2D dim)
         //calcul du plan, parametre servant a calculer et optimiser le FFT
         p=fftw_plan_dft_2d( dim.x,  dim.y, in, out,FFTW_FORWARD, FFTW_ESTIMATE);
           // p=fftw_plan_dft_2d( dim.x,  dim.y, in, out,FFTW_FORWARD,FFTW_USE_WISDOM);
-        fftw_execute(p); /* repeat as needed */
+        fftw_execute(p);
 
         for(int cpt=0; cpt<(N); cpt++) {
                 fft[cpt].Re=out[cpt][0]/N; //division par N (dim*dim) pour normaliser la fftw qui n'est pas normalisée
@@ -967,136 +993,4 @@ void TF2Dcplx(nbCplx *entree, nbCplx *fft, Var2D dim)
         fftw_free(in);
         fftw_free(out);
 }
-void SAV_Re(nbCplx *var_sav, size_t NbPix2D, char *chemin, enum PRECISION precision, char options[])
-{       size_t taille=NbPix2D;
-        FILE *fichier_ID;
-        fichier_ID= fopen(chemin, options);
-        if(fichier_ID==0)
-                cout<<"Erreur d'ouverture du fichier "<<chemin<<endl;
-
-        switch(precision) {
-        case DOUBLE: //64 bit
-
-                for(unsigned int cpt=0; cpt<taille; cpt++) {
-                        double tampon=var_sav[cpt].Re;
-                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
-                }
-                break;
-        case FLOAT://32 bits float
-
-                for(unsigned int cpt=0; cpt<taille; cpt++) {
-                        float tampon=var_sav[cpt].Re;
-                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
-                }
-                break;
-
-        case INT: //32 bit signé
-
-                for(unsigned int cpt=0; cpt<taille; cpt++) {
-                        int tampon=var_sav[cpt].Re;
-                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
-                }
-                break;
-        case UINT://32 bit non signé
-
-                for(unsigned int cpt=0; cpt<taille; cpt++) {
-                        unsigned int tampon=var_sav[cpt].Re;
-                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
-                }
-                break;
-        case CHAR: //8 bits
-
-                for(unsigned int cpt=0; cpt<taille; cpt++) {
-                        char tampon=var_sav[cpt].Re;
-                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
-                }
-                break;
-        default:
-                break;
-        }
-
-        fclose(fichier_ID);
-}
-void SAV_Tiff_Re(nbCplx *var_sav, char *chemin, int dim)
-{
-    TIFF *tif= TIFFOpen(chemin, "a");
-    TIFFSetField (tif, TIFFTAG_IMAGEWIDTH, dim);
-    TIFFSetField (tif, TIFFTAG_IMAGELENGTH, dim);
-    TIFFSetField (tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-    TIFFSetField (tif, TIFFTAG_SAMPLESPERPIXEL, 1);
-    TIFFSetField (tif, TIFFTAG_ROWSPERSTRIP, 1);
-    TIFFSetField (tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
-    TIFFSetField (tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_MINISBLACK);
-    TIFFSetField (tif, TIFFTAG_BITSPERSAMPLE, 32);
-    TIFFSetField (tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP);
-    TIFFSetField (tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
-
-    tsize_t strip_size = TIFFStripSize (tif);
-    tstrip_t strips_num = TIFFNumberOfStrips (tif);
-
-    float* strip_buf=(float*)_TIFFmalloc(strip_size);
-    for (unsigned int s=0; s<strips_num; s++)
-    {
-        for (unsigned int col=0; col<dim; col++)
-        {
-            unsigned int cpt=col+dim*s;
-            strip_buf[col]=(float)var_sav[cpt].Re;
-        }
-        TIFFWriteEncodedStrip (tif, s, strip_buf, strip_size);
-    }
-    _TIFFfree(strip_buf);
-    TIFFWriteDirectory(tif);
-    TIFFClose(tif);
-}
-
-///####################fonction################"
-void SAV(double *var_sav, int NbPix2D, char *chemin, PRECISION precision, char options[])
-{
-        FILE *fichier_ID;
-        fichier_ID= fopen(chemin, options);
-        if(fichier_ID==0)
-                cout<<"Erreur d'ouverture du fichier "<<chemin<<endl;
-
-        switch(precision) {
-        case DOUBLE: //64 bit
-
-                for(unsigned int cpt=0; cpt<NbPix2D; cpt++) {
-                        double tampon=var_sav[cpt];
-                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
-                }
-                break;
-        case FLOAT://32 bits float
-
-                for(unsigned int cpt=0; cpt<NbPix2D; cpt++) {
-                        float tampon=var_sav[cpt];
-                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
-                }
-                break;
-
-        case INT: //32 bit signé
-
-                for(unsigned int cpt=0; cpt<NbPix2D; cpt++) {
-                        int tampon=var_sav[cpt];
-                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
-                }
-                break;
-        case UINT://32 bit non signé
-
-                for(unsigned int cpt=0; cpt<NbPix2D; cpt++) {
-                        unsigned int tampon=var_sav[cpt];
-                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
-                }
-                break;
-        case CHAR: //8 bits
-
-                for(unsigned int cpt=0; cpt<NbPix2D; cpt++) {
-                        char tampon=var_sav[cpt];
-                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
-                }
-                break;
-        default:
-                break;
-        }
-
-        fclose(fichier_ID);
-}
+*/
