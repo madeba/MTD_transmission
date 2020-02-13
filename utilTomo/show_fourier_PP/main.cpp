@@ -159,6 +159,9 @@ int main(int argc, char *argv[])
 
     cx = m1.circle_cx;
     cy = m1.circle_cy;
+    int f1=m1.dimROI/2-m1.coord_porteuse;//coordonnée porteuse
+    int f2=m1.dimROI/2+m1.coord_porteuse;
+
     rayon =m1.NXMAX; //attentino, il s'agit du rayon du disque dans l'hologramme.
 //    while (argc > 0) {
 //                if (!strcmp(argv[0], "-r") && (argc > 1)) {
@@ -181,8 +184,15 @@ int main(int argc, char *argv[])
 
 
     coord3D Param_cercle={cx,cy,rayon};
+
+     cout<<"###############################"<<endl;
+    cout<<"# paramètres hors axe théoriques : "<<endl<<"#"<<"rayon : "<<rayon<<" #"<<endl;
+    cout<<"# paramètres hors axe théoriques : (cx1,cy1)=("<<f1<<","<<f1<<")"<<endl;
+    cout<<"# paramètres hors axe théoriques : (cx2,cy2)=("<<f1<<","<<f2<<")"<<endl;
+    cout<<"# paramètres hors axe théoriques : (cx3,cy4)=("<<f2<<","<<f1<<")"<<endl;
+    cout<<"# paramètres hors axe théoriques : (cx4,cy4)=("<<f2<<","<<f2<<")"<<endl;
     cout<<"###############################"<<endl;
-    cout<<"# paramètres hors axe :       #"<<endl<<"#"<<" cx="<<cx<<", cy="<<cy<<", rayon : "<<rayon<<" #"<<endl;
+    cout<<"# paramètres hors axe utilisés :       #"<<endl<<"#"<<" cx="<<cx<<", cy="<<cy<<", rayon : "<<rayon<<" #"<<endl;
     cout<<"# ou                          #"<<endl<<"#"<<"cx="<<cx<<", cy="<<-cy+m1.dimROI<<"(bas droit) #"<<endl;
     cout<<"###############################"<<endl;
     cout<<"##################################################"<<endl;

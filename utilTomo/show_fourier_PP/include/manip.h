@@ -28,6 +28,8 @@ struct manip {
         double tailleTheoPixelHolo;
         double tailleTheoPixelUborn;
         double tailleTheoPixelTomo;
+        int coord_porteuse;
+        double delta_f_Holo;
         size_t circle_cx,circle_cy;
         std::string chemin_result;
         std::string chemin_acquis;

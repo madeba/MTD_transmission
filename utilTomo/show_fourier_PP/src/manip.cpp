@@ -14,14 +14,14 @@ manip::manip()
     string home=getenv("HOME");
     string fin_chemin_gui_tomo="/.config/gui_tomo.conf";
     string chemin_config_GUI=getenv("HOME")+fin_chemin_gui_tomo;
-    string repertoire_config=extract_string("CHEMIN_CONFIG",home+fin_chemin_gui_tomo);
+    string repertoire_config=extract_string("CHEMIN_CONFIG_PC_ACQUIS",home+fin_chemin_gui_tomo);
     chemin_result=extract_string("CHEMIN_RESULT",home+fin_chemin_gui_tomo);
     chemin_acquis=extract_string("CHEMIN_ACQUIS",home+fin_chemin_gui_tomo);
 //    dimROI=extract_val("DIM_ROI", chemin_config_manip);
     string fic_cfg_recon=repertoire_config+"recon.txt";
     cout<<"fichier recon="<<fic_cfg_recon<<endl;
     string fic_cfg_manip=repertoire_config+"config_manip.txt";
-    cout<<"chemin config="<<fic_cfg_manip<<endl;
+    cout<<"chemin config manip="<<fic_cfg_manip<<endl;
 
     // Var2D dimROI= {extract_val("DIM_ROI", fic_cfg_manip),extract_val("DIM_ROI", fic_cfg_manip)};
     dimROI=extract_val("DIM_ROI", fic_cfg_manip);
@@ -59,8 +59,7 @@ manip::manip()
     R_th_Ewald=R_Ewald;
     NXMAX_theo=round(R_Ewald*NA/n0);
     cout<<"NXMAX_theo="<<NXMAX_theo<<endl;
-
-
+    coord_porteuse=3*NXMAX_theo/sqrt(2);//distance entre porteuse et axes abscisses/ordonnées
 
 
 }
