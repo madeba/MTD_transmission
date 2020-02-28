@@ -92,7 +92,7 @@ typedef std::list<PvBuffer *> BufferList;
 float tiptilt_factor_x = 0;//init rayon X en volt
 float tiptilt_factor_y = 0;//init rayon  Y en volt
 float2D VfOffset={-0, -0};
-float NAcondLim=0;
+float NAcondLim=1;//coefficient de limitation de 'louverture numerique de balyage 0<valeur<=1
 float flower_x(float t);
 float flower_y(float t);
 size_t MAX_IMAGES = 0;
