@@ -844,6 +844,7 @@ void Gui_TomoFrame::sav_all()
     modif_tab_val("VYMIN",editVymin->GetValue().ToStdString(),tab_val_manip);
     modif_tab_val("VXMAX",editVxmax->GetValue().ToStdString(),tab_val_manip);
     modif_tab_val("VYMAX",editVymax->GetValue().ToStdString(),tab_val_manip);
+    modif_tab_val("NA_COND_LIM",editNAcondLim->GetValue().ToStdString(),tab_val_manip);
     //tableau de config  recons
     modif_tab_val("DELTA_NMAX",editDnMax->GetValue().ToStdString(),tab_val_recon);
     modif_tab_val("DELTA_NMIN",editDnMin->GetValue().ToStdString(),tab_val_recon);

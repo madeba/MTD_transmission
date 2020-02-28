@@ -36,7 +36,13 @@ VXMAX 3.80
 VYMIN -2.80
 VYMAX 2.60
 
-NA_COND_LIM 1
+NA_COND_LIM 0.70
+
+
+
+
+
+
 
 
 
