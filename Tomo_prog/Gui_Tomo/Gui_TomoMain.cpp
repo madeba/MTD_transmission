@@ -1,3 +1,4 @@
+
 /***************************************************************
  * Name:      Gui_TomoMain.cpp
  * Purpose:   Code for Application Frame
@@ -193,6 +194,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
             editNbHolo=new wxTextCtrl(zone11,1,"",wxPoint(120,4),wxSize(40,25));
             editNbHolo->SetToolTip(wxT("Nombre d'hologrammes à acquérir"));
             //int Nb_Holo=extract_val("NB_HOLO",chemin_config_manip);
+            //récupérer la valeur dans fichier de config, convertir en string, puis l'afficher dans la case
             int Nb_Holo=stof(extract_string("NB_HOLO",chemin_config_manip));//stof=string to float
 
             wxString string_NbHolo = wxString::Format(wxT("%i"),Nb_Holo);
@@ -202,37 +204,45 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     wxPanel *zone12 = new wxPanel(panel_gauche);
     sizer_vertical0->Add(zone12, 0, wxALL | wxEXPAND | wxALIGN_CENTER, 1);// Ajout de cette zone au sizer vertical    //
     zone12->SetBackgroundColour(*wxLIGHT_GREY);
-    titre_Balayage=new wxStaticText(zone12,-1," Balayage",wxPoint(0,0),wxSize(100,40));
-    titre_Balayage->SetFont(wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD) );
 
-    textVxmin=new wxStaticText(zone12,-1,"Vxm ",wxPoint(10,30),wxSize(30,40));
-    editVxmin=new wxTextCtrl(zone12,-1,"",wxPoint(40,28),wxSize(50,25));
-    editVxmin->SetToolTip(wxT("tension mini en volt selon l'axe x"));
-    float Vxmin=extract_val("VXMIN",chemin_config_manip);
-    wxString string_Vxmin = wxString::Format(wxT("%.2f"),Vxmin);
-    editVxmin->SetValue(string_Vxmin);
+        titre_Balayage=new wxStaticText(zone12,-1," Balayage",wxPoint(0,0),wxSize(100,40));
+        titre_Balayage->SetFont(wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD) );
 
-    textVymin=new wxStaticText(zone12,-1,"Vym ",wxPoint(100,30),wxSize(30,40));
-    editVymin=new wxTextCtrl(zone12,-1,"",wxPoint(130,28),wxSize(50,25));
-    editVymin->SetToolTip(wxT("tension mini en volt selon l'axe y"));
-    float Vymin=extract_val("VYMIN",chemin_config_manip);
-    wxString string_Vymin = wxString::Format(wxT("%.2f"),Vymin);
-    editVymin->SetValue(string_Vymin);
+        textVxmin=new wxStaticText(zone12,-1,"Vxm ",wxPoint(10,30),wxSize(30,40));
+        editVxmin=new wxTextCtrl(zone12,-1,"",wxPoint(50,28),wxSize(50,25));
+        editVxmin->SetToolTip(wxT("tension mini en volt selon l'axe x"));
+        float Vxmin=extract_val("VXMIN",chemin_config_manip);
+        wxString string_Vxmin = wxString::Format(wxT("%.2f"),Vxmin);
+        editVxmin->SetValue(string_Vxmin);
 
-    textVxmax=new wxStaticText(zone12,-1,"VxM ",wxPoint(10,70),wxSize(30,40));
-    editVxmax=new wxTextCtrl(zone12,-1,"",wxPoint(40,68),wxSize(50,25));
-    editVxmax->SetToolTip(wxT("tension maxi en volt selon l'axe x"));
-    float Vxmax=extract_val("VXMAX",chemin_config_manip);
-    wxString string_Vxmax = wxString::Format(wxT("%.2f"),Vxmax);
-    editVxmax->SetValue(string_Vxmax);
+        textVymin=new wxStaticText(zone12,-1,"Vym ",wxPoint(110,30),wxSize(30,40));
+        editVymin=new wxTextCtrl(zone12,-1,"",wxPoint(140,28),wxSize(50,25));
+        editVymin->SetToolTip(wxT("tension mini en volt selon l'axe y"));
+        float Vymin=extract_val("VYMIN",chemin_config_manip);
+        wxString string_Vymin = wxString::Format(wxT("%.2f"),Vymin);
+        editVymin->SetValue(string_Vymin);
+
+        textVxmax=new wxStaticText(zone12,-1,"VxM ",wxPoint(10,70),wxSize(30,40));
+        editVxmax=new wxTextCtrl(zone12,-1,"",wxPoint(50,68),wxSize(50,25));
+        editVxmax->SetToolTip(wxT("tension maxi en volt selon l'axe x"));
+        float Vxmax=extract_val("VXMAX",chemin_config_manip);
+        wxString string_Vxmax = wxString::Format(wxT("%.2f"),Vxmax);
+        editVxmax->SetValue(string_Vxmax);
 
 
-    textVymax=new wxStaticText(zone12,-1,"VyM ",wxPoint(100,70),wxSize(30,40));
-    editVymax=new wxTextCtrl(zone12,-1,"",wxPoint(130,68),wxSize(50,25));
-    editVymax->SetToolTip(wxT("tension maxi en volt selon l'axe y"));
-    float Vymax=extract_val("VYMAX",chemin_config_manip);
-    wxString string_Vymax = wxString::Format(wxT("%.2f"),Vymax);
-    editVymax->SetValue(string_Vymax);
+        textVymax=new wxStaticText(zone12,-1,"VyM ",wxPoint(110,70),wxSize(30,40));
+        editVymax=new wxTextCtrl(zone12,-1,"",wxPoint(140,68),wxSize(50,25));
+        editVymax->SetToolTip(wxT("tension maxi en volt selon l'axe y"));
+        float Vymax=extract_val("VYMAX",chemin_config_manip);
+        wxString string_Vymax = wxString::Format(wxT("%.2f"),Vymax);
+        editVymax->SetValue(string_Vymax);
+
+        textNAcondLim=new wxStaticText(zone12,-1,"NAlim",wxPoint(10,110),wxSize(50,40));
+        editNAcondLim=new wxTextCtrl(zone12,-1,"",wxPoint(50,110),wxSize(50,25));
+        editNAcondLim->SetToolTip(wxT("coefficient limitant NA balayage, valeur=[0,1]"));
+        float NACondLim=extract_val("NA_COND_LIM",chemin_config_manip);
+        wxString string_LimNACond = wxString::Format(wxT("%.2f"),NACondLim);
+        editNAcondLim->SetValue(string_LimNACond);
 
     ////-------------------------
         ///--------------------ACQUISITION------------------

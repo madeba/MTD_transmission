@@ -90,7 +90,7 @@ class Gui_TomoFrame: public wxFrame
         wxStaticText* t;
         wxTextCtrl *editX,*editY,*editResult,*editDirAcquis,*editFicMask,*editFicManip,*editDirResultAcquis;//champ de texte editable
         wxTextCtrl *editNbHolo,*editDimFinal;
-        wxTextCtrl *editCX,*editCY,*editNXMAX,*editVxmin,*editVymin,*editVxmax,*editVymax,*editDeltaVx,*editDeltaVy;
+        wxTextCtrl *editCX,*editCY,*editNXMAX,*editVxmin,*editVymin,*editVxmax,*editVymax,*editDeltaVx,*editDeltaVy,*editNAcondLim;
         wxTextCtrl *editDnMin,*editDnMax, *editIteration;
         wxTextCtrl *editKappaMin,*editKappaMax, *editKappa;
 
@@ -98,7 +98,7 @@ class Gui_TomoFrame: public wxFrame
         wxStaticText *textDnMin,*textDnMax;
         wxStaticText *textKappaMin,*textKappaMax;
         wxStaticText *titre_Acquis,*titre_Pretraitement, *titre_Recons,*titre_HorsAxe,*titre_Balayage;//texte des champs
-        wxStaticText *textNbHolo,*textDimFinal,*textCX,*textCY,*textNXMAX,*textVxmin,*textVymin,*textVxmax,*textVymax,*textDeltaVy,*textDeltaVx,*textOffx,*textOffy;//texte des champs
+        wxStaticText *textNbHolo,*textDimFinal,*textCX,*textCY,*textNXMAX,*textVxmin,*textVymin,*textVxmax,*textVymax,*textDeltaVy,*textNAcondLim,*textDeltaVx,*textOffx,*textOffy;//texte des champs
         wxStaticText *titre_GPS,*titre_interval_indice,*titre_iterationGPS,*textIteration;
         wxStaticText  *titre_interval_kappa;
 
