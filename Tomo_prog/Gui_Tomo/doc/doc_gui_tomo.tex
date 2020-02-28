@@ -51,7 +51,7 @@
 \chead{}
 \rhead{}
 % Footer (you may change this to your own needs)
-\lfoot{\footnotesize \texttt{Manip tomo} \textbullet Réglages optiques et logiciels}
+\lfoot{\footnotesize \texttt{Manip tomo} \textbullet\! Interface graphique}
 \cfoot{}
 \rfoot{\footnotesize page \thepage\ of \pageref{LastPage}}	% "Page 1 of 2"
 \renewcommand{\headrulewidth}{0.0pt}
@@ -79,7 +79,7 @@
 \pretitle{\vspace{-30pt} \begin{flushleft} \HorRule 
 				\fontsize{50}{50} \usefont{OT1}{phv}{b}{n} \color{DarkRed} \selectfont 
 				}
-\title{Documentation Tomo}					% Title of your article goes here
+\title{Documentation interface Tomo}					% Title of your article goes here
 \posttitle{\par\end{flushleft}\vskip 0.5em}
 
 \preauthor{\begin{flushleft}
@@ -102,22 +102,24 @@
 
 
 \section{Principes}
+\subsubsection*{Fichiers utiles}
+L'interface graphique utilise 3 fichiers. Pour les paramètres expérimentaux ou de reconstruction,  les fichiers de configuration sont ceux utilisés par  les programmes de reconstruction :  \code{recon.txt} et  \code{config\_manip.txt}.
+Pour démarrer, l'interface a besoin de savoir où sont stockés ces fichiers et va les trouver dans le fichier  \$HOME/.config/gui\_tomo.config.
 
-L'interface graphique écrit dans 2 fichiers de configuration : \code{recon.txt}, \code{config\_manip.txt}. Les chemins utiles au démarrage se trouvent dans \$HOME/.config/gui\_tomo.config.
 
 
+À l'acquisition, les fichiers contenus dans \code{Projet\_tomo/tomo\_config} sont copiés dans le répertoire des données acquises (par défaut \code{/ramdisk/ACQUIS/}), afin de conserver les paramètres expérimentaux avec les données. 
+\subsubsection*{Principe du programme}
 Pour enregistrer une modif dans un fichier sur le disque dur, il faut en fait réenregistrer toutes les données.
-On utilise pour cela des tableaux de stockage, contiennent l'ensemble des données du fichier.
-Ces tableaux stockés en mémoire sont modifiés à chaque clic sur un bouton.
+On utilise pour cela des tableaux de stockage, qui contiennent l'ensemble des données du fichier. Ces tableaux stockés en mémoire sont modifiés à chaque clic sur un bouton et leurs données écrasent le contenu complet  des fichiers lors des sauvegardes.
 
-À l'acquisition, les fichiers contenus dans \code{Projet\_tomo/tomo\_config} sont copiés dans le répertoire des données acquises (par défaut \code{/ramdisk/ACQUIS/}), afin de conserver les paramètres expérimentaux. 
 
-\section{Pc d'acquisition}
+\section{Emplacement des fichiers}
 \begin{enumerate}
- \item Le fichier de \code{config\_manip.txt} doit être modifié uniquement sur le PC d'acquisition. C'est pourquoi il existe un 2e chemin, spécifique au Pc d'acquisition, indiqué par \code{config\_manip\_pc\_acquis}. 
+ \item Le fichier  \code{config\_manip.txt} doit être modifié uniquement sur le PC d'acquisition. C'est pourquoi il existe un 2e chemin, spécifique au Pc d'acquisition, indiqué par la variable \code{config\_manip\_pc\_acquis} dans leprogramme et par \code{CHEMIN\_CONFIG\_PC\_ACQUIS} dans le fichier de \code{gui\_tomo.conf}. 
 Sur un Pc de reconstruction uniquement, ce fichier \code{config\_manip.txt} ne doit jamais être modifié (c'est un fichier de sauvegarde qui informe sur les conditions d'acquisition).
 
-\item L'endroit de sauvegarde du fichier  \code{recon.txt} n'est pas critique, et il est enregistré dans le répertoire des données. 
+\item L'endroit de sauvegarde du fichier  \code{recon.txt} n'est pas critique, et il est enregistré dans le répertoire des données (en général, \code{/ramdisk/ACQUIS}). 
 \item 
 Le fichier \code{gui\_tomo.conf} est toujours sauvegardé dans \code{\$HOME/.config/} quelle que soit la machine. 
 \end{enumerate}

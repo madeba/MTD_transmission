@@ -92,6 +92,7 @@ typedef std::list<PvBuffer *> BufferList;
 float tiptilt_factor_x = 0;//init rayon X en volt
 float tiptilt_factor_y = 0;//init rayon  Y en volt
 float2D VfOffset={-0, -0};
+float NAcondLim=0;
 float flower_x(float t);
 float flower_y(float t);
 size_t MAX_IMAGES = 0;
@@ -227,8 +228,9 @@ int main(int argc, char *argv[])
 MAX_IMAGES=extract_val("NB_HOLO",chemin_config_manip);
 tiptilt_factor_x=(abs(extract_val("VXMIN", chemin_config_manip))+abs(extract_val("VXMAX", chemin_config_manip)))/20;///amplitude de tension/10=(|vmax|+|vmin|)/10
 tiptilt_factor_y=(abs(extract_val("VYMIN", chemin_config_manip))+abs(extract_val("VYMAX", chemin_config_manip)))/20;
-VfOffset.x=extract_val("VXMIN", chemin_config_manip)+tiptilt_factor_x*10;///offset en volt=amplitude tension+Vmin
-VfOffset.y=extract_val("VYMIN", chemin_config_manip)+tiptilt_factor_y*10;
+NAcondLim=extract_val("NA_COND_LIM",chemin_config_manip);
+VfOffset.x=extract_val("VXMIN", chemin_config_manip)+tiptilt_factor_x*10*NAcondLim;///offset en volt=amplitude tension+Vmin
+VfOffset.y=extract_val("VYMIN", chemin_config_manip)+tiptilt_factor_y*10*NAcondLim;
 
 
 cout<<"  ####################################"<<endl;
@@ -560,7 +562,7 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
     size_t cpt_img=0;
 
     boost::posix_time::milliseconds delay_jack( 1 ); //1.2 + 1.2 +1 );
-    boost::posix_time::milliseconds delay_tilt( 1.0);
+    boost::posix_time::milliseconds delay_tilt( 1);//attention bug : boost 1.67 n'accepte pas de flottant !
     boost::posix_time::milliseconds delay_cam( 5 );
 
     vChronos vTime("prise d'images--"); vTime.clear();
@@ -848,7 +850,7 @@ void AcquireIntensiteRef( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPip
     size_t cpt_img=0;
 
     boost::posix_time::milliseconds delay_jack( 1 ); //1.2 + 1.2 +1 );
-    boost::posix_time::milliseconds delay_tilt( 1.0);
+    boost::posix_time::milliseconds delay_tilt( 1);
     boost::posix_time::milliseconds delay_cam( 100 );
 
 
