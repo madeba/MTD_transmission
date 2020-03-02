@@ -227,11 +227,12 @@ int main(int argc, char *argv[])
     efface_acquis(repAcquis);
 ///!\ attention les fonction labjack de john n'utilisent pas des tensions mais des facteurs "d'attenuation de la tension max". Tout est divisé par 10.
 MAX_IMAGES=extract_val("NB_HOLO",chemin_config_manip);
-tiptilt_factor_x=(abs(extract_val("VXMIN", chemin_config_manip))+abs(extract_val("VXMAX", chemin_config_manip)))/20;///amplitude de tension/10=(|vmax|+|vmin|)/10
-tiptilt_factor_y=(abs(extract_val("VYMIN", chemin_config_manip))+abs(extract_val("VYMAX", chemin_config_manip)))/20;
 NAcondLim=extract_val("NA_COND_LIM",chemin_config_manip);
-VfOffset.x=extract_val("VXMIN", chemin_config_manip)+tiptilt_factor_x*10*NAcondLim;///offset en volt=amplitude tension+Vmin
-VfOffset.y=extract_val("VYMIN", chemin_config_manip)+tiptilt_factor_y*10*NAcondLim;
+tiptilt_factor_x=(abs(extract_val("VXMIN", chemin_config_manip))+abs(extract_val("VXMAX", chemin_config_manip)))*NAcondLim/20;///amplitude de tension/10=(|vmax|+|vmin|)/10
+tiptilt_factor_y=(abs(extract_val("VYMIN", chemin_config_manip))+abs(extract_val("VYMAX", chemin_config_manip)))*NAcondLim/20;
+
+VfOffset.x=(extract_val("VXMIN", chemin_config_manip)*NAcondLim+tiptilt_factor_x*10);///offset en volt=amplitude tension+Vmin
+VfOffset.y=(extract_val("VYMIN", chemin_config_manip)*NAcondLim+tiptilt_factor_y*10)*NAcondLim;
 b_AmpliRef=extract_val("AMPLI_REF", chemin_recon);
 
 cout<<"  ####################################"<<endl;

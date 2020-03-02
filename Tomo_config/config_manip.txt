@@ -16,12 +16,12 @@ RF 0.75
 NXMAX 125
 #Paramètres de hors-axe : position du centre et rayon
 
-CIRCLE_CX 777
+CIRCLE_CX 247
 CIRCLE_CY 777
 
 DIM_ROI 1024
 #Nombre d'hologrammes
-NB_HOLO 400
+NB_HOLO 600
 
 #tension min max du miroir de balayage
 #VXMIN -4.20
@@ -31,13 +31,16 @@ NB_HOLO 400
 
 
 
-VXMIN -3.75
-VXMAX 3.80
-VYMIN -2.80
-VYMAX 2.60
+VXMIN -8.80
+VXMAX 8.80
+VYMIN -6.20
+VYMAX 6.20
 
-NA_COND_LIM 0.70
+NA_COND_LIM 0.5
 AMPLI_REF 0
+
+
+
 
 
 

@@ -255,7 +255,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     editDirAcquis=new wxTextCtrl(zone13,-1,chemin_rep_acquis,wxPoint(105,14), wxSize(175,26));
     editDirAcquis->SetToolTip(wxT("Répertoire des acquisitions"));
     // textFicManip=new wxTextCtrl(zone10,-1,"",wxPoint(160,195),wxSize(100,20));
-    BoutonManip= new wxButton(zone13, idBoutonManip, wxT("&Acquisition"), wxPoint(195,75), wxDefaultSize, 0);
+    BoutonManip= new wxButton(zone13, idBoutonManip, wxT("&Acquisition"), wxPoint(194,60), wxDefaultSize, 0);
 
 
     ///-----------------------------
@@ -313,7 +313,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     editFicMask=new wxTextCtrl(zone22,-1,chemin_rep_acquis+"/Mask.png",wxPoint(85,6), wxSize(200,40));
     editFicMask->SetToolTip(wxT("Masque pour correction d'aberration"));
 
-    BoutonRecons= new wxButton(zone22, idBoutonTraitement, wxT("&Prétraitement"), wxPoint(184,94), wxDefaultSize, 0);
+    BoutonRecons= new wxButton(zone22, idBoutonTraitement, wxT("&Prétraitement"), wxPoint(180,160), wxDefaultSize, 0);
 
 
     panel_centre->SetSizer(sizer_vertical1);//affecter l'organiseur (sizer) horizontal à l'onglet  1.
@@ -387,7 +387,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     editDirResultAcquis=new wxTextCtrl(zone32,-1,chemin_result,wxPoint(105,16),wxSize(170,20));
     editDirResultAcquis->SetToolTip(wxT("Répertoire résultats"));
     // textFicManip=new wxTextCtrl(zone10,-1,"",wxPoint(160,195),wxSize(100,20));
-    BoutonRecons= new wxButton(zone32, idBoutonRecons, wxT("&Reconstruction"), wxPoint(175,118), wxDefaultSize, 0);
+    BoutonRecons= new wxButton(zone32, idBoutonRecons, wxT("&Reconstruction"), wxPoint(174,214), wxDefaultSize, 0);
 
    // BoutonOpenDir=new wxButton(zone13, idBoutonOpenDir, wxT("&Données"), wxPoint(5,10), wxDefaultSize, 0);
    // editDirAcquis=new wxTextCtrl(zone13,-1,chemin_rep_acquis,wxPoint(105,14), wxSize(175,26));

@@ -27,9 +27,9 @@ bool Gui_TomoApp::OnInit()
 {
     Gui_TomoFrame* frame = new Gui_TomoFrame(0L, _("Interface Tomo")) ;
 
-    wxSize frame_size(900,460);
+    wxSize frame_size(900,540);
     frame->SetSize(frame_size);
-    frame->SetMaxSize(wxSize(960,520));
+    frame->SetMaxSize(wxSize(960,540));
     frame->Show(true);
     return true;
 }
