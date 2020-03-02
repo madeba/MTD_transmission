@@ -92,6 +92,7 @@ typedef std::list<PvBuffer *> BufferList;
 float tiptilt_factor_x = 0;//init rayon X en volt
 float tiptilt_factor_y = 0;//init rayon  Y en volt
 float2D VfOffset={-0, -0};
+unsigned int b_AmpliRef=0;
 float NAcondLim=1;//coefficient de limitation de 'louverture numerique de balyage 0<valeur<=1
 float flower_x(float t);
 float flower_y(float t);
@@ -231,7 +232,7 @@ tiptilt_factor_y=(abs(extract_val("VYMIN", chemin_config_manip))+abs(extract_val
 NAcondLim=extract_val("NA_COND_LIM",chemin_config_manip);
 VfOffset.x=extract_val("VXMIN", chemin_config_manip)+tiptilt_factor_x*10*NAcondLim;///offset en volt=amplitude tension+Vmin
 VfOffset.y=extract_val("VYMIN", chemin_config_manip)+tiptilt_factor_y*10*NAcondLim;
-
+b_AmpliRef=extract_val("AMPLI_REF", chemin_recon);
 
 cout<<"  ####################################"<<endl;
 cout<<"  #  tension MAX x="<<tiptilt_factor_x*10<<"                   #"<<endl;
@@ -347,7 +348,7 @@ cout<<"  ####################################" <<endl;
                 if( lPipeline )
                 {
                     AcquireImages( lDevice, lStream, lPipeline, &ljDAC_flower, chemin_result,chemin_acquis, dimROI );
-
+                    if(b_AmpliRef==1)
                     AcquireIntensiteRef( lDevice, lStream, lPipeline, &ljDAC_flower, chemin_result,chemin_acquis, dimROI );
                     delete lPipeline;
                 }
@@ -883,8 +884,8 @@ void AcquireIntensiteRef( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPip
 
                 if ( lType == PvPayloadTypeImage )///le buffer contient bien une image? Tout est ok, on traite le flux
                 {
-                    DAC_tiptilt -> set_A_output(5+VfOffset.x);
-                    DAC_tiptilt -> set_B_output(5+VfOffset.y);
+                    DAC_tiptilt -> set_A_output(9.5);
+                    DAC_tiptilt -> set_B_output(9.5);
 
                     // Get image specific buffer interface.
                     PvImage *lImage = lBuffer->GetImage();

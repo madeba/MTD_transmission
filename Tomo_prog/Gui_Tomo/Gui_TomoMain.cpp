@@ -65,6 +65,7 @@ BEGIN_EVENT_TABLE(Gui_TomoFrame, wxFrame)
     EVT_CHECKBOX(idBoolVolkov,Gui_TomoFrame::OnBoutonVolkov)
     EVT_CHECKBOX(idBoolDeroul,Gui_TomoFrame::OnBoutonDeroul)
     EVT_CHECKBOX(idBoolAber,Gui_TomoFrame::OnBoutonAber)
+    EVT_CHECKBOX(idBoolAmpliRef,Gui_TomoFrame::OnBoutonAmpliRef)
     EVT_BUTTON(idBoutonOpenDir, Gui_TomoFrame::OnBoutonOpenDir)
     EVT_BUTTON(idBoutonOpenDirResult, Gui_TomoFrame::OnBoutonOpenDirResult)
     EVT_BUTTON(idBoutonOpenMask, Gui_TomoFrame::OnBoutonOpenMask)
@@ -280,7 +281,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     titre_Pretraitement=new wxStaticText(zone20,-1,wxT(" Prétraitement"),wxPoint(0,0),wxSize(100,40));               //
     titre_Pretraitement->SetFont(wxFont(12, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL) );      //
     //-------------zone du milieu ------------------------------------------------------------------------------------
-    wxPanel *zone21 = new wxPanel(panel_centre, wxID_ANY, wxDefaultPosition, wxSize(-1, 130));
+    wxPanel *zone21 = new wxPanel(panel_centre, wxID_ANY, wxDefaultPosition, wxSize(-1, 160));
     zone21->SetBackgroundColour(*wxLIGHT_GREY);
 
     // Ajout de cette zone au sizer vertical
@@ -299,6 +300,8 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     m_Aber = new wxCheckBox(zone21, idBoolAber, wxT("Correction aberration"), wxPoint(20, 101));
     m_Aber->SetValue(stof(extract_string("C_ABER",chemin_recon)));
 
+    m_AmpliRef = new wxCheckBox(zone21, idBoolAmpliRef, wxT("Division ampli_ref"), wxPoint(20, 131));
+    m_AmpliRef->SetValue(stof(extract_string("AMPLI_REF",chemin_recon)));
 
     //-------------zone du bas---------------------------------------------------------------------------------------//
     wxPanel *zone22 = new wxPanel(panel_centre);
@@ -588,6 +591,7 @@ void Gui_TomoFrame::OnBoutonDeroul(wxCommandEvent& WXUNUSED(event))
             modif_tab_val("DEROUL", "0",tab_val_recon);
         }
 }
+
 ///modifier aussi la sauvegarde, sinon fichier non modifié
 void Gui_TomoFrame::OnBoutonVolkov(wxCommandEvent& WXUNUSED(event))
 {
@@ -610,6 +614,18 @@ void Gui_TomoFrame::OnBoutonAber(wxCommandEvent& WXUNUSED(event))
     else
         {
             modif_tab_val("C_ABER", "0",tab_val_recon);
+        }
+}
+
+void Gui_TomoFrame::OnBoutonAmpliRef(wxCommandEvent& WXUNUSED(event))
+{
+    if (m_AmpliRef->GetValue()==true)
+        {
+            modif_tab_val("AMPLI_REF", "1",tab_val_recon);
+        }
+    else
+        {
+            modif_tab_val("AMPLI_REF", "0",tab_val_recon);
         }
 }
 

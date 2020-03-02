@@ -50,6 +50,7 @@ class Gui_TomoFrame: public wxFrame
             idBoolVolkov,
             idBoolDeroul,
             idBoolAber,
+            idBoolAmpliRef,
             idBoolExportOTF,
             idBoutonOpenDir,
             idBoutonOpenDirResult,
@@ -85,7 +86,7 @@ class Gui_TomoFrame: public wxFrame
 
         wxButton* BoutonGPS;
         wxBitmapButton *BoutonRecalc, *BoutonSAV;
-        wxCheckBox *m_born,*m_volkov,*m_Aber,*m_Deroul,*m_export_OTF;
+        wxCheckBox *m_born,*m_volkov,*m_Aber,*m_Deroul,*m_AmpliRef,*m_export_OTF;
 
         wxStaticText* t;
         wxTextCtrl *editX,*editY,*editResult,*editDirAcquis,*editFicMask,*editFicManip,*editDirResultAcquis;//champ de texte editable
@@ -114,6 +115,7 @@ class Gui_TomoFrame: public wxFrame
         void OnBoutonExportOTF(wxCommandEvent& event);
         void OnBoutonVolkov(wxCommandEvent& WXUNUSED(event));
         void OnBoutonAber(wxCommandEvent& event);
+        void OnBoutonAmpliRef(wxCommandEvent& event);
         void OnBoutonDeroul(wxCommandEvent& event);
         void OnBoutonOpenDir(wxCommandEvent& event);
         void OnBoutonOpenDirResult(wxCommandEvent& event);
