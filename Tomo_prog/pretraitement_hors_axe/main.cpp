@@ -96,7 +96,7 @@ int main()
     }
     auto end = std::chrono::system_clock::now();
     auto elapsed = end - start;
-    std::cout <<"Découpe hors axe= "<< elapsed.count()/(pow(10,9)) << '\n';
+    std::cout <<"Découpe Spectre= "<< elapsed.count()/(pow(10,9)) << '\n';
     ///--------------libérer allocation FFTW holo-------------------------------------
         fftw_destroy_plan(p_forward_holo);
         fftw_free(in_holo);
