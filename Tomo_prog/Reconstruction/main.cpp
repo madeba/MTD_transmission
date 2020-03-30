@@ -80,8 +80,8 @@ int main(int argc, char *argv[])
         manip m1;
 
         int NXMAX=m1.NXMAX, NbAngle=m1.NbAngle;
-        Var2D NMAX={NXMAX,NXMAX},dimROI={2*NXMAX,2*NXMAX};
-        Point2D dim2DUBorn(dimROI.x,dimROI.y,2*NXMAX);
+        Var2D NMAX={NXMAX,NXMAX},dimChpCplx={2*NXMAX,2*NXMAX};
+        Point2D dim2DUBorn(2*NXMAX,2*NXMAX,2*NXMAX);
 
         ///------Récupérer spéculaire dans le fichier binaire---
         //lire_bin(chemin_fichier,variable de stockage, type de donnée en bits (32,64...), nombre d'images 2D)
@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
             UBornFinal3D[cpt].real(UBornFinal3D_Re[cpt]);
             UBornFinal3D[cpt].imag(UBornFinal3D_Im[cpt]);
         }
-       // SAV_Tiff2DCplx(UBornFinal3D,"Im",chemin_result+"/UBornfinal3D_Im.tif",tailleTheoPixelUborn*1000,"a");
+        SAV3D_Tiff(UBornFinal3D,"Im",m1.chemin_result+"/UBornfinal3D_Im.tif",tailleTheoPixelUborn*1000);
         delete[] UBornFinal3D_Re;delete[] UBornFinal3D_Im;
 
 
@@ -168,7 +168,7 @@ int main(int argc, char *argv[])
         string tmp=m1.chemin_result+"/wisdom/test2D.wisdom";
         int bool_wisdom2D=fftw_import_wisdom_from_filename(tmp.c_str());//charger ou calculer le fichier wisdom
             if(bool_wisdom2D==0){
-                prepare_wisdom2D(dimROI,tmp.c_str());
+                prepare_wisdom2D(dimChpCplx,tmp.c_str());
             }
 
         for(int cpt_angle=premier_plan; cpt_angle<NbAngle; cpt_angle++) //boucle sur tous les angles

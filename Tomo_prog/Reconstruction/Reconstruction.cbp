@@ -48,7 +48,7 @@
 			<Add option="-fexceptions -lpthread -std=c++11 -fopenmp" />
 			<Add directory="/usr/include/opencv" />
 			<Add directory="include" />
-			<Add directory="/home/tomo/Projet_tomo/Tomo_prog/Reconstruction/" />
+			<Add directory="." />
 		</Compiler>
 		<Linker>
 			<Add option="`pkg-config --cflags --libs opencv` -lpthread -lgomp -ltiff" />

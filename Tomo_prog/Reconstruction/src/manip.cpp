@@ -32,7 +32,7 @@ manip::manip()
     NXMAX=parametre[0],NYMAX=parametre[0],NbAngle=parametre[1],rayon=parametre[2],dimROI=parametre[3],tailleTheoPixelHolo=parametre[4];
 
 
-
+    cout<<"NXMAX="<<NXMAX<<endl;
     cout<<"rayon param=="<<rayon<<endl;
     cout<<"\n##################### INFO MANIP ##################\n"<<endl;
     n0=extract_val("N0",fic_cfg_manip);	//indice de l'huile
@@ -48,8 +48,8 @@ manip::manip()
     tailleTheoPixelHolo=TpCam/Gt;//Pour info, taille des pixels sur un hologramme=Tpcam/GT
     cout<<"taille theorique pixel holo="<<tailleTheoPixelHolo*pow(10,9)<<"nm"<<endl;
     theta=asin(NA/n0);
-    circle_cx=extract_val("CIRCLE_CX",fic_cfg_manip);
-    circle_cy=extract_val("CIRCLE_CY",fic_cfg_manip);
+ //   circle_cx=extract_val("CIRCLE_CX",fic_cfg_manip);
+   // circle_cy=extract_val("CIRCLE_CY",fic_cfg_manip);
   //  NXMAX=extract_val("NXMAX",fic_cfg_manip);
 
     if(NXMAX==0)

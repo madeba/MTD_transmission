@@ -447,7 +447,7 @@
 	<cstring>
 	<string>
 
-1550587655 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/pretraitement_hors_axe/Correction_aberration.cpp
+1519293665 source:/home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/Correction_aberration.cpp
 	<iostream>
 	<fstream>
 	<sstream>
@@ -457,11 +457,12 @@
 	"fonctions.h"
 	"Correction_aberration.h"
 
-1557328878 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/pretraitement_hors_axe/fonctions.h
+1549992003 /home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/fonctions.h
 	"struct.h"
 	<time.h>
 	<math.h>
 	<iostream>
+	<tiffio.h>
 	<cstdlib>
 	<strstream>
 	<fftw3.h>
@@ -474,13 +475,12 @@
 	"projet.h"
 	<vector>
 	<complex>
-	<tiffio.h>
 
-1516469398 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/pretraitement_hors_axe/struct.h
+1516465799 /home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/struct.h
 
-1513783010 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/pretraitement_hors_axe/projet.h
+1513779411 /home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/projet.h
 
-1557328371 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/pretraitement_hors_axe/Correction_aberration.h
+1516543277 /home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/Correction_aberration.h
 	<iostream>
 	<fstream>
 	<sstream>
@@ -491,7 +491,7 @@
 	<highgui.h>
 	<cv.h>
 
-1519231966 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_herraez.cpp
+1519228367 source:/home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/deroulement_herraez.cpp
 	"deroulement_herraez.h"
 	<stdlib.h>
 	<string.h>
@@ -499,11 +499,11 @@
 	<vector>
 	<math.h>
 
-1519227912 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_herraez.h
+1519224312 /home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/deroulement_herraez.h
 	"struct.h"
 	<vector>
 
-1516811852 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_volkov.cpp
+1516808252 source:/home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/deroulement_volkov.cpp
 	"deroulement_volkov.h"
 	<vector>
 	<complex>
@@ -511,25 +511,25 @@
 	"FFT_fonctions.h"
 	"src/vecteur.h"
 
-1519226836 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_volkov.h
+1519223237 /home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/deroulement_volkov.h
 	<fftw3.h>
 	<vector>
 	<complex>
 
-1516880808 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/pretraitement_hors_axe/FFT_fonctions.h
+1516877208 /home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/FFT_fonctions.h
 	<vector>
 	<complex>
 	<fftw3.h>
 	"src/vecteur.h"
 
-1494511718 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/vecteur.h
+1494508118 /home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/src/vecteur.h
 	<iostream>
 
-1549031522 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/pretraitement_hors_axe/FFT_fonctions.cpp
+1540542203 source:/home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/FFT_fonctions.cpp
 	"FFT_fonctions.h"
 	"fonctions.h"
 
-1551439538 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/pretraitement_hors_axe/fonctions.cpp
+1549992176 source:/home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/fonctions.cpp
 	<fstream>
 	<vector>
 	<complex>
@@ -541,7 +541,7 @@
 	"FFT_fonctions.h"
 	"fonctions.h"
 
-1557477423 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/pretraitement_hors_axe/main.cpp
+1549992190 source:/home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/main.cpp
 	<iostream>
 	<vector>
 	"struct.h"
@@ -557,17 +557,17 @@
 	<chrono>
 	<cv.h>
 
-1550679385 /home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/pretraitement_hors_axe/manip.h
+1516793190 /home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/manip.h
 	<cstdlib>
 	<iostream>
 
-1557492335 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/pretraitement_hors_axe/manip.cpp
+1548772867 source:/home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/manip.cpp
 	"manip.h"
 	<iostream>
 	"fonctions.h"
 	"projet.h"
 
-1494492826 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/vecteur.cpp
+1494489226 source:/home/mat/Dropbox/projet_c/2018/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/src/vecteur.cpp
 	"vecteur.h"
 	<cmath>
 	<cstdlib>
@@ -575,38 +575,22 @@
 	<cstring>
 	<string>
 
-1519231966 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_herraez.cpp
-	"deroulement_herraez.h"
-	<stdlib.h>
-	<string.h>
+1519293665 source:/home/mat/Dropbox/projet_c/2019/pretraitement_phase_shifting/Correction_aberration.cpp
+	<iostream>
+	<fstream>
+	<sstream>
 	<stdio.h>
-	<vector>
+	<stdlib.h>
 	<math.h>
-
-1519227912 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_herraez.h
-	"struct.h"
-	<vector>
-
-1516469398 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/struct.h
-
-1516811852 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_volkov.cpp
-	"deroulement_volkov.h"
-	<vector>
-	<complex>
 	"fonctions.h"
-	"FFT_fonctions.h"
-	"src/vecteur.h"
+	"Correction_aberration.h"
 
-1519226836 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_volkov.h
-	<fftw3.h>
-	<vector>
-	<complex>
-
-1557328878 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/fonctions.h
+1549992003 /home/mat/Dropbox/projet_c/2019/pretraitement_phase_shifting/fonctions.h
 	"struct.h"
 	<time.h>
 	<math.h>
 	<iostream>
+	<tiffio.h>
 	<cstdlib>
 	<strstream>
 	<fftw3.h>
@@ -619,20 +603,61 @@
 	"projet.h"
 	<vector>
 	<complex>
-	<tiffio.h>
 
-1513783010 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/projet.h
+1516465799 /home/mat/Dropbox/projet_c/2019/pretraitement_phase_shifting/struct.h
 
-1516880808 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/FFT_fonctions.h
+1513779411 /home/mat/Dropbox/projet_c/2019/pretraitement_phase_shifting/projet.h
+
+1516543277 /home/mat/Dropbox/projet_c/2019/pretraitement_phase_shifting/Correction_aberration.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+
+1519228367 source:/home/mat/Dropbox/projet_c/2019/pretraitement_phase_shifting/deroulement_herraez.cpp
+	"deroulement_herraez.h"
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	<vector>
+	<math.h>
+
+1519224312 /home/mat/Dropbox/projet_c/2019/pretraitement_phase_shifting/deroulement_herraez.h
+	"struct.h"
+	<vector>
+
+1516808252 source:/home/mat/Dropbox/projet_c/2019/pretraitement_phase_shifting/deroulement_volkov.cpp
+	"deroulement_volkov.h"
+	<vector>
+	<complex>
+	"fonctions.h"
+	"FFT_fonctions.h"
+	"src/vecteur.h"
+
+1519223237 /home/mat/Dropbox/projet_c/2019/pretraitement_phase_shifting/deroulement_volkov.h
+	<fftw3.h>
+	<vector>
+	<complex>
+
+1516877208 /home/mat/Dropbox/projet_c/2019/pretraitement_phase_shifting/FFT_fonctions.h
 	<vector>
 	<complex>
 	<fftw3.h>
 	"src/vecteur.h"
 
-1494511718 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/vecteur.h
+1494508118 /home/mat/Dropbox/projet_c/2019/pretraitement_phase_shifting/src/vecteur.h
 	<iostream>
 
-1557504385 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/fonctions.cpp
+1540542203 source:/home/mat/Dropbox/projet_c/2019/pretraitement_phase_shifting/FFT_fonctions.cpp
+	"FFT_fonctions.h"
+	"fonctions.h"
+
+1549992176 source:/home/mat/Dropbox/projet_c/2019/pretraitement_phase_shifting/fonctions.cpp
 	<fstream>
 	<vector>
 	<complex>
@@ -644,17 +669,17 @@
 	"FFT_fonctions.h"
 	"fonctions.h"
 
-1558965269 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/manip.cpp
+1548772867 source:/home/mat/Dropbox/projet_c/2019/pretraitement_phase_shifting/manip.cpp
 	"manip.h"
 	<iostream>
 	"fonctions.h"
 	"projet.h"
 
-1550679385 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/manip.h
+1516793190 /home/mat/Dropbox/projet_c/2019/pretraitement_phase_shifting/manip.h
 	<cstdlib>
 	<iostream>
 
-1494492826 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/vecteur.cpp
+1494489226 source:/home/mat/Dropbox/projet_c/2019/pretraitement_phase_shifting/src/vecteur.cpp
 	"vecteur.h"
 	<cmath>
 	<cstdlib>
@@ -662,32 +687,7 @@
 	<cstring>
 	<string>
 
-1550587655 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/Correction_aberration.cpp
-	<iostream>
-	<fstream>
-	<sstream>
-	<stdio.h>
-	<stdlib.h>
-	<math.h>
-	"fonctions.h"
-	"Correction_aberration.h"
-
-1557328371 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/Correction_aberration.h
-	<iostream>
-	<fstream>
-	<sstream>
-	<stdio.h>
-	<stdlib.h>
-	<math.h>
-	<cxcore.h>
-	<highgui.h>
-	<cv.h>
-
-1549031522 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/FFT_fonctions.cpp
-	"FFT_fonctions.h"
-	"fonctions.h"
-
-1558622680 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/main.cpp
+1549993194 source:/home/mat/Dropbox/projet_c/2019/pretraitement_phase_shifting/main.cpp
 	<iostream>
 	<vector>
 	"struct.h"
@@ -703,7 +703,7 @@
 	<chrono>
 	<cv.h>
 
-1550587655 source:/media/mat/Elements/sav_pc_strasbourg/Projet_tomo/Tomo_prog/pretraitement_hors_axe/Correction_aberration.cpp
+1585230026 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/Correction_aberration.cpp
 	<iostream>
 	<fstream>
 	<sstream>
@@ -713,11 +713,12 @@
 	"fonctions.h"
 	"Correction_aberration.h"
 
-1551439491 /media/mat/Elements/sav_pc_strasbourg/Projet_tomo/Tomo_prog/pretraitement_hors_axe/fonctions.h
+1549992003 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/fonctions.h
 	"struct.h"
 	<time.h>
 	<math.h>
 	<iostream>
+	<tiffio.h>
 	<cstdlib>
 	<strstream>
 	<fftw3.h>
@@ -730,13 +731,12 @@
 	"projet.h"
 	<vector>
 	<complex>
-	<tiffio.h>
 
-1516469398 /media/mat/Elements/sav_pc_strasbourg/Projet_tomo/Tomo_prog/pretraitement_hors_axe/struct.h
+1516465799 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/struct.h
 
-1513783010 /media/mat/Elements/sav_pc_strasbourg/Projet_tomo/Tomo_prog/pretraitement_hors_axe/projet.h
+1585327390 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/projet.h
 
-1516546876 /media/mat/Elements/sav_pc_strasbourg/Projet_tomo/Tomo_prog/pretraitement_hors_axe/Correction_aberration.h
+1585230044 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/Correction_aberration.h
 	<iostream>
 	<fstream>
 	<sstream>
@@ -747,7 +747,7 @@
 	<highgui.h>
 	<cv.h>
 
-1519231966 source:/media/mat/Elements/sav_pc_strasbourg/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_herraez.cpp
+1519228367 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/deroulement_herraez.cpp
 	"deroulement_herraez.h"
 	<stdlib.h>
 	<string.h>
@@ -755,11 +755,11 @@
 	<vector>
 	<math.h>
 
-1519227912 /media/mat/Elements/sav_pc_strasbourg/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_herraez.h
+1519224312 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/deroulement_herraez.h
 	"struct.h"
 	<vector>
 
-1516811852 source:/media/mat/Elements/sav_pc_strasbourg/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_volkov.cpp
+1516808252 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/deroulement_volkov.cpp
 	"deroulement_volkov.h"
 	<vector>
 	<complex>
@@ -767,25 +767,25 @@
 	"FFT_fonctions.h"
 	"src/vecteur.h"
 
-1519226836 /media/mat/Elements/sav_pc_strasbourg/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_volkov.h
+1519223237 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/deroulement_volkov.h
 	<fftw3.h>
 	<vector>
 	<complex>
 
-1516880808 /media/mat/Elements/sav_pc_strasbourg/Projet_tomo/Tomo_prog/pretraitement_hors_axe/FFT_fonctions.h
+1516877208 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/FFT_fonctions.h
 	<vector>
 	<complex>
 	<fftw3.h>
 	"src/vecteur.h"
 
-1494511718 /media/mat/Elements/sav_pc_strasbourg/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/vecteur.h
+1494508118 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/src/vecteur.h
 	<iostream>
 
-1549031522 source:/media/mat/Elements/sav_pc_strasbourg/Projet_tomo/Tomo_prog/pretraitement_hors_axe/FFT_fonctions.cpp
+1540542203 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/FFT_fonctions.cpp
 	"FFT_fonctions.h"
 	"fonctions.h"
 
-1551439538 source:/media/mat/Elements/sav_pc_strasbourg/Projet_tomo/Tomo_prog/pretraitement_hors_axe/fonctions.cpp
+1585492743 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/fonctions.cpp
 	<fstream>
 	<vector>
 	<complex>
@@ -797,7 +797,7 @@
 	"FFT_fonctions.h"
 	"fonctions.h"
 
-1551884003 source:/media/mat/Elements/sav_pc_strasbourg/Projet_tomo/Tomo_prog/pretraitement_hors_axe/main.cpp
+1585500293 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/main.cpp
 	<iostream>
 	<vector>
 	"struct.h"
@@ -813,145 +813,17 @@
 	<chrono>
 	<cv.h>
 
-1550679385 /media/mat/Elements/sav_pc_strasbourg/Projet_tomo/Tomo_prog/pretraitement_hors_axe/manip.h
+1585500314 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/manip.h
 	<cstdlib>
 	<iostream>
 
-1550679436 source:/media/mat/Elements/sav_pc_strasbourg/Projet_tomo/Tomo_prog/pretraitement_hors_axe/manip.cpp
+1585500314 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/manip.cpp
 	"manip.h"
 	<iostream>
 	"fonctions.h"
 	"projet.h"
 
-1494492826 source:/media/mat/Elements/sav_pc_strasbourg/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/vecteur.cpp
-	"vecteur.h"
-	<cmath>
-	<cstdlib>
-	<iostream>
-	<cstring>
-	<string>
-
-1550587655 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/Correction_aberration.cpp
-	<iostream>
-	<fstream>
-	<sstream>
-	<stdio.h>
-	<stdlib.h>
-	<math.h>
-	"fonctions.h"
-	"Correction_aberration.h"
-
-1557328878 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/fonctions.h
-	"struct.h"
-	<time.h>
-	<math.h>
-	<iostream>
-	<cstdlib>
-	<strstream>
-	<fftw3.h>
-	<opencv2/core/core.hpp>
-	<opencv2/highgui/highgui.hpp>
-	<cstring>
-	<fstream>
-	<sstream>
-	<assert.h>
-	"projet.h"
-	<vector>
-	<complex>
-	<tiffio.h>
-
-1516469398 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/struct.h
-
-1513783010 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/projet.h
-
-1557328371 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/Correction_aberration.h
-	<iostream>
-	<fstream>
-	<sstream>
-	<stdio.h>
-	<stdlib.h>
-	<math.h>
-	<cxcore.h>
-	<highgui.h>
-	<cv.h>
-
-1519231966 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_herraez.cpp
-	"deroulement_herraez.h"
-	<stdlib.h>
-	<string.h>
-	<stdio.h>
-	<vector>
-	<math.h>
-
-1519227912 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_herraez.h
-	"struct.h"
-	<vector>
-
-1516811852 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_volkov.cpp
-	"deroulement_volkov.h"
-	<vector>
-	<complex>
-	"fonctions.h"
-	"FFT_fonctions.h"
-	"src/vecteur.h"
-
-1519226836 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_volkov.h
-	<fftw3.h>
-	<vector>
-	<complex>
-
-1516880808 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/FFT_fonctions.h
-	<vector>
-	<complex>
-	<fftw3.h>
-	"src/vecteur.h"
-
-1494511718 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/vecteur.h
-	<iostream>
-
-1549031522 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/FFT_fonctions.cpp
-	"FFT_fonctions.h"
-	"fonctions.h"
-
-1581414737 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/fonctions.cpp
-	<fstream>
-	<vector>
-	<complex>
-	<fftw3.h>
-	"struct.h"
-	<cv.h>
-	<highgui.h>
-	"projet.h"
-	"FFT_fonctions.h"
-	"fonctions.h"
-
-1581414742 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/main.cpp
-	<iostream>
-	<vector>
-	"struct.h"
-	<complex>
-	"manip.h"
-	<string>
-	"projet.h"
-	"fonctions.h"
-	"FFT_fonctions.h"
-	"deroulement_volkov.h"
-	"deroulement_herraez.h"
-	"Correction_aberration.h"
-	<chrono>
-	<cv.h>
-
-1550679385 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/manip.h
-	<cstdlib>
-	<iostream>
-
-1558965269 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/manip.cpp
-	"manip.h"
-	<iostream>
-	"fonctions.h"
-	"projet.h"
-
-1494492826 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/vecteur.cpp
+1494489226 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/src/vecteur.cpp
 	"vecteur.h"
 	<cmath>
 	<cstdlib>

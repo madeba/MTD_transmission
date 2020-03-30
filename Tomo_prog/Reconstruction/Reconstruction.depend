@@ -12,28 +12,19 @@
 	"fonctions.h"
 	"Correction_aberration.h"
 
-1411092226 /usr/include/opencv/cxcore.h
+1494560727 /usr/include/opencv/cxcore.h
 	"opencv2/core/core_c.h"
-	"opencv2/core/core.hpp"
 
-1411092226 /usr/include/opencv/highgui.h
+1494560727 /usr/include/opencv/highgui.h
 	"opencv2/core/core_c.h"
-	"opencv2/core/core.hpp"
 	"opencv2/highgui/highgui_c.h"
-	"opencv2/highgui/highgui.hpp"
 
-1411092226 /usr/include/opencv/cv.h
+1494560727 /usr/include/opencv/cv.h
 	"opencv2/core/core_c.h"
-	"opencv2/core/core.hpp"
 	"opencv2/imgproc/imgproc_c.h"
-	"opencv2/imgproc/imgproc.hpp"
-	"opencv2/video/tracking.hpp"
-	"opencv2/features2d/features2d.hpp"
-	"opencv2/flann/flann.hpp"
-	"opencv2/calib3d/calib3d.hpp"
-	"opencv2/objdetect/objdetect.hpp"
-	"opencv2/legacy/compat.hpp"
-	"opencv2/core/internal.hpp"
+	"opencv2/photo/photo_c.h"
+	"opencv2/video/tracking_c.h"
+	"opencv2/objdetect/objdetect_c.h"
 
 1445263776 /home/mat/Dropbox/projet_c/2015/Reconstruction_Tr_hors_axe/fonctions.h
 	"struct.h"
@@ -2321,5 +2312,174 @@
 	"Point2D.h"
 
 1544112250 source:/home/tomo/Projet_tomo/Tomo_prog/Reconstruction/src/Point3D.cpp
+	"Point3D.h"
+
+1493393559 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Reconstruction/deroulement.cpp
+	"deroulement.h"
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	<math.h>
+
+1493393559 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Reconstruction/deroulement.h
+	"struct.h"
+
+1493393559 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Reconstruction/struct.h
+
+1581414741 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Reconstruction/fonctions.cpp
+	"fonctions.h"
+	<chrono>
+	<vector>
+	<algorithm>
+	"FFT_encaps.h"
+	"FFT_fonctions.h"
+
+1555515175 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Reconstruction/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<tiffio.h>
+	<vector>
+	<complex>
+	"projet.h"
+	"manip.h"
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+
+1548758173 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Reconstruction/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1581414738 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Reconstruction/include/manip.h
+	<cstdlib>
+	<iostream>
+
+1581414734 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Reconstruction/include/FFT_encaps.h
+	"Point3D.h"
+	"Point2D.h"
+	<fftw3.h>
+
+1531839117 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Reconstruction/include/Point3D.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	<iostream>
+	"Point2D.h"
+
+1544202478 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Reconstruction/include/Point2D.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	<vector>
+	<complex>
+
+1549643640 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Reconstruction/include/FFT_fonctions.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	"manip.h"
+	"FFT_encaps.h"
+
+1585499257 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Reconstruction/main.cpp
+	"projet.h"
+	"fonctions.h"
+	"deroulement.h"
+	"Correction_aberration.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<chrono>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<omp.h>
+	"manip.h"
+	"FFT_fonctions.h"
+
+1493393559 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Reconstruction/Correction_aberration.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<cxcore.h>
+	<highgui.h>
+	<cv.h>
+
+1581414739 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Reconstruction/src/FFT_encaps.cpp
+	"FFT_encaps.h"
+
+1557501609 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Reconstruction/src/FFT_fonctions.cpp
+	"FFT_fonctions.h"
+	"fonctions.h"
+	"manip.h"
+
+1555515175 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Reconstruction//fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<tiffio.h>
+	<vector>
+	<complex>
+	"projet.h"
+	"manip.h"
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+
+1493393559 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Reconstruction//struct.h
+
+1548758173 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Reconstruction//projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1585563078 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Reconstruction/src/manip.cpp
+	"manip.h"
+	<iostream>
+	"fonctions.h"
+	"projet.h"
+
+1544202725 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Reconstruction/src/Point2D.cpp
+	"Point2D.h"
+
+1544112250 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Reconstruction/src/Point3D.cpp
 	"Point3D.h"
 
