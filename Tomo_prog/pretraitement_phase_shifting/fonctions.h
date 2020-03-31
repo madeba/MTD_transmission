@@ -27,7 +27,7 @@
 //#include "vecteur.h"
 #include <vector>
 #include <complex>
-
+void antigaussienne(double *tab, int Tx, int sigma, float A, int Exy);
 void calcPhase_mpi_pi_atan2(std::vector<std::complex<double>> obj, std::vector<double> &phaseMod2pi);
 void circshift2DCplx(std::vector<std::complex<double>> entree, std::vector<std::complex<double>> &result, Var2D dim,Var2D decal);
 void decal2DCplxGen(std::vector<std::complex<double>> entree,std::vector<std::complex<double>> &result, Var2D dim,Var2D decal);

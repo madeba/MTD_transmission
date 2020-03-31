@@ -907,38 +907,7 @@ void interp3D(double *volume_interp_3D, int taille_x,int taille_y,int taille_z)
         }
 }
 //##############§FIN INTERP3D#####################################################
-///#######masque pour &écraser jumeau############""
-void antigaussienne(double *tab, int Tx, int sigma, float A, int Exy)
-{
 
-        int corr_paire=0;
-        if(Tx%2==0) {
-                cout<<"taille Tx="<<Tx<<" paire : le masque ne serait pas centré!"<<endl;
-                corr_paire=1;
-        }
-
-        if(sigma==0)
-                sigma=1;
-        short  int x,y, Tinf=-round(Tx/2),Tsup=round(Tx/2);
-        short unsigned int cptx,cpty;
-        float Ex,Ey,sigmax,sigmay;
-        Ex=Exy;
-        Ey=Exy;
-        sigmax=sigma;
-        sigmay=sigma;
-        if(Tx==1)
-                tab[0]=0;
-        else {
-                for(x=Tinf; x<Tsup+1-corr_paire; x++) {
-                        cptx=x+Tsup;
-                        for( y=Tinf; y<Tsup+1-corr_paire; y++) {
-                                cpty=y+Tsup;
-                                tab[cpty*Tx+cptx]=1-A*exp(-(pow((x-Ex),4)/(2*sigmax*sigmax)+pow((y-Ey),4)/(2*sigmay*sigmay)));
-                        }
-                }
-        }
-
-}
 
 //#############################################################"
 /*double *tukey2D(int dimx,int dimy, float alpha)

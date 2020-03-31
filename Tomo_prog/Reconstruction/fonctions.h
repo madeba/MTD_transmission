@@ -35,7 +35,7 @@ float   total;
 /* --------------------------------------------------------------------------- */
 // Prototypes
 /* --------------------------------------------------------------------------- */
-void antigaussienne(double *tab, int Tx, int sigma, float A, int Exy);
+
 float extract_val(string token,  string chemin_fic);
 //void divCplx(nbCplx* imageA,nbCplx* imageB,nbCplx* resultat, int NbPix);
 //void multiplierCplx(nbCplx* image1,nbCplx* image2,nbCplx* resultat, int NbPix);

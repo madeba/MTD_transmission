@@ -206,7 +206,7 @@ int main()
                                             UBornFinal[cpt].imag((UBornAmpFinal[cpt]-1)*sin(PhaseFinal[cpt]));
                                         }
                                     else{ //RYTOV URytov = log a_t/a_i=log a_t
-                                            UBornFinal[cpt].real(log(sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt])));///Rytov nécessite correction amplitude
+                                            UBornFinal[cpt].real(log(sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt])));///racine(U^2) pour éliminer les éventueles amplitudes négatives
                                             UBornFinal[cpt].imag(PhaseFinal[cpt]);
                                         }
                                 }
