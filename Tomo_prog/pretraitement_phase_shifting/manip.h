@@ -11,6 +11,7 @@ struct manip {
         double rayon;
         double lambda0;
         size_t NXMAX;
+        size_t dim2DUBorn;
         size_t premier_plan;
         size_t Num_Angle_final;
         double theta;
@@ -27,6 +28,7 @@ struct manip {
         double tailleTheoPixelUborn;
         double tailleTheoPixelTomo;
         size_t circle_cx,circle_cy;
+
         std::string chemin_result;
         std::string chemin_acquis;
         manip();

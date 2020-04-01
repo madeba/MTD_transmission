@@ -207,7 +207,7 @@ void TF2Dcplx_vec_INPLACE(fftw_complex *in_out,vector<double> entree, vector<com
             in_out[cpt][1]=0;
         }
     // in = reinterpret_cast<fftw_complex*>(&entree);
-// SAV2_vec(entree,nbPix,"/home/mat/tomo_test/entree_dans_tf2D.bin",t_float,"a+b");
+// SAV2_vec(entree,nbPix,m1.chemin_result+"/entree_dans_tf2D.bin",t_float,"a+b");
 
     fftw_execute(p);
 
@@ -216,7 +216,7 @@ void TF2Dcplx_vec_INPLACE(fftw_complex *in_out,vector<double> entree, vector<com
             sortie[cpt].real(in_out[cpt][0]/nbPix); //division par N (dim*dim) si FORWARD pour normaliser la fftw qui n'est pas normalisée
             sortie[cpt].imag(in_out[cpt][1]/nbPix);
         }
-    //  SAVCplx(sortie,"Im",nbPix,"/home/mat/tomo_test/spectre_dans_tf2D.bin",t_float,"a+b");
+    //  SAVCplx(sortie,"Im",nbPix,m1.chemin_result+"/spectre_dans_tf2D.bin",t_float,"a+b");
 }
 
 void TF2Dcplx_vec_INV(fftw_complex *in, fftw_complex *out, vector<double> entree, vector<complex<double> > &sortie, fftw_plan p){

@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
         cout<<"lecture posSpec"<<endl;
         lire_bin(m1.chemin_result+"/tab_posSpec.raw",TabPosSpec,64,2*m1.NbAngle);
         ///--------------FFTW2D init----
-        FFT_encaps tf2D(dim2DUBorn);
+          tf2D(dim2DUBorn);
         ///---Variable de dimensions (taille pixel, volume, zoom)-------------------
         float tailleTheoPixelUborn=m1.tailleTheoPixelUborn;
         const  int dim_final=m1.dim_final;//peut être différent de 4*NXMAX, mais l'image final sera (dé)zoomée;

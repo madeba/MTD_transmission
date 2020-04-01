@@ -45,7 +45,7 @@ int main()
 
     ///------Init variable hologramme hors axe
     const int  NXMAX=m1.NXMAX,NbPixUBorn=4*NXMAX*NXMAX;
-    Var2D dim2DUBorn= {2*NXMAX,2*NXMAX},coinROI= {0,0},decal2DUBorn= {NXMAX,NXMAX},posSpec= {0,0};
+    Var2D dim2DUBorn= {m1.dim2DUBorn,m1.dim2DUBorn},coinROI= {0,0},decal2DUBorn= {NXMAX,NXMAX},posSpec= {0,0};
 
     const int NbAngle=m1.Num_Angle_final-m1.premier_plan;//m1.Num_Angle_final-m1.premier_plan;
     cout<<"Nb_angle="<<NbAngle<<endl;
@@ -123,19 +123,19 @@ int main()
                 else cout<<"fichier "<<cptAngle<<" inexistant\n";
             }
 
-          //  SAV_Tiff2D(holoPS1,"/home/mat/tomo_test/holops.tif",1);
+          //  SAV_Tiff2D(holoPS1,m1.chemin_result+"/holops.tif",1);
             for(int cpt=0;cpt<NbPixROI2d;cpt++)
                     {
                         holoPSCplx[cpt].real((holoPS1[cpt]-holoPS3[cpt]));
                         holoPSCplx[cpt].imag((holoPS4[cpt]-holoPS2[cpt]));
                     }
-                    SAVCplx(holoPSCplx,"Re", "/home/mat/tomo_test/holo_extract.bin",t_float,"a+b");
-                   holo2TF_UBorn_PS(holoPSCplx,TF_UBornTot,dim2DUBorn,NbAngleOk, masqueTukeyHolo, in_holo,out_holo,p_forward_holo);
+                    SAVCplx(holoPSCplx,"Re", m1.chemin_result+"/holo_extract.bin",t_float,"a+b");
+                   holo2TF_UBorn_PS(holoPSCplx,TF_UBornTot,NbAngleOk, masqueTukeyHolo, in_holo,out_holo,p_forward_holo,m1);
                     //holo2TF_UBorn(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA,NbAngleOk, masqueTukeyHolo, in_holo,out_holo,p_forward_holo);
                     NbAngleOk++;
     }
 
-//SAVCplx(TF_UBornTot,"Re","/home/mat/tomo_test/TF_UBornTot.raw",t_float,"a+b");
+//SAVCplx(TF_UBornTot,"Re",m1.chemin_result+"/TF_UBornTot.raw",t_float,"a+b");
     auto end = std::chrono::system_clock::now();
     auto elapsed = end - start;
     std::cout <<"Découpe hors axe= "<< elapsed.count()/(pow(10,9)) << '\n';
@@ -155,7 +155,7 @@ int main()
         float alpha=0.1;//coeff pour le masque de tuckey
         vector<double> masqueTukeyHA(tukey2D(dim2DUBorn.x,dim2DUBorn.y,alpha));
      ///---------fin prepare fftw HA-----------------
-
+     ///----------------init  vectors stockants les champs, spectres, phase etc.--------------------
     //vector<complex<double>> TF_UBorn(TF_UBornTot.begin(),TF_UBornTot.begin()+NbPixUBorn);
     vector<complex<double>> TF_UBorn(NbPixUBorn);
     vector<complex<double>> UBorn(NbPixUBorn);
@@ -181,13 +181,13 @@ int main()
     vector<double> tabPosSpec(NbAngle*2);  ///stockage des speculaires pour exportation vers reconstruction
 
     cout<<"\n#########################Calcul champs cplx 2D Uborn/Rytov + eventuelle Correction aberrations#############################"<<endl;
-cout<<"Nb angle OK="<<NbAngleOk<<endl;
+    cout<<"Nb angle OK="<<NbAngleOk<<endl;
 
     for(int cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les angles : correction aberrations
             ///Récupérer la TF2D dans la pile de spectre2D. Place le spectre à cpt angle dans TF_UBorn
             TF_UBorn.assign(TF_UBornTot.begin()+NbPixUBorn*cpt_angle, TF_UBornTot.begin()+NbPixUBorn*(cpt_angle+1));
             //cout<<"cpt_angle="<<cpt_angle<<endl;
-            SAVCplx(TF_UBorn,"Re","/home/mat/tomo_test/TF_Uborn_iterateur.raw",t_float,"a+b");
+            SAVCplx(TF_UBorn,"Re",m1.chemin_result+"/TF_Uborn_iterateur.raw",t_float,"a+b");
 
 
             ///Recherche de la valeur maximum du module dans ref non centré-----------------------------------------

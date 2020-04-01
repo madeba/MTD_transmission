@@ -8,9 +8,41 @@
 #include "projet.h"
 #include "FFT_fonctions.h"
 #include "fonctions.h"
+#include "manip.h"
 using namespace std;
 using namespace cv;
+///#######masque pour &écraser jumeau############""
+void antigaussienne(vector<complex<double>> &tab, int sigma, float A, int Exy)
+{
+        int Tx=sqrt(tab.size());
+        int corr_paire=0;
+        if(Tx%2==0) {
+                cout<<"taille Tx="<<Tx<<" paire : ajout d'un pixel afin de centrer le masque!"<<endl;
+                corr_paire=1;
+        }
 
+        if(sigma==0)
+                sigma=1;
+        short  int x,y, Tinf=-round(Tx/2),Tsup=round(Tx/2);
+        short unsigned int cptx,cpty;
+        float Ex,Ey,sigmax,sigmay;
+        Ex=Exy;
+        Ey=Exy;
+        sigmax=sigma;
+        sigmay=sigma;
+        if(Tx==1)
+                tab[0]=0;
+        else {
+                for(x=Tinf; x<Tsup+1-corr_paire; x++) {
+                        cptx=x+Tsup;
+                        for( y=Tinf; y<Tsup+1-corr_paire; y++) {
+                                cpty=y+Tsup;
+                                tab[cpty*Tx+cptx]=1-A*exp(-(pow((x-Ex),4)/(2*sigmax*sigmax)+pow((y-Ey),4)/(2*sigmay*sigmay)));
+                        }
+                }
+        }
+
+}
 void calcPhase_mpi_pi_atan2(vector<complex<double>> obj, vector<double> &phaseMod2pi)///calcul phase -PI-PI
 {
 for(int cpt=0;cpt<obj.size();cpt++)
@@ -219,17 +251,20 @@ void coupeCplx2Stack(vector<complex<double>> src, vector<complex<double>> &dest,
 
 }
 ///--------------------------------Sauver-Charger---------------------------------------------
-void holo2TF_UBorn_PS(vector<complex <double>> holo1, vector<complex<double>> &TF_UBornTot,Var2D dim2DUborn, size_t NumAngle, vector<double> tukey_holo, fftw_complex *in,fftw_complex *out,fftw_plan p_forward_holo)
+void holo2TF_UBorn_PS(vector<complex <double>> holo1, vector<complex<double>> &TF_UBornTot, size_t NumAngle, vector<double> tukey_holo, fftw_complex *in,fftw_complex *out,fftw_plan p_forward_holo, manip m1)
 {
+
     ///--------------Init FFTW-------------------------------------------------
     size_t NbPix2dROI=holo1.size();
     size_t dimx=sqrt(NbPix2dROI);
     Var2D dimROI={dimx,dimx};
-
-    Var2D coinPS={dimROI.x/2-dim2DUborn.x/2,dimROI.x/2-dim2DUborn.y/2};
+    Var2D dim2DUBorn={m1.dim2DUBorn,m1.dim2DUBorn};//pas malin
+    Var2D coinPS={dimROI.x/2-m1.dim2DUBorn/2,dimROI.x/2-m1.dim2DUBorn/2};
   // cout<<"coinPS="<<coinPS.x<<","<<coinPS.y<<")"<<endl;
         size_t NbPixROI2d=holo1.size();
         vector<complex <double>> holo_shift(NbPixROI2d);
+        vector<complex <double>> masqueAntiGauss(NbPixROI2d);
+        //antigaussienne(masqueAntiGauss)
         vector<complex<double>> TF_Holo(NbPixROI2d);
 
         vector<complex<double>> TFHoloCentre(NbPixROI2d);
@@ -243,19 +278,20 @@ void holo2TF_UBorn_PS(vector<complex <double>> holo1, vector<complex<double>> &T
 
         ///--------Circshift et TF2D HOLOGRAMME------
         holo_shift=fftshift2D(holo1);
-      //  SAVCplx(holo_shift, "Re", "/home/mat/tomo_test/holo_shift_extract_holo.bin",t_float,"a+b");
+      //  SAVCplx(holo_shift, "Re", m1.chemin_result+"/holo_shift_extract_holo.bin",t_float,"a+b");
 
         TF2Dcplx_vec(in,out,holo_shift, TF_Holo,p_forward_holo);
         TFHoloCentre=fftshift2D(TF_Holo);//Décalage  sur fft_reel_tmp, pour recentrer le spectre avant découpe (pas obligatoire mais plus clair)
-        SAVCplx(TFHoloCentre,"Re","/home/mat/tomo_test/TFHoloCentre.raw",t_float,"a+b");
+        SAVCplx(TFHoloCentre,"Re",m1.chemin_result+"/TFHoloCentre.raw",t_float,"a+b");
         //cout<<"coinPS=("<<coinPS.x<<","<<coinPS.y<<")"<<endl;
-        vector<complex<double>> TFHolo_coupe(dim2DUborn.x*dim2DUborn.y);
+        //vector<complex<double>> TFHolo_coupe(dim2DUborn.x*dim2DUborn.y);
+
        // coupeCplx(TFHoloCentre, TF_UBornTot, dim2DUborn, coinPS);///Découpe à [-Nxmax,+NXmax]
        ///decouper la zone spectrale utile + l'ajouter à une pile de spectre à l'altitude numAngle
-        coupeCplx2Stack(TFHoloCentre, TF_UBornTot,dim2DUborn, coinPS, NumAngle);///Découpe à [-Nxmax,+NXmax]
+        coupeCplx2Stack(TFHoloCentre, TF_UBornTot,dim2DUBorn, coinPS, NumAngle);///Découpe à [-Nxmax,+NXmax]
 
 
-        //SAVCplx(TFHolo_coupe,"Re","/home/mat/tomo_test/TFHoloCoupe.raw",t_float,"a+b");
+        //SAVCplx(TFHolo_coupe,"Re",m1.chemin_result+"/TFHoloCoupe.raw",t_float,"a+b");
 
         ///--------Découpe hors axée------------------
        // coupeCplx(TF_Holo_centre, TF_UBornTot, dimROI, dim2DHA, coinHA);///Découpe à [-Nxmax,+NXmax]

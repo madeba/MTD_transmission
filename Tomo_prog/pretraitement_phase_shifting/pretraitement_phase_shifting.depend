@@ -703,7 +703,7 @@
 	<chrono>
 	<cv.h>
 
-1585230026 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/Correction_aberration.cpp
+1585669518 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/Correction_aberration.cpp
 	<iostream>
 	<fstream>
 	<sstream>
@@ -713,7 +713,7 @@
 	"fonctions.h"
 	"Correction_aberration.h"
 
-1549992003 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/fonctions.h
+1585735031 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/fonctions.h
 	"struct.h"
 	<time.h>
 	<math.h>
@@ -731,6 +731,7 @@
 	"projet.h"
 	<vector>
 	<complex>
+	"manip.h"
 
 1516465799 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/struct.h
 
@@ -759,13 +760,14 @@
 	"struct.h"
 	<vector>
 
-1516808252 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/deroulement_volkov.cpp
+1585669874 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/deroulement_volkov.cpp
 	"deroulement_volkov.h"
 	<vector>
 	<complex>
 	"fonctions.h"
 	"FFT_fonctions.h"
 	"src/vecteur.h"
+	"manip.h"
 
 1519223237 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/deroulement_volkov.h
 	<fftw3.h>
@@ -781,11 +783,11 @@
 1494508118 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/src/vecteur.h
 	<iostream>
 
-1540542203 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/FFT_fonctions.cpp
+1585669731 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/FFT_fonctions.cpp
 	"FFT_fonctions.h"
 	"fonctions.h"
 
-1585492743 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/fonctions.cpp
+1585735192 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/fonctions.cpp
 	<fstream>
 	<vector>
 	<complex>
@@ -796,8 +798,9 @@
 	"projet.h"
 	"FFT_fonctions.h"
 	"fonctions.h"
+	"manip.h"
 
-1585566799 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/main.cpp
+1585735031 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/main.cpp
 	<iostream>
 	<vector>
 	"struct.h"
@@ -813,11 +816,11 @@
 	<chrono>
 	<cv.h>
 
-1585500314 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/manip.h
+1585734885 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/manip.h
 	<cstdlib>
 	<iostream>
 
-1585500314 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/manip.cpp
+1585734885 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_phase_shifting/manip.cpp
 	"manip.h"
 	<iostream>
 	"fonctions.h"

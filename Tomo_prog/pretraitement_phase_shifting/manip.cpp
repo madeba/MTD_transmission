@@ -46,7 +46,7 @@ void manip::init()
    // circle_cx=extract_val("CIRCLE_CX",fic_cfg_manip);
    // circle_cy=extract_val("CIRCLE_CY",fic_cfg_manip);
     NXMAX=extract_val("NXMAX",fic_cfg_manip);
-
+    dim2DUBorn=2*NXMAX;
     if(NXMAX==0)
         cout<<"----- ERREUR : NXMAX absent du fichier de configuration" <<fic_cfg_manip<<endl;
     dim_final=extract_val("DIM_FINAL",fic_cfg_recon);
@@ -90,23 +90,29 @@ void manip::init()
     ofstream fichier_sav_parametre1(sav_param);
 
     cout<<"\n##################### INFO Reconstruction ##################\n"<<endl;
-    cout<<"+----------------+----------------+"<<endl;
-    cout<<"|    Grandeur    |    Valeur      |"<<endl;
-    cout<<"|---------------------------------|"<<endl;
-    cout<<"|    Tp Holo     |     "<<tailleTheoPixelHolo<<" nm      |"<<endl;
-    cout<<"|---------------------------------|"<<endl;
-    cout<<"|     Champ      |     "<<round(IMAGE_DIMX*tailleTheoPixelHolo/1000)<<" µm      |"<<endl;
-    cout<<"|---------------------------------|"<<endl;
-    cout<<"|     R_Ewald    |     "<<round(R_Ewald)<<" pixels |"<<endl;
-    cout<<"|---------------------------------|"<<endl;
-    cout<<"|     NXMAX_theo |     "<<round(R_Ewald*NA/n0)<<" pixels |"<<endl;
-    cout<<"|---------------------------------|"<<endl;
-    cout<<"| Taille chp cplx|     "<<2*round(R_Ewald*NA/n0)<<" pixels |"<<endl;
-    cout<<"|---------------------------------|"<<endl;
-    cout<<"|    Tp Chp cplx |     "<<round(tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI.x)<<" nm     |"<<endl;
-    cout<<"|---------------------------------|"<<endl;
-    cout<<"|    Tp Tomo theo|     "<<(2*NXMAX_theo)/dim_final*tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI.x<<" nm      |"<<endl;
-    cout<<"+---------------------------------+"<<endl;
+    cout<<"+------------------+----------------+"<<endl;
+    cout<<"|    Grandeur      |    Valeur      |"<<endl;
+    cout<<"|-----------------------------------|"<<endl;
+    cout<<"|    Dim ROI       |     "<<dimROI.x<<" µm    |"<<endl;
+    cout<<"|-----------------------------------|"<<endl;
+    cout<<"|    Tp Holo       |     "<<tailleTheoPixelHolo<<" nm    |"<<endl;
+    cout<<"|-----------------------------------|"<<endl;
+    cout<<"|     Champ        |     "<<round(IMAGE_DIMX*tailleTheoPixelHolo/1000)<<" µm      |"<<endl;
+    cout<<"|-----------------------------------|"<<endl;
+    cout<<"|     R_Ewald      |     "<<round(R_Ewald)<<" pixels |"<<endl;
+    cout<<"|-----------------------------------|"<<endl;
+    cout<<"|     NXMAX_theo   |     "<<round(R_Ewald*NA/n0)<<" pixels |"<<endl;
+    cout<<"|-----------------------------------|"<<endl;
+    cout<<"|   NXMAX config   |     "<<NXMAX<<" pixels |"<<endl;
+    cout<<"|-----------------------------------|"<<endl;
+    cout<<"| Dim Chp_cplx théo|     "<<2*round(R_Ewald*NA/n0)<<" pixels |"<<endl;
+    cout<<"|-----------------------------------|"<<endl;
+    cout<<"| Dim Chp_cplx     |     "<<2*NXMAX<<" pixels |"<<endl;
+    cout<<"|-----------------------------------|"<<endl;
+    cout<<"|    Tp Chp cplx   |     "<<round(tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI.x)<<" nm     |"<<endl;
+    cout<<"|-----------------------------------|"<<endl;
+    cout<<"|    Tp Tomo theo  |     "<<(2*NXMAX_theo)/dim_final*tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI.x<<" nm    |"<<endl;
+    cout<<"+-----------------------------------+"<<endl;
     cout<<"\n##################### FIN INFO Reconstruction ##################\n"<<endl;
 
     fichier_sav_parametre1<<"Fichiers d'acquisition : "<<chemin_acquis<<endl;

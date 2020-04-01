@@ -198,7 +198,7 @@ int countM(Mat mask)
         }
     }
     //cout<<"NbPtRand="<<NbPtRand<<endl;
-   // SAV(test_pt,nbPt,"/home/mat/tomo_test/test_pt.bin",FLOAT,"wb");
+   // SAV(test_pt,nbPt,m1.chemin_result+"/test_pt.bin",FLOAT,"wb");
 
    /* cout<<"nbptrand="<<NbPtRand<<endl;;
     imshow("masque2",mask);
@@ -256,7 +256,7 @@ void compuPoly(Mat imagebrut, Mat mask, Mat& polynomial, int deg, bool method, i
 
         double t_total=0;
 
-    //SAV(FOND,imagebrut.rows*imagebrut.rows,"/home/mat/tomo_test/fond.raw",FLOAT,"a+b");
+    //SAV(FOND,imagebrut.rows*imagebrut.rows,m1.chemin_result+"/fond.raw",FLOAT,"a+b");
 
         Mat coef(nbCols, 1, CV_64F);
         Mat D(Size(nbCols, nbRows), CV_64F);
@@ -319,7 +319,7 @@ Mat  aberCorr(Mat image, Mat mask, double *polyAber, int degpoly,  int NbPtOk)
 
    }
    }
-    //SAV(polyAber,image.rows*image.cols,"/home/mat/tomo_test/poly_aber_phase.raw",FLOAT,"a+b");
+    //SAV(polyAber,image.rows*image.cols,m1.chemin_result+"/poly_aber_phase.raw",FLOAT,"a+b");
     result = image-resultatpoly;
     return result;
     }
@@ -340,7 +340,7 @@ Mat  ampliCorr(Mat image, Mat mask, double *polyAber,int degpoly, int NbPtOk)
 
      polyAber = (double*)resultatpoly.data;
 
-     //SAV(polyAber,image.rows*image.cols,"/home/mat/tomo_test/poly_aber_ampli.raw",FLOAT,"a+b");
+     //SAV(polyAber,image.rows*image.cols,m1.chemin_result+"/poly_aber_ampli.raw",FLOAT,"a+b");
     result = image/resultatpoly;
     return result;
 }

@@ -27,7 +27,8 @@
 //#include "vecteur.h"
 #include <vector>
 #include <complex>
-void antigaussienne(double *tab, int Tx, int sigma, float A, int Exy);
+#include "manip.h"
+void antigaussienne(std::vector<std::complex<double>> &tab, int sigma, float A, int Exy);
 void calcPhase_mpi_pi_atan2(std::vector<std::complex<double>> obj, std::vector<double> &phaseMod2pi);
 void circshift2DCplx(std::vector<std::complex<double>> entree, std::vector<std::complex<double>> &result, Var2D dim,Var2D decal);
 void decal2DCplxGen(std::vector<std::complex<double>> entree,std::vector<std::complex<double>> &result, Var2D dim,Var2D decal);
@@ -35,7 +36,7 @@ void calc_Uborn(std::vector<std::complex<double>> TF_UBorn,std::vector<std::comp
 int coordSpec(std::vector<std::complex<double>> TF_UBorn, std::vector<double> &TF_champMod,Var2D NMAX);
 //void holo2TF_UBorn(std::vector<double> holo1, std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA,
                  //  size_t NumAngle, std::vector<double> masque);std::
-void holo2TF_UBorn_PS(std::vector<std::complex <double>> holo1, std::vector<std::complex<double>> &TF_UBornTot, Var2D dim2DUborn, size_t NumAngle, std::vector<double> tukey_holo, fftw_complex *in,fftw_complex *out,fftw_plan p_forward_holo);
+void holo2TF_UBorn_PS(std::vector<std::complex <double>> holo1, std::vector<std::complex<double>> &TF_UBornTot, size_t NumAngle, std::vector<double> tukey_holo, fftw_complex *in,fftw_complex *out,fftw_plan p_forward_holo,manip m1);
 
 void holo2TF_UBorn_old(std::vector<double> holo1, std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle, std::vector<double> tukey_holo);
 void holo2TF_UBorn(std::vector<double> holo1, std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle,
