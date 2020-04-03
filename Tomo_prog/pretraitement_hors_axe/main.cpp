@@ -71,7 +71,8 @@ int main()
     size_t  NbAngleOk=0;
     cout<<"NbAngle="<<NbAngle<<endl;
     FILE* test_existence;//tester l'existence des fichiers
-     auto start = std::chrono::system_clock::now();///chrono
+
+     auto start_decoupeHA = std::chrono::system_clock::now();///démarrage chrono
     ///Charger les acqusitions
     for(size_t cptAngle=0; cptAngle<NbAngle; cptAngle++){
             if((cptAngle-100*(cptAngle/100))==0)
@@ -94,9 +95,9 @@ int main()
             }
              else cout<<"fichier "<<cptAngle<<" inexistant\n";
     }
-    auto end = std::chrono::system_clock::now();
-    auto elapsed = end - start;
-    std::cout <<"Découpe Spectre= "<< elapsed.count()/(pow(10,9)) << '\n';
+    auto end_decoupeHA = std::chrono::system_clock::now();
+    auto elapsed = end_decoupeHA - start_decoupeHA;
+    std::cout <<"Temps pour FFT holo+découpe Spectre= "<< elapsed.count()/(pow(10,9)) << '\n';
     ///--------------libérer allocation FFTW holo-------------------------------------
         fftw_destroy_plan(p_forward_holo);
         fftw_free(in_holo);

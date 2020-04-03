@@ -210,6 +210,7 @@ int countM(Mat mask)
 
 
 /// Compute the coef of polynomial (Least Squares method)
+//void compuPoly(Mat const &imagebrut, Mat mask, Mat& polynomial, int deg, bool method, int NbPtOk)
 void compuPoly(Mat imagebrut, Mat mask, Mat& polynomial, int deg, bool method, int NbPtOk)
 {
     int nbCols = sizePoly2D(deg);//Nb coef poly

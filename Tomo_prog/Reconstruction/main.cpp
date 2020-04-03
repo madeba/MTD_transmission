@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
         cout<<"lecture posSpec"<<endl;
         lire_bin(m1.chemin_result+"/tab_posSpec.raw",TabPosSpec,64,2*m1.NbAngle);
         ///--------------FFTW2D init----
-          tf2D(dim2DUBorn);
+        FFT_encaps  tf2D(dim2DUBorn);
         ///---Variable de dimensions (taille pixel, volume, zoom)-------------------
         float tailleTheoPixelUborn=m1.tailleTheoPixelUborn;
         const  int dim_final=m1.dim_final;//peut être différent de 4*NXMAX, mais l'image final sera (dé)zoomée;
@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
         fflush(stdout); cout.flush();
 
         ///---------------Recharger le champ complexe depuis sav prétraitement-----------------------------------------------------
-        Var2D dim2DHA= {2*NXMAX,2*NXMAX},decal2D= {NXMAX,NXMAX};
+        Var2D dim2DHA= {2*NXMAX,2*NXMAX},decal2D= {NXMAX,NXMAX};//dim2DHA=dimUBorn
         const int NbPixU_Born=dim2DHA.x*dim2DHA.y;
 
         double *UBornFinal3D_Re=new double[NbPixU_Born*NbAngle];
@@ -219,6 +219,7 @@ int main(int argc, char *argv[])
                 }
                 TF3D_PotObj[cpt]= TF3D_PotObj[cpt]/sup_redon[cpt];//moyennage par sup_redon
         }
+        vector<double>().swap(sup_redon);//forcer la libération mémoire de sup_redon
 
         temps_final = clock ();
         temps_cpu = (temps_final - temps_initial) * 1e-6;
@@ -252,7 +253,7 @@ int main(int argc, char *argv[])
         temps_initial = clock();//enclenchement chronometre
         Var3D    dimFinal= {dimVol.x,dimVol.y,dimVol.z};
         circshift3DCplx(TF3D_PotObj, TF3D_PotObj_shift, dimFinal, decal3DTF);
-
+        vector<complex<double>>().swap(TF3D_PotObj);///liubérer mémoire
         temps_final = clock ();
         temps_cpu = (temps_final - temps_initial) * 1e-6;
         printf("temps apres circshift 3D: %f\n",temps_cpu);

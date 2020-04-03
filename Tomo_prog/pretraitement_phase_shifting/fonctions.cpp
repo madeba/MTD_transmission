@@ -11,8 +11,28 @@
 #include "manip.h"
 using namespace std;
 using namespace cv;
-///#######masque pour &écraser jumeau############""
-void antigaussienne(vector<complex<double>> &tab, int sigma, float A, int Exy)
+///attenuer jumeau avec antigaussienne ddans spectre TFUBornPhaseShifting//attenuate twin object in TFUBornPhaseShifting
+void fratenuer(vector<complex<double>> &TFUBornPS,Var2D posSpec,vector<complex<double>> const &filtre_agauss){
+  size_t dim2DUBorn=sqrt(TFUBornPS.size());
+  size_t dim_agauss=sqrt(filtre_agauss.size());
+  size_t demi_dim_agauss=round(dim_agauss/2);
+  int NXMAX=dim2DUBorn/2;
+
+  Var2D posSpecRH={posSpec.x-NXMAX,posSpec.y-NXMAX};
+  Var2D posJumeauRH={-posSpecRH.x,-posSpecRH.y};
+  Var2D posJumeau={posJumeauRH.x+NXMAX,posJumeauRH.y+NXMAX};
+
+        if(pow(posSpec.x-posJumeau.x,2)+pow(posSpec.y-posJumeau.y,2)>pow(dim_agauss/2,2)){ ///si jumeau pas trop spéculaire//if twin not to close to the specular point
+                for(size_t fy=posJumeau.y-demi_dim_agauss;fy<posJumeau.y+demi_dim_agauss;fy++)
+                  for(size_t fx=posJumeau.x-demi_dim_agauss; fx<posJumeau.x+demi_dim_agauss;fx++){///mulitplier le spectre par l'antigaussienne à la position du jumeau///multiply spectrum by "antigaussienne"
+                    size_t cptUBorn=fx+fy*dim2DUBorn;
+                    size_t cpt_agauss=fx-posJumeau.x+demi_dim_agauss+(fy-posJumeau.y+demi_dim_agauss)*dim_agauss;
+                    TFUBornPS[cptUBorn]=TFUBornPS[cptUBorn]*filtre_agauss[cpt_agauss];
+                  }
+            }
+}
+///#######masque pour &écraser jumeau//mask to attenuate twin object############""
+void antigaussienne(vector<complex<double>> &tab, int sigma, float A, int Exy)///A=amplitude gaussienne, sigma=ecart type/standard deviation, E=esperance (typiquement zéro)
 {
         int Tx=sqrt(tab.size());
         int corr_paire=0;
@@ -282,12 +302,12 @@ void holo2TF_UBorn_PS(vector<complex <double>> holo1, vector<complex<double>> &T
 
         TF2Dcplx_vec(in,out,holo_shift, TF_Holo,p_forward_holo);
         TFHoloCentre=fftshift2D(TF_Holo);//Décalage  sur fft_reel_tmp, pour recentrer le spectre avant découpe (pas obligatoire mais plus clair)
-        SAVCplx(TFHoloCentre,"Re",m1.chemin_result+"/TFHoloCentre.raw",t_float,"a+b");
+       // SAVCplx(TFHoloCentre,"Re",m1.chemin_result+"/TFHoloCentre.raw",t_float,"a+b");
         //cout<<"coinPS=("<<coinPS.x<<","<<coinPS.y<<")"<<endl;
         //vector<complex<double>> TFHolo_coupe(dim2DUborn.x*dim2DUborn.y);
 
        // coupeCplx(TFHoloCentre, TF_UBornTot, dim2DUborn, coinPS);///Découpe à [-Nxmax,+NXmax]
-       ///decouper la zone spectrale utile + l'ajouter à une pile de spectre à l'altitude numAngle
+       ///decouper la zone spectrale utile à dimUBorn + l'ajouter à une pile de spectre à l'altitude numAngle
         coupeCplx2Stack(TFHoloCentre, TF_UBornTot,dim2DUBorn, coinPS, NumAngle);///Découpe à [-Nxmax,+NXmax]
 
 
@@ -295,6 +315,41 @@ void holo2TF_UBorn_PS(vector<complex <double>> holo1, vector<complex<double>> &T
 
         ///--------Découpe hors axée------------------
        // coupeCplx(TF_Holo_centre, TF_UBornTot, dimROI, dim2DHA, coinHA);///Découpe à [-Nxmax,+NXmax]
+}
+///--------------------------------surcharge pour utiliser FFTencaps---------------------------------------------
+void holo2TF_UBorn_PS(vector<complex <double>> holo1, vector<complex<double>> &TF_UBornTot, size_t NumAngle, vector<double> tukey_holo, FFT_encaps &tf2D, manip m1)
+{
+
+    ///--------------Init FFTW-------------------------------------------------
+    size_t NbPix2dROI=holo1.size();
+    size_t dimx=sqrt(NbPix2dROI);
+    Var2D dimROI={dimx,dimx};
+    Var2D dim2DUBorn={m1.dim2DUBorn,m1.dim2DUBorn};//pas malin
+    Var2D coinPS={dimROI.x/2-m1.dim2DUBorn/2,dimROI.x/2-m1.dim2DUBorn/2};
+  // cout<<"coinPS="<<coinPS.x<<","<<coinPS.y<<")"<<endl;
+        size_t NbPixROI2d=holo1.size();
+        vector<complex <double>> holo_shift(NbPixROI2d);
+       // vector<complex <double>> masqueAntiGauss(NbPixROI2d);
+        //antigaussienne(masqueAntiGauss)
+        vector<complex<double>> TF_Holo(NbPixROI2d);
+
+        vector<complex<double>> TFHoloCentre(NbPixROI2d);
+
+        //nbCplx *TF_UBorn_A=new nbCplx[NbPixROI2d];
+
+        for(size_t pixel=0; pixel<NbPixROI2d; pixel++) {
+                holo1[pixel].real((double)holo1[pixel].real()*tukey_holo[pixel]);
+                holo1[pixel].imag((double)holo1[pixel].imag()*tukey_holo[pixel]);
+        }
+
+        ///--------Circshift et TF2D HOLOGRAMME------
+        holo_shift=fftshift2D(holo1);
+      //  SAVCplx(holo_shift, "Re", m1.chemin_result+"/holo_shift_extract_holo.bin",t_float,"a+b");
+        TF2Dcplx_vec(holo_shift, TF_Holo,tf2D);
+        TFHoloCentre=fftshift2D(TF_Holo);//Décalage  sur fft_reel_tmp, pour recentrer le spectre avant découpe (pas obligatoire mais plus clair)
+       // SAVCplx(TFHoloCentre,"Re",m1.chemin_result+"/TFHoloCentre.raw",t_float,"a+b");
+       ///decouper la zone spectrale utile à dimUBorn + l'ajouter à une pile de spectre à l'altitude numAngle
+        coupeCplx2Stack(TFHoloCentre, TF_UBornTot,dim2DUBorn, coinPS, NumAngle);///Découpe à [-Nxmax,+NXmax]
 }
 ///--------------------------------Sauver-Charger---------------------------------------------
 void holo2TF_UBorn(vector<double> holo1, vector<complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DUBorn, Var2D coinHA, size_t NumAngle, vector<double> tukey_holo, fftw_complex *in,fftw_complex *out,fftw_plan p_forward_holo)
@@ -407,7 +462,7 @@ void holo2TF_UBorn_old(vector<double> holo1, vector<complex<double>> &TF_UBornTo
        // coupeCplx(TF_Holo_centre, TF_UBornTot, dimROI, dim2DHA, coinHA);///Découpe à [-Nxmax,+NXmax]
 }
 
-void charger_image2D_OCV(std::vector<double> &imgTab, string imgFile, Var2D coin, Var2D dimROI)
+void charger_image2D_OCV(std::vector<double> &imgTab, string imgFile, Var2D coin, Point2D dimROI)
 {
 
 

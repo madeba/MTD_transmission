@@ -21,7 +21,7 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-O2" />
+					<Add option="-fexpensive-optimizations" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -32,6 +32,7 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions  -lpthread -std=c++11" />
 			<Add directory="/usr/include/opencv" />
+			<Add directory="include" />
 		</Compiler>
 		<Linker>
 			<Add option="`pkg-config --cflags --libs opencv` -lpthread -lm -lopencv_core -lopencv_imgproc" />
@@ -49,10 +50,16 @@
 		<Unit filename="deroulement_volkov.h" />
 		<Unit filename="fonctions.cpp" />
 		<Unit filename="fonctions.h" />
+		<Unit filename="include/FFT_encaps.h" />
+		<Unit filename="include/Point2D.h" />
+		<Unit filename="include/Point3D.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="manip.cpp" />
 		<Unit filename="manip.h" />
 		<Unit filename="projet.h" />
+		<Unit filename="src/FFT_encaps.cpp" />
+		<Unit filename="src/Point2D.cpp" />
+		<Unit filename="src/Point3D.cpp" />
 		<Unit filename="src/vecteur.cpp" />
 		<Unit filename="src/vecteur.h" />
 		<Unit filename="struct.h" />

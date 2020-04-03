@@ -267,7 +267,7 @@ void compuPoly(Mat imagebrut, Mat mask, Mat& polynomial, int deg, bool method, i
         if (method)
         {
             cv::solve(B, f, coef, DECOMP_NORMAL);//DECOMP_NORMAL
-          //  cout<<"t_total="<<(double)t_total/CLOCKS_PER_SEC<<endl;
+           // cout<<"t_total="<<(double)t_total/CLOCKS_PER_SEC<<endl;
         }
         else
         {
@@ -311,14 +311,12 @@ Mat  aberCorr(Mat image, Mat mask, double *polyAber, int degpoly,  int NbPtOk)
     compuBackgr(coefsolve, degpoly, resultatpoly);/// Compute the background image with the coef of polynomial
    // double minmat, maxmat;
    // polyAber = (double*)resultatpoly.data;
-   for(size_t x=0; x<image.rows;x++){
-    for(size_t y=0; y<image.cols;y++)
-   {
+     for(size_t y=0; y<image.cols;y++){
+      for(size_t x=0; x<image.rows;x++){
         size_t cpt=x+y*image.cols;
        // cout<<"cpt="<<cpt<<endl;
         polyAber[cpt]=resultatpoly.at<double>(y,x);
-
-   }
+     }
    }
     //SAV(polyAber,image.rows*image.cols,"/home/mat/tomo_test/poly_aber_phase.raw",FLOAT,"a+b");
     result = image-resultatpoly;

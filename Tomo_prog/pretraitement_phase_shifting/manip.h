@@ -3,6 +3,8 @@
 
 #include <cstdlib>
 #include <iostream>
+#include "Point2D.h"
+//#include "struct.h"
 struct manip {
 
         double NA;
@@ -10,6 +12,7 @@ struct manip {
         double n0;
         double rayon;
         double lambda0;
+        Point2D dimROI;
         size_t NXMAX;
         size_t dim2DUBorn;
         size_t premier_plan;
@@ -21,6 +24,7 @@ struct manip {
         bool b_CorrAber=false;
         bool b_Deroul=false;
         bool b_Born=true;
+        bool b_Volkov=true;
         size_t dim_final;
         double TpCam;
         double R_th;

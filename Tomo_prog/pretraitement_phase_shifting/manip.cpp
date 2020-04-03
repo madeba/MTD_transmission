@@ -12,15 +12,16 @@ manip::manip()
 
 void manip::init()
 {
-    Var2D dimROI= {ROI_X, ROI_Y};//dimension de l'image découpée sur l'image acquise
+
     cout<<"dans la classe manip"<<endl;
+    dimROI.set_xy(ROI_X, ROI_Y);//dimension de l'image découpée sur l'image acquise
+    ///---Init des chemins------------------------------
     string home=getenv("HOME");
     string fin_chemin_gui_tomo="/.config/gui_tomo.conf";
     string chemin_config_GUI=getenv("HOME")+fin_chemin_gui_tomo;
     string repertoire_config=extract_string("CHEMIN_CONFIG",home+fin_chemin_gui_tomo);
     chemin_result=extract_string("CHEMIN_RESULT",home+fin_chemin_gui_tomo);
     chemin_acquis=extract_string("CHEMIN_ACQUIS",home+fin_chemin_gui_tomo);
-
     string fic_cfg_recon=repertoire_config+"recon.txt";
     cout<<"fichier recon="<<fic_cfg_recon<<endl;
     string fic_cfg_manip=repertoire_config+"config_manip.txt";
@@ -33,7 +34,7 @@ void manip::init()
     f_tube=extract_val("F_TUBE",fic_cfg_manip), ///focale lentille tube
     f_obj=extract_val("F_OBJ",fic_cfg_manip),///focale objectif
     G=f_tube/f_obj,	//grossissement telan+objectif
-      TpCam=extract_val("TPCAM",fic_cfg_manip),//cam. photon focus
+    TpCam=extract_val("TPCAM",fic_cfg_manip),//cam. photon focus
     Rf=extract_val("RF",fic_cfg_manip),//1.2;=1/facteur grossissement
     Gt=G/Rf;
     cout<<"Gt="<<Gt<<endl;
@@ -59,6 +60,7 @@ void manip::init()
     cout<<"\n##################### Options de RECONSTRUCTION ##################\n"<<endl;
     b_CorrAber=extract_val("C_ABER",fic_cfg_recon);///corriger les aberrations?
     b_Deroul=extract_val("DEROUL",fic_cfg_recon);///Dérouler la phase?
+    b_Volkov=extract_val("VOLKOV",fic_cfg_recon);///Dérouler en Volkov ?
     b_Born=extract_val("BORN",fic_cfg_recon);///Born vrai ? Sinon Rytov
     if(b_Born==true)
         cout<<"RYTOV=0"<<endl;

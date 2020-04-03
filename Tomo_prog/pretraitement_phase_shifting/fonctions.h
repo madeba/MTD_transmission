@@ -28,6 +28,9 @@
 #include <vector>
 #include <complex>
 #include "manip.h"
+#include "FFT_encaps.h"
+//attenuer jumeau avec antigaussienne
+void fratenuer(std::vector<std::complex<double>> &TFUBornPS,Var2D posSpec,std::vector<std::complex<double>> const &filtre_agauss);
 void antigaussienne(std::vector<std::complex<double>> &tab, int sigma, float A, int Exy);
 void calcPhase_mpi_pi_atan2(std::vector<std::complex<double>> obj, std::vector<double> &phaseMod2pi);
 void circshift2DCplx(std::vector<std::complex<double>> entree, std::vector<std::complex<double>> &result, Var2D dim,Var2D decal);
@@ -36,6 +39,7 @@ void calc_Uborn(std::vector<std::complex<double>> TF_UBorn,std::vector<std::comp
 int coordSpec(std::vector<std::complex<double>> TF_UBorn, std::vector<double> &TF_champMod,Var2D NMAX);
 //void holo2TF_UBorn(std::vector<double> holo1, std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA,
                  //  size_t NumAngle, std::vector<double> masque);std::
+void holo2TF_UBorn_PS(std::vector<std::complex <double>> holo1, std::vector<std::complex<double>> &TF_UBornTot, size_t NumAngle, std::vector<double> tukey_holo, FFT_encaps &tf2D, manip m1);
 void holo2TF_UBorn_PS(std::vector<std::complex <double>> holo1, std::vector<std::complex<double>> &TF_UBornTot, size_t NumAngle, std::vector<double> tukey_holo, fftw_complex *in,fftw_complex *out,fftw_plan p_forward_holo,manip m1);
 
 void holo2TF_UBorn_old(std::vector<double> holo1, std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle, std::vector<double> tukey_holo);
@@ -50,7 +54,7 @@ void SAVCplx(std::vector<std::complex<double> > v, std::string partie, std::stri
 void SAV_Tiff2D(std::vector<double> var_sav,  std::string chemin, double taille_pixel);
 void SAV_Tiff2DCplx(std::vector<std::complex<double>> var_sav, std::string partie, std::string chemin, double taille_pixel);
 void SAV3D_Tiff(std::vector<std::complex <double>> var_sav, std::string partie, std::string chemin, double taille_pixel);
-void charger_image2D_OCV(std::vector<double> &imgTab, std::string imgFile, Var2D coin,Var2D taille);
+void charger_image2D_OCV(std::vector<double> &imgTab, std::string imgFile, Var2D coin,Point2D taille);
 
 void coupeCplx(std::vector<std::complex<double>> src, std::vector<std::complex<double>> &dest, Var2D coin);
 void coupeCplx2Stack(std::vector<std::complex<double>> src, std::vector<std::complex<double>> &dest, Var2D dim_dest, Var2D coin, size_t NumAngle);

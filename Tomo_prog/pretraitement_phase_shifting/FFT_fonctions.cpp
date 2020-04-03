@@ -4,6 +4,7 @@
 
 using namespace std;
 
+
 vector<vecteur>  fftshift2D(vector<vecteur> &entree)
 {
 unsigned int dim=sqrt(entree.size());
@@ -160,7 +161,24 @@ void TF2Dcplx_vec(fftw_complex *in, fftw_complex *out, vector<complex<double> > 
     }
 
 }
+///surcharge pour tuiliser la classe encapsulant le FFTW
+void TF2Dcplx_vec(vector<complex<double> > entree, vector<complex<double> > &sortie,FFT_encaps &tf2D)
+{
+    unsigned int nbPix=entree.size();
+    for(int cpt=0; cpt<nbPix; cpt++) {
+        tf2D.in[cpt][0]=entree[cpt].real();
+        tf2D.in[cpt][1]=entree[cpt].imag();
+    }
+//in = reinterpret_cast<fftw_complex*>(&entree);
 
+    fftw_execute(tf2D.p_forward_OUT);
+    for(int cpt=0; cpt<(nbPix); cpt++) {
+        sortie[cpt].real(tf2D.out[cpt][0]/nbPix); //division par N (dim*dim) pour normaliser la fftw qui n'est pas normalisée
+        sortie[cpt].imag(tf2D.out[cpt][1]/nbPix);
+    }
+
+}
+///TFinverse
 void TF2Dcplx_vec_INV(fftw_complex *in,fftw_complex *out, vector<complex<double> > entree, vector<complex<double> > &sortie, fftw_plan p)
 {
     unsigned int nbPix=entree.size();
