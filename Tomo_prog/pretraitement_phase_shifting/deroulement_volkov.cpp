@@ -5,11 +5,13 @@
 #include "FFT_fonctions.h"
 #include "src/vecteur.h"
 #include "manip.h"
+#include <chrono>
 using namespace std;
 
 //Deroulement Volkov
 void deroul_volkov(fftw_complex *in,fftw_complex *out,vector<double> phase_enroul,vector<double> &phase_deroul , fftw_plan p_forward, fftw_plan p_backward)
 {
+
 complex<double> I(0,1);
 unsigned int nbPix=phase_enroul.size();
 vector<complex<double>> gradx_enroul_fft(nbPix);
@@ -29,7 +31,12 @@ for(int cpt=0;cpt<nbPix;cpt++){
 Z[cpt].real(cos(phase_enroul[cpt]));
 Z[cpt].imag(sin(phase_enroul[cpt]));
 }
+ //auto start = std::chrono::system_clock::now();
 gradient_fft(in,out, Z, Gradx_Z_fft,Grady_Z_fft, p_forward, p_backward);
+ /*  auto fin = std::chrono::system_clock::now();
+    auto t_total_pretraitement = fin - start;
+    std::cout <<"durée Volkov fft_grad = "<< t_total_pretraitement.count()/(pow(10,9)) << '\n';*/
+
 //SAVCplx(TF_gradx,"Re",nbPix,m1.chemin_result+"/TF_gradx.bin",t_float,"w+b");
 /// Calcul du champ des entiers de déroulement
 complex<double> ax,ay;
@@ -41,11 +48,15 @@ gradx_IntM[cpt]=(ax.real()-gradx_enroul_fft[cpt].real())/(2*M_PI);//*(-0.159);//
 grady_IntM[cpt]=(ay.real()-grady_enroul_fft[cpt].real())/(2*M_PI);
 }
 vector<complex<double>> IntM(nbPix);
+
 integ_grad(in,out,gradx_IntM,grady_IntM,IntM,p_forward,p_backward);
+
 
 for(int cpt=0;cpt<nbPix;cpt++){
 phase_deroul[cpt]=phase_enroul[cpt]+2*3.14159*IntM[cpt].real();
 }
+
+
 
 }
 

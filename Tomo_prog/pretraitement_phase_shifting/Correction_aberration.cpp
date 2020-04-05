@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "fonctions.h"
+#include <chrono>
 using namespace cv;
 using namespace std;
 
@@ -100,47 +101,13 @@ Mat init_mask_aber(string Chemin_mask, Var2D dim2DHA)
     imwrite("Image_mask.tif",drawing);
 }*/
 
-/// Compute the value sum of the polynomial for each (x,y), for deg 3: 1+x+x²+x³+y+xy+x²y+y²+xy²+y³
-double poly2DEval(Mat coefficients, int deg, int x, int y)
-{
-   // deg=3;
-    int k = 0;
-   double sum = 0;
-   for (int i = 0; i <= deg; i ++)
-    {
-        int j = 0;
-        while ((i+j) <= deg)
-        {
-            sum +=(coefficients.at<double>(k)) * pow(x,i) * pow(y,j);
-            //cout<<"k="<<k<<" i= "<<i <<" j= "<<j<<endl;
-            k ++;
-            j ++;
-        }
-    }
-
-  /*  int xc=x*x,yc=y*y;
-    sum=coefficients.at<double>(0)+
-    coefficients.at<double>(1)*y+
-    coefficients.at<double>(2)*y*y+
-    coefficients.at<double>(3)*y*y*y+
-    coefficients.at<double>(4)*x+
-    coefficients.at<double>(5)*x*y+
-    coefficients.at<double>(6)*x*y*y+
-    coefficients.at<double>(7)*x*x+
-    coefficients.at<double>(8)*x*x*y+
-    coefficients.at<double>(9)*x*x*x;*/
-    return sum;
-}
 
 
-/// Return the size of polynomial
-int sizePoly2D(int deg)
-{
+/// Return the size of polynomial. Used to calculate the number of columns for the vector "polynom_to_fit"
+int sizePoly2D(int deg){
     int j = 0, size = 0;
-    for (int i = 0; i <= deg; i ++)
-    {
-        while ((i+j) <= deg)
-        {
+    for (int i = 0; i <= deg; i ++){
+        while ((i+j) <= deg){
             size ++;
             j ++;
         }
@@ -150,18 +117,14 @@ int sizePoly2D(int deg)
     return size;
 }
 
-/// Count pixels in mask
-int countM(Mat mask)
-{
+/// Count pixels in mask (for control, not used in calculations)
+int countM(Mat mask){
     const int step=5;//échantillonnage divisé par step=5
     //vector<int> tableau(5);
     int count = 0;
-    for (int i = 0; i < mask.rows; i ++)
-    {
-        for (int j = 0; j < mask.cols; j ++)
-        {
-            if (mask.at<uchar>(j,i) > 45)//le masque doit être créé avec des valeurs >45 hors objet, 0 dans l'objet
-            {
+    for (int i = 0; i < mask.rows; i ++){
+        for (int j = 0; j < mask.cols; j ++){
+            if (mask.at<uchar>(j,i) > 45){//le masque doit être créé avec des valeurs  >45 (seuil arbritaire) hors objet, 0 dans l'objet
                count ++;
             }
         }
@@ -206,13 +169,38 @@ int countM(Mat mask)
     //return count;
     return NbPtRand;
 }
-
-
-
-/// Compute the coef of polynomial (Least Squares method)
-//void compuPoly(Mat const &imagebrut, Mat mask, Mat& polynomial, int deg, bool method, int NbPtOk)
-void compuPoly(Mat imagebrut, Mat mask, Mat& polynomial, int deg, bool method, int NbPtOk)
+///Generate the numerical value of the vector [1,x,x^2,xy,y,y^2] for each (x,y) in the image
+void CalcPoly_xy(int degre_poly,int NbPtOk, Mat const & mask, Var2D dimImg,Mat &polynome_to_fit)
 {
+    int nbRows=NbPtOk;
+    //int nbRows=polynome_to_fit.row();
+   // cout<<"nbrows="<<nbRows<<endl;
+   if(nbRows>9){
+     int col, k = 0;
+     for (int y = 0; y < dimImg.y; y ++){//largeur de 262
+       for (int x = 0; x < dimImg.x; x ++){//hauteur de 262
+         col = 0;
+         if (mask.at<uchar>(y,x)==220){//220=>1 point sur 5
+           for (int i = 0; i <= degre_poly; i ++){
+             int j = 0;
+               while((i+j) <= degre_poly){
+                 polynome_to_fit.at<double>(k,col) = pow((double)x,i) * pow((double)y,j); //genere polynome pour l'ajustement: identique pour toutes les images
+                 col ++;
+                 j ++;
+               }
+             }
+             k ++;
+           }
+        }
+    }
+  }
+}
+
+
+/// Compute the coef of polynomial (Least Squares method) by SVD : i.e. solve coef*polynom_to_fit=background
+//void compuPoly(Mat const &imagebrut, Mat mask, Mat& coef_polynomial, int deg, bool method, int NbPtOk)
+void compuPoly(Mat const &imagebrut, Mat mask, Mat& coef_polynomial, int deg, bool method, int NbPtOk)
+{ ///auto start = std::chrono::system_clock::now();
     int nbCols = sizePoly2D(deg);//Nb coef poly
     //cout<<"nbcols="<<nbCols<<endl;
     //int nbRows = countNonZero(mask); /// Opencv function
@@ -225,12 +213,11 @@ void compuPoly(Mat imagebrut, Mat mask, Mat& polynomial, int deg, bool method, i
         // double FOND[imagebrut.rows*imagebrut.rows];
         // for(int cpt=0;cpt<imagebrut.rows*imagebrut.rows;cpt++)
         // FOND[cpt]=0;
-        Mat B(Size(nbCols,nbRows), CV_64F);
-        Mat Bt(Size(nbRows,nbCols), CV_64F);
-        Mat f(nbRows, 1, CV_64F);///matrice contenant 1 point sur 5 (NbPtOK)
+        Mat polynome_to_fit(Size(nbCols,nbRows), CV_64F);///Polynome to fit= function to fit. We use a polynome. we had to genrate polynome_to_fit=[1,x,x^2,xy,y^2] for each coordinate (x,y)
+        Mat Bt(Size(nbRows,nbCols), CV_64F);//variable to stock transposed polynome_to_fit, for SVD inversion
+        Mat undersampled_background(nbRows, 1, CV_64F);///matrice contenant 1 point sur 5 (NbPtOK). Il s'agit de l'image avec moins de points, f est donc toujours connue
 
-        for (int y = 0; y < imagebrut.rows; y ++)//largeur de 262
-        {
+        for (int y = 0; y < imagebrut.rows; y ++){//largeur de 262 Remarquer que imagebrut ne sert à rien, sauf pour les coordonnées de balayage
             for (int x = 0; x < imagebrut.cols; x ++)//hauteur de 262
             {
                col = 0;
@@ -238,13 +225,11 @@ void compuPoly(Mat imagebrut, Mat mask, Mat& polynomial, int deg, bool method, i
               // int test=mask.at<uchar>(y,x);
                if (mask.at<uchar>(y,x)==220)//220=>1 point sur 5
                 {
-                    f.at<double>(k) = (double)imagebrut.at<double>(y,x); /// uchar--> double for .bin files
-                    for (int i = 0; i <= deg; i ++)
-                    {
+                    undersampled_background.at<double>(k) = (double)imagebrut.at<double>(y,x); /// copy 1 point out of 5 from image (outside the mask area) to speed up least square
+                    for (int i = 0; i <= deg; i ++){
                         int j = 0;
-                        while((i+j) <= deg)
-                        {
-                            B.at<double>(k,col) = pow((double)x,i) * pow((double)y,j); //genere polynome pour l'ajustement
+                        while((i+j) <= deg){
+                            polynome_to_fit.at<double>(k,col) = pow((double)x,i) * pow((double)y,j); //genere polynome pour l'ajustement: identique pour toutes les images
                             col ++;
                             j ++;
                         }
@@ -257,92 +242,150 @@ void compuPoly(Mat imagebrut, Mat mask, Mat& polynomial, int deg, bool method, i
 
         double t_total=0;
 
-    //SAV(FOND,imagebrut.rows*imagebrut.rows,m1.chemin_result+"/fond.raw",FLOAT,"a+b");
-
         Mat coef(nbCols, 1, CV_64F);
         Mat D(Size(nbCols, nbRows), CV_64F);
         Mat invD(Size(nbCols, nbRows), CV_64F);
 
         /// Use OpenCV solve() function to solve the linear system
-        if (method)
-        {
-            cv::solve(B, f, coef, DECOMP_NORMAL);//DECOMP_NORMAL
+        if (method){
+            cv::solve(polynome_to_fit, undersampled_background, coef, DECOMP_NORMAL);//DECOMP_NORMAL->speed ++
           //  cout<<"t_total="<<(double)t_total/CLOCKS_PER_SEC<<endl;
-        }
-        else
-        {
+        }///alternatively, use a simple matrix inversion (less robust)
+        else{
             /// Use OpenCV matrix inversion operators to solve the linear system
-            cv::transpose(B, Bt);
-            D = Bt * B;
+            cv::transpose(polynome_to_fit, Bt);
+            D = Bt * polynome_to_fit;
             cv::invert(D, invD);
-            coef = (invD * Bt) *f;
+            coef = (invD * Bt) *undersampled_background;
         }
-        coef.copyTo(polynomial);
+        coef.copyTo(coef_polynomial);
    }
    else{
        Mat coef=Mat::zeros(nbCols, 1, CV_64F);//init with zeros
    }
+  /*  auto end = std::chrono::system_clock::now();
+    auto elapsed = end - start;
+    std::cout <<"compu_poly = "<< elapsed.count()/(pow(10,9)) <<"s"<< '\n';*/
 }
-
-/// Compute the background image with the coef of polynomial
-void compuBackgr(Mat coefficients, int deg, Mat imageBackgr)
-{clock_t t_init,t_fin;
-double t_total=0;
- t_init=clock();
-    for (int y = 0; y < imageBackgr.rows; y ++)
-    {
-        for (int x = 0; x < imageBackgr.cols; x ++)
-        {
-            imageBackgr.at<double>(y,x) = poly2DEval(coefficients, deg, x, y);
+/// numerically compute the value of each point of the polynom for **one** coordinate (x,y), for deg 3: a+b*x+c*x²+d*x³+e*y+f*xy+g*x²y+h*y²+i*xy²+j*y³
+double poly2DEval(Mat const &coefficients, int deg, int x, int y)
+{
+   int k = 0;
+   double sum = 0;
+   for (int i = 0; i <= deg; i ++){
+        int j = 0;
+        while ((i+j) <= deg){
+            sum +=(coefficients.at<double>(k)) * pow(x,i) * pow(y,j);
+            //cout<<"k="<<k<<" i= "<<i <<" j= "<<j<<endl;
+            k ++;
+            j ++;
         }
     }
-        t_fin=clock();
-        t_total=t_fin-t_init;
+
+  /*  int xc=x*x,yc=y*y;
+    sum=coefficients.at<double>(0)+
+    coefficients.at<double>(1)*y+
+    coefficients.at<double>(2)*y*y+
+    coefficients.at<double>(3)*y*y*y+
+    coefficients.at<double>(4)*x+
+    coefficients.at<double>(5)*x*y+
+    coefficients.at<double>(6)*x*y*y+
+    coefficients.at<double>(7)*x*x+
+    coefficients.at<double>(8)*x*x*y+
+    coefficients.at<double>(9)*x*x*x;*/
+    return sum;
+}
+/// Compute the background polynome for *all* coordinates (x,y)
+void compuBackgr(Mat const &coefficients, int deg, Mat PolyBackgr)
+{
+    for (int y = 0; y < PolyBackgr.rows; y ++)
+        for (int x = 0; x < PolyBackgr.cols; x ++){
+            PolyBackgr.at<double>(y,x) = poly2DEval(coefficients, deg, x, y);
+        }
 }
 
-/// Apply the aberration correction
-Mat  aberCorr(Mat image, Mat mask, double *polyAber, int degpoly,  int NbPtOk)
-{    //degpoly = 4;
+/// Apply the aberration correction (old version)
+/*Mat  aberCorr(Mat image, Mat mask, int degpoly,  int NbPtOk){
     Mat coefsolve;
-    /// Compute the coef of polynomial (Least Squares method)
-    compuPoly(image, mask, coefsolve, degpoly, true, NbPtOk);
+    compuPoly(image, mask, coefsolve, degpoly, true, NbPtOk); /// Compute the coef of polynomial (Least Squares method)
     Mat resultatpoly(image.rows, image.cols, CV_64F);
     Mat result(image.rows, image.cols, CV_64F);
     compuBackgr(coefsolve, degpoly, resultatpoly);/// Compute the background image with the coef of polynomial
-   // double minmat, maxmat;
-   // polyAber = (double*)resultatpoly.data;
-   for(size_t x=0; x<image.rows;x++){
-    for(size_t y=0; y<image.cols;y++)
-   {
-        size_t cpt=x+y*image.cols;
-       // cout<<"cpt="<<cpt<<endl;
-        polyAber[cpt]=resultatpoly.at<double>(y,x);
-
-   }
-   }
-    //SAV(polyAber,image.rows*image.cols,m1.chemin_result+"/poly_aber_phase.raw",FLOAT,"a+b");
+    //SAV2((double*)resultatpoly.data,image.rows*image.cols,"/home/mat/tmp/poly_aber_phase.raw",t_float,"a+b");
     result = image-resultatpoly;
     return result;
-    }
+}*/
 
 
-Mat  ampliCorr(Mat image, Mat mask, double *polyAber,int degpoly, int NbPtOk)
+Mat  ampliCorr(Mat const & image, Mat mask, int degpoly, int NbPtOk)
 {
     Mat coefsolve;
-    /// Compute the coef of polynomial (Least Squares method)
-
-    compuPoly(image, mask, coefsolve, degpoly, true, NbPtOk);
-
+    compuPoly(image, mask, coefsolve, degpoly, true, NbPtOk); /// Compute the coef of polynomial (Least Squares method)
     Mat resultatpoly(image.rows, image.cols, CV_64F);
     Mat result(image.rows, image.cols, CV_64F);
     compuBackgr(coefsolve, degpoly, resultatpoly);/// Compute the background image with the coef of polynomial
-
-    //double minmat, maxmat;
-
-     polyAber = (double*)resultatpoly.data;
-
-     //SAV(polyAber,image.rows*image.cols,m1.chemin_result+"/poly_aber_ampli.raw",FLOAT,"a+b");
+    //SAV2((double*)resultatpoly.data,image.rows*image.cols,"/home/mat/tmp/poly_aber_phase.raw",t_float,"a+b");
     result = image/resultatpoly;
     return result;
 }
 
+///#--------------------nouvelle fonction pour calculer poly_to_fit en dehors de la boucle------------------------------------------------------------------------------
+
+///surcharge pour calcul poly exterieur
+Mat  aberCorr2(Mat image, Mat mask,  Mat const &polynome_to_fit, int degpoly,  int NbPtOk)
+{
+    Mat coefsolve;
+    /// Compute the coef of polynomial (Least Squares method)
+    compuPoly2(image, mask, coefsolve, polynome_to_fit, degpoly, true, NbPtOk);
+    Mat resultatpoly(image.rows, image.cols, CV_64F);
+    Mat result_final(image.rows, image.cols, CV_64F);
+    compuBackgr(coefsolve, degpoly, resultatpoly);/// Compute the background image with the coef of polynomial
+    //SAV2((double*)resultatpoly.data,image.rows*image.cols,"/home/mat/tmp/poly_aber_phase.raw",t_float,"a+b");
+    result_final = image-resultatpoly;
+    return result_final;
+}
+
+
+/// Compute the coef of polynomial (Least Squares method) by SVD : i.e. solve coef*polynom_to_fit=background
+//void compuPoly(Mat const &imagebrut, Mat mask, Mat& coef_polynomial, int deg, bool method, int NbPtOk)
+//surcharge avec calciul du plynome à l extérieur
+void compuPoly2(Mat const &imagebrut, Mat mask, Mat& coef_polynomial, Mat const &polynome_to_fit,int deg, bool method, int NbPtOk)
+{
+  double t_total=0;
+  int nbCols = sizePoly2D(deg);
+  int nbRows=NbPtOk;
+  Mat Bt(Size(nbRows,nbCols), CV_64F);//variable to stock transposed polynome_to_fit, for SVD inversion
+  Mat undersampled_background(nbRows, 1, CV_64F);///matrice contenant 1 point sur 5 (NbPtOK). Il s'agit de l'image avec moins de points
+
+  if(nbRows>9){
+    int col, k = 0;
+    for (int y = 0; y < imagebrut.rows; y ++){//largeur de 262
+      for (int x = 0; x < imagebrut.cols; x ++){//hauteur de 262
+         col = 0;
+         //if (mask.at<float>(y,x) > 210 )
+         // int test=mask.at<uchar>(y,x);
+         if (mask.at<uchar>(y,x)==220){//220=>1 point sur 5
+           undersampled_background.at<double>(k) = (double)imagebrut.at<double>(y,x); /// copy 1 point out of 5 from image (outside the mask area) to speed up least square
+           k ++;
+         }
+     }
+  }
+  Mat coef(nbCols, 1, CV_64F), D(Size(nbCols, nbRows), CV_64F), invD(Size(nbCols, nbRows), CV_64F);
+  /// Use OpenCV solve() function to solve the linear system
+  if (method){
+    cv::solve(polynome_to_fit, undersampled_background, coef, DECOMP_NORMAL);//DECOMP_NORMAL->speed ++
+    //  cout<<"t_total="<<(double)t_total/CLOCKS_PER_SEC<<endl;
+  }///alternatively, use a simple matrix inversion (less robust)
+  else{
+    /// Use OpenCV matrix inversion operators to solve the linear system
+    cv::transpose(polynome_to_fit, Bt);
+    D = Bt * polynome_to_fit;
+    cv::invert(D, invD);
+    coef = (invD * Bt) *undersampled_background;
+  }
+  coef.copyTo(coef_polynomial);
+  }
+   else{
+       Mat coef=Mat::zeros(nbCols, 1, CV_64F);//init with zeros
+  }
+}

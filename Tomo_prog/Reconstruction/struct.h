@@ -1,6 +1,6 @@
 #ifndef DEF_STRUCT// Si la constante n'a pas été définie` le fichier n'a jamais été inclus
 #define DEF_STRUCT
-#endif // DEF_STRUCT
+
 
 //Nombre complexe
 
@@ -18,3 +18,4 @@ typedef struct {
 typedef struct {
   int x,y,z;
 }Var3D;
+#endif // DEF_STRUCT

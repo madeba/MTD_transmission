@@ -63,6 +63,7 @@
 		<Unit filename="include/FFT_fonctions.h" />
 		<Unit filename="include/Point2D.h" />
 		<Unit filename="include/Point3D.h" />
+		<Unit filename="include/fonctions.h" />
 		<Unit filename="include/manip.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="projet.h" />

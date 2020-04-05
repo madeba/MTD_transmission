@@ -36,13 +36,17 @@ using namespace cv;
 /// Function header
 Mat init_mask_aber(std::string Chemin_mask, Var2D dim2DHA);
 //void threshCallback(int, void*);
-double poly2DEval(Mat coefficients, int deg,int x, int y);
+double poly2DEval(Mat const &coefficients, int deg,int x, int y);
 int sizePoly2D(int deg);
 int countM(Mat mask);
-void compuBackgr(Mat coefficients, int deg, Mat imageBackgr);
-void compuPoly(Mat imagebrut, Mat mask, Mat& polynomial, int deg, bool method, int NbPtOk);
-Mat aberCorr(Mat image, Mat mask, double *polyAber, int degpoly, int NbPtOk);
-Mat  ampliCorr(Mat image, Mat mask, double *polyAber, int degpoly, int NbPtOk);
+void compuBackgr(Mat const &coefficients, int deg, Mat imageBackgr);
+void compuPoly(Mat const &imagebrut, Mat mask, Mat& polynomial, int deg, bool method, int NbPtOk);
+//Mat aberCorr(Mat image, Mat mask,  int degpoly, int NbPtOk);
+Mat  ampliCorr(Mat const &image, Mat mask, int degpoly, int NbPtOk);
+
+Mat  aberCorr2(Mat image, Mat mask, Mat const &polynome_to_fit, int degpoly,  int NbPtOk);
+void compuPoly2(Mat const &imagebrut, Mat mask, Mat& coef_polynomial, Mat const &polynome_to_fit,int deg, bool method, int NbPtOk);
+void CalcPoly_xy(int degre_poly,int NbPtOk, Mat const & mask, Var2D dimChpCplx,Mat &polynome_to_fit);
 /*class ImgSeuil
 {
 private:

@@ -117,7 +117,7 @@ int main()
 //SAVCplx(TF_UBornTot,"Re",m1.chemin_result+"/TF_UBornTot.raw",t_float,"a+b");
     auto end = std::chrono::system_clock::now();
     auto elapsed = end - start;
-    std::cout <<"Découpe hors axe= "<< elapsed.count()/(pow(10,9)) << '\n';
+    std::cout <<"durée FFT+Découpe hors axe= "<< elapsed.count()/(pow(10,9)) << '\n';
     ///--------------libérer allocation FFTW holo-------------------------------------
 
     //      fftw_destroy_plan(p_forward_holo);
@@ -139,7 +139,7 @@ int main()
     //vector<complex<double>> TF_UBorn(TF_UBornTot.begin(),TF_UBornTot.begin()+NbPixUBorn);
     vector<complex<double>> TF_UBorn(NbPixUBorn), UBorn(NbPixUBorn);
     vector<double> phase_2Pi_vec(NbPixUBorn), phase_deroul_vec(NbPixUBorn), UnwrappedPhase(NbPixUBorn), ampli_ref(NbPixUBorn);
-    double *poly_aber=new double[NbPixUBorn];
+   // double *poly_aber=new double[NbPixUBorn];
     double *UnwrappedPhase_herraez=new double[NbPixUBorn];
 
     vector<double> PhaseFinal(NbPixUBorn);
@@ -159,14 +159,18 @@ int main()
    // SAV_Tiff2DCplx(filtre_agauss,"Re",chemin_result+"antigaussienne.tif",1);
     cout<<"\n#########################Calcul champs cplx 2D Uborn/Rytov + eventuelle Correction aberrations#############################"<<endl;
     cout<<"Nb angle OK="<<NbAngleOk<<endl;
+    int degre_poly=3;
+    int nbCols = sizePoly2D(degre_poly);//Nb coef poly
+    int nbRows=NbPtOk;
+    Mat polynome_to_fit(Size(nbCols,nbRows), CV_64F);///Polynome to fit= function to fit (We use a polynome). we have to generate atble containing polynome_to_fit=[1,x,x^2,xy,y^2] for each coordinate (x,y)
+
+    CalcPoly_xy(degre_poly, NbPtOk, mask_aber, dim2DUBorn, polynome_to_fit);
 
     for(int cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++)  //boucle sur tous les angles : correction aberrations
     {
         ///Récupérer la TF2D dans la pile de spectre2D. Place le spectre à cpt angle dans TF_UBorn
         TF_UBorn.assign(TF_UBornTot.begin()+NbPixUBorn*cpt_angle, TF_UBornTot.begin()+NbPixUBorn*(cpt_angle+1));
         //cout<<"cpt_angle="<<cpt_angle<<endl;
-
-
         ///Recherche de la valeur maximum du module dans ref non centré-----------------------------------------
         int cpt_max=coordSpec(TF_UBorn, TF_champMod,decal2DUBorn);
         double  max_part_reel = TF_UBorn[cpt_max].real(),///sauvegarde de la valeur cplx des  spéculaires
@@ -206,14 +210,16 @@ int main()
             //SAV2(UnwrappedPhase,chemin_result+"/phase_deroul_volkov.raw",t_float,"a+b");
             ///-------------Correction aberration phase-------------------------------
             src=Mat(dim2DUBorn.x,dim2DUBorn.y,CV_64F, UnwrappedPhase.data());
-            Mat Phase_corr(aberCorr(src, mask_aber,poly_aber,3,  NbPtOk));
+          // Mat Phase_corr(aberCorr(src, mask_aber,degre_poly,  NbPtOk));
+           Mat Phase_corr(aberCorr2(src, mask_aber,polynome_to_fit,3,  NbPtOk));
             //SAV2(poly_aber,NbPixUBorn,chemin_result+"/poly_aber.raw",t_float,"a+b");
             ///---------------Correction amplitude----------------------------------------
             for(int cpt=0; cpt<(NbPixUBorn); cpt++)
-                UBornAmp[cpt]=abs(UBorn[cpt]);
+              UBornAmp[cpt]=abs(UBorn[cpt]);
+
             Mat srcAmp=Mat(dim2DUBorn.x, dim2DUBorn.y, CV_64F, UBornAmp.data());
             //Mat UBornAmp_corr(dim2DHA.x, dim2DHA.y, CV_64F);
-            Mat UBornAmp_corr(ampliCorr(srcAmp, mask_aber,poly_aber,3,  NbPtOk));
+            Mat UBornAmp_corr(ampliCorr(srcAmp, mask_aber,3,  NbPtOk));
 
             ///Fin Correction amplitude----------------------------------------
             ///-----------Calcul champ complexe en BOrn ou Rytov---------------
@@ -271,6 +277,9 @@ int main()
     SAV_Tiff2D(centre,m1.chemin_result+"/centres.tif",m1.NA/(m1.NXMAX*100));//exportation centre en NA
 //        SAV_Tiff2D2(centre, chemin_result+"/centres.tif", 2*NXMAX );
     cout<<"Fin prétraitement"<<endl;
+    auto fin = std::chrono::system_clock::now();
+    auto t_total_pretraitement = fin - start;
+    std::cout <<"durée totale = "<< t_total_pretraitement.count()/(pow(10,9)) << '\n';
     return 0;
 
 }
