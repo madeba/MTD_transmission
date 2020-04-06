@@ -144,31 +144,32 @@ int main()
 
     vector<double> PhaseFinal(NbPixUBorn);
     Mat src=Mat(1, ampli_ref.size(), CV_64F, ampli_ref.data());
-    ///Charger masque aberration
+
+    ///variable pour correction aberration
     Mat mask_aber=init_mask_aber(Chemin_mask,dim2DUBorn);
     mask_aber.convertTo(mask_aber, CV_8U);
-    int NbPtOk=countM(mask_aber);
-    ///initialiser variable champ et spectre complexe
+    size_t NbPtOk=countM(mask_aber), nbRows=NbPtOk, degre_poly=3, nbCols = sizePoly2D(degre_poly);//Nb coef poly
+    cout<<"dimX polynome to fit="<<sqrt(NbPtOk)<<endl;
+    Mat polynomeUs_to_fit(Size(nbCols,nbRows), CV_64F);///(undersampled) Polynome to fit= function to fit (We use a polynome). we have to generate atble containing polynome_to_fit=[1,x,x^2,xy,y^2] for each coordinate (x,y)
+    CalcPolyUs_xy(degre_poly, NbPtOk, mask_aber, dim2DUBorn, polynomeUs_to_fit);
+
+    Mat polynome_to_fit(Size(nbCols,dim2DUBorn.x*dim2DUBorn.y), CV_64F);
+    CalcPoly_xy(degre_poly, dim2DUBorn, polynome_to_fit);
+
+     ///initialiser variable champ et spectre complexe
     vector<complex<double>> UBornFinal(NbPixUBorn), UBornFinalDecal(NbPixUBorn), TF_UBorn_norm(NbPixUBorn);
     vector<double> UBornAmpFinal(NbPixUBorn), UBornAmp(NbPixUBorn);
     vector<double> tabPosSpec(NbAngle*2);  ///stockage des speculaires pour exportation vers reconstruction
+    ///Filtre pour écrasement jumeau
     size_t dim_agauss=round(NXMAX/4);
     vector<complex<double>> filtre_agauss(dim_agauss*dim_agauss);
     antigaussienne(filtre_agauss,round(dim_agauss),1,0);
-
-   // SAV_Tiff2DCplx(filtre_agauss,"Re",chemin_result+"antigaussienne.tif",1);
+     // SAV_Tiff2DCplx(filtre_agauss,"Re",chemin_result+"antigaussienne.tif",1);
     cout<<"\n#########################Calcul champs cplx 2D Uborn/Rytov + eventuelle Correction aberrations#############################"<<endl;
     cout<<"Nb angle OK="<<NbAngleOk<<endl;
-    int degre_poly=3;
-    int nbCols = sizePoly2D(degre_poly);//Nb coef poly
-    int nbRows=NbPtOk;
-    Mat polynome_to_fit(Size(nbCols,nbRows), CV_64F);///Polynome to fit= function to fit (We use a polynome). we have to generate atble containing polynome_to_fit=[1,x,x^2,xy,y^2] for each coordinate (x,y)
-
-    CalcPoly_xy(degre_poly, NbPtOk, mask_aber, dim2DUBorn, polynome_to_fit);
-
     for(int cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++)  //boucle sur tous les angles : correction aberrations
     {
-        ///Récupérer la TF2D dans la pile de spectre2D. Place le spectre à cpt angle dans TF_UBorn
+        ///Récupérer la TF2D dans la pile de spectre2D. Place le spectre numero "cpt angle" dans TF_UBorn
         TF_UBorn.assign(TF_UBornTot.begin()+NbPixUBorn*cpt_angle, TF_UBornTot.begin()+NbPixUBorn*(cpt_angle+1));
         //cout<<"cpt_angle="<<cpt_angle<<endl;
         ///Recherche de la valeur maximum du module dans ref non centré-----------------------------------------
@@ -211,7 +212,7 @@ int main()
             ///-------------Correction aberration phase-------------------------------
             src=Mat(dim2DUBorn.x,dim2DUBorn.y,CV_64F, UnwrappedPhase.data());
           // Mat Phase_corr(aberCorr(src, mask_aber,degre_poly,  NbPtOk));
-           Mat Phase_corr(aberCorr2(src, mask_aber,polynome_to_fit,3,  NbPtOk));
+           Mat Phase_corr(aberCorr2(src, mask_aber,polynomeUs_to_fit,polynome_to_fit, 3,  NbPtOk));
             //SAV2(poly_aber,NbPixUBorn,chemin_result+"/poly_aber.raw",t_float,"a+b");
             ///---------------Correction amplitude----------------------------------------
             for(int cpt=0; cpt<(NbPixUBorn); cpt++)
@@ -219,7 +220,7 @@ int main()
 
             Mat srcAmp=Mat(dim2DUBorn.x, dim2DUBorn.y, CV_64F, UBornAmp.data());
             //Mat UBornAmp_corr(dim2DHA.x, dim2DHA.y, CV_64F);
-            Mat UBornAmp_corr(ampliCorr(srcAmp, mask_aber,3,  NbPtOk));
+            Mat UBornAmp_corr(ampliCorr2(srcAmp, polynomeUs_to_fit, mask_aber,3,  NbPtOk));
 
             ///Fin Correction amplitude----------------------------------------
             ///-----------Calcul champ complexe en BOrn ou Rytov---------------
