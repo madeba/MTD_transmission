@@ -199,7 +199,7 @@ void CalcPoly_xy(int degre_poly,int NbPtOk, Mat const & mask, Var2D dimImg,Mat &
 
 /// Compute the coef of polynomial (Least Squares method) by SVD : i.e. solve coef*polynom_to_fit=background
 //void compuPoly(Mat const &imagebrut, Mat mask, Mat& coef_polynomial, int deg, bool method, int NbPtOk)
-void compuPoly(Mat const &imagebrut, Mat mask, Mat& coef_polynomial, int deg, bool method, int NbPtOk)
+void compuPoly(Mat const &imagebrut, Mat const &mask, Mat& coef_polynomial, int deg, bool method, int NbPtOk)
 { ///auto start = std::chrono::system_clock::now();
     int nbCols = sizePoly2D(deg);//Nb coef poly
     //cout<<"nbcols="<<nbCols<<endl;
@@ -275,7 +275,7 @@ double poly2DEval(Mat const &coefficients, int deg, int x, int y)
    for (int i = 0; i <= deg; i ++){
         int j = 0;
         while ((i+j) <= deg){
-            sum +=(coefficients.at<double>(k)) * pow(x,i) * pow(y,j);
+            sum +=(coefficients.at<double>(k)) * pow(x,i) * pow(y,j);/// * pow(x,i) * pow(y,j) n'a pas besoin d'être recalculé à chaque fois :c'est polynome_to_fit, déjà calculé CalcPoly_xy
             //cout<<"k="<<k<<" i= "<<i <<" j= "<<j<<endl;
             k ++;
             j ++;
@@ -332,7 +332,7 @@ Mat  ampliCorr(Mat const & image, Mat mask, int degpoly, int NbPtOk)
 ///#--------------------nouvelle fonction pour calculer poly_to_fit en dehors de la boucle------------------------------------------------------------------------------
 
 ///surcharge pour calcul poly exterieur
-Mat  aberCorr2(Mat image, Mat mask,  Mat const &polynome_to_fit, int degpoly,  int NbPtOk)
+Mat  aberCorr2(Mat image, Mat const &mask,  Mat const &polynome_to_fit, int degpoly,  int NbPtOk)
 {
     Mat coefsolve;
     /// Compute the coef of polynomial (Least Squares method)
@@ -349,7 +349,7 @@ Mat  aberCorr2(Mat image, Mat mask,  Mat const &polynome_to_fit, int degpoly,  i
 /// Compute the coef of polynomial (Least Squares method) by SVD : i.e. solve coef*polynom_to_fit=background
 //void compuPoly(Mat const &imagebrut, Mat mask, Mat& coef_polynomial, int deg, bool method, int NbPtOk)
 //surcharge avec calciul du plynome à l extérieur
-void compuPoly2(Mat const &imagebrut, Mat mask, Mat& coef_polynomial, Mat const &polynome_to_fit,int deg, bool method, int NbPtOk)
+void compuPoly2(Mat const &imagebrut, Mat const & mask, Mat& coef_polynomial, Mat const &polynome_to_fit,int deg, bool method, int NbPtOk)
 {
   double t_total=0;
   int nbCols = sizePoly2D(deg);
