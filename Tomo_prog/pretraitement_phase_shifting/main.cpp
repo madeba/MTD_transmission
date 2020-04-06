@@ -220,7 +220,7 @@ int main()
 
             Mat srcAmp=Mat(dim2DUBorn.x, dim2DUBorn.y, CV_64F, UBornAmp.data());
             //Mat UBornAmp_corr(dim2DHA.x, dim2DHA.y, CV_64F);
-            Mat UBornAmp_corr(ampliCorr2(srcAmp, polynomeUs_to_fit, mask_aber,3,  NbPtOk));
+            Mat UBornAmp_corr(ampliCorr2(srcAmp, polynomeUs_to_fit, polynome_to_fit, mask_aber,3,  NbPtOk));
 
             ///Fin Correction amplitude----------------------------------------
             ///-----------Calcul champ complexe en BOrn ou Rytov---------------

@@ -384,13 +384,13 @@ Mat  aberCorr2(Mat const &image, Mat const &mask,  Mat const &polynomeUs_to_fit,
     return result_final;
 }
 
-Mat  ampliCorr2(Mat const & image,  Mat const &polynome_to_fit, Mat mask, int degpoly, int NbPtOk)
+Mat  ampliCorr2(Mat const & image,  Mat const &polynomeUs_to_fit, Mat const &polynome_to_fit, Mat mask, int degpoly, int NbPtOk)
 {
     Mat coefsolve;
-    compuCoefPoly2(image, mask, coefsolve, polynome_to_fit, degpoly, true, NbPtOk); /// Compute the coef of polynomial (Least Squares method)
+    compuCoefPoly2(image, mask, coefsolve, polynomeUs_to_fit, degpoly, true, NbPtOk); /// Compute the coef of polynomial (Least Squares method)
     Mat resultatpoly(image.rows, image.cols, CV_64F);
     Mat result(image.rows, image.cols, CV_64F);
-    compuBackgr(coefsolve, degpoly, resultatpoly);/// Compute the background image with the coef of polynomial
+    compuBackgr2(coefsolve, polynome_to_fit, degpoly, resultatpoly);/// Compute the background image with the coef of polynomial
     //SAV2((double*)resultatpoly.data,image.rows*image.cols,"/home/mat/tmp/poly_aber_phase.raw",t_float,"a+b");
     result = image/resultatpoly;
     return result;
