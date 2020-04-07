@@ -38,7 +38,7 @@ int main()
 
     ///------Init variable hologramme hors axe
     const int  NXMAX=m1.NXMAX,NbPixUBorn=4*NXMAX*NXMAX;
-    Var2D dim2DUBorn= {m1.dim2DUBorn,m1.dim2DUBorn},coinROI= {0,0},decal2DUBorn= {NXMAX,NXMAX},posSpec= {0,0},posJumeau={0,0};
+    Var2D dim2DUBorn= {(int)m1.dim2DUBorn,(int)m1.dim2DUBorn},coinROI= {0,0},decal2DUBorn= {NXMAX,NXMAX},posSpec= {0,0},posJumeau={0,0};
 
     const int NbAngle=m1.Num_Angle_final-m1.premier_plan;//m1.Num_Angle_final-m1.premier_plan;
     cout<<"Nb_angle="<<NbAngle<<endl;
@@ -65,14 +65,14 @@ int main()
     string cheminRef=m1.chemin_acquis+"modref.bmp";
     if(fopen(cheminRef.c_str(), "rb")!=NULL){
         charger_image2D_OCV(modRef,cheminRef, coinROI, m1.dimROI);
-        for(int cpt=0; cpt<NbPixROI2d; cpt++)
+        for(size_t cpt=0; cpt<NbPixROI2d; cpt++)
             if(modRef[cpt]!=0)
                 ampRef[cpt]=sqrt(modRef[cpt]);
             else
                 ampRef[cpt]=1;
     }
     else{
-        for(int cpt=0; cpt<NbPixROI2d; cpt++){
+        for(size_t cpt=0; cpt<NbPixROI2d; cpt++){
             modRef[cpt]=1;
         }
     }
@@ -149,9 +149,10 @@ int main()
     Mat mask_aber=init_mask_aber(Chemin_mask,dim2DUBorn);
     mask_aber.convertTo(mask_aber, CV_8U);
     size_t NbPtOk=countM(mask_aber), nbRows=NbPtOk, degre_poly=3, nbCols = sizePoly2D(degre_poly);//Nb coef poly
-    cout<<"dimX polynome to fit="<<sqrt(NbPtOk)<<endl;
+   //cout<<"dimX polynome to fit="<<sqrt(NbPtOk)<<endl;
+
     Mat polynomeUs_to_fit(Size(nbCols,nbRows), CV_64F);///(undersampled) Polynome to fit= function to fit (We use a polynome). we have to generate atble containing polynome_to_fit=[1,x,x^2,xy,y^2] for each coordinate (x,y)
-    CalcPolyUs_xy(degre_poly, NbPtOk, mask_aber, dim2DUBorn, polynomeUs_to_fit);
+    CalcPolyUs_xy(degre_poly, mask_aber, dim2DUBorn, polynomeUs_to_fit);
 
     Mat polynome_to_fit(Size(nbCols,dim2DUBorn.x*dim2DUBorn.y), CV_64F);
     CalcPoly_xy(degre_poly, dim2DUBorn, polynome_to_fit);
@@ -228,7 +229,7 @@ int main()
             for(size_t y=0; y<dim2DUBorn.y; y++){
               for(size_t x=0; x<dim2DUBorn.x; x++){
                     size_t cpt=x+y*dim2DUBorn.x;
-                    size_t cpt3D=x+y*dim2DUBorn.x+NbPixUBorn*(cpt_angle-1);
+                   // size_t cpt3D=x+y*dim2DUBorn.x+NbPixUBorn*(cpt_angle-1);
                     PhaseFinal[cpt]=Phase_corr.at<double>(y,x);//copie opencV->Tableau
                     UBornAmpFinal[cpt]=UBornAmp_corr.at<double>(y,x);
                     if(m1.b_Born==true)  //UBORN=U_tot-U_inc=u_tot_norm-1
@@ -247,7 +248,7 @@ int main()
             //SAV2(UBornAmp,chemin_result+"/UbornAmp_final.bin",t_float,"a+b");
             //SAV2(UBornAmpFinal,chemin_result+"/UBornAmpFinal.raw",t_float,"a+b");
             ///Recalculer la TF décalée pour le programme principal.
-            Var2D recal= {kxmi,kymi};
+//            Var2D recal= {kxmi,kymi};
             decal2DCplxGen(UBornFinal,UBornFinalDecal, dim2DUBorn,decal2DUBorn);
             TF2Dcplx_vec(in_PS,out_PS,UBornFinalDecal,TF_UBorn_norm,p_forward_PS);
             SAVCplx(UBornFinal,"Re", chemin_result+"/UBornfinal_Re.raw",t_double, "a+b");

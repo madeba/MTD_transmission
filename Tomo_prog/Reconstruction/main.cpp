@@ -253,7 +253,7 @@ int main(int argc, char *argv[])
         temps_initial = clock();//enclenchement chronometre
         Var3D    dimFinal= {dimVol.x,dimVol.y,dimVol.z};
         circshift3DCplx(TF3D_PotObj, TF3D_PotObj_shift, dimFinal, decal3DTF);
-        vector<complex<double>>().swap(TF3D_PotObj);///liubérer mémoire
+        vector<complex<double>>().swap(TF3D_PotObj);///libérer mémoire
         temps_final = clock ();
         temps_cpu = (temps_final - temps_initial) * 1e-6;
         printf("temps apres circshift 3D: %f\n",temps_cpu);
