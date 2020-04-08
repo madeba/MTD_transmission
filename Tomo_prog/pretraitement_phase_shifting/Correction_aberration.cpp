@@ -32,7 +32,7 @@ using namespace std;
 
 /// Function header
 #include "Correction_aberration.h"
-
+///load object mask
 Mat init_mask_aber(string Chemin_mask, Var2D dim2DHA)
 {
     ///Charger masque aberration
@@ -50,45 +50,6 @@ Mat init_mask_aber(string Chemin_mask, Var2D dim2DHA)
     mask.convertTo(mask, CV_8U);  ///Chargement du masque pour correction aberration/ampli
     return mask;
 }
-/// function threshCallback
-/*void threshCallback(int thresh, void* param)
-{
-    RNG rng(12345);
-    Mat &src=*(Mat*)param;//typecast  du ptr void vers ptr Mat
-    Mat canny_output;
-    Mat src_filtering;
-    vector<vector<Point> > contours;
-    vector<Vec4i> hierarchy;
-    imshow("Source",src);
-    /// Detect edges using canny
-    Canny(src, canny_output, thresh, thresh*2, 3);
-    /// Detect edges using Threshold
-    threshold(src, canny_output, thresh, 255, THRESH_BINARY);
-    /// Dilate helps to remove potential holes between edge segments
-    dilate(canny_output, canny_output, Mat(), Point(-1,-1));
-    //imshow("Canny output",canny_output);
-    /// Find contours
-    findContours(canny_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
-    /// Find the convex hull object for each contour
-    vector<vector<Point> >hull(contours.size());
-    for (int i = 0; i < contours.size(); i ++)
-    {
-        convexHull(Mat(contours[i]), hull[i], false);
-    }
-    /// Draw contours
-    Mat drawing = Mat::zeros(canny_output.size(), CV_8UC3);//Uc3?
-    //Mat drawing_gray;
-    for (int i = 0; i < contours.size(); i ++)
-    {
-        Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255));
-        /// hull results
-        drawContours(drawing, hull, i, Scalar(255,255,255), CV_FILLED, 8, vector<Vec4i>(), 0, Point());
-    }
-    /// Show in a window
-    imshow("Image_mask", drawing);
-    imwrite("Image_mask.tif",drawing);
-}*/
-
 
 /// Return the size of polynomial. Used to calculate the number of columns for the vector "polynom_to_fit" (ex [1,x,x^2,xy,y,y^]->size=6]
 int sizePoly2D(int deg){
@@ -103,7 +64,7 @@ int sizePoly2D(int deg){
     return size;
 }
 
-/// Count pixels in mask )
+/// Count pixels in mask
 int countM(Mat mask){
     const int step=5;//échantillonnage divisé par step=5
     int count = 0;
@@ -129,7 +90,6 @@ int countM(Mat mask){
 void CalcPolyUs_xy(int degre_poly, Mat const & mask, Var2D dimImg, Mat &polynomeUs_to_fit)
 {
    int nbRows=polynomeUs_to_fit.rows;
-
    if(nbRows>9){//you need at least 9 points for a deg 3 polynome
      int num_coef, Coord1D = 0;// coordinate (1D)
      for (int y = 0; y < dimImg.y; y ++){//largeur de 262
@@ -183,34 +143,33 @@ void compuBackgr2(Mat const &coefficients, Mat const & polynome_to_fit, Mat &Pol
             UsCoord1D++;
         }
 }
-///#--------------------Top functions continaing the algorithm for phase and amplitude------------------------------------------------------------------------------
-Mat  aberCorr2(Mat const &image, Mat const &mask,  Mat const &polynomeUs_to_fit, Mat const &polynome_to_fit, int degpoly,  int NbPtOk)
+///#--------------------Top functions containing the algorithm for phase and amplitude------------------------------------------------------------------------------
+Mat  aberCorr2(Mat const &image, Mat const &mask,  Mat const &polynomeUs_to_fit, Mat const &polynome_to_fit)
 {
     Mat coefsolve;
-    compuCoefPoly2(image, mask, coefsolve, polynomeUs_to_fit, degpoly, true, NbPtOk); /// Compute the coef of polynomial (Least Squares method)
+    compuCoefPoly2(image, mask, coefsolve, polynomeUs_to_fit, true); /// Compute the coef of polynomial (Least Squares method)
     Mat resultatpolyBG(image.rows, image.cols, CV_64F), result_final(image.rows, image.cols, CV_64F);
     compuBackgr2(coefsolve, polynome_to_fit, resultatpolyBG);/// Compute the background image with the coef of polynomial
     //SAV2((double*)resultatpoly.data,image.rows*image.cols,"/home/mat/tmp/poly_aber_phase.raw",t_float,"a+b");
     result_final = image-resultatpolyBG;
     return result_final;
 }
-Mat  ampliCorr2(Mat const & image,  Mat const &polynomeUs_to_fit, Mat const &polynome_to_fit, Mat mask, int degpoly, int NbPtOk)
+Mat  ampliCorr2(Mat const & image,  Mat const &polynomeUs_to_fit, Mat const &polynome_to_fit, Mat mask)
 {
     Mat coefsolve;
-    compuCoefPoly2(image, mask, coefsolve, polynomeUs_to_fit, degpoly, true, NbPtOk); /// Compute the coef of polynomial (Least Squares method)
+    compuCoefPoly2(image, mask, coefsolve, polynomeUs_to_fit, true); /// Compute the coef of polynomial (Least Squares method)
     Mat resultatpoly(image.rows, image.cols, CV_64F), result(image.rows, image.cols, CV_64F);
     compuBackgr2(coefsolve, polynome_to_fit,  resultatpoly);/// Compute the background image with the coef of polynomial
     //SAV2((double*)resultatpoly.data,image.rows*image.cols,"/home/mat/tmp/poly_aber_phase.raw",t_float,"a+b");
     result = image/resultatpoly;
     return result;
 }
-
 /// Compute the coef of polynomial (Least Squares method) by SVD,  i.e. solve COEF*POLYNOME_TO_FIT=BACKGROUND (with undersampled variable to speed up the process)
-void compuCoefPoly2(Mat const &imagebrut, Mat const & mask, Mat& coef_polynomial, Mat const &polynomeUs_to_fit,int deg, bool method, int NbPtOk)
+void compuCoefPoly2(Mat const &imagebrut, Mat const & mask, Mat& coef_polynomial, Mat const &polynomeUs_to_fit, bool method)
 {
   int nbCols=polynomeUs_to_fit.cols, nbRows=polynomeUs_to_fit.rows;/// x,y image sizes
   Mat Bt(Size(nbRows,nbCols), CV_64F);//variable to stock transposed polynome_to_fit, for SVD inversion
-  Mat undersampled_background(nbRows, 1, CV_64F);///matrice contenant 1 point sur "step" (defaut_step=5) (donnent NbPtOK). Il s'agit de l'image avec moins de points
+  Mat undersampled_background(nbRows, 1, CV_64F);///matrix containing  1 point out of  "step" (default_step=5) (gives NbPtOK).
 
   if(nbRows>9){
     int UsCoord = 0;/// 1D undersampled coordinate (corresponds to the 2D undersampled coordinates (x_us,y_us))
@@ -239,6 +198,46 @@ void compuCoefPoly2(Mat const &imagebrut, Mat const & mask, Mat& coef_polynomial
   }
 }
 ///*-----------------------------------------------old functions-----------------------------------
+/// function threshCallback
+/*void threshCallback(int thresh, void* param)
+{
+    RNG rng(12345);
+    Mat &src=*(Mat*)param;//typecast  du ptr void vers ptr Mat
+    Mat canny_output;
+    Mat src_filtering;
+    vector<vector<Point> > contours;
+    vector<Vec4i> hierarchy;
+    imshow("Source",src);
+    /// Detect edges using canny
+    Canny(src, canny_output, thresh, thresh*2, 3);
+    /// Detect edges using Threshold
+    threshold(src, canny_output, thresh, 255, THRESH_BINARY);
+    /// Dilate helps to remove potential holes between edge segments
+    dilate(canny_output, canny_output, Mat(), Point(-1,-1));
+    //imshow("Canny output",canny_output);
+    /// Find contours
+    findContours(canny_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
+    /// Find the convex hull object for each contour
+    vector<vector<Point> >hull(contours.size());
+    for (int i = 0; i < contours.size(); i ++)
+    {
+        convexHull(Mat(contours[i]), hull[i], false);
+    }
+    /// Draw contours
+    Mat drawing = Mat::zeros(canny_output.size(), CV_8UC3);//Uc3?
+    //Mat drawing_gray;
+    for (int i = 0; i < contours.size(); i ++)
+    {
+        Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255));
+        /// hull results
+        drawContours(drawing, hull, i, Scalar(255,255,255), CV_FILLED, 8, vector<Vec4i>(), 0, Point());
+    }
+    /// Show in a window
+    imshow("Image_mask", drawing);
+    imwrite("Image_mask.tif",drawing);
+}*/
+
+
 /// numerically compute the value of each point of the polynom for **one** coordinate (x,y), for deg 3: a+b*x+c*x²+d*x³+e*y+f*xy+g*x²y+h*y²+i*xy²+j*y³
 /*double poly2DEval2(Mat const &coefficients,  Mat const &polynome_to_fit, size_t UsCoord1D)
 {

@@ -213,7 +213,7 @@ int main()
             ///-------------Correction aberration phase-------------------------------
             src=Mat(dim2DUBorn.x,dim2DUBorn.y,CV_64F, UnwrappedPhase.data());
           // Mat Phase_corr(aberCorr(src, mask_aber,degre_poly,  NbPtOk));
-           Mat Phase_corr(aberCorr2(src, mask_aber,polynomeUs_to_fit,polynome_to_fit, 3,  NbPtOk));
+           Mat Phase_corr(aberCorr2(src, mask_aber,polynomeUs_to_fit,polynome_to_fit));
             //SAV2(poly_aber,NbPixUBorn,chemin_result+"/poly_aber.raw",t_float,"a+b");
             ///---------------Correction amplitude----------------------------------------
             for(int cpt=0; cpt<(NbPixUBorn); cpt++)
@@ -221,7 +221,7 @@ int main()
 
             Mat srcAmp=Mat(dim2DUBorn.x, dim2DUBorn.y, CV_64F, UBornAmp.data());
             //Mat UBornAmp_corr(dim2DHA.x, dim2DHA.y, CV_64F);
-            Mat UBornAmp_corr(ampliCorr2(srcAmp, polynomeUs_to_fit, polynome_to_fit, mask_aber,3,  NbPtOk));
+            Mat UBornAmp_corr(ampliCorr2(srcAmp, polynomeUs_to_fit, polynome_to_fit, mask_aber));
 
             ///Fin Correction amplitude----------------------------------------
             ///-----------Calcul champ complexe en BOrn ou Rytov---------------
