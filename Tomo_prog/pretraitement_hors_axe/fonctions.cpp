@@ -759,6 +759,7 @@ void SAV3D_Tiff(vector<complex <double>> var_sav, string partie, string chemin, 
                         if(partie=="Im" || partie=="im"){
                         buffer2D[y * dim + x] = (float)var_sav[y * dim + x+num_page*dim*dim].imag();
                         }
+
                         else
                             cout<<"Partie non identifiée : Re, re, Im ou im"<<endl;
                     }

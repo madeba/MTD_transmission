@@ -12,7 +12,7 @@ std::vector<double>  fftshift2D(std::vector<double> &entree);
 std::vector<vecteur>  fftshift2D(std::vector<vecteur> &entree);
 
 void TF2D_vec(fftw_complex *in,fftw_complex *out, std::vector<double> entree, std::vector<std::complex<double> > &sortie, fftw_plan p);
-
+void TF2D_r2c_symetric(std::vector<double> const &entree, std::vector<std::complex<double> > &sortie, FFT_encaps const &tf2D_Re, double delta_x);
 
 void TF2Dcplx_vec(fftw_complex *in,fftw_complex *out, std::vector<double> entree, std::vector<std::complex<double> > &sortie, fftw_plan p);
 void TF2Dcplx_vec_INV(fftw_complex *in, fftw_complex *out, std::vector<double> entree, std::vector<std::complex<double> > &sortie, fftw_plan p);
