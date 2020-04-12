@@ -3,8 +3,8 @@
 
 #include <cstdlib>
 #include <iostream>
-struct manip {
-
+class manip {
+public :
         double NA;
         double Tp;
         double n0;
@@ -13,6 +13,7 @@ struct manip {
         size_t NXMAX;
         size_t premier_plan;
         size_t Num_Angle_final;
+        size_t NbAngle;
         double theta;
         double f_tube;
         double f_obj;
@@ -28,10 +29,12 @@ struct manip {
         double tailleTheoPixelUborn;
         double tailleTheoPixelTomo;
         size_t circle_cx,circle_cy;
+        std::string dimImg;
         std::string chemin_result;
         std::string chemin_acquis;
+
         manip();
-        void init();
+       // void init();
 } ;
 
 #endif // DEF_MANIP

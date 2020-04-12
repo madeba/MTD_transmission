@@ -80,9 +80,10 @@ int main(int argc, char *argv[])
         manip m1;
 
         int NXMAX=m1.NXMAX, NbAngle=m1.NbAngle;
+
         Var2D NMAX={NXMAX,NXMAX},dimChpCplx={2*NXMAX,2*NXMAX};
         Point2D dim2DUBorn(2*NXMAX,2*NXMAX,2*NXMAX);
-
+        string dimImg=to_string(dimChpCplx.x)+"x"+to_string(dimChpCplx.y)+"x"+to_string(NbAngle);
         ///------Récupérer spéculaire dans le fichier binaire---
         //lire_bin(chemin_fichier,variable de stockage, type de donnée en bits (32,64...), nombre d'images 2D)
         double *TabPosSpec=new double[2*m1.NbAngle];
@@ -119,14 +120,14 @@ int main(int argc, char *argv[])
         vector<complex<double>> UBornFinal3D(NbPixU_Born*NbAngle);
         cout<<"lecture Uborn Re et Im"<<endl;
 
-        lire_bin(m1.chemin_result+"/UBornfinal_Im.raw",UBornFinal3D_Im,64,NbPixU_Born*NbAngle);
-        lire_bin(m1.chemin_result+"/UBornfinal_Re.raw",UBornFinal3D_Re,64,NbPixU_Born*NbAngle);
-
+        lire_bin(m1.chemin_result+"/UBornfinal_Im"+dimImg+".raw",UBornFinal3D_Im,64,NbPixU_Born*NbAngle);
+        lire_bin(m1.chemin_result+"/UBornfinal_Re"+dimImg+".raw",UBornFinal3D_Re,64,NbPixU_Born*NbAngle);
+        #pragma omp parallel for
         for(int cpt=0;cpt<NbPixU_Born*NbAngle;cpt++){
             UBornFinal3D[cpt].real(UBornFinal3D_Re[cpt]);
             UBornFinal3D[cpt].imag(UBornFinal3D_Im[cpt]);
         }
-        SAV3D_Tiff(UBornFinal3D,"Im",m1.chemin_result+"/UBornfinal3D_Im.tif",tailleTheoPixelUborn*1000);
+        //SAV3D_Tiff(UBornFinal3D,"Im",m1.chemin_result+"/UBornfinal3D_Im.tif",tailleTheoPixelUborn*1000);
         delete[] UBornFinal3D_Re;delete[] UBornFinal3D_Im;
 
 
@@ -165,11 +166,11 @@ int main(int argc, char *argv[])
         const int premier_plan=0;
         Var2D posSpec={0,0};
         Var2D recal={0,0};
-        string tmp=m1.chemin_result+"/wisdom/test2D.wisdom";
+       /* string tmp=m1.chemin_result+"/wisdom/test2D.wisdom";
         int bool_wisdom2D=fftw_import_wisdom_from_filename(tmp.c_str());//charger ou calculer le fichier wisdom
             if(bool_wisdom2D==0){
                 prepare_wisdom2D(dimChpCplx,tmp.c_str());
-            }
+            }*/
 
         for(int cpt_angle=premier_plan; cpt_angle<NbAngle; cpt_angle++) //boucle sur tous les angles
         {
@@ -252,7 +253,9 @@ int main(int argc, char *argv[])
 
         temps_initial = clock();//enclenchement chronometre
         Var3D    dimFinal= {dimVol.x,dimVol.y,dimVol.z};
-        circshift3DCplx(TF3D_PotObj, TF3D_PotObj_shift, dimFinal, decal3DTF);
+       // circshift3DCplx(TF3D_PotObj, TF3D_PotObj_shift, dimFinal, decal3DTF);
+       // TF3D_PotObj_shift=fftshift3D(TF3D_PotObj);
+       fftshift3D(TF3D_PotObj,TF3D_PotObj_shift);
         vector<complex<double>>().swap(TF3D_PotObj);///libérer mémoire
         temps_final = clock ();
         temps_cpu = (temps_final - temps_initial) * 1e-6;
@@ -292,7 +295,7 @@ int main(int argc, char *argv[])
         high_resolution_clock::time_point t1v = high_resolution_clock::now();//temps vrai (pas CPU)
 
         TF3Dcplx_INV(tf3D.in, tf3D.out,TF3D_PotObj_shift , PotObj_shift, tf3D.p_backward_OUT,m1.Delta_fUborn);
-
+        vector<complex<double>>().swap(TF3D_PotObj_shift);
         high_resolution_clock::time_point t2v = high_resolution_clock::now();
         auto duration = duration_cast<microseconds>( t2v - t1v ).count();
         cout << "temps TF3D="<< duration/1000<<" ms"<<endl;
@@ -301,8 +304,9 @@ int main(int argc, char *argv[])
         /////////////////////creation des tableaux qui recoivent le circshift
 
         vector <complex<double >> PotObj3D(N_tab);
-        circshift3DCplx(PotObj_shift, PotObj3D, dimFinal, decal3DTF);
-
+       // circshift3DCplx(PotObj_shift, PotObj3D, dimFinal, decal3DTF);
+         fftshift3D(PotObj_shift,PotObj3D);
+        vector<complex<double>>().swap(PotObj_shift);
         ///--------------------------------chrono et écriture.
         temps_final = clock ();
         temps_cpu = (temps_final - temps_initial) * 1e-6;
@@ -318,11 +322,11 @@ int main(int argc, char *argv[])
         for(size_t cpt=0;cpt<N_tab;cpt++){
             indice_cplx[cpt]=ctePot2Ind*PotObj3D[cpt];
         }
-
+        printf("ecriture de PotObj3D.Re, PotObj3D.Im \n");
         SAV3D_Tiff(indice_cplx,"Re", m1.chemin_result+"/indice.tif",tailleTheoPixelTomo);
         SAV3D_Tiff(indice_cplx,"Im", m1.chemin_result+"/absorption.tif",tailleTheoPixelTomo);
 
-        printf("ecriture de PotObj3D.Re, PotObj3D.Im : OK \n");
+
 
         temps_arrivee = clock ();
         temps_cpu = (temps_arrivee-temps_depart )/CLOCKS_PER_SEC;

@@ -8,10 +8,6 @@ using namespace std;
 manip::manip()
 {
 
-}
-
-void manip::init()
-{
     Var2D dimROI= {WINDOW_X, WINDOW_Y};
     cout<<"dans la classe manip"<<endl;
     string home=getenv("HOME");
@@ -33,13 +29,11 @@ void manip::init()
     f_tube=extract_val("F_TUBE",fic_cfg_manip), ///focale lentille tube
     f_obj=extract_val("F_OBJ",fic_cfg_manip),///focale objectif
     G=f_tube/f_obj,	//grossissement telan+objectif
-      TpCam=extract_val("TPCAM",fic_cfg_manip),//cam. photon focus
+    TpCam=extract_val("TPCAM",fic_cfg_manip),//cam. photon focus
     Rf=extract_val("RF",fic_cfg_manip),//1.2;=1/facteur grossissement
-    Gt=G/Rf;
+    Gt=G/Rf;//grandissement total
     cout<<"Gt="<<Gt<<endl;
     size_t dim_final=extract_val("DIM_FINAL",fic_cfg_recon);
-    //K=lambda*G/(2*NA*TpCam*Rf),// Facteur d'echelle
-    //Tps=TpCam,//*K; //Taille pixel apres mise à l'echelle important si RF<>1
     tailleTheoPixelHolo=TpCam/Gt*pow(10,9);//Pour info, taille des pixels sur un hologramme=Tpcam/GT
     cout<<"taille theorique pixel holo="<<tailleTheoPixelHolo<<endl;
     theta=asin(NA/n0);
@@ -55,6 +49,7 @@ void manip::init()
 
     premier_plan=extract_val("PREMIER_ANGLE",fic_cfg_recon),
     Num_Angle_final=extract_val("NB_HOLO",fic_cfg_manip),//
+    NbAngle=Num_Angle_final-premier_plan;
 
     cout<<"\n##################### Options de RECONSTRUCTION ##################\n"<<endl;
     b_CorrAber=extract_val("C_ABER",fic_cfg_recon);///corriger les aberrations?
@@ -68,15 +63,19 @@ void manip::init()
 
     cout<<"\n##########################################################"<<endl;
 
-        //Effacer précédent résultats.
+        ///Effacer précédent résultatscar fonction d'enregistrement cumulative ("a+b")
 
+        Var2D dim2DHA={2*NXMAX,2*NXMAX};
+        dimImg=to_string(dim2DHA.x)+"x"+to_string(dim2DHA.y)+"x"+to_string(NbAngle);
 
-        string tampon="/UBornfinal_Im.raw";
+        //string tampon="/UBornfinal_Im.raw";
+        string tampon="/UBornfinal_Im"+dimImg+".raw";
         string result=chemin_result+tampon;
         cout<<"Effacement Uborn : "<<result<<endl;
         if( remove(result.c_str())== 0 )
         perror( "Fichier Ubornfinal_Im impossible à effacer" );
-        tampon="/UBornfinal_Re.raw";
+       // tampon="/UBornfinal_Re.raw";
+        tampon="/UBornfinal_Re"+to_string(dim2DHA.x)+dimImg+".raw";
         result=chemin_result+tampon;
         if( remove(result.c_str()) == 0 )
         perror( "Fichier UBornfinal_Re impossible à effacer" );
@@ -84,6 +83,7 @@ void manip::init()
       rayon=round(NXMAX*n0/NA);//calcul du rayon à partir de la fréquence NXMAX defini pare l'utlisateur
       double R_Ewald=IMAGE_DIMX*tailleTheoPixelHolo*n0/(lambda0*pow(10,9)); //vraie valeur de R_Ewald.
       double NXMAX_theo=R_Ewald*NA/n0;
+    ///-------------enregistrer les paramètres dans un fichier log.--------------------------------------
     string sav_param=chemin_result+"/SAV_param_manip.txt";
     cout<<sav_param<<endl;
     ofstream fichier_sav_parametre(sav_param);

@@ -56,7 +56,7 @@ void circshift2(double* entree, double* result, Var2D dim,Var2D decal);
 void circshift3(double* entree, double* result, Var2D dim,Var2D decal);
 void circshift2DCplx(nbCplx* entree, nbCplx* result, Var2D dim,Var2D decal);
 void circshift3D2(double *volume3D, double *volume3D_shift, Var3D dimFinal3D, Var3D decal3D);
-void circshift3DCplx(vector <complex<double>> &volume3D, vector <complex<double>> &volume3D_shift, Var3D dimFinal3D, Var3D decal3D);
+void circshift3DCplx(vector <complex<double>> const &volume3D, vector <complex<double>> &volume3D_shift, Var3D dimFinal3D, Var3D decal3D);
 
 int chargeBin(float *objet, string chemin,  int NbPix);
 

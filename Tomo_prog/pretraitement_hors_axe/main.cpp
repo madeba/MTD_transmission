@@ -19,10 +19,13 @@ using namespace std;
 int main()
 {
     manip m1; //créer un objet manip
-    m1.init();//initialiser les constantes de la manip
+   // m1.init();//initialiser les constantes de la manip
     string chemin_result=m1.chemin_result;
     string chemin_acquis=m1.chemin_acquis;
     string Chemin_mask=m1.chemin_acquis+"Image_mask.pgm";
+
+
+
     Var2D dimROI= {1024,1024}, coin= {0,0};
     size_t NbPixROI2d=dimROI.x*dimROI.y;
     vector<double> holo1(NbPixROI2d);
@@ -36,7 +39,7 @@ int main()
         fftw_plan_with_nthreads(4);
         ///prepare fftw plan+tableaux-----------------
         fftw_plan p_forward_holo;
-        fftw_complex *in_out_holo=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * NbPixROI2d);//in=out pour transformation "inplace".
+        //fftw_complex *in_out_holo=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * NbPixROI2d);//in=out pour transformation "inplace".
         fftw_complex *in_holo=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * NbPixROI2d);//
         fftw_complex *out_holo=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * NbPixROI2d);//
         p_forward_holo=fftw_plan_dft_2d(dimROI.x, dimROI.y, in_holo, out_holo, FFTW_FORWARD,FFTW_ESTIMATE);
@@ -49,7 +52,7 @@ int main()
          else cout<<"/!\\  fichier intensité référence absent, création intensité unité"<<endl;
 
 
-    for(int cpt=0;cpt<NbPixROI2d;cpt++)
+    for(size_t cpt=0;cpt<NbPixROI2d;cpt++)
     {
         if(intensite_ref[cpt]!=0)
         ampli_ref[cpt]=sqrt(intensite_ref[cpt]);
@@ -64,7 +67,7 @@ int main()
     cout<<"m1.NXMAX="<<m1.NXMAX<<endl;
     Var2D dim2DHA= {2*m1.NXMAX,2*m1.NXMAX},coinHA= {m1.circle_cx-m1.NXMAX,m1.circle_cy-m1.NXMAX},decal2DHA= {m1.NXMAX,m1.NXMAX},posSpec= {0,0};
     cout<<"dimension decoupe dimDHA="<<dim2DHA.x<<endl;
-    const int NbAngle=m1.Num_Angle_final-m1.premier_plan;//m1.Num_Angle_final-m1.premier_plan;
+    const int NbAngle=m1.NbAngle;//m1.Num_Angle_final-m1.premier_plan;
     vector<complex<double>> TF_UBornTot(NbPixUBorn*NbAngle);///variable stockant les N champs complexes decoupés depuis la zone 1024 (pour utilsier wisdom en 1024)
     vector<double>  TF_champMod(NbPixUBorn);//module du champ
     vector<double> centre(NbPixUBorn);///centre pour controler balayage
@@ -84,7 +87,7 @@ int main()
             if(test_existence!=NULL) {
                 fclose(test_existence);
                 charger_image2D_OCV(holo1,nomFichierHolo, coin, dimROI);
-                  for(int cpt=0;cpt<NbPixROI2d;cpt++){
+                  for(size_t cpt=0;cpt<NbPixROI2d;cpt++){
                   holo1[cpt]=holo1[cpt]/ampli_ref[cpt];
                   }
                // holo2TF_UBorn_old(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA,NbAngleOk, masqueTukeyHolo);
@@ -141,7 +144,7 @@ int main()
 
     cout<<"\n#########################Calcul champs cplx 2D Uborn/Rytov + eventuelle Correction aberrations#############################"<<endl;
 
-    for(int cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les angles : correction aberrations
+    for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les angles : correction aberrations
             ///Récupérer la TF2D dans la pile de spectre2D
             TF_UBorn.assign(TF_UBornTot.begin()+NbPixUBorn*cpt_angle, TF_UBornTot.begin()+NbPixUBorn*(cpt_angle+1));
             //SAVCplx(TF_UBorn,"Re","/home/mat/tomo_test/TF_Uborn_iterateur.raw",t_float,"a+b");
@@ -199,7 +202,7 @@ int main()
                     for(size_t x=0; x<dim2DHA.x; x++){
                             for(size_t y=0; y<dim2DHA.y; y++){
                                     size_t cpt=x+y*dim2DHA.x;
-                                    size_t cpt3D=x+y*dim2DHA.x+NbPixUBorn*(cpt_angle-1);
+                                   // size_t cpt3D=x+y*dim2DHA.x+NbPixUBorn*(cpt_angle-1);
                                     PhaseFinal[cpt]=Phase_corr.at<double>(y,x);//copie opencV->Tableau
                                     UBornAmpFinal[cpt]=UBornAmp_corr.at<double>(y,x);
                                     if(m1.b_Born==true){ //UBORN=U_tot-U_inc=u_tot_norm-1
@@ -219,8 +222,12 @@ int main()
                     Var2D recal= {kxmi,kymi};
                     decal2DCplxGen(UBornFinal,UBornFinalDecal, dim2DHA,decal2DHA);
                     TF2Dcplx_vec(in_HA,out_HA,UBornFinalDecal,TF_UBorn_norm,p_forward_HA);
-                    SAVCplx(UBornFinal,"Re", chemin_result+"/UBornfinal_Re.raw",t_double, "a+b");
-                    SAVCplx(UBornFinal,"Im", chemin_result+"/UBornfinal_Im.raw",t_double, "a+b");
+                 //  SAVCplx(UBornFinal,"Re", chemin_result+"/UBornfinal_Re.raw",t_double, "a+b");
+
+                    SAVCplx(UBornFinal,"Re", chemin_result+"/UBornfinal_Re"+m1.dimImg+".raw", t_double, "a+b");
+                  //  SAVCplx(UBornFinal,"Im", chemin_result+"/UBornfinal_Im.raw",t_double, "a+b");
+                     SAVCplx(UBornFinal,"Im", chemin_result+"/UBornfinal_Im"+m1.dimImg+".raw", t_double, "a+b");
+
                 }
             else{ ///sauvegarde onde avec aberration
 
@@ -235,8 +242,8 @@ int main()
                      //SAVCplx(TF_UBorn,"Re", chemin_result+"/TF_Uborn_Re.raw", t_double, "a+b");
                     calc_Uborn(TF_UBorn_norm,UBorn,dim2DHA,posSpec,in_HA,out_HA,p_backward_HA);///--/!\ recale le spectre dans support Uborn!
 
-                    SAVCplx(UBorn,"Re", chemin_result+"/UBornfinal_Re.raw", t_double, "a+b");
-                    SAVCplx(UBorn,"Im", chemin_result+"/UBornfinal_Im.raw", t_double, "a+b");
+                    SAVCplx(UBorn,"Re", chemin_result+"/UBornfinal_Re"+m1.dimImg+".raw", t_double, "a+b");
+                    SAVCplx(UBorn,"Im", chemin_result+"/UBornfinal_Im"+m1.dimImg+".raw", t_double, "a+b");
                 }
         }//fin de boucle for sur tous les angles
     delete[] UnwrappedPhase_herraez;

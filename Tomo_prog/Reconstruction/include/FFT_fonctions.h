@@ -10,7 +10,7 @@
 std::vector<double>  fftshift2D(std::vector<double> &entree);
 std::vector<std::complex<double>> fftshift2D(std::vector<std::complex<double>> &entree);
 std::vector<std::complex<double>> fftshift3D(std::vector<std::complex<double>> &entree);
-
+void fftshift3D(std::vector<std::complex<double>> const &entree, std::vector<std::complex<double>>  &sortie);
 
 void TF2D(std::vector<double>  entree, std::vector<std::complex<double> > &sortie, FFT_encaps &tf2D, double delta_x);
 

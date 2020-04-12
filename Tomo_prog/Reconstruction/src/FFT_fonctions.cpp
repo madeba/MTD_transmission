@@ -1,7 +1,7 @@
 #include "FFT_fonctions.h"
 #include "fonctions.h"
 #include "manip.h"
-
+#include "omp.h"
 using namespace std;
 
  vector<complex<double>> fftshift3D(vector<complex<double>> &entree)
@@ -14,7 +14,7 @@ using namespace std;
     vector<complex<double>> result(nbPix);
     size_t yi=0,xi=0,zi=0;
     int nbPix_z=0, nbPix_zdecal=0,nbPixy=0;
-   // #pragma omp parallel for private(zi)
+  // #pragma omp parallel for private(zi)
     for(zi=0;zi<dim.z/2;zi++){
         nbPix_z=zi*nbPix2D;
         nbPix_zdecal=(zi+decal.z)*nbPix2D;
@@ -75,8 +75,80 @@ using namespace std;
     }
     return result;
 }
+void fftshift3D(vector<complex<double>> const &entree, vector<complex<double>> &result)
+{       //si décalage supérieure à dim, on fait plus d'un tour, donc on prend le modulo
 
+    int nbPix=entree.size();
+    int dimFinale=round(std::pow(entree.size(), 1.0/3.0));
+    int nbPix2D=dimFinale*dimFinale;//taille d'un plan 2D
+    Var3D decal={round(dimFinale/2),round(dimFinale/2),round(dimFinale/2)}, dim={dimFinale,dimFinale,dimFinale};
+//    vector<complex<double>> result(nbPix);
+    size_t yi=0,xi=0,zi=0;
+    int nbPix_z=0, nbPix_zdecal=0,nbPixy=0;
+  // #pragma omp parallel for
+    for(zi=0;zi<dim.z/2;zi++){
+        nbPix_z=zi*nbPix2D;
+        nbPix_zdecal=(zi+decal.z)*nbPix2D;
+        //#pragma omp parallel for private(yi)
+        for(yi=0; yi<dim.y/2; yi++) {
+                decal.x=dim.x/2;
+                decal.y=dim.y/2;
+                //#pragma omp parallel for private(xi)
+                for(xi=0; xi<dim.x/2; xi++){///cadran 1<->8
+                    int pixel=nbPix_z+yi*dim.x+xi;
+                    int pixel_shift=nbPix_zdecal+(yi+decal.y)*dim.x+xi+decal.x;
+                    // 1e quadrant vers 8e
 
+                    result[pixel_shift].real(entree[pixel].real());
+                    result[pixel_shift].imag(entree[pixel].imag());
+                  //  result[pixel_shift]=entree[pixel];
+
+                    // 8eme quadrant vers 1er
+                    result[pixel].real(entree[pixel_shift].real());
+                    result[pixel].imag(entree[pixel_shift].imag());
+                   // result[pixel]=entree[pixel_shift];
+                }
+                decal.x=-dim.x/2;
+                for(xi=dim.x/2; xi<dimFinale; xi++){
+                    int pixel=nbPix_z+yi*dim.x+xi;
+                    int pixel_shift=nbPix_zdecal+(yi+decal.y)*dim.x+xi+decal.x;
+                    //2e quadrant vers 7 eme
+                    result[pixel_shift].real(entree[pixel].real());
+                    result[pixel_shift].imag(entree[pixel].imag());
+                    // 7eme quadrant vers 2e
+                    result[pixel].real(entree[pixel_shift].real());
+                    result[pixel].imag(entree[pixel_shift].imag());
+                }
+        }
+
+        for(yi=dim.y/2; yi<dim.y; yi++){
+             decal.y=-dim.y/2;
+             decal.x=dim.x/2;
+            for(xi=0; xi<dim.x/2; xi++){///cadran 3<->6
+                int pixel=zi*nbPix2D+yi*dim.x+xi;
+                int pixel_shift=(zi+decal.z)*nbPix2D+(yi+decal.y)*dim.x+xi+decal.x;
+                //3e quadrant vers 6e
+                result[pixel_shift].real(entree[pixel].real());
+                result[pixel_shift].imag(entree[pixel].imag());
+                // 6eme vers 3e
+                result[pixel].real(entree[pixel_shift].real());
+                result[pixel].imag(entree[pixel_shift].imag());
+            }
+                decal.x=-dim.x/2;
+            for(xi=dim.x/2; xi<dimFinale; xi++){///cadran 4<->5
+                int pixel=zi*nbPix2D+yi*dim.x+xi;
+                int pixel_shift=(zi+decal.z)*nbPix2D+(yi+decal.y)*dim.x+xi+decal.x;
+                //2e quadrant vers 7 eme
+                result[pixel_shift].real(entree[pixel].real());
+                result[pixel_shift].imag(entree[pixel].imag());
+                // 7eme quadrant vers 2e
+                result[pixel].real(entree[pixel_shift].real());
+                result[pixel].imag(entree[pixel_shift].imag());
+            }
+        }
+    }
+
+}
 
  vector<complex<double>> fftshift2D(vector<complex<double>> &entree)///
 {

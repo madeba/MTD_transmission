@@ -10,7 +10,7 @@ FFT_encaps::FFT_encaps(Point3D dim)
     fftw_plan_with_nthreads(m_Nthread);
     in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
     out=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
-    p_forward_OUT=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, out,FFTW_FORWARD, FFTW_ESTIMATE );
+    p_forward_OUT=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, out,FFTW_FORWARD, FFTW_ESTIMATE);
     p_backward_OUT=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, out,FFTW_BACKWARD, FFTW_ESTIMATE );
 }
 
@@ -23,8 +23,8 @@ FFT_encaps::FFT_encaps(Point2D dim)
     fftw_plan_with_nthreads(m_Nthread);
     in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
     out=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
-    p_forward_OUT=fftw_plan_dft_2d(dim.x, dim.y,  in, out,FFTW_FORWARD, FFTW_ESTIMATE );
-    p_backward_OUT=fftw_plan_dft_2d(dim.x, dim.y, in, out,FFTW_BACKWARD, FFTW_ESTIMATE );
+    p_forward_OUT=fftw_plan_dft_2d(dim.x, dim.y,  in, out,FFTW_FORWARD, FFTW_MEASURE );
+    p_backward_OUT=fftw_plan_dft_2d(dim.x, dim.y, in, out,FFTW_BACKWARD, FFTW_MEASURE);
 }
 
 ///destructeur

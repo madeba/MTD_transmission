@@ -227,7 +227,7 @@ int chargeBin(float *objet, string chemin,  int NbPix)
     if(fichier_ID==0)
     cout<<"Erreur d'ouverture du fichier "<<chemin<<endl;
     cout<<"precision en nb d'octet="<<precision<<endl;
-    fread(objet,precision,NbPix,fichier_ID);
+    int isfileok=fread(objet,precision,NbPix,fichier_ID);
     return 1;
 }
 
@@ -755,7 +755,7 @@ int retroPropag_Born(vector <complex<double>> &TF3D_PotObj, vector<complex<doubl
                                         int NMAX_CARRE=NMAX.x*NMAX.x;
 
                                         complex<double> cteUb2Pot(0,k0/PI);//
-
+                                        #pragma omp parallel for
                                         for (int fdy = -NMAX.y; fdy < NMAX.y; fdy++) { //on balaye le champ Uborn2D en x , origine (0,0) de l'image au milieu
                                                 int fdy_carre=fdy*fdy;
                                                 for (int fdx = -NMAX.x; fdx < NMAX.x; fdx++) { //on balaye l'image 2D en y, centre au milieu
@@ -1209,7 +1209,7 @@ void circshift3D2(double *volume3D, double *volume3D_shift, Var3D dimFinal3D, Va
                 }
         }
 }
-void circshift3DCplx(vector <complex<double>> &volume3D, vector <complex<double>> &volume3D_shift, Var3D dimFinal3D, Var3D decal3D)
+void circshift3DCplx(vector <complex<double>> const &volume3D, vector <complex<double>> &volume3D_shift, Var3D dimFinal3D, Var3D decal3D)
 {
         decal3D.x=decal3D.x%dimFinal3D.x;//éliminer les "modulos"
         decal3D.y=decal3D.y%dimFinal3D.y;
@@ -1218,7 +1218,7 @@ void circshift3DCplx(vector <complex<double>> &volume3D, vector <complex<double>
         unsigned short int xi,yi,zi=0;
         short int x2,y2,z2=0; //signé car une fois décalé, peuvent être négatifs!
         const unsigned int taille_plan =dimFinal3D.x*dimFinal3D.y;
-
+       // #pragma omp parallel for private(zi)
         for(zi=0; zi<dimFinal3D.z; zi++) {
                 if(zi+decal3D.z>dimFinal3D.z-1) { //dépassement à droite
                         z2=zi+decal3D.z-dimFinal3D.z;
@@ -1243,7 +1243,7 @@ void circshift3DCplx(vector <complex<double>> &volume3D, vector <complex<double>
                         }
                         int nb_lignes=yi*dimFinal3D.x;
                         int nb_lignes_decal=y2*dimFinal3D.x;
-                        #pragma omp parallel for private(xi)
+
                         for(xi=0; xi<dimFinal3D.x; xi++) {
                                 if(xi+decal3D.x>dimFinal3D.x-1) { //dépassement à droite
                                         x2=xi+decal3D.x-dimFinal3D.x;
@@ -1258,7 +1258,7 @@ void circshift3DCplx(vector <complex<double>> &volume3D, vector <complex<double>
                            // volume3D_shift[nb_pixelz_decal+nb_lignes_decal+x2].Re=volume3D[nb_pixelz+nb_lignes+xi].Re;
                            // volume3D_shift[nb_pixelz_decal+nb_lignes_decal+x2].Im=volume3D[nb_pixelz+nb_lignes+xi].Im;
                         }
-                        #pragma omp barrier
+
                 }
         }
 }

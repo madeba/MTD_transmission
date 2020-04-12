@@ -25,6 +25,7 @@ manip::manip()
         cout<<"##################"<<endl;
         cout<<"# RECONSTRUCTION #"<<endl;
          cout<<"##################"<<endl;
+
     ///-----Recharger les paramètres--------///
     const int nbParam=5;
     double parametre[nbParam];
