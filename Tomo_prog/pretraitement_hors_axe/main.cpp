@@ -119,27 +119,26 @@ int main()
 
     ///initialiser les variables de champ, phase, amplitude etc.
     //vector<complex<double>> TF_UBorn(TF_UBornTot.begin(),TF_UBornTot.begin()+NbPixUBorn);
-    vector<complex<double>> TF_UBorn(NbPixUBorn);
-    vector<complex<double>> UBorn(NbPixUBorn);
-    vector<double> phase_2Pi_vec(NbPixUBorn);
-    vector<double> phase_deroul_vec(NbPixUBorn);
-    vector<double> UnwrappedPhase(NbPixUBorn);
+    vector<complex<double>> TF_UBorn(NbPixUBorn),  UBorn(NbPixUBorn);
+    vector<double> phase_2Pi_vec(NbPixUBorn), phase_deroul_vec(NbPixUBorn), UnwrappedPhase(NbPixUBorn);
 
     double *poly_aber=new double[NbPixUBorn];
     double *UnwrappedPhase_herraez=new double[NbPixUBorn];
 
     vector<double> PhaseFinal(NbPixUBorn);
     Mat src=Mat(1, ampli_ref.size(), CV_64F, ampli_ref.data());
-    ///Charger masque aberration
+
+     ///variable pour correction aberration
     Mat mask_aber=init_mask_aber(Chemin_mask,dim2DHA);
     mask_aber.convertTo(mask_aber, CV_8U);
-    int NbPtOk=countM(mask_aber);
+    size_t NbPtOk=countM(mask_aber), nbRows=NbPtOk, degre_poly=4, nbCols = sizePoly2D(degre_poly);//Nb coef poly
+    Mat polynomeUs_to_fit(Size(nbCols,nbRows), CV_64F);///(undersampled) Polynome to fit= function to fit (We use a polynome). we have to generate atble containing polynome_to_fit=[1,x,x^2,xy,y^2] for each coordinate (x,y)
+    CalcPolyUs_xy(degre_poly, mask_aber, dim2DHA, polynomeUs_to_fit);
+    Mat polynome_to_fit(Size(nbCols,dim2DHA.x*dim2DHA.y), CV_64F);
+    CalcPoly_xy(degre_poly, dim2DHA, polynome_to_fit);
 
-    vector<complex<double>> UBornFinal(NbPixUBorn);
-    vector<double> UBornAmpFinal(NbPixUBorn);
-    vector<double> UBornAmp(NbPixUBorn);
-    vector<complex<double>> UBornFinalDecal(NbPixUBorn);
-    vector<complex<double>> TF_UBorn_norm(NbPixUBorn);
+    vector<complex<double>> UBornFinal(NbPixUBorn), UBornFinalDecal(NbPixUBorn), TF_UBorn_norm(NbPixUBorn);
+    vector<double> UBornAmpFinal(NbPixUBorn),  UBornAmp(NbPixUBorn);
     vector<double> tabPosSpec(NbAngle*2);  ///stockage des speculaires pour exportation vers reconstruction
 
     cout<<"\n#########################Calcul champs cplx 2D Uborn/Rytov + eventuelle Correction aberrations#############################"<<endl;
@@ -185,17 +184,30 @@ int main()
                         }
                     else UnwrappedPhase=phase_2Pi_vec;
 
+                   // cout<<"2è valeur="<<elapsed_CORR_ABER.count()<<endl;
                     //SAV2(UnwrappedPhase,chemin_result+"/phase_deroul_volkov.raw",t_float,"a+b");
                     ///-------------Correction aberration phase-------------------------------
                     src=Mat(dim2DHA.x,dim2DHA.y,CV_64F, UnwrappedPhase.data());
-                    Mat Phase_corr(aberCorr(src, mask_aber,poly_aber,4,  NbPtOk));
+                    //Mat Phase_corr(aberCorr(src, mask_aber,poly_aber,4,  NbPtOk));
+                   //  auto start_CORR_ABER = std::chrono::system_clock::now();///démarrage chrono
+
+                    Mat Phase_corr(aberCorr2(src, mask_aber,polynomeUs_to_fit,polynome_to_fit));
+                         //    auto end_CORR_ABER = std::chrono::system_clock::now();
+                  //  auto elapsed_corr_aber_1 = end_CORR_ABER - start_CORR_ABER;
+                     // cout<<"elapsed_CORR_aber1="<<elapsed_corr_aber_1.count()/pow(10,9)<<endl;
+
+                 //   elapsed_CORR_ABER = (elapsed_corr_aber_1+elapsed_CORR_ABER);
+                   // cout<<"elapsed_CORR_ABER="<<elapsed_CORR_ABER.count()<<endl;
                    // SAV2(poly_aber,NbPixUBorn,chemin_result+"/poly_aber.raw",t_float,"a+b");
                     ///---------------Correction amplitude----------------------------------------
                     for(int cpt=0; cpt<(NbPixUBorn); cpt++)
                     UBornAmp[cpt]=abs(UBorn[cpt]);
+
                     Mat srcAmp=Mat(dim2DHA.x, dim2DHA.y, CV_64F, UBornAmp.data());
                     //Mat UBornAmp_corr(dim2DHA.x, dim2DHA.y, CV_64F);
-                    Mat UBornAmp_corr(ampliCorr(srcAmp, mask_aber,poly_aber,4,  NbPtOk));
+                   // Mat UBornAmp_corr(ampliCorr(srcAmp, mask_aber,poly_aber,4,  NbPtOk));
+                    Mat UBornAmp_corr(ampliCorr2(srcAmp, polynomeUs_to_fit, polynome_to_fit, mask_aber));
+
 
                     ///Fin Correction amplitude----------------------------------------*/
                     // reconstruire l'onde complexe/Recalculate the complex field
@@ -246,6 +258,7 @@ int main()
                     SAVCplx(UBorn,"Im", chemin_result+"/UBornfinal_Im"+m1.dimImg+".raw", t_double, "a+b");
                 }
         }//fin de boucle for sur tous les angles
+
     delete[] UnwrappedPhase_herraez;
     ///------------SAUVER LES PARAMETRES UTILES À RECONSTRUCTION ou au contrôle
     cout<<"NXMAX sauve="<<m1.NXMAX<<endl;

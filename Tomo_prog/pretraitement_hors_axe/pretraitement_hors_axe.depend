@@ -831,7 +831,7 @@
 	<cstring>
 	<string>
 
-1586696835 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/Correction_aberration.cpp
+1586282765 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/Correction_aberration.cpp
 	<iostream>
 	<fstream>
 	<sstream>
@@ -839,6 +839,7 @@
 	<stdlib.h>
 	<math.h>
 	"fonctions.h"
+	<chrono>
 	"Correction_aberration.h"
 
 1586696835 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/fonctions.h
@@ -864,7 +865,7 @@
 
 1586696835 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/projet.h
 
-1586696835 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/Correction_aberration.h
+1586267532 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/Correction_aberration.h
 	<iostream>
 	<fstream>
 	<sstream>
@@ -925,7 +926,7 @@
 	"FFT_fonctions.h"
 	"fonctions.h"
 
-1586713313 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/main.cpp
+1586807297 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/main.cpp
 	<iostream>
 	<vector>
 	"struct.h"
