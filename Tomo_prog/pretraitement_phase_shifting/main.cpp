@@ -117,14 +117,14 @@ int main()
 //SAVCplx(TF_UBornTot,"Re",m1.chemin_result+"/TF_UBornTot.raw",t_float,"a+b");
     auto end = std::chrono::system_clock::now();
     auto elapsed = end - start;
-    std::cout <<"durée FFT+Découpe hors axe= "<< elapsed.count()/(pow(10,9)) << '\n';
+    std::cout <<"durée FFT+Découpe à 2NXMAX= "<< elapsed.count()/(pow(10,9)) << '\n';
     ///--------------libérer allocation FFTW holo-------------------------------------
 
     //      fftw_destroy_plan(p_forward_holo);
     //     fftw_free(in_holo);
     //     fftw_free(out_holo);
     //     fftw_forget_wisdom();
-    ///--------------Init FFTW Hors axe-------------------------------------------------
+    ///--------------Init FFTW PS-------------------------------------------------
     fftw_plan p_backward_PS,p_forward_PS;
     //fftw_complex *in_out=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * dimROI.x*dimROI.y);//
     fftw_complex *in_PS=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * NbPixUBorn);//in=out pour transformation "inplace".

@@ -1,5 +1,6 @@
 #include <fstream>//ifstream
 #include <vector>
+#include <chrono>
 #include <complex>
 #include <fftw3.h>
 #include "struct.h"
@@ -116,7 +117,7 @@ void decal2DCplxGen(vector<complex<double>> entree, vector<complex<double>> &res
 
 
 
-void calc_Uborn(vector<complex<double>> TF_UBorn,vector<complex<double>> &UBorn,Var2D dim2DHA,Var2D PosSpec,fftw_complex *in,fftw_complex *out,fftw_plan p)
+void calc_Uborn(vector<complex<double>> const &TF_UBorn,vector<complex<double>> &UBorn,Var2D dim2DHA,Var2D PosSpec,fftw_complex *in,fftw_complex *out,fftw_plan p)
 {
 
     Var2D recalUBorn={-PosSpec.x,-PosSpec.y},DecalU_Born={dim2DHA.x/2,dim2DHA.y/2};
@@ -137,7 +138,7 @@ void calc_Uborn(vector<complex<double>> TF_UBorn,vector<complex<double>> &UBorn,
 
 
     circshift2DCplx(UBorn_I,UBorn,dim2DHA,DecalU_Born);
-   // SAVCplx(UBorn, "Re", "/home/mat/tomo_test/Uborn_re_extract_holo.raw", t_float, "a+b");
+   // SAVCplx(UBorn, "Re", "/home/mat/tmp/Uborn_re_extract_holo.raw", t_float, "a+b");
 
 }
 int coordSpec(vector<complex<double>> TF_UBorn, vector<double> &TF_champMod,Var2D NMAX)
@@ -163,23 +164,21 @@ int coordSpec(vector<complex<double>> TF_UBorn, vector<double> &TF_champMod,Var2
 
 void coupeCplx(vector<complex<double>> src, vector<complex<double>> &dest, Var2D dim_src, Var2D dim_dest, Var2D coin, size_t NumAngle)
 {
-    size_t nbPixSrc=src.size();
-    //Var2D dim_src={sqrt(nbPixSrc),sqrt(nbPixSrc)};
-    size_t X_dest,Y_dest, cpt_dest1D,
-            X_src, Y_src, cpt_src1D, cpt_Z_dest;
-    //balyage destination en 2NXMAX*2NXMAX
+size_t nbPixSrc=src.size();
+//Var2D dim_src={sqrt(nbPixSrc),sqrt(nbPixSrc)};
+size_t X_dest,Y_dest, cpt_dest1D,
+X_src, Y_src, cpt_src1D, cpt_Z_dest;
 
-    for(X_dest=0; X_dest<dim_dest.x; X_dest++){
+cpt_Z_dest=(dim_dest.x*dim_dest.y)*NumAngle;
         for(Y_dest=0; Y_dest<dim_dest.y; Y_dest++){
-
-            cpt_Z_dest=(dim_dest.x*dim_dest.y)*NumAngle;
-            cpt_dest1D=cpt_Z_dest+X_dest+Y_dest*dim_dest.x;;///coord 1D destination
+          size_t num_lgn= Y_dest*dim_dest.x;
+          for(X_dest=0; X_dest<dim_dest.x; X_dest++){
+            cpt_dest1D=cpt_Z_dest+X_dest+num_lgn;///coord 1D destination
 
             //coordonnées de découpe dans la source
             X_src=coin.x+X_dest;///coord X src
             Y_src=coin.y+Y_dest;///coord Y src
             cpt_src1D=X_src+Y_src*dim_src.x;///coord 1D source
-
             //copie src->dest
             dest[cpt_dest1D]=src[cpt_src1D];
             //dest[cpt_dest1D]->imag=src[cpt_src1D].imag;
@@ -201,7 +200,7 @@ void holo2TF_UBorn(vector<double> holo1, vector<complex<double>> &TF_UBornTot,Va
         vector<double> holo_shift(NbPixROI2d);
         vector<complex<double>> TF_Holo(NbPixROI2d);
         vector<complex<double>> TFHoloCentre(NbPixROI2d);
-        nbCplx *TF_UBorn_A=new nbCplx[NbPixROI2d];
+       // nbCplx *TF_UBorn_A=new nbCplx[NbPixROI2d];
 
         for(size_t pixel=0; pixel<NbPixROI2d; pixel++) {
                 holo1[pixel]=(double)holo1[pixel]*tukey_holo[pixel];
@@ -213,16 +212,55 @@ void holo2TF_UBorn(vector<double> holo1, vector<complex<double>> &TF_UBornTot,Va
 
         TF2Dcplx_vec(in,out,holo_shift, TF_Holo,p_forward_holo);
         TFHoloCentre=fftshift2D(TF_Holo);//Décalage  sur fft_reel_tmp, pour recentrer le spectre avant découpe (pas obligatoire mais plus clair)
-      //  SAVCplx(TFHoloCentre,"Re","/home/mat/tomo_test/TFHoloCentre.raw",t_float,"a+b");
+        SAVCplx(TF_Holo,"Re","/home/mat/tmp/TFHolo_Re_classique_1024x1024x59.raw",t_float,"a+b");
 
         coupeCplx(TFHoloCentre, TF_UBornTot, dimROI, dim2DHA, coinHA, NumAngle);///Découpe à [-Nxmax,+NXmax]
 
-    //SAVCplx(TFHoloCentre,"Re","/home/tomo/TFHoloCentre.raw",t_float,"a+b");
+  //  SAVCplx(TFHoloCentre,"Re","/home/mat/tmp/TFHoloCentre_Re_1024x1024x59.raw",t_float,"a+b");
 
         ///--------Découpe hors axée------------------
        // coupeCplx(TF_Holo_centre, TF_UBornTot, dimROI, dim2DHA, coinHA);///Découpe à [-Nxmax,+NXmax]
 }
-void holo2TF_UBorn_INPLACE(vector<double> holo1, vector<complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle, vector<double> tukey_holo, fftw_complex *in_out,fftw_plan p_forward_holo)
+void holo2TF_UBorn2(vector<double>  &holo1,vector<complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA, size_t NbAngleOk, vector<double> const &tukeyHolo,FFTW_init  &param_fftw2DHolo)
+{
+    size_t NbPix2dROI=holo1.size(), dimx=sqrt(NbPix2dROI);
+
+        size_t NbPixROI2d=holo1.size();
+        vector<double> holo_shift(NbPixROI2d);
+        vector<complex<double>> TF_Holo(NbPixROI2d), TFHoloCentre(NbPixROI2d);
+    //    nbCplx *TF_UBorn_A=new nbCplx[NbPixROI2d];
+    // auto start_tukey = std::chrono::system_clock::now();
+
+        for(size_t pixel=0; pixel<NbPixROI2d; pixel++) {
+                holo1[pixel]=(double)holo1[pixel]*tukeyHolo[pixel];
+        }
+                /*  auto end_tukey = std::chrono::system_clock::now();
+           auto elapsed_tukey = end_tukey - start_tukey;
+    std::cout <<"Temps tukey= "<< elapsed_tukey.count()/(pow(10,9)) << '\n';*/
+        ///--------Circshift et TF2D HOLOGRAMME------
+             auto start_fftshift = std::chrono::system_clock::now();
+       // holo_shift=fftshift2D(holo1);
+        fftshift2D(holo1, holo_shift);
+
+     /*     auto end_fftshift = std::chrono::system_clock::now();
+           auto elapsed_fftshift = end_fftshift - start_fftshift;
+    std::cout <<"Temps fftshift= "<< elapsed_fftshift.count()/(pow(10,9)) << '\n';*/
+
+   //    SAV2(holo_shift, "/home/mat/tmp/holo_shift_extract_holo.bin",t_float,"a+b");
+
+        TF2D_r2c_symetric(holo_shift,TF_Holo,param_fftw2DHolo);
+
+//        TF2Dcplx_vec(in,out,holo_shift, TF_Holo,p_forward_holo);
+  // SAVCplx(TF_Holo,"Re","/home/mat/tmp/TFHolo_Re_r2c_1024x1024x59.raw",t_float,"a+b");
+        TFHoloCentre=fftshift2D(TF_Holo);//Décalage  sur fft_reel_tmp, pour recentrer le spectre avant découpe (pas obligatoire mais plus clair)
+      //  SAVCplx(TFHoloCentre,"Re","/home/mat/tmp/TFHoloCentre_Re_r2c_1024x1024x59.raw",t_float,"a+b");
+ //auto start_coupe= std::chrono::system_clock::now();
+        coupeCplx(TFHoloCentre, TF_UBornTot, dimROI, dim2DHA, coinHA, NbAngleOk);///Découpe à [-Nxmax,+NXmax]
+/*auto end_coupe= std::chrono::system_clock::now();
+  auto elapsed_coupe = end_coupe - start_coupe;
+    std::cout <<"Temps pour coupe FFT r2c= "<< elapsed_coupe.count()/(pow(10,9)) << '\n';*/
+}
+/*void holo2TF_UBorn_INPLACE(vector<double> holo1, vector<complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle, vector<double> tukey_holo, fftw_complex *in_out,fftw_plan p_forward_holo)
 {
 
             ///--------------Init FFTW-------------------------------------------------
@@ -253,9 +291,9 @@ void holo2TF_UBorn_INPLACE(vector<double> holo1, vector<complex<double>> &TF_UBo
 
         ///--------Découpe hors axée------------------
        // coupeCplx(TF_Holo_centre, TF_UBornTot, dimROI, dim2DHA, coinHA);///Découpe à [-Nxmax,+NXmax]
-}
+}*/
 ///--------------------------------Sauver-Charger---------------------------------------------
-void holo2TF_UBorn_old(vector<double> holo1, vector<complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle, vector<double> tukey_holo)
+/*void holo2TF_UBorn_old(vector<double> holo1, vector<complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle, vector<double> tukey_holo)
 {
 
             ///--------------Init FFTW-------------------------------------------------
@@ -296,12 +334,10 @@ void holo2TF_UBorn_old(vector<double> holo1, vector<complex<double>> &TF_UBornTo
 
         ///--------Découpe hors axée------------------
        // coupeCplx(TF_Holo_centre, TF_UBornTot, dimROI, dim2DHA, coinHA);///Découpe à [-Nxmax,+NXmax]
-}
+}*/
 
 void charger_image2D_OCV(std::vector<double> &imgTab, string imgFile, Var2D coin, Var2D dimROI)
 {
-
-
         //Mat img(taille.x, taille.y,CV_8UC1);
         Mat img=imread(imgFile, 0);//0=grayscale
         if(! img.data )  // Check for invalid input
@@ -309,16 +345,16 @@ void charger_image2D_OCV(std::vector<double> &imgTab, string imgFile, Var2D coin
               cout <<  "##################### /!\\ ##############################"<<endl;
               cout <<  "Impossible d'ouvrir" <<imgFile<< endl ;
               cout <<  "#########################################################"<<endl;
-
        }
         Var2D taille={img.cols,img.rows};
         Rect myROI(coin.x, coin.y, dimROI.x, dimROI.y);
         Mat imgCrop = img(myROI);
+       /*  for(size_t y=0;y<dimROI.y;y++){
         for(size_t x=0;x<dimROI.x;x++){
-                  for(size_t y=0;y<dimROI.y;y++){
                     imgTab[taille.x*y+x]=(double)imgCrop.at<uchar>(y,x);//openCv->tableau
                 }
-        }
+        }*/
+        imgTab.assign(imgCrop.begin<uchar>(), imgCrop.end<uchar>());
 
 }
 

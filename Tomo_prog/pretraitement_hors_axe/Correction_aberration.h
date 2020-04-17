@@ -56,4 +56,3 @@ public:
     ImgSeuil();
     void threshCallback(int, void* ); // non-static
 };*/
-

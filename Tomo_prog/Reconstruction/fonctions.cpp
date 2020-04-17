@@ -1876,21 +1876,30 @@ void SAV3D_Tiff(vector<complex <double>> var_sav, string partie, string chemin, 
 
     for (int num_page = 0; num_page < dim; num_page++)//z=page
     {
+
+        int nbPix_plan=num_page*dim*dim;
+        ///reel
+       if(partie=="Re" || partie=="re"){
         for (y = 0; y < dim; y++)
-            for(x = 0; x < dim; x++){
-                    if(partie=="Re" || partie=="re"){
-                      buffer2D[y * dim + x] = (float)var_sav[y * dim + x+num_page*dim*dim].real();
-                    }
-                    else{
-                        if(partie=="Im" || partie=="im"){
-                        buffer2D[y * dim + x] = (float)var_sav[y * dim + x+num_page*dim*dim].imag();
-                        }
-                        else
-                            cout<<"Partie non identifiée : Re, re, Im ou im"<<endl;
-                    }
-
+          for(x = 0; x < dim; x++){
+            buffer2D[y * dim + x] = (float)var_sav[y * dim + x+nbPix_plan].real();
+          }
+        }
+            ///imag
+       else{
+            if(partie=="Im" || partie=="im"){
+            for (y = 0; y < dim; y++)
+              for(x = 0; x < dim; x++){
+                buffer2D[y * dim + x] = (float)var_sav[y * dim + x+nbPix_plan].imag();
+              }
             }
+            else
+                cout<<"Partie non identifiée : Re || re, Im, || im"<<endl;
+       }
 
+
+
+            //------------------------------
 
         TIFFSetField(out, TIFFTAG_IMAGEWIDTH, image_width / spp);
         TIFFSetField(out, TIFFTAG_IMAGELENGTH, image_height);

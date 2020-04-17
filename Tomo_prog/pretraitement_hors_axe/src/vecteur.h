@@ -19,11 +19,11 @@ class vecteur {
         void sety(double vy);
         void setz(double vy);
         double norm();
-        double calc_angle(vecteur const vec2);
+        double calc_angle(vecteur const &vec2);
 
         double operator*(vecteur const &vec2);
         vecteur operator*(double scalaire);
-        friend vecteur operator*(double a, vecteur v);//fonctoion amie pour la commutativité de *
+        friend vecteur operator*(double a, vecteur &v);//fonctoion amie pour la commutativité de *
        // friend vecteur operator^(vecteur v1, vecteur v2);//fonctoion amie pour la commutativité de *
         vecteur operator+(vecteur const &vec2);
         vecteur operator-(vecteur const &vec2);

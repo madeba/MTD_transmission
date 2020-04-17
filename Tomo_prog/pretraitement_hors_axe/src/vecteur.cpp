@@ -45,9 +45,9 @@ double vecteur :: norm(){
     return sqrt(this->x*this->x+this->y*this->y+this->z*this->z);
 }
 
-double vecteur::calc_angle(vecteur vec2){
+double vecteur::calc_angle(vecteur const &vec2){
     //double prod_scal=this->x*vec2.x+this->y*vec2.y+this->z*vec2.z;
-   double prod_scal=(*this)*vec2;//this->x*vec2.x+this->y*vec2.y+this->z*vec2.z;
+//   double prod_scal=(*this)*vec2;//this->x*vec2.x+this->y*vec2.y+this->z*vec2.z;
 double angle = atan2(  (*this^vec2).norm(), (*this)*vec2  );
 return angle;
    // angle = atan(norm(cross(a,b)), dot(a,b))
@@ -70,7 +70,7 @@ vecteur vecteur::operator*(double scalaire)
     return result;
 }
 
-vecteur operator*(double scalaire, vecteur v){ //fonction amie pour la commutativité de *
+vecteur operator*(double scalaire, vecteur &v){ //fonction amie pour la commutativité de *
     return v*scalaire;
 }
 

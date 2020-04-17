@@ -28,12 +28,13 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="-fexceptions  -lpthread -std=c++11 `pkg-config --cppflags opencv`" />
+			<Add option="-fexceptions   -fopenmp  -lpthread -std=c++11 `pkg-config --cppflags opencv`" />
 			<Add directory="/usr/include/opencv" />
+			<Add directory="include" />
 		</Compiler>
 		<Linker>
-			<Add option="`pkg-config --libs opencv` -lpthread -lm -lopencv_core -lopencv_imgproc" />
-			<Add option="-lopencv_highgui -ltiff -lgomp -lfftw3 -lm -lfftw3_threads" />
+			<Add option="`pkg-config --libs opencv` -lgomp -lpthread -lm -lopencv_core -lopencv_imgproc" />
+			<Add option="-lopencv_highgui -ltiff  -lfftw3 -lm -lfftw3_threads" />
 			<Add library="/usr/lib/x86_64-linux-gnu/libfftw3.so" />
 			<Add library="/usr/lib/x86_64-linux-gnu/libfftw3_threads.so" />
 			<Add directory="/usr/lib/x86_64-linux-gnu/" />
@@ -48,13 +49,17 @@
 		<Unit filename="deroulement_volkov.h" />
 		<Unit filename="fonctions.cpp" />
 		<Unit filename="fonctions.h" />
+		<Unit filename="include/FFTW_init.h" />
+		<Unit filename="include/Point2D.h" />
+		<Unit filename="include/struct.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="manip.cpp" />
 		<Unit filename="manip.h" />
 		<Unit filename="projet.h" />
+		<Unit filename="src/FFTW_init.cpp" />
+		<Unit filename="src/Point2D.cpp" />
 		<Unit filename="src/vecteur.cpp" />
 		<Unit filename="src/vecteur.h" />
-		<Unit filename="struct.h" />
 		<Extensions>
 			<envvars />
 			<code_completion />

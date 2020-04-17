@@ -323,10 +323,15 @@ int main(int argc, char *argv[])
             indice_cplx[cpt]=ctePot2Ind*PotObj3D[cpt];
         }
         printf("ecriture de PotObj3D.Re, PotObj3D.Im \n");
+           auto start_tiff = std::chrono::system_clock::now();
         SAV3D_Tiff(indice_cplx,"Re", m1.chemin_result+"/indice.tif",tailleTheoPixelTomo);
         SAV3D_Tiff(indice_cplx,"Im", m1.chemin_result+"/absorption.tif",tailleTheoPixelTomo);
 
 
+
+                 auto end_tiff = std::chrono::system_clock::now();
+    auto elapsed_tiff = end_tiff - start_tiff;
+    std::cout <<"Temps ecriture tiff= "<< elapsed_tiff.count()/(pow(10,9)) << '\n';
 
         temps_arrivee = clock ();
         temps_cpu = (temps_arrivee-temps_depart )/CLOCKS_PER_SEC;

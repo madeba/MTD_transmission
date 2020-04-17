@@ -75,7 +75,7 @@ manip::manip()
         if( remove(result.c_str())== 0 )
         perror( "Fichier Ubornfinal_Im impossible à effacer" );
        // tampon="/UBornfinal_Re.raw";
-        tampon="/UBornfinal_Re"+to_string(dim2DHA.x)+dimImg+".raw";
+        tampon="/UBornfinal_Re"+dimImg+".raw";
         result=chemin_result+tampon;
         if( remove(result.c_str()) == 0 )
         perror( "Fichier UBornfinal_Re impossible à effacer" );
