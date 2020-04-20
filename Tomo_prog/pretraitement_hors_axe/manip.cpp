@@ -4,7 +4,7 @@
 #include "projet.h"
 
 using namespace std;
-
+///Initialize paramaters from the set-up + path for config files
 manip::manip()
 {
 
@@ -24,20 +24,20 @@ manip::manip()
 
     cout<<"\n##################### INFO MANIP ##################\n"<<endl;
     n0=extract_val("N0",fic_cfg_manip);	//indice de l'huile
-    NA=extract_val("NA",fic_cfg_manip);	//ouverture numerique de l'objectif? (celle du condenseur intervient sur la forme, la taille, du papillon)
-    lambda0=extract_val("LAMBDA",fic_cfg_manip);
-    f_tube=extract_val("F_TUBE",fic_cfg_manip), ///focale lentille tube
-    f_obj=extract_val("F_OBJ",fic_cfg_manip),///focale objectif
-    G=f_tube/f_obj,	//grossissement telan+objectif
-    TpCam=extract_val("TPCAM",fic_cfg_manip),//cam. photon focus
+    NA=extract_val("NA",fic_cfg_manip);	/// NA=Numerical aperture of the objective///ouverture numerique de l'objectif? (celle du condenseur intervient sur la forme, la taille, du papillon)
+    lambda0=extract_val("LAMBDA",fic_cfg_manip);///lambda0 = laser wavelength
+    f_tube=extract_val("F_TUBE",fic_cfg_manip), ///f_tube = tube lens focal length
+    f_obj=extract_val("F_OBJ",fic_cfg_manip),///f_obj=focale objectif
+    G=f_tube/f_obj,	///magnitude of (telan+objectif)
+    TpCam=extract_val("TPCAM",fic_cfg_manip),///Tpcam = pixel size of the camera
     Rf=extract_val("RF",fic_cfg_manip),//1.2;=1/facteur grossissement
-    Gt=G/Rf;//grandissement total
+    Gt=G/Rf;///Gt : total magnitude of the optical system. grandissement total
     cout<<"Gt="<<Gt<<endl;
     size_t dim_final=extract_val("DIM_FINAL",fic_cfg_recon);
     tailleTheoPixelHolo=TpCam/Gt*pow(10,9);//Pour info, taille des pixels sur un hologramme=Tpcam/GT
     cout<<"taille theorique pixel holo="<<tailleTheoPixelHolo<<endl;
     theta=asin(NA/n0);
-    circle_cx=extract_val("CIRCLE_CX",fic_cfg_manip);
+    circle_cx=extract_val("CIRCLE_CX",fic_cfg_manip);///coordinates of the off-axis career
     circle_cy=extract_val("CIRCLE_CY",fic_cfg_manip);
     NXMAX=extract_val("NXMAX",fic_cfg_manip);
     cout<<"m1.NXMAX="<<NXMAX<<endl;
@@ -52,6 +52,7 @@ manip::manip()
     NbAngle=Num_Angle_final-premier_plan;
 
     cout<<"\n##################### Options de RECONSTRUCTION ##################\n"<<endl;
+    ///boolean used to choose the type of reconstruction/phase unwrapping
     b_CorrAber=extract_val("C_ABER",fic_cfg_recon);///corriger les aberrations?
     b_Deroul=extract_val("DEROUL",fic_cfg_recon);///Dérouler la phase?
     b_Born=extract_val("BORN",fic_cfg_recon);///Born vrai ? Sinon Rytov

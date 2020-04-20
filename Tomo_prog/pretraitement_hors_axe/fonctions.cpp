@@ -12,13 +12,14 @@
 
 using namespace std;
 using namespace cv;
-
-void calcPhase_mpi_pi_atan2(vector<complex<double>> obj, vector<double> &phaseMod2pi)///calcul phase -PI-PI
+///free functions used outside classes
+///calculate the wrapped phase from -pi to pi
+void calcPhase_mpi_pi_atan2(vector<complex<double>> const &cplxField, vector<double> &phaseMod2pi)///calcul phase -PI-PI
 {
-for(int cpt=0;cpt<obj.size();cpt++)
-phaseMod2pi[cpt]=atan2(obj[cpt].imag(),obj[cpt].real());
+for(int cpt=0;cpt<cplxField.size();cpt++)
+phaseMod2pi[cpt]=atan2(cplxField[cpt].imag(),cplxField[cpt].real());
 }
-
+///general circular shift
 void circshift2DCplx(vector<complex<double>> entree, vector<complex<double>> &result, Var2D dim,Var2D decal)///___/!\ ne fonctionne qu'avec des demi espace??
 {
         //si décalage supérieure à dim, on fait plus d'un tour, donc on prend le modulo
@@ -116,7 +117,7 @@ void decal2DCplxGen(vector<complex<double>> entree, vector<complex<double>> &res
 }
 
 
-
+///@parameters PosSpec : position of the specular beam
 void calc_Uborn(vector<complex<double>> const &TF_UBorn,vector<complex<double>> &UBorn,Var2D dim2DHA,Var2D PosSpec,fftw_complex *in,fftw_complex *out,fftw_plan p)
 {
 
@@ -161,8 +162,8 @@ int coordSpec(vector<complex<double>> TF_UBorn, vector<double> &TF_champMod,Var2
     //recalUBorn={-kxmi,-kymi};
     return cpt_max;
  }
-
-void coupeCplx(vector<complex<double>> src, vector<complex<double>> &dest, Var2D dim_src, Var2D dim_dest, Var2D coin, size_t NumAngle)
+///crop image
+void coupeCplx(vector<complex<double>> const &src, vector<complex<double>> &dest, Var2D dim_src, Var2D dim_dest, Var2D coin, size_t NumAngle)
 {
 size_t nbPixSrc=src.size();
 //Var2D dim_src={sqrt(nbPixSrc),sqrt(nbPixSrc)};
@@ -434,7 +435,7 @@ float extract_val(string token,  string chemin_fic)
     return valeur;
 }
 
-void SAVCplx2(std::vector<complex<double> > var_sav, string partie, std::string chemin, enum PRECISION2 precision, char options[])
+/*void SAVCplx2(std::vector<complex<double>> const &var_sav, string partie, std::string chemin, enum PRECISION2 precision, char options[])
 {        //double* var_sav = &v[0];
 
         size_t NbPix2D=var_sav.size();
@@ -482,8 +483,8 @@ void SAVCplx2(std::vector<complex<double> > var_sav, string partie, std::string 
         fclose(fichier_ID);
 }
 
-
-void SAVCplx(std::vector<complex<double> > var_sav, string partie, std::string chemin, enum PRECISION2 precision, char options[])
+*/
+void SAVCplx(std::vector<complex<double>> const &var_sav, string partie, std::string chemin, enum PRECISION2 precision, char options[])
 {        //double* var_sav = &v[0];
 
         size_t NbPix2D=var_sav.size();
