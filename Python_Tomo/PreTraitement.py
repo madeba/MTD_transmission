@@ -105,7 +105,4 @@ for hol in range(0,nb_holo):
     else:
         cpt = cpt + 1
 print("--- %s seconds ---" % np.round(time.time() - start_time))
-# plt.imshow(Centres, cmap=plt.cm.gray)
-# plt.colorbar()
-# plt.show()
-# holo.SAVbin(np.float32(Centres),'Centres',str(dimHolo))
+
