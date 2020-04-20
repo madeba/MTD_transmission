@@ -241,7 +241,7 @@ def compuCoefPoly(ImageBrut,Masque,coef_polynomial,polynomeUS_to_fit,methode):
         D = np.zeros((nbPtUs,nbCoef),dtype=np.float64)
         invD = np.zeros((nbCoef,nbPtUs),dtype=np.float64)
         if methode:
-            cv2.solve(polynomeUS_to_fit, undersampled_background, tabCoef, cv2.DECOMP_NORMAL)
+            cv2.solve(np.transpose(polynomeUS_to_fit), np.transpose(undersampled_background), tabCoef, cv2.DECOMP_SVD)
         else:
             cv2.transpose(polynomeUS_to_fit,Bt)
             D = Bt * polynomeUS_to_fit
