@@ -53,32 +53,8 @@ usage(int argc, char **argv)
 /* --------------------------------------------------------------------------- */
 
 int main(int argc, char *argv[])
-{        // ----------------------------------------------------------------------
-        // parsing arguments
-        // ----------------------------------------------------------------------
-  /*     usage(argc, argv);
-
-        char* input_dir = NULL;
-        size_t circle_cx = 0, circle_cy = 0;
-
-        while (argc > 0) {
-                if (!strcmp(argv[0], "-i") && (argc > 1)) {
-                        input_dir = argv[1];
-                        argc--;
-                        argv++;
-                }
-                if (!strcmp(argv[0], "-c") && (argc > 2)) {
-                        circle_cx = atoi(argv[1]);
-                        circle_cy = atoi(argv[2]);
-                        argc-=2;
-                        argv+=2;
-                }
-
-                argc--;
-                argv++;
-        }*/
+{
         manip m1;
-
         int NXMAX=m1.NXMAX, NbAngle=m1.NbAngle;
 
         Var2D NMAX={NXMAX,NXMAX},dimChpCplx={2*NXMAX,2*NXMAX};

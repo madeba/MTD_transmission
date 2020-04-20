@@ -1880,17 +1880,21 @@ void SAV3D_Tiff(vector<complex <double>> var_sav, string partie, string chemin, 
         int nbPix_plan=num_page*dim*dim;
         ///reel
        if(partie=="Re" || partie=="re"){
-        for (y = 0; y < dim; y++)
-          for(x = 0; x < dim; x++){
-            buffer2D[y * dim + x] = (float)var_sav[y * dim + x+nbPix_plan].real();
-          }
+         for (y = 0; y < dim; y++){
+           size_t num_lgn=y*dim;
+           for(x = 0; x < dim; x++){
+             buffer2D[num_lgn + x] = (float)var_sav[num_lgn + x+nbPix_plan].real();
+           }
+         }
         }
             ///imag
        else{
             if(partie=="Im" || partie=="im"){
-            for (y = 0; y < dim; y++)
-              for(x = 0; x < dim; x++){
-                buffer2D[y * dim + x] = (float)var_sav[y * dim + x+nbPix_plan].imag();
+              for (y = 0; y < dim; y++){
+                size_t num_lgn=y*dim;
+                for(x = 0; x < dim; x++){
+                  buffer2D[num_lgn + x] = (float)var_sav[num_lgn + x+nbPix_plan].imag();
+                }
               }
             }
             else

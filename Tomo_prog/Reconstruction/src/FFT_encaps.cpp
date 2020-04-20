@@ -4,7 +4,7 @@ using namespace std;
 FFT_encaps::FFT_encaps(Point3D dim)
 {
     unsigned int nbPix=dim.x*dim.y*dim.z;
-    m_Nthread=4;
+    m_Nthread=3;
 
     fftwThreadInit=fftw_init_threads();
     fftw_plan_with_nthreads(m_Nthread);

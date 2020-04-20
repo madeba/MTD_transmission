@@ -145,7 +145,7 @@ void compuBackgr2(Mat const &coefficients, Mat const & polynome_to_fit, Mat &Pol
             Coord1D++;
         }
 }
-///#--------------------Top functions containing the algorithm for phase and amplitude------------------------------------------------------------------------------
+///--------------------//Top functions containing the algorithm for phase and amplitude------------------------------------------------------------------------------
 Mat  aberCorr2(Mat const &image, Mat const &mask,  Mat const &polynomeUs_to_fit, Mat const &polynome_to_fit)
 {
     Mat coefsolve;
