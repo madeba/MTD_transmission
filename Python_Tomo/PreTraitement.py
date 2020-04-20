@@ -93,12 +93,12 @@ for hol in range(0,nb_holo):
         plt.show()
         
         # Enregistrement des résultats
-        CheminAmp = DossierAmplitude + 'AmpUBornCorr_' + str('%03d' % cpt ) + '.tiff'
-        CheminPh = DossierPhase + 'PhaseUBornCorr_' + str('%03d' % cpt ) + '.tiff'
+        CheminAmp = DossierAmplitude + 'AmpUBorn_' + str('%03d' % cpt ) + '.tiff'
+        CheminPh = DossierPhase + 'PhaseUBorn_' + str('%03d' % cpt ) + '.tiff'
         
         # Enregistrement de l'amplitude et la phase dépliée (avant correction pour le test)
-        plt.imsave(CheminAmp,Amp_UBornCorr,cmap=plt.cm.gray)
-        plt.imsave(CheminPh,Phase_UBornCorr,cmap=plt.cm.gray)    
+        plt.imsave(CheminAmp,Amp_UBorn,cmap=plt.cm.gray)
+        plt.imsave(CheminPh,Phase_UBorn,cmap=plt.cm.gray)    
         
         cpt = cpt + 1
         cpt_exist = cpt_exist + 1
