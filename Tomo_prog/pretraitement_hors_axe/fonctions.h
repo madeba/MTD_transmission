@@ -41,6 +41,8 @@ int coordSpec(std::vector<std::complex<double>> TF_UBorn, std::vector<double> &T
 //void holo2TF_UBorn_old(std::vector<double> holo1, std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle, std::vector<double> tukey_holo);
 void holo2TF_UBorn(std::vector<double> holo1, std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle,
                    std::vector<double> tukey_holo, fftw_complex *in, fftw_complex *out,fftw_plan p_forward_holo);
+
+void holo2TF_UBorn(std::vector<double> &holo1, std::vector<std::complex<double>> &TF_UBornTot, Var2D dimROI, Var2D dim2DHA,Var2D coinHA, size_t NbAngleOk, std::vector<double> const &masqueTukeyHolo, FFTW_init &tf2D_Holo_c2r);//surcharge FFTW_init pour c2r
 //void holo2TF_UBorn_INPLACE(std::vector<double> holo1, std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle,
                   // std::vector<double> tukey_holo, fftw_complex *in_out,fftw_plan p_forward_holo);
 

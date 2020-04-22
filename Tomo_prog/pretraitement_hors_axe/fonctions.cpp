@@ -222,6 +222,35 @@ void holo2TF_UBorn(vector<double> holo1, vector<complex<double>> &TF_UBornTot,Va
         ///--------Découpe hors axée------------------
        // coupeCplx(TF_Holo_centre, TF_UBornTot, dimROI, dim2DHA, coinHA);///Découpe à [-Nxmax,+NXmax]
 }
+//surchar0ge fftw_init
+void holo2TF_UBorn(vector<double> &holo1, vector<complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA,size_t NbAngleOk, vector<double> const &tukeyHolo, FFTW_init &tf2D_Holo_c2r){
+                ///--------------Init FFTW-------------------------------------------------
+    size_t NbPix2dROI=holo1.size();
+    size_t dimx=sqrt(NbPix2dROI);
+
+        size_t NbPixROI2d=holo1.size();
+        vector<double> holo_shift(NbPixROI2d);
+        vector<complex<double>> TF_Holo(NbPixROI2d);
+        vector<complex<double>> TFHoloCentre(NbPixROI2d);
+       // nbCplx *TF_UBorn_A=new nbCplx[NbPixROI2d];
+
+        for(size_t pixel=0; pixel<NbPixROI2d; pixel++) {
+                holo1[pixel]=(double)holo1[pixel]*tukeyHolo[pixel];
+        }
+
+        ///--------Circshift et TF2D HOLOGRAMME------
+        holo_shift=fftshift2D(holo1);
+        //SAV2(holo1, "/home/mat/tomo_test/holo_shift_extract_holo.bin",t_float,"a+b");
+
+       // TF2Dcplx_vec(in,out,holo_shift, TF_Holo,p_forward_holo);
+        TF2Dcplx_vec(holo_shift, TF_Holo, tf2D_Holo_c2r);
+        TFHoloCentre=fftshift2D(TF_Holo);//Décalage  sur fft_reel_tmp, pour recentrer le spectre avant découpe (pas obligatoire mais plus clair)
+        SAVCplx(TF_Holo,"Re","/home/mat/tmp/TFHolo_Re_classique_1024x1024x59.raw",t_float,"a+b");
+
+        coupeCplx(TFHoloCentre, TF_UBornTot, dimROI, dim2DHA, coinHA, NbAngleOk);///Découpe à [-Nxmax,+NXmax]
+}
+
+
 void holo2TF_UBorn2(vector<double>  &holo1,vector<complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA, size_t NbAngleOk, vector<double> const &tukeyHolo,FFTW_init  &param_fftw2DHolo)
 {
     size_t NbPix2dROI=holo1.size(), dimx=sqrt(NbPix2dROI);

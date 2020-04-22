@@ -32,6 +32,11 @@ using namespace std;
 
 /// Function header
 #include "Correction_aberration.h"
+void initCorrAber(std::string Chemin_mask, Mat const & mask_aber, size_t degre_poly, Var2D dim2DHA, Mat &polynome_to_fit, Mat &polynomeUs_to_fit)
+{
+CalcPolyUs_xy(degre_poly, mask_aber, dim2DHA, polynomeUs_to_fit);
+CalcPoly_xy(degre_poly, dim2DHA, polynome_to_fit);
+}
 ///load object mask
 Mat init_mask_aber(string Chemin_mask, Var2D dim2DHA)
 {
@@ -48,6 +53,7 @@ Mat init_mask_aber(string Chemin_mask, Var2D dim2DHA)
         cout<<"Problème aberrations : masque "<<Chemin_mask<< " de largeur "<<mask.rows<<", mais image de largeur "<<2*dim2DHA.x<<endl;
     }
     mask.convertTo(mask, CV_8U);  ///Chargement du masque pour correction aberration/ampli
+
     return mask;
 }
 

@@ -39,6 +39,8 @@ Mat  ampliCorr2(Mat const & image,  Mat const &polynomeUs_to_fit, Mat const &pol
 void compuCoefPoly2(Mat const &imagebrut, Mat const & mask, Mat& coef_polynomial, Mat const &polynome_to_fit, bool method);
 void CalcPolyUs_xy(int degre_poly, Mat const & mask, Var2D dimChpCplx,Mat &polynome_to_fit);
 void CalcPoly_xy(int degre_poly, Var2D dimImg, Mat &polynome_to_fit);
+void initCorrAber(std::string Chemin_mask, Mat const &mask, size_t degre_poly, Var2D dim2DHA,Mat &polynome_to_fit, Mat &polynomeUs_to_fit);
+
 //void threshCallback(int, void*);
 //double poly2DEval2(Mat const &coefficients, Mat const &polynome_to_fit, size_t UsCoord1D);
 //void poly2DEval(Mat const &coefficients, int deg,int x, int y);
