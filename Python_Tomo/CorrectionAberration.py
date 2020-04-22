@@ -115,7 +115,7 @@ def CalcPolyUS_xy(degre_poly, Masque, polynomeUS_to_fit):
    
     if nbRows > 9:
         num_coef = Coord1D = 0
-        print("degre_poly=",degre_poly)  
+        # print("degre_poly=",degre_poly)  
         for y in range(0,dimMasqueY-1):
             for x in range(0,dimMasqueX-1):
                 num_coef=0
@@ -186,18 +186,24 @@ def compuBackgr(coefficients,polynome_to_fit,PolyBackgr):
     None.
 
     """
+    coefX,coefY=np.shape(coefficients)
+    
     UsCoord1D = 0
-    PolyRows, PolyCols = np.shape(polynome_to_fit)
+    nbCoef, NbPtImg = np.shape(polynome_to_fit)
+    #print("PolyRows, PolyCols=",PolyRows,PolyCols)
     BackgrRows, BackgrCols = np.shape(PolyBackgr)
-    PolySize = PolyCols
+    PolySize = nbCoef
     for y in range(0,BackgrRows-1):
         for x in range(0,BackgrCols-1):
             sum = 0.
-            for num_coef in range(0,PolySize-1):
-                sum += coefficients[num_coef] * polynome_to_fit[UsCoord1D,num_coef]
+            for num_coef in range(0,PolySize-1):             
+                sum += coefficients[num_coef] * polynome_to_fit[num_coef,UsCoord1D]       
             PolyBackgr[y,x] = sum
             UsCoord1D += 1
-            
+    # plt.imshow(PolyBackgr, cmap=plt.cm.gray)
+    # plt.colorbar()
+    # plt.show()
+      
 # Calcul des coefficients du polynome
 def compuCoefPoly(ImageBrut,Masque,coef_polynomial,polynomeUS_to_fit,methode):
     """
@@ -223,10 +229,13 @@ def compuCoefPoly(ImageBrut,Masque,coef_polynomial,polynomeUS_to_fit,methode):
     """
     ImgRows,ImgCols = np.shape(ImageBrut)
     nbCoef,nbPtUs = np.shape(polynomeUS_to_fit)
-    print("nbPtUs==",nbPtUs)
-    print("nbCoef==",nbCoef)
+    # print("nbPtUs dimXpolyus==",nbCoef)
+    # print("nbCoef dimYpolyUS==",nbPtUs)
     Bt = np.zeros((nbCoef,nbPtUs),dtype=np.float64)
     undersampled_background = np.zeros((nbPtUs,1),dtype=np.float64)
+    x_poly,y_poly = np.shape(undersampled_background)
+    # print("xusbg==",x_poly)
+    # print("yusbg==",y_poly)
     if nbCoef>9:
         UsCoord = 0
         for y in range(0,ImgRows):
@@ -236,18 +245,28 @@ def compuCoefPoly(ImageBrut,Masque,coef_polynomial,polynomeUS_to_fit,methode):
                     UsCoord += 1
                     # print("USCoord",UsCoord)
         tabCoef = np.zeros((nbCoef,1),dtype=np.float64)
+        
+        tabCoefX,tabCoefY=np.shape(tabCoef)
+        # print("tabCoefX=",tabCoefX)
+        # print("tabCoefY=",tabCoefY)
+        # print("type(tabCoef)=",type(tabCoef))
         # print("bckgrd",undersampled_background)
-   
+        
         D = np.zeros((nbPtUs,nbCoef),dtype=np.float64)
         invD = np.zeros((nbCoef,nbPtUs),dtype=np.float64)
         if methode:
-            cv2.solve(np.transpose(polynomeUS_to_fit), np.transpose(undersampled_background), tabCoef, cv2.DECOMP_SVD)
+            # print("solve==")
+            cv2.solve(np.transpose(polynomeUS_to_fit), (undersampled_background), (tabCoef), cv2.DECOMP_SVD)
+            # for cpt in range(0,nbCoef-1):
+            #     print(tabCoef[cpt])
+        
         else:
             cv2.transpose(polynomeUS_to_fit,Bt)
             D = Bt * polynomeUS_to_fit
             cv2.invert(D,invD)
             tabCoef = (invD * Bt) * undersampled_background
         # coef_polynomial=tabCoef
+        # print("tabCoef=",tabCoef)
         np.copyto(coef_polynomial,tabCoef)
     else:
         tabCoef = np.zeros((nbCoef,1),dtype=np.float64)
@@ -274,12 +293,17 @@ def aberCorr(Image,Masque,polynomeUS_to_fit,polynome_to_fit):
         Corrected phase image.
 
     """
+    nbCoef,nbPtUs = np.shape(polynomeUS_to_fit)
     ImgRows,ImgCols = np.shape(Image)
-    coefsolve = []
+    coefsolve = np.zeros((nbCoef,1),dtype=np.float64)
+    # print("typecoefsolve=",type(coefsolve))
     compuCoefPoly(Image,Masque,coefsolve,polynomeUS_to_fit,True)
     resultatpolyBG = np.zeros((ImgRows,ImgCols),dtype=np.float64)
     resultat_final = np.zeros((ImgRows,ImgCols),dtype=np.float64)
     compuBackgr(coefsolve,polynome_to_fit,resultatpolyBG)
+    # plt.imshow(resultatpolyBG, cmap=plt.cm.gray)
+    # plt.colorbar()
+    # plt.show()
     resultat_final=Image-resultatpolyBG
     return resultat_final
 
@@ -306,10 +330,11 @@ def ampliCorr(Image,Masque,polynomeUS_to_fit,polynome_to_fit):
 
     """
     ImgRows,ImgCols = np.shape(Image)
-    coefsolve = []
+    nbCoef,nbPtUs = np.shape(polynomeUS_to_fit)
+    coefsolve = np.zeros((nbCoef,1),dtype=np.float64)
     compuCoefPoly(Image,Masque,coefsolve,polynomeUS_to_fit,True)
     resultatpoly = np.zeros((ImgRows,ImgCols),dtype=np.float64)
     resultat = np.zeros((ImgRows,ImgCols),dtype=np.float64)
     compuBackgr(coefsolve,polynome_to_fit,resultatpoly)
-    resultat=Image/resultatpoly
+    resultat=Image/(resultatpoly+np.finfo(float).eps)
     return resultat

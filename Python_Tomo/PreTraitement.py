@@ -80,25 +80,34 @@ for hol in range(0,nb_holo):
         Poly = np.zeros((nbCoef,dimHolo*dimHolo),dtype=np.float64)          
         Poly = CAber.CalcPoly_xy(degrePoly,Masque,Poly)
         
+        # Test Calcul coefficients
+        # Coeffs = CAber.compuCoefPoly(Amp_UBorn,Masque,Poly_US,True)
+        
         # Correction de l'amplitude
         Amp_UBornCorr = CAber.ampliCorr(Amp_UBorn,Masque,Poly_US,Poly)
-        plt.imshow(Amp_UBornCorr, cmap=plt.cm.gray)
-        plt.colorbar()
-        plt.show()
+        # plt.imshow(Amp_UBorn, cmap=plt.cm.gray)
+        # plt.colorbar()
+        # plt.show()
+        # plt.imshow(Amp_UBornCorr, cmap=plt.cm.gray)
+        # plt.colorbar()
+        # plt.show()
         
         # Correction de la phase
         Phase_UBornCorr = CAber.aberCorr(Phase_UBorn,Masque,Poly_US,Poly)
-        plt.imshow(Phase_UBornCorr, cmap=plt.cm.gray)
-        plt.colorbar()
-        plt.show()
+        # plt.imshow(Phase_UBorn, cmap=plt.cm.gray)
+        # plt.colorbar()
+        # plt.show()
+        # plt.imshow(Phase_UBornCorr, cmap=plt.cm.gray)
+        # plt.colorbar()
+        # plt.show()
         
         # Enregistrement des résultats
         CheminAmp = DossierAmplitude + 'AmpUBorn_' + str('%03d' % cpt ) + '.tiff'
         CheminPh = DossierPhase + 'PhaseUBorn_' + str('%03d' % cpt ) + '.tiff'
         
         # Enregistrement de l'amplitude et la phase dépliée (avant correction pour le test)
-        plt.imsave(CheminAmp,Amp_UBorn,cmap=plt.cm.gray)
-        plt.imsave(CheminPh,Phase_UBorn,cmap=plt.cm.gray)    
+        # plt.imsave(CheminAmp,Amp_UBorn,cmap=plt.cm.gray)
+        # plt.imsave(CheminPh,Phase_UBorn,cmap=plt.cm.gray)    
         
         cpt = cpt + 1
         cpt_exist = cpt_exist + 1
