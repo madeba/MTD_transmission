@@ -23,7 +23,11 @@
 				<Compiler>
 					<Add option="-march=corei7-avx" />
 					<Add option="-O3" />
+					<Add option="-pg" />
 				</Compiler>
+				<Linker>
+					<Add option="-pg" />
+				</Linker>
 			</Target>
 		</Build>
 		<Compiler>

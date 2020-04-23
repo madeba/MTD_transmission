@@ -15,11 +15,15 @@ void fftshift2D(std::vector<double> const &entree, std::vector<double> &sortie);
 void  fftshift2D(std::vector<std::complex<double>> const &entree,std::vector<std::complex<double>>  &sortie);
 std::vector<vecteur>  fftshift2D(std::vector<vecteur> &entree);
 
+///fftw c2r complex input
 void TF2D_vec(fftw_complex *in,fftw_complex *out, std::vector<double> entree, std::vector<std::complex<double> > &sortie, fftw_plan p);
 
 void TF2Dcplx_vec(fftw_complex *in, fftw_complex *out, std::vector<std::complex<double> > entree, std::vector<std::complex<double> > &sortie, fftw_plan p);
 void TF2Dcplx_vec_INV(fftw_complex *in,fftw_complex *out, std::vector<std::complex<double> > entree, std::vector<std::complex<double> > &sortie, fftw_plan p);
 
+///fftw c2r  real  input
+
+void TF2Dcplx_vec(std::vector<double> const &entree, std::vector<std::complex<double>> &sortie, FFTW_init &tf2D_Holo_c2r);
 void TF2Dcplx_vec(fftw_complex *in,fftw_complex *out, std::vector<double> entree, std::vector<std::complex<double> > &sortie, fftw_plan p);
 void TF2Dcplx_vec_INV(fftw_complex *in, fftw_complex *out, std::vector<double> entree, std::vector<std::complex<double> > &sortie, fftw_plan p);
 

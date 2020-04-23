@@ -202,6 +202,22 @@ void TF2D_vec(fftw_complex *in,fftw_complex *out, vector<double> entree, vector<
             sortie[cpt].imag(out[cpt][1]/nbPix);
         }
 }
+// surcharge fftw_init
+void TF2Dcplx_vec(vector<double> const &entree, vector<complex<double>> &sortie, FFTW_init &tf2D_Holo_c2r)
+{
+    size_t nbPix=entree.size();
+    for(size_t cpt=0; cpt<nbPix; cpt++) {
+        tf2D_Holo_c2r.in[cpt][0]=entree[cpt];
+        tf2D_Holo_c2r.in[cpt][1]=0;//
+    }
+//in = reinterpret_cast<fftw_complex*>(&entree);
+    fftw_execute(tf2D_Holo_c2r.p_forward_OUT);
+
+    for(size_t cpt=0; cpt<(nbPix); cpt++) {
+        sortie[cpt].real(tf2D_Holo_c2r.out[cpt][0]/nbPix); //division par N (dim*dim) pour normaliser la fftw qui n'est pas normalisée
+        sortie[cpt].imag(tf2D_Holo_c2r.out[cpt][1]/nbPix);
+    }
+}
 ///FFT2D entree=vector complex
 void TF2Dcplx_vec(fftw_complex *in, fftw_complex *out, vector<complex<double> > entree, vector<complex<double> > &sortie,fftw_plan p)
 {
@@ -218,6 +234,10 @@ void TF2Dcplx_vec(fftw_complex *in, fftw_complex *out, vector<complex<double> > 
         sortie[cpt].imag(out[cpt][1]/nbPix);
     }
 }
+
+///FFT2D entree=vector complex
+
+
 
 void TF2Dcplx_vec_INV(fftw_complex *in,fftw_complex *out, vector<complex<double> > entree, vector<complex<double> > &sortie, fftw_plan p)
 {

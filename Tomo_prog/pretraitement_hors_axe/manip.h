@@ -5,8 +5,7 @@
 #include <iostream>
 class manip {
 public :
-        double NA;
-        double Tp;
+        double NA, Tp;
         double n0;
         double rayon;
         double lambda0;
@@ -32,9 +31,8 @@ public :
         std::string dimImg;
         std::string chemin_result;
         std::string chemin_acquis;
-
         manip();
-       // void init();
+
 } ;
 
 #endif // DEF_MANIP
