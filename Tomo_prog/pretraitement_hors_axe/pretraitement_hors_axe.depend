@@ -931,7 +931,7 @@
 	"FFT_fonctions.h"
 	"fonctions.h"
 
-1587553571 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/main.cpp
+1587591143 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/main.cpp
 	<iostream>
 	<vector>
 	"struct.h"
@@ -941,7 +941,7 @@
 	"projet.h"
 	"fonctions.h"
 	"FFT_fonctions.h"
-	"deroulement_volkov.h"
+	"deroulement_volkov2.h"
 	"deroulement_herraez.h"
 	"Correction_aberration.h"
 	<chrono>
@@ -993,4 +993,18 @@
 
 1587120874 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/Point2D.cpp
 	"Point2D.h"
+
+1587590652 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/deroulement_volkov2.cpp
+	"deroulement_volkov2.h"
+	<vector>
+	<complex>
+	"fonctions.h"
+	"FFT_fonctions.h"
+	"src/vecteur.h"
+
+1587591243 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/include/deroulement_volkov2.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"FFTW_init.h"
 

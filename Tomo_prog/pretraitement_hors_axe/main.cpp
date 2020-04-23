@@ -10,7 +10,7 @@
 #include "fonctions.h"
 //#include "FFTW_init.h"
 #include "FFT_fonctions.h"
-#include "deroulement_volkov.h"
+#include "deroulement_volkov2.h"
 #include "deroulement_herraez.h"
 #include "Correction_aberration.h"
 #include <chrono>
@@ -102,9 +102,7 @@ vector<double> phase_2Pi_vec(NbPixUBorn),  UnwrappedPhase(NbPixUBorn),PhaseFinal
 double *UnwrappedPhase_herraez=new double[NbPixUBorn];
 
 ///variable pour correction aberration
-Mat src=Mat(1, ampli_ref.size(), CV_64F, ampli_ref.data());
-Mat mask_aber=init_mask_aber(Chemin_mask,dim2DHA);
-//mask_aber.convertTo(mask_aber, CV_8U);
+Mat src=Mat(1, ampli_ref.size(), CV_64F, ampli_ref.data()), mask_aber=init_mask_aber(Chemin_mask,dim2DHA);
 size_t NbPtOk=countM(mask_aber),  degre_poly=4, nbCoef = sizePoly2D(degre_poly);//Nb coef poly
 Mat polynomeUs_to_fit(Size(nbCoef,NbPtOk), CV_64F);///(undersampled) Polynome to fit= function to fit (We use a polynome). we have to generate a table containing polynome_to_fit=[1,x,x^2,xy,y^2] for each coordinate (x,y)
 Mat polynome_to_fit(Size(nbCoef,dim2DHA.x*dim2DHA.y), CV_64F);
@@ -148,6 +146,7 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
         else{
           auto start_volkov = std::chrono::system_clock::now();///démarrage chrono
           deroul_volkov(in_HA, out_HA,phase_2Pi_vec,UnwrappedPhase, p_forward_HA, p_backward_HA);
+
           auto end_volkov = std::chrono::system_clock::now();
           auto elapsed_volkov = end_volkov - start_volkov;
           // std::cout <<"Temps pour Volkov = "<< elapsed_volkov.count()/(pow(10,9)) << '\n';
