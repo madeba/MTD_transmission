@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import numpy.fft as nfft
 import numpy as np
 
@@ -162,27 +163,3 @@ def unwrapping(PhiW, pix, approx=True):
         kphi = np.real(1/(2*1j*np.pi)*nfft.ifft2(q_x+q_y))
         PhiUW = PhiW+2*np.pi*kphi
     return PhiUW
-
-def SAVbin(image,chemin,dim):
-    """
-    
-    Binary file saving
-
-    Parameters
-    ----------
-    image : at will !!
-        Image to be saved as a binary file.
-    chemin : str
-        Path + name (without exension) of the file to be saved.
-    dim : str
-        x or y dimension of the image to be saved.
-
-    Returns
-    -------
-    None.
-
-    """
-    nom_fichier = chemin + "_" + dim + ".bin"
-    fid = open(nom_fichier,"w")
-    image.tofile(fid)
-    fid.close()

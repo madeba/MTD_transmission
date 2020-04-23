@@ -29,12 +29,57 @@ def lineinfile(filename):
         File.close()
     return NumberOfLines
 
-def filetolist(filename):
+def readvalue(filename,keyword):
+    """
+    Extraction of parameters values
+
+    Parameters
+    ----------
+    filename : str
+        File to be opened.
+    keyword : str
+        Parameter to be extracted.
+
+    Returns
+    -------
+    Value : float
+        Value of the requested parameter.
+
+    """
     FileContent = []
-    Ligne = []
     nbLignes = lineinfile(filename)
+    nbLignesOK = 0
+    Value = 0.
     for cpt in range(1,nbLignes):
         Ligne = getline(filename,cpt).split()
-        # Ligne[0]
-        FileContent.append(Ligne)  
-    return FileContent
+        if len(Ligne) != 0:
+            FileContent.append(Ligne)
+            nbLignesOK += 1
+    for cpt in range(0,nbLignesOK-1):
+        if FileContent[cpt][0] == keyword:
+            Value = float(FileContent[cpt][1])
+    return Value
+
+def SAVbin(image,chemin,dim):
+    """
+    
+    Binary file saving
+
+    Parameters
+    ----------
+    image : at will !!
+        Image to be saved as a binary file.
+    chemin : str
+        Path + name (without exension) of the file to be saved.
+    dim : str
+        x or y dimension of the image to be saved.
+
+    Returns
+    -------
+    None.
+
+    """
+    nom_fichier = chemin + "_" + dim + ".bin"
+    fid = open(nom_fichier,"w")
+    image.tofile(fid)
+    fid.close()

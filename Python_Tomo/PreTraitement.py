@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
 import numpy.fft as nfft
 import numpy as np
 import HoloProcessing as holo
 import CorrectionAberration as CAber
 import os
+import FileTools as ft
 import time
 
 
@@ -11,24 +13,26 @@ import time
 DossierData = '../PollenAziz/'
 DossierAmplitude = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Amplitude/'
 DossierPhase = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Phase/'
-FichierConfig = DossierData + 'config_manip.txt' # Prévoir lecture des paramètres depuis le fichier texte
+FichierConfig = DossierData + 'config_manip.txt'
 CheminMasque = 'Masque.tif'
 
-# Données de l'acquisition (Bientôt lues depuis le fichier de données)
-NA = 1.4
-nimm = 1.515
-Lambda = 632.8e-9
-f_tube = 15e-2 # focale de la lentille de tube
-f_obj = 1.8e-3 # focale de l'objectif
-pix = 5.5e-6 # taille des pixels du capteur
-RapFoc = 0.7 # rapport des focales du doublet de rééchantillonnage
+# Données de l'acquisition
+CamDim = 1024
+NA = ft.readvalue(FichierConfig,'NA')
+nimm = ft.readvalue(FichierConfig,'N0')
+Lambda = ft.readvalue(FichierConfig,'LAMBDA')
+f_tube = ft.readvalue(FichierConfig,'F_TUBE') # focale de la lentille de tube
+f_obj = ft.readvalue(FichierConfig,'F_OBJ') # focale de l'objectif
+pix = ft.readvalue(FichierConfig,'TPCAM') # taille des pixels du capteur
+RapFoc = ft.readvalue(FichierConfig,'RF') # rapport des focales du doublet de rééchantillonnage
 Gtot = f_tube/f_obj/0.7
-REwald = 1024*pix/Gtot*nimm/(Lambda) # rayon support de fréquence accessible en pixel
+REwald = CamDim*pix/Gtot*nimm/(Lambda) # rayon support de fréquence accessible en pixel
 fmaxHolo = round(REwald*NA/nimm) # support max de fréquence
 dimHolo = 2*fmaxHolo # dimension de l'hologramme
-CentreX = 773 # position du centre de la pupille dans l'espace de Fourier
-CentreY = 210
-nb_holo = 1 # nombre d'hologrammes
+CentreX = ft.readvalue(FichierConfig,'CIRCLE_CX') # position du centre de la pupille dans l'espace de Fourier
+CentreY = ft.readvalue(FichierConfig,'CIRCLE_CY')
+nb_holoTot = ft.readvalue(FichierConfig,'NB_HOLO')
+nb_holo = 1 # nombre d'hologrammes à traiter
 
 # Traitement de la séquence
 cpt = 1
