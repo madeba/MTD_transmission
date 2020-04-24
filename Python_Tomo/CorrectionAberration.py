@@ -196,10 +196,11 @@ def compuBackgr(coefficients,polynome_to_fit,PolyBackgr):
     for y in range(0,BackgrRows-1):
         for x in range(0,BackgrCols-1):
             sum = 0.
-            for num_coef in range(0,PolySize-1):             
+            for num_coef in range(0,PolySize):             
                 sum += coefficients[num_coef] * polynome_to_fit[num_coef,UsCoord1D]       
             PolyBackgr[y,x] = sum
             UsCoord1D += 1
+            # print("UsCoord==",UsCoord1D)
     #plt.imshow(PolyBackgr, cmap=plt.cm.gray)
     #plt.colorbar()
     #plt.show()
@@ -238,8 +239,8 @@ def compuCoefPoly(ImageBrut,Masque,coef_polynomial,polynomeUS_to_fit,methode):
     # print("yusbg==",y_poly)
     if nbPtUs>9:
         UsCoord = 0
-        for y in range(0,ImgRows):
-            for x in range(0,ImgCols):
+        for y in range(0,ImgRows-1):
+            for x in range(0,ImgCols-1):
                 if Masque[y,x] == 220:
                     undersampled_background[UsCoord] = np.float64(ImageBrut[y,x])
                     UsCoord += 1
@@ -256,15 +257,15 @@ def compuCoefPoly(ImageBrut,Masque,coef_polynomial,polynomeUS_to_fit,methode):
         invD = np.zeros((nbCoef,nbPtUs),dtype=np.float64)
         if methode:
             # print("solve==")
-            cv2.solve(np.transpose(polynomeUS_to_fit), (undersampled_background), (tabCoef), cv2.DECOMP_SVD)
+            cv2.solve(np.transpose(polynomeUS_to_fit), undersampled_background, tabCoef, cv2.DECOMP_NORMAL)
             # for cpt in range(0,nbCoef-1):
             #     print(tabCoef[cpt])
         
         else:
             cv2.transpose(polynomeUS_to_fit,Bt)
             D = Bt * polynomeUS_to_fit
-            cv2.invert(D,invD)
-            tabCoef = (invD * Bt) * undersampled_background
+            cv2.invert(D,invD,cv2.DECOMP_SVD)
+            tabCoef = (invD.dot(Bt)).dot(undersampled_background)
         # coef_polynomial=tabCoef
         # print("tabCoef=",tabCoef)
         np.copyto(coef_polynomial,tabCoef)
@@ -336,5 +337,5 @@ def ampliCorr(Image,Masque,polynomeUS_to_fit,polynome_to_fit):
     resultatpoly = np.zeros((ImgRows,ImgCols),dtype=np.float64)
     resultat = np.zeros((ImgRows,ImgCols),dtype=np.float64)
     compuBackgr(coefsolve,polynome_to_fit,resultatpoly)
-    resultat=Image/(resultatpoly+np.finfo(float).eps)
+    resultat=Image/resultatpoly
     return resultat
