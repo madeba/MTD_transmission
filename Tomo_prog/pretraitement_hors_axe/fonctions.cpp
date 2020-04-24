@@ -243,7 +243,7 @@ void holo2TF_UBorn(vector<double> &holo1, vector<complex<double>> &TF_UBornTot,V
         //SAV2(holo1, "/home/mat/tomo_test/holo_shift_extract_holo.bin",t_float,"a+b");
 
        // TF2Dcplx_vec(in,out,holo_shift, TF_Holo,p_forward_holo);
-        TF2Dcplx_vec(holo_shift, TF_Holo, tf2D_Holo_c2r);
+        TF2Dcplx(holo_shift, TF_Holo, tf2D_Holo_c2r);
         TFHoloCentre=fftshift2D(TF_Holo);//Décalage  sur fft_reel_tmp, pour recentrer le spectre avant découpe (pas obligatoire mais plus clair)
         SAVCplx(TF_Holo,"Re","/home/mat/tmp/TFHolo_Re_classique_1024x1024x59.raw",t_float,"a+b");
 

@@ -64,7 +64,7 @@ vector<double> tukey2D(int dimx,int dimy, float alpha)
         return tuk2D;
 }
 
-vector<complex<double> >  fftshift2D(vector<complex<double> > const &entree)
+vector<complex<double> >  fftshift2D(vector<complex<double>> const &entree)
 {
 unsigned int dim=sqrt(entree.size());
 vector<complex<double> > result(dim*dim);
@@ -164,7 +164,7 @@ vector<double> result(dim*dim);
 size_t decal=dim/2;
 size_t yi=0;
        size_t xi=0;
-        //#pragma omp parallel for private(yi)
+      //  #pragma omp parallel for private(yi)
        for(yi=0; yi<decal; yi++) {
             size_t num_ligne=yi*dim;
                 for(xi=0; xi<decal; xi++)
@@ -202,22 +202,7 @@ void TF2D_vec(fftw_complex *in,fftw_complex *out, vector<double> entree, vector<
             sortie[cpt].imag(out[cpt][1]/nbPix);
         }
 }
-// surcharge fftw_init
-void TF2Dcplx_vec(vector<double> const &entree, vector<complex<double>> &sortie, FFTW_init &tf2D_Holo_c2r)
-{
-    size_t nbPix=entree.size();
-    for(size_t cpt=0; cpt<nbPix; cpt++) {
-        tf2D_Holo_c2r.in[cpt][0]=entree[cpt];
-        tf2D_Holo_c2r.in[cpt][1]=0;//
-    }
-//in = reinterpret_cast<fftw_complex*>(&entree);
-    fftw_execute(tf2D_Holo_c2r.p_forward_OUT);
 
-    for(size_t cpt=0; cpt<(nbPix); cpt++) {
-        sortie[cpt].real(tf2D_Holo_c2r.out[cpt][0]/nbPix); //division par N (dim*dim) pour normaliser la fftw qui n'est pas normalisée
-        sortie[cpt].imag(tf2D_Holo_c2r.out[cpt][1]/nbPix);
-    }
-}
 ///FFT2D entree=vector complex
 void TF2Dcplx_vec(fftw_complex *in, fftw_complex *out, vector<complex<double> > entree, vector<complex<double> > &sortie,fftw_plan p)
 {
@@ -239,7 +224,7 @@ void TF2Dcplx_vec(fftw_complex *in, fftw_complex *out, vector<complex<double> > 
 
 
 
-void TF2Dcplx_vec_INV(fftw_complex *in,fftw_complex *out, vector<complex<double> > entree, vector<complex<double> > &sortie, fftw_plan p)
+void TF2Dcplx_vec_INV(fftw_complex *in,fftw_complex *out, vector<complex<double> > entree, vector<complex<double> > &sortie, fftw_plan p_backward)
 {
     size_t nbPix=entree.size();
 
@@ -248,16 +233,16 @@ void TF2Dcplx_vec_INV(fftw_complex *in,fftw_complex *out, vector<complex<double>
         in[cpt][1]=entree[cpt].imag();
     }
 
-    fftw_execute(p);
+    fftw_execute(p_backward);
 
-    for(size_t cpt=0; cpt<(nbPix); cpt++){
+    for(size_t cpt=0; cpt<(nbPix); cpt++){//BACKWARD, no normalization
         sortie[cpt].real(out[cpt][0]);
         sortie[cpt].imag(out[cpt][1]);
     }
 
 }
 ///FFT2D entree=TF2D vector double
-void TF2Dcplx_vec(fftw_complex *in,fftw_complex *out, vector<double> entree, vector<complex<double> > &sortie, fftw_plan p){
+void TF2Dcplx_vec(fftw_complex *in,fftw_complex *out, vector<double> entree, vector<complex<double> > &sortie, fftw_plan p_forward){
     size_t nbPix=entree.size();
     //size_t dim=sqrt(nbPix);
     for(size_t cpt=0; cpt<nbPix; cpt++){
@@ -265,7 +250,7 @@ void TF2Dcplx_vec(fftw_complex *in,fftw_complex *out, vector<double> entree, vec
             in[cpt][1]=0;
         }
     // in = reinterpret_cast<fftw_complex*>(&entree);
-    fftw_execute(p);
+    fftw_execute(p_forward);
 
     for(size_t cpt=0; cpt<(nbPix); cpt++){
             sortie[cpt].real(out[cpt][0]/nbPix); //division par N (dim*dim) si FORWARD pour normaliser la fftw qui n'est pas normalisée
@@ -273,7 +258,7 @@ void TF2Dcplx_vec(fftw_complex *in,fftw_complex *out, vector<double> entree, vec
         }
 }
 
-///FFT2D entree=TF2D vector double
+///FFT2D entree=TF2D vector double+inplace
 void TF2Dcplx_vec_INPLACE(fftw_complex *in_out,vector<double> entree, vector<complex<double> > &sortie, fftw_plan p){
 
     size_t nbPix=entree.size();
@@ -297,21 +282,62 @@ void TF2Dcplx_vec_INPLACE(fftw_complex *in_out,vector<double> entree, vector<com
     //  SAVCplx(sortie,"Im",nbPix,"/home/mat/tomo_test/spectre_dans_tf2D.bin",t_float,"a+b");
 }
 
-void TF2Dcplx_vec_INV(fftw_complex *in, fftw_complex *out, vector<double> entree, vector<complex<double> > &sortie, fftw_plan p){
+void TF2Dcplx_vec_INV(fftw_complex *in, fftw_complex *out, vector<double> entree, vector<complex<double> > &sortie, fftw_plan p_backward){
     size_t nbPix=entree.size();
     for(size_t cpt=0; cpt<nbPix; cpt++){
         in[cpt][0]=entree[cpt];
         in[cpt][1]=0;
     }
 
-    fftw_execute(p);
+    fftw_execute(p_backward);
 
-        for(size_t cpt=0; cpt<(nbPix); cpt++){
+        for(size_t cpt=0; cpt<(nbPix); cpt++){//BACKWARD : no normalization
             sortie[cpt].real(out[cpt][0]);
             sortie[cpt].imag(out[cpt][1]);
         }
 }
-/////////----------------------------TF FFTW_INIT
+
+
+
+
+/////////----------------------------TF FFTW_INIT-------------------------------------------------------------------------
+// surcharge fftw_init+entree <double>+calcul fft
+void TF2Dcplx(vector<double> const &entree, vector<complex<double>> &sortie, FFTW_init &tf2D_c2r)
+{
+    size_t nbPix=entree.size();
+    for(size_t cpt=0; cpt<nbPix; cpt++) {
+        tf2D_c2r.in[cpt][0]=entree[cpt];
+        tf2D_c2r.in[cpt][1]=0;//
+    }
+//in = reinterpret_cast<fftw_complex*>(&entree);
+    fftw_execute(tf2D_c2r.p_forward_OUT);
+
+    for(size_t cpt=0; cpt<(nbPix); cpt++) {
+        sortie[cpt].real(tf2D_c2r.out[cpt][0]/nbPix); //division par N (dim*dim) pour normaliser la fftw qui n'est pas normalisée
+        sortie[cpt].imag(tf2D_c2r.out[cpt][1]/nbPix);
+    }
+}
+
+// surcharge fftw_init+entree <complex double>+calcul fft
+///FFT2D complex c2c
+void TF2Dcplx(vector<complex<double>> const &entree, vector<complex<double>> &sortie,FFTW_init &param_c2c)
+{
+    size_t nbPix=entree.size();
+    for(size_t cpt=0; cpt<nbPix; cpt++) {
+        param_c2c.in[cpt][0]=entree[cpt].real();
+        param_c2c.in[cpt][1]=entree[cpt].imag();
+    }
+//in = reinterpret_cast<fftw_complex*>(&entree);
+//fftw_complex * in = reinterpret_cast<fftw_complex*>(entree.data().begin());
+//param_c2c.in = reinterpret_cast<fftw_complex*>(entree[0]);
+    fftw_execute(param_c2c.p_forward_OUT);
+
+    for(size_t cpt=0; cpt<(nbPix); cpt++) {
+        sortie[cpt].real(param_c2c.out[cpt][0]/nbPix); //division par N (dim*dim) pour normaliser la fftw qui n'est pas normalisée
+        sortie[cpt].imag(param_c2c.out[cpt][1]/nbPix);
+    }
+}
+///calcul TF vraie
 void TF2Dcplx(vector<complex<double>> const &entree, vector<complex<double> > &sortie, FFTW_init &tf2D, double delta_x){
     size_t nbPix=entree.size();
 //    size_t dim=sqrt(nbPix);
@@ -330,7 +356,26 @@ void TF2Dcplx(vector<complex<double>> const &entree, vector<complex<double> > &s
         }
 }
 
+void TF2Dcplx_INV(vector<complex<double> > entree, vector<complex<double> > &sortie, FFTW_init &tf2D)
+{
+    size_t nbPix=entree.size();
+//    int dim=sqrt(nbPix);
 
+   // cout<<"delta_f="<<delta_f<<endl;
+    size_t cpt=0;
+    for(size_t cpt=0; cpt<nbPix; cpt++) {
+        tf2D.in[cpt][0]=entree[cpt].real();
+        tf2D.in[cpt][1]=entree[cpt].imag();
+    }
+
+    fftw_execute(tf2D.p_backward_OUT);
+
+    for(cpt=0; cpt<(nbPix); cpt++) {///FFT inverse, no normalization
+        sortie[cpt].real(tf2D.out[cpt][0]); //division par N (dim*dim) pour normaliser l'énergie
+        sortie[cpt].imag(tf2D.out[cpt][1]);
+    }
+}
+//Surcharge avec echantillonnage pour calcul exact de la transformée fourier
 void TF2Dcplx_INV(vector<complex<double> > entree, vector<complex<double> > &sortie, FFTW_init &tf2D, double delta_f)
 {
     size_t nbPix=entree.size();

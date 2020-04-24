@@ -11,6 +11,7 @@
 //#include "FFTW_init.h"
 #include "FFT_fonctions.h"
 #include "deroulement_volkov2.h"
+#include "deroulement_volkov.h"
 #include "deroulement_herraez.h"
 #include "Correction_aberration.h"
 #include <chrono>
@@ -30,6 +31,12 @@ int main()
     char charAngle[4+1];
     ///-----------Init FFTW Holo---------------
     size_t nb_thread_fftw=4;
+
+    int fftwThreadInit=fftw_init_threads();
+   // cout<<"fftwthreadinit="<<fftwThreadInit<<endl;
+    fftw_plan_with_nthreads(nb_thread_fftw);
+
+
     FFTW_init param_fftw2D_r2c_Holo(holo1,dimHolo,nb_thread_fftw);/// /!\ init r2c->surcharge avec image2D en entrée!
     FFTW_init param_fftw2D_c2r_Holo(holo1,nb_thread_fftw);
     vector<double> masqueTukeyHolo(NbPixROI2d);
@@ -85,10 +92,13 @@ auto end_decoupeHA = std::chrono::system_clock::now();
 auto elapsed = end_decoupeHA - start_decoupeHA;
 std::cout <<"Temps pour FFT holo+découpe Spectre= "<< elapsed.count()/(pow(10,9)) << '\n';
 //--------------Init FFTW Hors axe-------------------------------------------------
+
+
 fftw_plan p_backward_HA,p_forward_HA;
 //fftw_complex *in_out=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * dimROI.x*dimROI.y);////in=out pour transformation "inplace".
 fftw_complex *in_HA=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * NbPixUBorn);
 fftw_complex *out_HA=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * NbPixUBorn);//
+
 p_backward_HA=fftw_plan_dft_2d(dim2DHA.x, dim2DHA.y, in_HA, out_HA, FFTW_BACKWARD,FFTW_MEASURE);
 p_forward_HA=fftw_plan_dft_2d(dim2DHA.x, dim2DHA.y, in_HA, out_HA, FFTW_FORWARD,FFTW_MEASURE);
 float alpha=0.1;//coeff pour le masque de tuckey
@@ -100,6 +110,7 @@ vector<double> masqueTukeyHA(tukey2D(dim2DHA.x,dim2DHA.y,alpha));
 vector<complex<double>> TF_UBorn(NbPixUBorn),  UBorn(NbPixUBorn);
 vector<double> phase_2Pi_vec(NbPixUBorn),  UnwrappedPhase(NbPixUBorn),PhaseFinal(NbPixUBorn);
 double *UnwrappedPhase_herraez=new double[NbPixUBorn];
+FFTW_init param_fftw2D_c2r_HA(TF_UBorn,4);
 
 ///variable pour correction aberration
 Mat src=Mat(1, ampli_ref.size(), CV_64F, ampli_ref.data()), mask_aber=init_mask_aber(Chemin_mask,dim2DHA);
@@ -145,11 +156,12 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
         }
         else{
           auto start_volkov = std::chrono::system_clock::now();///démarrage chrono
-          deroul_volkov(in_HA, out_HA,phase_2Pi_vec,UnwrappedPhase, p_forward_HA, p_backward_HA);
+          //deroul_volkov(in_HA, out_HA,phase_2Pi_vec,UnwrappedPhase, p_forward_HA, p_backward_HA);
+          deroul_volkov2(phase_2Pi_vec,UnwrappedPhase, param_fftw2D_c2r_HA);
 
           auto end_volkov = std::chrono::system_clock::now();
           auto elapsed_volkov = end_volkov - start_volkov;
-          // std::cout <<"Temps pour Volkov = "<< elapsed_volkov.count()/(pow(10,9)) << '\n';
+        std::cout <<"Temps pour Volkov = "<< elapsed_volkov.count()/(pow(10,9)) << '\n';
         }
     }
     else UnwrappedPhase=phase_2Pi_vec;

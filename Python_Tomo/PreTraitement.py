@@ -10,9 +10,9 @@ import time
 
 
 # Dossier de Données et fichier de configuration
-DossierData = '../PollenAziz/'
-DossierAmplitude = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Amplitude/'
-DossierPhase = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Phase/'
+DossierData = '/opt/Acquis/pollen_topi_21SEPT/Acquis/'
+DossierAmplitude = '/home/mat/tmp/'
+DossierPhase = '/home/mat/tmp/'
 FichierConfig = DossierData + 'config_manip.txt'
 CheminMasque = 'Masque.tif'
 
@@ -47,7 +47,12 @@ for hol in range(0,nb_holo):
     filename = DossierData + 'i' + str('%03d' % cpt ) + '.pgm'
     if os.path.isfile(filename):
         Image = plt.imread(filename)
-        
+        #plt.imshow(Image, cmap=plt.cm.gray)
+        #plt.colorbar()
+        #plt.show()
+        # plt.imshow(Amp_UBornCorr, cmap=plt.cm.gray)
+        # plt.colorbar()
+        # plt.show()
         # Spectre hologramme
         FImage = nfft.fftshift(nfft.fft2(Image))
         nfy,nfx = np.shape(FImage)
@@ -89,21 +94,21 @@ for hol in range(0,nb_holo):
         
         # Correction de l'amplitude
         Amp_UBornCorr = CAber.ampliCorr(Amp_UBorn,Masque,Poly_US,Poly)
-        # plt.imshow(Amp_UBorn, cmap=plt.cm.gray)
-        # plt.colorbar()
-        # plt.show()
-        # plt.imshow(Amp_UBornCorr, cmap=plt.cm.gray)
-        # plt.colorbar()
-        # plt.show()
+        plt.imshow(Amp_UBorn, cmap=plt.cm.gray)
+        plt.colorbar()
+        plt.show()
+        plt.imshow(Amp_UBornCorr, cmap=plt.cm.gray)
+        plt.colorbar()
+        plt.show()
         
         # Correction de la phase
         Phase_UBornCorr = CAber.aberCorr(Phase_UBorn,Masque,Poly_US,Poly)
-        # plt.imshow(Phase_UBorn, cmap=plt.cm.gray)
-        # plt.colorbar()
-        # plt.show()
-        # plt.imshow(Phase_UBornCorr, cmap=plt.cm.gray)
-        # plt.colorbar()
-        # plt.show()
+        plt.imshow(Phase_UBorn, cmap=plt.cm.gray)
+        plt.colorbar()
+        plt.show()
+        plt.imshow(Phase_UBornCorr, cmap=plt.cm.gray)
+        plt.colorbar()
+        plt.show()
         
         # Enregistrement des résultats
         CheminAmp = DossierAmplitude + 'AmpUBorn_' + str('%03d' % cpt ) + '.tiff'
