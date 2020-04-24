@@ -155,13 +155,13 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
           UnwrappedPhase[cpt]=UnwrappedPhase_herraez[cpt];///plutôt passer pointeur ?
         }
         else{
-          auto start_volkov = std::chrono::system_clock::now();///démarrage chrono
+         // auto start_volkov = std::chrono::system_clock::now();///démarrage chrono
           //deroul_volkov(in_HA, out_HA,phase_2Pi_vec,UnwrappedPhase, p_forward_HA, p_backward_HA);
           deroul_volkov2(phase_2Pi_vec,UnwrappedPhase, param_fftw2D_c2r_HA);
 
-          auto end_volkov = std::chrono::system_clock::now();
+        /*  auto end_volkov = std::chrono::system_clock::now();
           auto elapsed_volkov = end_volkov - start_volkov;
-        std::cout <<"Temps pour Volkov = "<< elapsed_volkov.count()/(pow(10,9)) << '\n';
+        std::cout <<"Temps pour Volkov = "<< elapsed_volkov.count()/(pow(10,9)) << '\n';*/
         }
     }
     else UnwrappedPhase=phase_2Pi_vec;
@@ -173,7 +173,7 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
     ///---------------Correction amplitude----------------------------------------
     for(size_t cpt=0; cpt<(NbPixUBorn); cpt++)
       UBornAmp[cpt]=abs(UBorn[cpt]);
-
+ //SAV2(UBornAmp,chemin_result+"/UBornAmp.raw",t_float,"a+b");
     Mat srcAmp=Mat(dim2DHA.x, dim2DHA.y, CV_64F, UBornAmp.data());///image source
     Mat UBornAmp_corr(ampliCorr2(srcAmp, polynomeUs_to_fit, polynome_to_fit, mask_aber));///résultat amplitude
     ///Fin Correction amplitude----------------------------------------*/
@@ -187,14 +187,14 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
           UBornFinal[cpt].real((UBornAmpFinal[cpt]-1)*cos(PhaseFinal[cpt]));///correction amplitude
           UBornFinal[cpt].imag((UBornAmpFinal[cpt]-1)*sin(PhaseFinal[cpt]));
         }
-        else{ //RYTOV URytov = log a_t/a_i=log a_t
+        else{ //RYTOV URytov = log a_t/a_i (=log a_t après correction AmpliCorr)
           UBornFinal[cpt].real(log(sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt])));///racine(U^2) pour éliminer les éventueles amplitudes négatives
           UBornFinal[cpt].imag(PhaseFinal[cpt]);
         }
       }
     }
     //SAV2(PhaseFinal,chemin_result+"/phase_finale.raw",t_float,"a+b");
-    //SAV2(UBornAmpFinal,chemin_result+"/UBornAmpFinal.raw",t_float,"a+b");
+    SAV2(UBornAmpFinal,chemin_result+"/UBornAmpFinal.raw",t_float,"a+b");
     ///Recalculer la TF décalée pour le programme principal.
     Var2D recal= {kxmi,kymi};
     decal2DCplxGen(UBornFinal,UBornFinalDecal, dim2DHA,decal2DHA);
@@ -221,9 +221,9 @@ delete[] UnwrappedPhase_herraez;
 ///------------SAUVER LES PARAMETRES UTILES À RECONSTRUCTION ou au contrôle
 cout<<"NXMAX sauve="<<m1.NXMAX<<endl;
 vector<double> param{m1.NXMAX,NbAngle,m1.rayon,dimROI.x,m1.tailleTheoPixelHolo};
-SAV2(param,m1.chemin_result+"/parametres.raw", t_double, "wb");
-SAV2(tabPosSpec,m1.chemin_result+"/tab_posSpec.raw",t_double,"wb");
-SAV_Tiff2D(centre,m1.chemin_result+"/centres.tif",m1.NA/m1.NXMAX); //exportation des spéculaires en "unité NA"
+//SAV2(param,m1.chemin_result+"/parametres.raw", t_double, "wb");
+//SAV2(tabPosSpec,m1.chemin_result+"/tab_posSpec.raw",t_double,"wb");
+//SAV_Tiff2D(centre,m1.chemin_result+"/centres.tif",m1.NA/m1.NXMAX); //exportation des spéculaires en "unité NA"
 cout<<"Fin prétraitement"<<endl;
 
 return 0;

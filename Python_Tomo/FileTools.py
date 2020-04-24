@@ -55,7 +55,7 @@ def readvalue(filename,keyword):
         if len(Ligne) != 0:
             FileContent.append(Ligne)
             nbLignesOK += 1
-    for cpt in range(0,nbLignesOK-1):
+    for cpt in range(0,nbLignesOK):
         if FileContent[cpt][0] == keyword:
             Value = float(FileContent[cpt][1])
     return Value

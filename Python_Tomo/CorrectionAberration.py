@@ -78,13 +78,13 @@ def PixInMask(Masque):
     step = 5
     count = 0
     dimMasqueX, dimMasqueY = np.shape(Masque)
-    for i in range(0,dimMasqueY-1):
-        for j in range(0,dimMasqueX-1):
+    for i in range(0,dimMasqueY):
+        for j in range(0,dimMasqueX):
             if Masque[j,i]>45:
                 count += 1
     nbPtRand = 0
-    for i in range(0,dimMasqueY-1,step):
-        for j in range(0,dimMasqueX-1,step):
+    for i in range(0,dimMasqueY,step):
+        for j in range(0,dimMasqueX,step):
             if Masque[j,i]>45:
                 Masque[j,i]=220
                 nbPtRand += 1
@@ -116,8 +116,8 @@ def CalcPolyUS_xy(degre_poly, Masque, polynomeUS_to_fit):
     if nbPtPolyUS > 9:
         num_coef = Coord1D = 0
         # print("degre_poly=",degre_poly)  
-        for y in range(0,dimMasqueY-1):
-            for x in range(0,dimMasqueX-1):
+        for y in range(0,dimMasqueY):
+            for x in range(0,dimMasqueX):
                 num_coef=0
                 if Masque[y,x] == 220:                    
                     for powX in range(0,degre_poly-1):
@@ -155,8 +155,8 @@ def CalcPoly_xy(degre_poly, Masque, polynome_to_fit):
     dimMasqueX, dimMasqueY = np.shape(Masque)
     if nbPtPoly > 9:
         num_coef = Coord1D = 0
-        for y in range(0,dimMasqueY-1):
-            for x in range(0,dimMasqueX-1):
+        for y in range(0,dimMasqueY):
+            for x in range(0,dimMasqueX):
                 num_coef=0
                 for powX in range(0,degre_poly-1):
                     powY = 0
@@ -193,14 +193,14 @@ def compuBackgr(coefficients,polynome_to_fit,PolyBackgr):
     #print("PolyRows, PolyCols=",PolyRows,PolyCols)
     BackgrRows, BackgrCols = np.shape(PolyBackgr)
     PolySize = nbCoef
-    for y in range(0,BackgrRows-1):
-        for x in range(0,BackgrCols-1):
+    for y in range(0,BackgrRows):
+        for x in range(0,BackgrCols):
             sum = 0.
             for num_coef in range(0,PolySize):             
                 sum += coefficients[num_coef] * polynome_to_fit[num_coef,UsCoord1D]       
             PolyBackgr[y,x] = sum
             UsCoord1D += 1
-            # print("UsCoord==",UsCoord1D)
+            #print("UsCoord==",UsCoord1D)
     #plt.imshow(PolyBackgr, cmap=plt.cm.gray)
     #plt.colorbar()
     #plt.show()
@@ -239,8 +239,8 @@ def compuCoefPoly(ImageBrut,Masque,coef_polynomial,polynomeUS_to_fit,methode):
     # print("yusbg==",y_poly)
     if nbPtUs>9:
         UsCoord = 0
-        for y in range(0,ImgRows-1):
-            for x in range(0,ImgCols-1):
+        for y in range(0,ImgRows):
+            for x in range(0,ImgCols):
                 if Masque[y,x] == 220:
                     undersampled_background[UsCoord] = np.float64(ImageBrut[y,x])
                     UsCoord += 1
@@ -337,5 +337,6 @@ def ampliCorr(Image,Masque,polynomeUS_to_fit,polynome_to_fit):
     resultatpoly = np.zeros((ImgRows,ImgCols),dtype=np.float64)
     resultat = np.zeros((ImgRows,ImgCols),dtype=np.float64)
     compuBackgr(coefsolve,polynome_to_fit,resultatpoly)
+    plt.imsave("/ramdisk/resultat_poly",resultatpoly,cmap=plt.cm.gray)
     resultat=Image/resultatpoly
     return resultat

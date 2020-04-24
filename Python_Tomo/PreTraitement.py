@@ -11,8 +11,8 @@ import time
 
 # Dossier de Données et fichier de configuration
 DossierData = '/opt/Acquis/pollen_topi_21SEPT/Acquis/'
-DossierAmplitude = '/home/mat/tmp/'
-DossierPhase = '/home/mat/tmp/'
+DossierAmplitude = '/ramdisk/'
+DossierPhase = '/ramdisk/'
 FichierConfig = DossierData + 'config_manip.txt'
 CheminMasque = 'Masque.tif'
 
@@ -94,29 +94,26 @@ for hol in range(0,nb_holo):
         
         # Correction de l'amplitude
         Amp_UBornCorr = CAber.ampliCorr(Amp_UBorn,Masque,Poly_US,Poly)
+        plt.title("Amp_Uborn")
         plt.imshow(Amp_UBorn, cmap=plt.cm.gray)
         plt.colorbar()
         plt.show()
+        plt.title("Amp_Corr")
         plt.imshow(Amp_UBornCorr, cmap=plt.cm.gray)
+        
         plt.colorbar()
         plt.show()
         
-        # Correction de la phase
-        Phase_UBornCorr = CAber.aberCorr(Phase_UBorn,Masque,Poly_US,Poly)
-        plt.imshow(Phase_UBorn, cmap=plt.cm.gray)
-        plt.colorbar()
-        plt.show()
-        plt.imshow(Phase_UBornCorr, cmap=plt.cm.gray)
-        plt.colorbar()
-        plt.show()
+
+
         
         # Enregistrement des résultats
         CheminAmp = DossierAmplitude + 'AmpUBorn_' + str('%03d' % cpt ) + '.tiff'
         CheminPh = DossierPhase + 'PhaseUBorn_' + str('%03d' % cpt ) + '.tiff'
         
         # Enregistrement de l'amplitude et la phase dépliée (avant correction pour le test)
-        # plt.imsave(CheminAmp,Amp_UBorn,cmap=plt.cm.gray)
-        # plt.imsave(CheminPh,Phase_UBorn,cmap=plt.cm.gray)    
+        plt.imsave(CheminAmp,Amp_UBornCorr,cmap=plt.cm.gray)
+        plt.imsave(CheminPh,Phase_UBorn,cmap=plt.cm.gray)    
         
         cpt = cpt + 1
         cpt_exist = cpt_exist + 1

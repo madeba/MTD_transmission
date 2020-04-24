@@ -144,9 +144,10 @@ void compuBackgr2(Mat const &coefficients, Mat const & polynome_to_fit, Mat &Pol
     for (int y = 0; y < PolyBackgr.rows; y ++)///scan all the (x,y) coord.
         for (int x = 0; x < PolyBackgr.cols; x ++){
             double sum=0;
-            for(int num_coef=0;num_coef<=poly_size;num_coef++)///calculate the numerical value of the poly for *one* coordinate (x_num_coef,y_num_coef)
+            for(int num_coef=0;num_coef<=poly_size;num_coef++){///calculate the numerical value of the poly for *one* coordinate (x_num_coef,y_num_coef)
                sum +=(coefficients.at<double>(num_coef)) * polynome_to_fit.at<double>(Coord1D,num_coef);
-
+               if(abs(sum)==0) cout<<"attention"<<endl;
+            }
             PolyBackgr.at<double>(y,x) = sum;//poly2DEval2(coefficients, polynome_to_fit, UsCoord1D);///calculate the numerical value of the poly for one  (x,y)
             Coord1D++;
         }
@@ -159,6 +160,7 @@ Mat  aberCorr2(Mat const &image, Mat const &mask,  Mat const &polynomeUs_to_fit,
     Mat resultatpolyBG(image.rows, image.cols, CV_64F), result_final(image.rows, image.cols, CV_64F);
     compuBackgr2(coefsolve, polynome_to_fit, resultatpolyBG);/// Compute the background image with the coef of polynomial
     //SAV2((double*)resultatpoly.data,image.rows*image.cols,"/home/mat/tmp/poly_aber_phase.raw",t_float,"a+b");
+
     result_final = image-resultatpolyBG;
     return result_final;
 }
@@ -168,18 +170,20 @@ Mat  ampliCorr2(Mat const & image,  Mat const &polynomeUs_to_fit, Mat const &pol
     compuCoefPoly2(image, mask, coefsolve, polynomeUs_to_fit, true); /// Compute the coef of polynomial (Least Squares method)
     Mat resultatpoly(image.rows, image.cols, CV_64F), result(image.rows, image.cols, CV_64F);
     compuBackgr2(coefsolve, polynome_to_fit,  resultatpoly);/// Compute the background image with the coef of polynomial
-    //SAV2((double*)resultatpoly.data,image.rows*image.cols,"/home/mat/tmp/poly_aber_phase.raw",t_float,"a+b");
+    SAV2((double*)resultatpoly.data,image.rows*image.cols,"/ramdisk/poly_aber_ampli.raw",t_float,"a+b");
+
+   //result = image/(resultatpoly+0.0001);
     result = image/resultatpoly;
     return result;
 }
 /// Compute the coef of polynomial (Least Squares method) by SVD,  i.e. solve COEF*POLYNOME_TO_FIT=BACKGROUND (with undersampled variables to speed up the process)
 void compuCoefPoly2(Mat const &imagebrut, Mat const & mask, Mat& coef_polynomial, Mat const &polynomeUs_to_fit, bool method)
 {
-  int nbCoef=polynomeUs_to_fit.cols, nbRows=polynomeUs_to_fit.rows;///
-  Mat Bt(Size(nbRows,nbCoef), CV_64F);//variable to stock transposed polynome_to_fit, for SVD inversion
-  Mat undersampled_background(nbRows, 1, CV_64F);///matrix containing  1 point out of  "step" (default_step=5) (gives NbPtOK).
+  int nbCoef=polynomeUs_to_fit.cols, nbPtPoly=polynomeUs_to_fit.rows;///
+  Mat Bt(Size(nbPtPoly,nbCoef), CV_64F);//variable to stock transposed polynome_to_fit, for SVD inversion
+  Mat undersampled_background(nbPtPoly, 1, CV_64F);///matrix containing  1 point out of  "step" (default_step=5) (gives NbPtOK).
 
-  if(nbRows>9){
+  if(nbPtPoly>9){
     int UsCoord = 0;/// 1D undersampled coordinate (corresponds to the 2D undersampled coordinates (x_us,y_us))
     for (int y = 0; y < imagebrut.rows; y ++){
       for (int x = 0; x < imagebrut.cols; x ++){
@@ -189,7 +193,7 @@ void compuCoefPoly2(Mat const &imagebrut, Mat const & mask, Mat& coef_polynomial
          }
      }
   }
-  Mat coef(nbCoef, 1, CV_64F), D(Size(nbCoef, nbRows), CV_64F), invD(Size(nbCoef, nbRows), CV_64F);
+  Mat coef(nbCoef, 1, CV_64F), D(Size(nbCoef, nbPtPoly), CV_64F), invD(Size(nbCoef, nbPtPoly), CV_64F);
   if (method){  /// Use OpenCV solve() function to solve the linear system
     cv::solve(polynomeUs_to_fit, undersampled_background, coef, DECOMP_NORMAL);//DECOMP_NORMAL->speed ++
   }
