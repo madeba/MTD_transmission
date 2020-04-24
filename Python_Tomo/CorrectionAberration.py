@@ -337,6 +337,6 @@ def ampliCorr(Image,Masque,polynomeUS_to_fit,polynome_to_fit):
     resultatpoly = np.zeros((ImgRows,ImgCols),dtype=np.float64)
     resultat = np.zeros((ImgRows,ImgCols),dtype=np.float64)
     compuBackgr(coefsolve,polynome_to_fit,resultatpoly)
-    plt.imsave("/ramdisk/resultat_poly",resultatpoly,cmap=plt.cm.gray)
+    # plt.imsave("/ramdisk/resultat_poly",resultatpoly,cmap=plt.cm.gray)
     resultat=Image/resultatpoly
     return resultat
