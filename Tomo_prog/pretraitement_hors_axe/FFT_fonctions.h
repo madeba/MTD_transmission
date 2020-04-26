@@ -40,8 +40,8 @@ void TF2D(std::vector<double> const & entree, std::vector<std::complex<double> >
 void TF2Dcplx(std::vector<std::complex<double>> const & entree, std::vector<std::complex<double> > &sortie, FFTW_init &tf2D_c2c, double delta_x);//calcul TF, cplx input
 void TF2Dcplx(std::vector<std::complex<double>> const & entree, std::vector<std::complex<double> > &sortie,FFTW_init &param_c2c);///->renommer fft?
 
-void TF2Dcplx_INV(std::vector<std::complex<double> > entree, std::vector<std::complex<double> > &sortie, FFTW_init &tf2D_c2c);//calcul fft inv
-void TF2Dcplx_INV(std::vector<std::complex<double> > entree, std::vector<std::complex<double> > &sortie, FFTW_init &tf2D_c2c, double Delta_f);//calcul TF inv
+void TF2Dcplx_INV(std::vector<std::complex<double>> const &entree, std::vector<std::complex<double> > &sortie, FFTW_init &tf2D_c2c);//calcul fft inv
+void TF2Dcplx_INV(std::vector<std::complex<double>> const &entree, std::vector<std::complex<double> > &sortie, FFTW_init &tf2D_c2c, double Delta_f);//calcul TF inv
 //---------R2C-----------------------------------------------------------------------------------
 void TF2D_r2c_symetric(std::vector<double> const &entree, std::vector<std::complex<double> > &sortie, FFTW_init  &tf2D_Re);//calcul fft
 void TF2D_r2c(std::vector<double> const &entree, std::vector<std::complex<double> > &sortie, FFTW_init const &tf2D_Re, double delta_x);//calcul TF

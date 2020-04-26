@@ -21,7 +21,7 @@ using namespace std;
 int main()
 {
     manip m1; //créer un objet manip
-    string chemin_result=m1.chemin_result, chemin_acquis=m1.chemin_acquis, Chemin_mask=m1.chemin_acquis+"Image_mask.pgm";
+    string chemin_result=m1.chemin_result, chemin_acquis=m1.chemin_acquis, Chemin_mask=m1.chemin_acquis+"/Image_mask.pgm";
     //dimensions hologrammes
     Var2D dimROI= {1024,1024}, coin= {0,0};
     Point2D dimHolo(1024,1024,1024);

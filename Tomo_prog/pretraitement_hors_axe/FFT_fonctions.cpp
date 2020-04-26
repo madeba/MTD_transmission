@@ -356,7 +356,7 @@ void TF2Dcplx(vector<complex<double>> const &entree, vector<complex<double> > &s
         }
 }
 
-void TF2Dcplx_INV(vector<complex<double> > entree, vector<complex<double> > &sortie, FFTW_init &tf2D)
+void TF2Dcplx_INV(vector<complex<double>> const &entree, vector<complex<double> > &sortie, FFTW_init &tf2D)
 {
     size_t nbPix=entree.size();
 //    int dim=sqrt(nbPix);
@@ -376,7 +376,7 @@ void TF2Dcplx_INV(vector<complex<double> > entree, vector<complex<double> > &sor
     }
 }
 //Surcharge avec echantillonnage pour calcul exact de la transformée fourier
-void TF2Dcplx_INV(vector<complex<double> > entree, vector<complex<double> > &sortie, FFTW_init &tf2D, double delta_f)
+void TF2Dcplx_INV(vector<complex<double>> const &entree, vector<complex<double> > &sortie, FFTW_init &tf2D, double delta_f)
 {
     size_t nbPix=entree.size();
 //    int dim=sqrt(nbPix);
@@ -509,3 +509,5 @@ void TF2D_r2c_symetric(vector<double> const &entree, vector<complex<double> > &s
   }
 
 }*/
+
+

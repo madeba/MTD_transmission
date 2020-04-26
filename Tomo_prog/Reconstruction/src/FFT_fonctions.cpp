@@ -428,73 +428,9 @@ void TF3Dcplx_Inplace_INV(vector<complex<double>> const & entree, vector<complex
         sortie[cpt].imag(param_Inplace_c2c.in[cpt][1]*Coef_norm);//division par N (dim^3) pour normaliser l'énergie (Parseval)
     }
 }
-/*
-void TF3Dcplx_inplace(fftw_complex *in_out, vector<complex<double> > entree, vector<complex<double> > &sortie, fftw_plan p3d_forward,manip m1)
-{
-
-    int nbPix=entree.size();
-   // double Coef_norm=sqrt((double)nbPix*m1.Tp_Uborn);
-        double Coef_norm=1;
-    size_t cpt=0;
-    for(int cpt=0; cpt<nbPix; cpt++) {
-        in_out[cpt][0]=entree[cpt].real();
-        in_out[cpt][1]=entree[cpt].imag();
-    }
-
-    fftw_execute(p3d_forward);
-
-    for(cpt=0; cpt<(nbPix); cpt++) {
-        sortie[cpt].real(in_out[cpt][0]/Coef_norm); //division par N (dim*dim) pour normaliser la fftw qui n'est pas normalisée
-        sortie[cpt].imag(in_out[cpt][1]/Coef_norm);
-    }
-}
 
 
-void TF3Dcplx_inplace_INV(fftw_complex *in_out, vector<complex<double> > entree, vector<complex<double> > &sortie, fftw_plan p3d_backward,manip m1)
-{
-    int nbPix=entree.size();
-    //double Coef_norm=sqrt((double)nbPix*m1.Tp_Uborn);
-    double Coef_norm=(double)nbPix;
-    size_t cpt=0;
-    for(int cpt=0; cpt<nbPix; cpt++) {
-        in_out[cpt][0]=entree[cpt].real();
-        in_out[cpt][1]=entree[cpt].imag();
-    }
-
-    fftw_execute(p3d_backward); // repeat as needed
-
-    for(cpt=0; cpt<(nbPix); cpt++) {
-        sortie[cpt].real(in_out[cpt][0]/Coef_norm);
-        sortie[cpt].imag(in_out[cpt][1]/Coef_norm);
-    }
-}
 
 
-///FFT2D entree=TF2D vector double
-void TF2Dcplx_INPLACE(fftw_complex *in_out,vector<double> entree, vector<complex<double> > &sortie, fftw_plan p2d_forward, manip m1){
 
 
-    int nbPix=entree.size();
-    //double Coef_norm=1;
-    double Coef_norm=nbPix;
-   // double Coef_norm=sqrt((double)nbPix);
-    for(int cpt=0; cpt<nbPix; cpt++)
-        {
-            in_out[cpt][0]=entree[cpt];
-            in_out[cpt][1]=0;
-        }
-    // in = reinterpret_cast<fftw_complex*>(&entree);
-// SAV2_vec(entree,nbPix,"/home/mat/tomo_test/entree_dans_tf2D.bin",t_float,"a+b");
-
-    fftw_execute(p2d_forward);
-
-    for(int cpt=0; cpt<(nbPix); cpt++)
-        {
-            sortie[cpt].real(in_out[cpt][0]/Coef_norm); //division par N (dim*dim) si FORWARD pour normaliser la fftw qui n'est pas normalisée
-            sortie[cpt].imag(in_out[cpt][1]/Coef_norm);
-        }
-    //  SAVCplx(sortie,"Im",nbPix,"/home/mat/tomo_test/spectre_dans_tf2D.bin",t_float,"a+b");
-}
-
-
-*/

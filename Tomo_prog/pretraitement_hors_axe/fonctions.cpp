@@ -20,7 +20,7 @@ for(int cpt=0;cpt<cplxField.size();cpt++)
 phaseMod2pi[cpt]=atan2(cplxField[cpt].imag(),cplxField[cpt].real());
 }
 ///general circular shift
-void circshift2DCplx(vector<complex<double>> entree, vector<complex<double>> &result, Var2D dim,Var2D decal)///___/!\ ne fonctionne qu'avec des demi espace??
+void circshift2DCplx(vector<complex<double>> const &entree, vector<complex<double>> &result, Var2D dim,Var2D decal)///___/!\ ne fonctionne qu'avec des demi espace??
 {
         //si décalage supérieure à dim, on fait plus d'un tour, donc on prend le modulo
 
@@ -55,7 +55,7 @@ void circshift2DCplx(vector<complex<double>> entree, vector<complex<double>> &re
        //  #pragma omp barrier
 }
 
-void decal2DCplxGen(vector<complex<double>> entree, vector<complex<double>> &result, Var2D dim,Var2D decal)
+void decal2DCplxGen(vector<complex<double>> const &entree, vector<complex<double>> &result, Var2D dim,Var2D decal)
 {
             //si décalage supérieure à dim, on fait plus d'un tour, donc on prend le modulo
             //cout<<"decal.x,y="<<decal.x<<","<<decal.y<<endl;
@@ -168,7 +168,7 @@ void calc_Uborn2(vector<complex<double>> const &TF_UBorn,vector<complex<double>>
 
 }
 
-int coordSpec(vector<complex<double>> TF_UBorn, vector<double> &TF_champMod,Var2D NMAX)
+int coordSpec(vector<complex<double>> const &TF_UBorn, vector<double> &TF_champMod,Var2D NMAX)
  {
     int cpt_max=0;
     TF_champMod[0]=pow(TF_UBorn[0].real(),2)+pow(TF_UBorn[0].imag(),2);
@@ -588,7 +588,7 @@ void SAVCplx(std::vector<complex<double>> const &var_sav, string partie, std::st
 }
 
 
-void SAV2(vector<double> v, std::string chemin, enum PRECISION2 precision, char options[])
+void SAV2(vector<double> &v, std::string chemin, enum PRECISION2 precision, char options[])
 {
         size_t NbPix2D=v.size();
         double* var_sav = &v[0];
@@ -729,7 +729,7 @@ void SAV_Tiff2D(double *var_sav, string chemin, int dim)
     TIFFClose(tif);
 }
 
-void SAV_Tiff2D(std::vector<double> var_sav, string chemin, double taille_pixel)
+void SAV_Tiff2D(std::vector<double> const &var_sav, string chemin, double taille_pixel)
 {   int dim=pow(var_sav.size(),0.5);
     float xres, yres;
     uint16  res_unit;
@@ -772,7 +772,7 @@ void SAV_Tiff2D(std::vector<double> var_sav, string chemin, double taille_pixel)
 }
 
 
-void SAV_Tiff2D(std::vector<complex<double>> var_sav, string partie, string chemin, double taille_pixel)
+void SAV_Tiff2D(std::vector<complex<double>> const & var_sav, string partie, string chemin, double taille_pixel)
 {   int dim=pow(var_sav.size(),0.5);
     float xres, yres;
     uint16  res_unit;
@@ -820,7 +820,7 @@ void SAV_Tiff2D(std::vector<complex<double>> var_sav, string partie, string chem
     TIFFClose(tif_out);
 }
 
-void SAV3D_Tiff(vector<complex <double>> var_sav, string partie, string chemin, double taille_pixel)
+void SAV3D_Tiff(vector<complex <double>> const &var_sav, string partie, string chemin, double taille_pixel)
 {
     int dim=round(std::pow(var_sav.size(), 1.0/3.0));
     uint32 image_width, image_height, dimz;

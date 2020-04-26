@@ -43,14 +43,14 @@ Mat init_mask_aber(string Chemin_mask, Var2D dim2DHA)
     ///Charger masque aberration
     Mat mask = imread(Chemin_mask, 0);
     if(! mask.data ){
-        cout <<  "Masque non trouvé, création masque unité" << std::endl ;
+        cout <<  "Masque : "<<Chemin_mask <<" non trouvé création masque unité" << std::endl ;
         mask=255*Mat::ones(dim2DHA.x,dim2DHA.y, CV_8UC1);
     }
     else{
         cout<<"chargement du masque"<<Chemin_mask<<endl;
     }
-    if(mask.rows!=2*dim2DHA.x){
-        cout<<"Problème aberrations : masque "<<Chemin_mask<< " de largeur "<<mask.rows<<", mais image de largeur "<<2*dim2DHA.x<<endl;
+    if(mask.rows!=dim2DHA.x){
+        cout<<"Problème aberrations : masque "<<Chemin_mask<< " de largeur "<<mask.rows<<", mais image de largeur "<<dim2DHA.x<<endl;
     }
     mask.convertTo(mask, CV_8U);  ///Chargement du masque pour correction aberration/ampli
 
