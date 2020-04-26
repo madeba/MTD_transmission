@@ -30,7 +30,7 @@ int main()
     vector<double> holo1(NbPixROI2d), intensite_ref(NbPixROI2d), ampli_ref(NbPixROI2d);
     char charAngle[4+1];
     ///-----------Init FFTW Holo---------------
-    size_t nb_thread_fftw=4;
+    size_t nb_thread_fftw=3;
 
     int fftwThreadInit=fftw_init_threads();
    // cout<<"fftwthreadinit="<<fftwThreadInit<<endl;
@@ -66,7 +66,9 @@ auto start_decoupeHA = std::chrono::system_clock::now();///démarrage chrono Hor
 ///Charger les acqusitions
 //#pragma omp parallel for reduction(cpt)
 FILE* test_existence;//tester l'existence des fichiers
-for(size_t cptAngle=0; cptAngle<NbAngle; cptAngle++){
+size_t cptAngle=0;
+//#pragma omp parallel for private(cptAngle)
+for(cptAngle=0; cptAngle<NbAngle; cptAngle++){
   if((cptAngle-100*(cptAngle/100))==0)    cout<<cptAngle<<endl;
     sprintf(charAngle,"%03i",cptAngle);
     string nomFichierHolo=m1.chemin_acquis+"/i"+charAngle+".pgm";
@@ -93,14 +95,14 @@ auto elapsed = end_decoupeHA - start_decoupeHA;
 std::cout <<"Temps pour FFT holo+découpe Spectre= "<< elapsed.count()/(pow(10,9)) << '\n';
 //--------------Init FFTW Hors axe-------------------------------------------------
 
-
+/*
 fftw_plan p_backward_HA,p_forward_HA;
 //fftw_complex *in_out=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * dimROI.x*dimROI.y);////in=out pour transformation "inplace".
 fftw_complex *in_HA=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * NbPixUBorn);
 fftw_complex *out_HA=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * NbPixUBorn);//
 
 p_backward_HA=fftw_plan_dft_2d(dim2DHA.x, dim2DHA.y, in_HA, out_HA, FFTW_BACKWARD,FFTW_MEASURE);
-p_forward_HA=fftw_plan_dft_2d(dim2DHA.x, dim2DHA.y, in_HA, out_HA, FFTW_FORWARD,FFTW_MEASURE);
+p_forward_HA=fftw_plan_dft_2d(dim2DHA.x, dim2DHA.y, in_HA, out_HA, FFTW_FORWARD,FFTW_MEASURE);*/
 float alpha=0.1;//coeff pour le masque de tuckey
 vector<double> masqueTukeyHA(tukey2D(dim2DHA.x,dim2DHA.y,alpha));
 //-------------------------
@@ -110,7 +112,7 @@ vector<double> masqueTukeyHA(tukey2D(dim2DHA.x,dim2DHA.y,alpha));
 vector<complex<double>> TF_UBorn(NbPixUBorn),  UBorn(NbPixUBorn);
 vector<double> phase_2Pi_vec(NbPixUBorn),  UnwrappedPhase(NbPixUBorn),PhaseFinal(NbPixUBorn);
 double *UnwrappedPhase_herraez=new double[NbPixUBorn];
-FFTW_init param_fftw2D_c2r_HA(TF_UBorn,4);
+FFTW_init param_fftw2D_c2r_HA(TF_UBorn,3);
 
 ///variable pour correction aberration
 Mat src=Mat(1, ampli_ref.size(), CV_64F, ampli_ref.data()), mask_aber=init_mask_aber(Chemin_mask,dim2DHA);
@@ -125,8 +127,8 @@ cout<<"\n#########################Calcul champs cplx 2D Uborn/Rytov + eventuelle
 vector<complex<double>> UBornFinal(NbPixUBorn), UBornFinalDecal(NbPixUBorn), TF_UBorn_norm(NbPixUBorn);
 vector<double> UBornAmpFinal(NbPixUBorn),  UBornAmp(NbPixUBorn);
 vector<double> tabPosSpec(NbAngle*2);  ///stockage des speculaires pour exportation vers reconstruction
-
-
+auto start_part2= std::chrono::system_clock::now();
+//#pragma omp parallel for
 for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les angles : correction aberrations
   TF_UBorn.assign(TF_UBornTot.begin()+NbPixUBorn*cpt_angle, TF_UBornTot.begin()+NbPixUBorn*(cpt_angle+1));  ///Récupérer la TF2D dans la pile de spectre2D
   // SAVCplx(TF_UBorn,"Re","/home/mat/tmp/TF_Uborn_iterateur.raw",t_float,"a+b");
@@ -142,7 +144,8 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
   centre[kxmi*2*m1.NXMAX+kymi]=cpt_angle;
 
   if(m1.b_CorrAber==true){
-    calc_Uborn(TF_UBorn,UBorn,dim2DHA,posSpec,in_HA,out_HA,p_backward_HA);///--/!\ recale le spectre dans Uborn!
+    //calc_Uborn(TF_UBorn,UBorn,dim2DHA,posSpec,in_HA,out_HA,p_backward_HA);///--/!\ recale le spectre dans Uborn!
+    calc_Uborn2(TF_UBorn,UBorn,dim2DHA,posSpec,param_fftw2D_c2r_HA);
     //SAVCplx(UBorn,"Re",chemin_result+"/ampli_UBorn_debut_extract.raw",t_float,"a+b");
     ///----------Calcul phase + deroulement--------------------------------
     calcPhase_mpi_pi_atan2(UBorn,phase_2Pi_vec); ///fonction atan2
@@ -198,7 +201,8 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
     ///Recalculer la TF décalée pour le programme principal.
     Var2D recal= {kxmi,kymi};
     decal2DCplxGen(UBornFinal,UBornFinalDecal, dim2DHA,decal2DHA);
-    TF2Dcplx_vec(in_HA,out_HA,UBornFinalDecal,TF_UBorn_norm,p_forward_HA);
+    //TF2Dcplx_vec(in_HA,out_HA,UBornFinalDecal,TF_UBorn_norm,p_forward_HA);
+    TF2Dcplx(UBornFinalDecal,TF_UBorn_norm,param_fftw2D_c2r_HA);
     SAVCplx(UBornFinal,"Re", chemin_result+"/UBornfinal_Re"+m1.dimImg+".raw", t_double, "a+b");
     SAVCplx(UBornFinal,"Im", chemin_result+"/UBornfinal_Im"+m1.dimImg+".raw", t_double, "a+b");
   }
@@ -211,19 +215,22 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
       TF_UBorn_norm[cpt].imag((TF_UBorn[cpt].imag()*max_part_reel-TF_UBorn[cpt].real()*max_part_imag)/max_module);
     }
     //SAVCplx(TF_UBorn,"Re", chemin_result+"/TF_Uborn_Re.raw", t_double, "a+b");
-    calc_Uborn(TF_UBorn_norm,UBorn,dim2DHA,posSpec,in_HA,out_HA,p_backward_HA);///--/!\ recale le spectre dans support Uborn!
+    //calc_Uborn(TF_UBorn_norm,UBorn,dim2DHA,posSpec,in_HA,out_HA,p_backward_HA);///--/!\ recale le spectre dans support Uborn!
+    calc_Uborn2(TF_UBorn_norm,UBorn,dim2DHA,posSpec,param_fftw2D_c2r_HA);
     SAVCplx(UBorn,"Re", chemin_result+"/UBornfinal_Re"+m1.dimImg+".raw", t_double, "a+b");
     SAVCplx(UBorn,"Im", chemin_result+"/UBornfinal_Im"+m1.dimImg+".raw", t_double, "a+b");
   }
 }//fin de boucle for sur tous les angles
-
+auto end_part2= std::chrono::system_clock::now();
+auto elapsed_part2 = end_part2 - start_part2;
+std::cout <<"Temps pour part2= "<< elapsed_part2.count()/(pow(10,9)) << '\n';
 delete[] UnwrappedPhase_herraez;
 ///------------SAUVER LES PARAMETRES UTILES À RECONSTRUCTION ou au contrôle
 cout<<"NXMAX sauve="<<m1.NXMAX<<endl;
 vector<double> param{m1.NXMAX,NbAngle,m1.rayon,dimROI.x,m1.tailleTheoPixelHolo};
-//SAV2(param,m1.chemin_result+"/parametres.raw", t_double, "wb");
-//SAV2(tabPosSpec,m1.chemin_result+"/tab_posSpec.raw",t_double,"wb");
-//SAV_Tiff2D(centre,m1.chemin_result+"/centres.tif",m1.NA/m1.NXMAX); //exportation des spéculaires en "unité NA"
+SAV2(param,m1.chemin_result+"/parametres.raw", t_double, "wb");
+SAV2(tabPosSpec,m1.chemin_result+"/tab_posSpec.raw",t_double,"wb");
+SAV_Tiff2D(centre,m1.chemin_result+"/centres.tif",m1.NA/m1.NXMAX); //exportation des spéculaires en "unité NA"
 cout<<"Fin prétraitement"<<endl;
 
 return 0;

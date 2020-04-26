@@ -1,10 +1,10 @@
 #include "FFT_encaps.h"
 using namespace std;
 ///init fftw pour FFT3D
-FFT_encaps::FFT_encaps(Point3D dim)
+FFT_encaps::FFT_encaps(Point3D dim,size_t nbThreads)
 {
     unsigned int nbPix=dim.x*dim.y*dim.z;
-    m_Nthread=3;
+    m_Nthread=nbThreads;
 
     fftwThreadInit=fftw_init_threads();
     fftw_plan_with_nthreads(m_Nthread);
@@ -13,7 +13,26 @@ FFT_encaps::FFT_encaps(Point3D dim)
     p_forward_OUT=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, out,FFTW_FORWARD, FFTW_ESTIMATE);
     p_backward_OUT=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, out,FFTW_BACKWARD, FFTW_ESTIMATE );
 }
+FFT_encaps::FFT_encaps(Point3D dim,size_t nbThreads, bool b_inPlace)
+{
+    unsigned int nbPix=dim.x*dim.y*dim.z;
+    m_Nthread=nbThreads;
 
+    fftwThreadInit=fftw_init_threads();
+    fftw_plan_with_nthreads(m_Nthread);
+    if(b_inPlace==0){
+    in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
+    out=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
+    p_forward_OUT=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, out,FFTW_FORWARD, FFTW_ESTIMATE);
+    p_backward_OUT=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, out,FFTW_BACKWARD, FFTW_ESTIMATE );
+    }
+    else{
+    in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
+    //out=nullptr;
+    p_forward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_FORWARD, FFTW_ESTIMATE);
+    p_backward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_BACKWARD, FFTW_ESTIMATE );
+    }
+}
 ///init fftw pour FFT2D
 FFT_encaps::FFT_encaps(Point2D dim)
 {
@@ -29,9 +48,9 @@ FFT_encaps::FFT_encaps(Point2D dim)
 
 ///destructeur
 FFT_encaps::~FFT_encaps(){
-fftw_free(in);
-fftw_free(out);
-fftw_destroy_plan(p_forward_OUT);
-fftw_destroy_plan(p_backward_OUT);
+//fftw_free(in);
+//fftw_free(out);
+//fftw_destroy_plan(p_forward_OUT);
+//fftw_destroy_plan(p_backward_OUT);
 }
 

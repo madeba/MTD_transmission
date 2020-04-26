@@ -85,7 +85,7 @@ void fftshift3D(vector<complex<double>> const &entree, vector<complex<double>> &
 //    vector<complex<double>> result(nbPix);
     size_t yi=0,xi=0,zi=0;
     int nbPix_z=0, nbPix_zdecal=0,nbPixy=0;
-  // #pragma omp parallel for
+   #pragma omp parallel for private (zi)
     for(zi=0;zi<dim.z/2;zi++){
         nbPix_z=zi*nbPix2D;
         nbPix_zdecal=(zi+decal.z)*nbPix2D;
@@ -410,7 +410,24 @@ void TF3Dcplx_INV(fftw_complex *in, fftw_complex *out, vector<complex<double> > 
         sortie[cpt].imag(out[cpt][1]*Coef_norm);//division par N (dim^3) pour normaliser l'énergie (Parseval)
     }
 }
+void TF3Dcplx_Inplace_INV(vector<complex<double>> const & entree, vector<complex<double> > &sortie, FFT_encaps &param_Inplace_c2c, double delta_f)
+{
 
+    int nbPix=entree.size();
+   // double Coef_norm=sqrt((double)nbPix*m1.Tp_Uborn);
+    double Coef_norm=pow(delta_f,3);
+    size_t cpt=0;
+    for(int cpt=0; cpt<nbPix; cpt++) {
+        param_Inplace_c2c.in[cpt][0]=entree[cpt].real();
+        param_Inplace_c2c.in[cpt][1]=entree[cpt].imag();
+    }
+
+    fftw_execute(param_Inplace_c2c.p_backward_IN);
+    for(cpt=0; cpt<(nbPix); cpt++) {
+        sortie[cpt].real(param_Inplace_c2c.in[cpt][0]*Coef_norm); //division par N (dim^3) pour normaliser l'énergie (Parseval)
+        sortie[cpt].imag(param_Inplace_c2c.in[cpt][1]*Coef_norm);//division par N (dim^3) pour normaliser l'énergie (Parseval)
+    }
+}
 /*
 void TF3Dcplx_inplace(fftw_complex *in_out, vector<complex<double> > entree, vector<complex<double> > &sortie, fftw_plan p3d_forward,manip m1)
 {

@@ -36,8 +36,8 @@
 			<Add directory="src" />
 		</Compiler>
 		<Linker>
-			<Add option="`pkg-config --libs opencv`  -lpthread -lgomp  -lopencv_core -lopencv_imgproc" />
-			<Add option="-lopencv_highgui -ltiff  -lfftw3_threads -lfftw3 -lm" />
+			<Add option="`pkg-config --libs opencv`  -lpthread -lm -lgomp  -lopencv_core -lopencv_imgproc" />
+			<Add option="-lopencv_highgui -ltiff  -lfftw3 -lfftw3_threads" />
 			<Add library="/usr/lib/x86_64-linux-gnu/libfftw3.so" />
 			<Add library="/usr/lib/x86_64-linux-gnu/libfftw3_threads.so" />
 			<Add directory="/usr/lib/x86_64-linux-gnu/" />

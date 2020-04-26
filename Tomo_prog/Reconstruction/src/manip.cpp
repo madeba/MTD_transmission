@@ -62,7 +62,7 @@ manip::manip()
 
     premier_plan=extract_val("PREMIER_ANGLE",fic_cfg_recon),
     Num_Angle_final=extract_val("NB_HOLO",fic_cfg_manip),//
-
+    nbThreads=extract_val("NB_THREADS",fic_cfg_recon);
     cout<<"\n##################### Options de RECONSTRUCTION ##################\n"<<endl;
     b_CorrAber=extract_val("C_ABER",fic_cfg_recon);///corriger les aberrations?
     b_Deroul=extract_val("DEROUL",fic_cfg_recon);///Dérouler la phase?

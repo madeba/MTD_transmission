@@ -266,11 +266,12 @@ int main(int argc, char *argv[])
 
         vector <complex<double >> PotObj_shift(N_tab);
         Point3D dim3D(dim_final,dim_final,dim_final,dim_final);
-        FFT_encaps tf3D(dim3D);
-
+       // FFT_encaps tf3D_out(dim3D,m1.nbThreads);
+        FFT_encaps tf3D_IN(dim3D,m1.nbThreads,1);
         high_resolution_clock::time_point t1v = high_resolution_clock::now();//temps vrai (pas CPU)
 
-        TF3Dcplx_INV(tf3D.in, tf3D.out,TF3D_PotObj_shift , PotObj_shift, tf3D.p_backward_OUT,m1.Delta_fUborn);
+        //TF3Dcplx_INV(tf3D_out.in, tf3D_out.out,TF3D_PotObj_shift , PotObj_shift, tf3D_out.p_backward_OUT,m1.Delta_fUborn);
+        TF3Dcplx_Inplace_INV(TF3D_PotObj_shift , PotObj_shift,tf3D_IN,m1.Delta_fUborn);
         vector<complex<double>>().swap(TF3D_PotObj_shift);
         high_resolution_clock::time_point t2v = high_resolution_clock::now();
         auto duration = duration_cast<microseconds>( t2v - t1v ).count();

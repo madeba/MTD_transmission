@@ -35,6 +35,7 @@ void calcPhase_mpi_pi_atan2(std::vector<std::complex<double>> const & cplx_field
 void circshift2DCplx(std::vector<std::complex<double>> entree, std::vector<std::complex<double>> &result, Var2D dim,Var2D decal);
 void decal2DCplxGen(std::vector<std::complex<double>> entree,std::vector<std::complex<double>> &result, Var2D dim,Var2D decal);
 void calc_Uborn(std::vector<std::complex<double>> const &TF_UBorn,std::vector<std::complex<double>> &UBorn,Var2D dim2DHA,Var2D PosSpec,fftw_complex *in,fftw_complex *out,fftw_plan p);
+void calc_Uborn2(std::vector<std::complex<double>> const &TF_UBorn,std::vector<std::complex<double>> &UBorn,Var2D dim2DHA,Var2D PosSpec,FFTW_init &param_c2c);
 int coordSpec(std::vector<std::complex<double>> TF_UBorn, std::vector<double> &TF_champMod,Var2D NMAX);
 //void holo2TF_UBorn(std::vector<double> holo1, std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA,
                  //  size_t NumAngle, std::vector<double> masque);

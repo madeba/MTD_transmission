@@ -11,7 +11,7 @@ vector<vecteur > result(dim*dim);
 size_t decal=dim/2;
 size_t yi=0;
 size_t xi=0;
-        //#pragma omp parallel for private(yi)
+       // #pragma omp parallel for
        for(yi=0; yi<decal; yi++) {
             size_t num_ligne=yi*dim;
                 for(xi=0; xi<decal; xi++)
@@ -71,7 +71,7 @@ vector<complex<double> > result(dim*dim);
 size_t decal=dim/2;
 size_t yi=0;
        size_t xi=0;
-        //#pragma omp parallel for private(yi)
+    //#pragma omp parallel for
        for(yi=0; yi<decal; yi++) {
             size_t num_ligne=yi*dim;
                 for(xi=0; xi<decal; xi++)
@@ -105,7 +105,7 @@ unsigned int dim=sqrt(entree.size());
 size_t decal=dim/2;
 size_t yi=0;
        size_t xi=0;
-        #pragma omp parallel for private(yi)
+       // #pragma omp parallel for
        for(yi=0; yi<decal; yi++) {
             size_t num_ligne=yi*dim;
                 for(xi=0; xi<decal; xi++)
@@ -134,7 +134,7 @@ unsigned int dim=sqrt(entree.size());
 size_t decal=dim/2;
 size_t yi=0;
        size_t xi=0;
-        #pragma omp parallel for private(yi)
+       // #pragma omp parallel for
        for(yi=0; yi<decal; yi++) {
             size_t num_ligne=yi*dim, num_lgn_decal=(yi+decal)*dim;
                 for(xi=0; xi<decal; xi++)
@@ -164,7 +164,7 @@ vector<double> result(dim*dim);
 size_t decal=dim/2;
 size_t yi=0;
        size_t xi=0;
-      //  #pragma omp parallel for private(yi)
+    //  #pragma omp parallel for
        for(yi=0; yi<decal; yi++) {
             size_t num_ligne=yi*dim;
                 for(xi=0; xi<decal; xi++)
@@ -430,6 +430,9 @@ void TF2D_r2c_symetric(vector<double> const &entree, vector<complex<double> > &s
   for(int cpt=0; cpt<nbPix; cpt++){
     tf2D_Re.in_double[cpt]=entree[cpt];
   }
+
+int    fftwThreadInit=fftw_init_threads();
+    fftw_plan_with_nthreads(tf2D_Re.m_Nthread);
   fftw_execute(tf2D_Re.p_forward_OUT);
 
   //#pragma omp parallel for num_threads(2)

@@ -146,7 +146,7 @@ void compuBackgr2(Mat const &coefficients, Mat const & polynome_to_fit, Mat &Pol
             double sum=0;
             for(int num_coef=0;num_coef<=poly_size;num_coef++){///calculate the numerical value of the poly for *one* coordinate (x_num_coef,y_num_coef)
                sum +=(coefficients.at<double>(num_coef)) * polynome_to_fit.at<double>(Coord1D,num_coef);
-               if(abs(sum)==0) cout<<"attention"<<endl;
+               //if(abs(sum)==0) cout<<"attention"<<endl;
             }
             PolyBackgr.at<double>(y,x) = sum;//poly2DEval2(coefficients, polynome_to_fit, UsCoord1D);///calculate the numerical value of the poly for one  (x,y)
             Coord1D++;

@@ -24,7 +24,7 @@ void TF2Dcplx_INPLACE(fftw_complex *in_out, std::vector<double> entree,  std::ve
 
 
 void TF3Dcplx_inplace(fftw_complex *in_out, std::vector<std::complex<double> > entree, std::vector<std::complex<double> > &sortie, fftw_plan p3d, double delta_x);
-
+void TF3Dcplx_Inplace_INV(std::vector<std::complex<double>> const &entree, std::vector<std::complex<double> > &sortie, FFT_encaps &param_Inplace_c2c, double delta_f);
 void TF3Dcplx(fftw_complex *in, fftw_complex *out, std::vector<std::complex<double> > entree, std::vector<std::complex<double> > &sortie, fftw_plan p3d, double delta_x);
 void TF3Dcplx_INV(fftw_complex *in, fftw_complex *out, std::vector<std::complex<double> > entree, std::vector<std::complex<double> > &sortie, fftw_plan p3d, double delta_f);
 

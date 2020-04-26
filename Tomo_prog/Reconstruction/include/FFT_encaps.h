@@ -13,7 +13,8 @@ public:
     int fftwThreadInit;
     fftw_complex *in,*out;
 
-    FFT_encaps(Point3D dim);
+    FFT_encaps(Point3D dim,size_t nbThread);
+    FFT_encaps(Point3D dim,size_t nbThread,bool inplace);
     FFT_encaps(Point2D dim);
     ~FFT_encaps();
 

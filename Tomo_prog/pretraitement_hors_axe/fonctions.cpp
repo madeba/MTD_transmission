@@ -142,6 +142,32 @@ void calc_Uborn(vector<complex<double>> const &TF_UBorn,vector<complex<double>> 
    // SAVCplx(UBorn, "Re", "/home/mat/tmp/Uborn_re_extract_holo.raw", t_float, "a+b");
 
 }
+///@parameters PosSpec : position of the specular beam //surcharge FFTW_init
+void calc_Uborn2(vector<complex<double>> const &TF_UBorn,vector<complex<double>> &UBorn,Var2D dim2DHA,Var2D PosSpec,FFTW_init &param_c2c)
+{
+
+    Var2D recalUBorn={-PosSpec.x,-PosSpec.y},DecalU_Born={dim2DHA.x/2,dim2DHA.y/2};
+   // cout<<"recalUbonrxy"<<recalUBorn.x<<","<<recalUBorn.y<<endl;
+    //Var2D recal_filtrage={recalUBorn.x+DecalU_Born.x, recalUBorn.y+DecalU_Born.y};
+    size_t NbPixUBorn=dim2DHA.x*dim2DHA.y;
+
+  //SAVCplx(TF_UBorn, "Re", "/home/mat/tomo_test/TFUborn_extract_holo_re.raw", t_float, "a+b");
+
+    vector<complex<double>> TF_UBorn_I(NbPixUBorn);
+
+    decal2DCplxGen(TF_UBorn,TF_UBorn_I,dim2DHA,recalUBorn);/// ///
+  //  SAVCplx(TF_UBorn_I, "Re", "/home/mat/tomo_test/TFUbornI_extract_holo_re.raw", t_float, "a+b");
+
+    vector<complex<double>> UBorn_I(NbPixUBorn);
+    TF2Dcplx_INV(TF_UBorn_I, UBorn_I, param_c2c);
+ //SAVCplx(UBorn_I, "Re", "/home/mat/tomo_test/UbornI_extract_holo_re.raw", t_float, "a+b");
+
+
+    circshift2DCplx(UBorn_I,UBorn,dim2DHA,DecalU_Born);
+   // SAVCplx(UBorn, "Re", "/home/mat/tmp/Uborn_re_extract_holo.raw", t_float, "a+b");
+
+}
+
 int coordSpec(vector<complex<double>> TF_UBorn, vector<double> &TF_champMod,Var2D NMAX)
  {
     int cpt_max=0;
