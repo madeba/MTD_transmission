@@ -33,7 +33,7 @@ dimHolo = 2*fmaxHolo # dimension de l'hologramme
 CentreX = ft.readvalue(FichierConfig,'CIRCLE_CX') # position du centre de la pupille dans l'espace de Fourier
 CentreY = ft.readvalue(FichierConfig,'CIRCLE_CY')
 nb_holoTot = ft.readvalue(FichierConfig,'NB_HOLO')
-nb_holo = int(nb_holoTot) # nombre d'hologrammes à traiter
+nb_holo = 1 # nombre d'hologrammes à traiter
 
 # Traitement de la séquence
 cpt = 1
@@ -87,24 +87,24 @@ for hol in range(0,nb_holo):
             
         # Correction de l'amplitude
         Amp_UBornCorr = CAber.ampliCorr(Amp_UBorn,Masque,Poly_US,Poly)
-        # plt.title("Amp_Uborn")
-        # plt.imshow(Amp_UBorn, cmap=plt.cm.gray)
-        # plt.colorbar()
-        # plt.show()
-        # plt.title("Amp_Corr")
-        # plt.imshow(Amp_UBornCorr, cmap=plt.cm.gray)
-        # plt.colorbar()
-        # plt.show()
+        plt.title("Amp_Uborn")
+        plt.imshow(Amp_UBorn, cmap=plt.cm.gray)
+        plt.colorbar()
+        plt.show()
+        plt.title("Amp_Corr")
+        plt.imshow(Amp_UBornCorr, cmap=plt.cm.gray)
+        plt.colorbar()
+        plt.show()
         
         Phase_UBornCorr = CAber.aberCorr(Phase_UBorn,Masque,Poly_US,Poly)
-        # plt.title("Phase_Uborn")
-        # plt.imshow(Phase_UBorn, cmap=plt.cm.gray)
-        # plt.colorbar()
-        # plt.show()
-        # plt.title("Phase_Corr")
-        # plt.imshow(Phase_UBornCorr, cmap=plt.cm.gray)
-        # plt.colorbar()
-        # plt.show()
+        plt.title("Phase_Uborn")
+        plt.imshow(Phase_UBorn, cmap=plt.cm.gray)
+        plt.colorbar()
+        plt.show()
+        plt.title("Phase_Corr")
+        plt.imshow(Phase_UBornCorr, cmap=plt.cm.gray)
+        plt.colorbar()
+        plt.show()
 
         
         # Enregistrement des résultats

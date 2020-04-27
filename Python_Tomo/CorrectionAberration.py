@@ -24,11 +24,9 @@ def InitMasque(Chemin,dimMasque):
 
     """
     if os.path.isfile(Chemin):
-        # Ouverture si le masque existe
         Masque = np.uint8(np.array(plt.imread(Chemin)))
         print("Ouverture du masque binaire")
     else:
-        # Masque à 255 s'il n'est pas donné
         Masque = np.uint8(255 * np.ones((dimMasque,dimMasque)))
         print("Pas de masque trouvé ... chargement masque unité")
     return Masque
@@ -110,12 +108,10 @@ def CalcPolyUS_xy(degre_poly, Masque, polynomeUS_to_fit):
         Undersampled polynome.
 
     """
-    # nbPtMask,Masque = PixInMask(Masque)
     nbCoef,nbPtPolyUS = np.shape(polynomeUS_to_fit)
     dimMasqueX, dimMasqueY = np.shape(Masque) 
-    if nbPtPolyUS > 9:
-        num_coef = Coord1D = 0
-        # print("degre_poly=",degre_poly)  
+    if nbPtPolyUS > nbCoef:
+        num_coef = Coord1D = 0  
         for y in range(0,dimMasqueY):
             for x in range(0,dimMasqueX):
                 num_coef=0
@@ -127,7 +123,6 @@ def CalcPolyUS_xy(degre_poly, Masque, polynomeUS_to_fit):
                             num_coef += 1
                             powY += 1                             
                     Coord1D += 1
-                #print("coord",Coord1D)
     return polynomeUS_to_fit
 
 # Génération du polynome à ajuster pour tout x,y en dehors du masque
@@ -150,10 +145,9 @@ def CalcPoly_xy(degre_poly, Masque, polynome_to_fit):
         Calculated polynome.
 
     """
-    # nbPtMask,Masque = PixInMask(Masque)
     nbCoef,nbPtPoly = np.shape(polynome_to_fit)   
     dimMasqueX, dimMasqueY = np.shape(Masque)
-    if nbPtPoly > 9:
+    if nbPtPoly > nbCoef:
         num_coef = Coord1D = 0
         for y in range(0,dimMasqueY):
             for x in range(0,dimMasqueX):
@@ -186,27 +180,20 @@ def compuBackgr(coefficients,polynome_to_fit,PolyBackgr):
     None.
 
     """
-    coefX,coefY=np.shape(coefficients)
-    
     UsCoord1D = 0
     nbCoef, NbPtImg = np.shape(polynome_to_fit)
-    #print("PolyRows, PolyCols=",PolyRows,PolyCols)
     BackgrRows, BackgrCols = np.shape(PolyBackgr)
     PolySize = nbCoef
     for y in range(0,BackgrRows):
-        for x in range(0,BackgrCols):
+        for x in range(0,BackgrCols):    
             sum = 0.
             for num_coef in range(0,PolySize):             
-                sum += coefficients[num_coef] * polynome_to_fit[num_coef,UsCoord1D]       
+                sum += coefficients[num_coef]*polynome_to_fit[num_coef,UsCoord1D]       
             PolyBackgr[y,x] = sum
             UsCoord1D += 1
-            #print("UsCoord==",UsCoord1D)
-    #plt.imshow(PolyBackgr, cmap=plt.cm.gray)
-    #plt.colorbar()
-    #plt.show()
       
 # Calcul des coefficients du polynome
-def compuCoefPoly(ImageBrut,Masque,coef_polynomial,polynomeUS_to_fit,methode):
+def compuCoefPoly(ImageBrut,Masque,coef_polynomial,polynomeUS_to_fit):
     """
     Least-Square computation of the coefficient of the fitted polynome
 
@@ -220,8 +207,6 @@ def compuCoefPoly(ImageBrut,Masque,coef_polynomial,polynomeUS_to_fit,methode):
         Coefficients of the fit (copied from coef therein).
     polynomeUS_to_fit : float64
         Polynome to be fitted (undersampled version).
-    methode : bool
-        Choice of the method. If methode is true, lsq inversion. If methode is false, direct matrix inversion.
 
     Returns
     -------
@@ -230,44 +215,17 @@ def compuCoefPoly(ImageBrut,Masque,coef_polynomial,polynomeUS_to_fit,methode):
     """
     ImgRows,ImgCols = np.shape(ImageBrut)
     nbCoef,nbPtUs = np.shape(polynomeUS_to_fit)
-    # print("nbPtUs dimXpolyus==",nbCoef)
-    # print("nbCoef dimYpolyUS==",nbPtUs)
-    Bt = np.zeros((nbCoef,nbPtUs),dtype=np.float64)
     undersampled_background = np.zeros((nbPtUs,1),dtype=np.float64)
     x_poly,y_poly = np.shape(undersampled_background)
-    # print("xusbg==",x_poly)
-    # print("yusbg==",y_poly)
-    if nbPtUs>9:
+    if nbPtUs>nbCoef:
         UsCoord = 0
         for y in range(0,ImgRows):
             for x in range(0,ImgCols):
                 if Masque[y,x] == 220:
                     undersampled_background[UsCoord] = np.float64(ImageBrut[y,x])
                     UsCoord += 1
-                    # print("USCoord",UsCoord)
-        tabCoef = np.zeros((nbCoef,1),dtype=np.float64)
-        
-        tabCoefX,tabCoefY=np.shape(tabCoef)
-        # print("tabCoefX=",tabCoefX)
-        # print("tabCoefY=",tabCoefY)
-        # print("type(tabCoef)=",type(tabCoef))
-        # print("bckgrd",undersampled_background)
-        
-        D = np.zeros((nbPtUs,nbCoef),dtype=np.float64)
-        invD = np.zeros((nbCoef,nbPtUs),dtype=np.float64)
-        if methode:
-            # print("solve==")
-            cv2.solve(np.transpose(polynomeUS_to_fit), undersampled_background, tabCoef, cv2.DECOMP_NORMAL)
-            # for cpt in range(0,nbCoef-1):
-            #     print(tabCoef[cpt])
-        
-        else:
-            cv2.transpose(polynomeUS_to_fit,Bt)
-            D = Bt * polynomeUS_to_fit
-            cv2.invert(D,invD,cv2.DECOMP_SVD)
-            tabCoef = (invD.dot(Bt)).dot(undersampled_background)
-        # coef_polynomial=tabCoef
-        # print("tabCoef=",tabCoef)
+        tabCoef = np.zeros((nbCoef,1),dtype=np.float64)                
+        cv2.solve(np.transpose(polynomeUS_to_fit), undersampled_background, tabCoef, cv2.DECOMP_NORMAL)
         np.copyto(coef_polynomial,tabCoef)
     else:
         tabCoef = np.zeros((nbCoef,1),dtype=np.float64)
@@ -297,14 +255,10 @@ def aberCorr(Image,Masque,polynomeUS_to_fit,polynome_to_fit):
     nbCoef,nbPtUs = np.shape(polynomeUS_to_fit)
     ImgRows,ImgCols = np.shape(Image)
     coefsolve = np.zeros((nbCoef,1),dtype=np.float64)
-    # print("typecoefsolve=",type(coefsolve))
-    compuCoefPoly(Image,Masque,coefsolve,polynomeUS_to_fit,True)
+    compuCoefPoly(Image,Masque,coefsolve,polynomeUS_to_fit)
     resultatpolyBG = np.zeros((ImgRows,ImgCols),dtype=np.float64)
     resultat_final = np.zeros((ImgRows,ImgCols),dtype=np.float64)
     compuBackgr(coefsolve,polynome_to_fit,resultatpolyBG)
-    # plt.imshow(resultatpolyBG, cmap=plt.cm.gray)
-    # plt.colorbar()
-    # plt.show()
     resultat_final=Image-resultatpolyBG
     return resultat_final
 
@@ -333,10 +287,9 @@ def ampliCorr(Image,Masque,polynomeUS_to_fit,polynome_to_fit):
     ImgRows,ImgCols = np.shape(Image)
     nbCoef,nbPtUs = np.shape(polynomeUS_to_fit)
     coefsolve = np.zeros((nbCoef,1),dtype=np.float64)
-    compuCoefPoly(Image,Masque,coefsolve,polynomeUS_to_fit,True)
+    compuCoefPoly(Image,Masque,coefsolve,polynomeUS_to_fit)
     resultatpoly = np.zeros((ImgRows,ImgCols),dtype=np.float64)
     resultat = np.zeros((ImgRows,ImgCols),dtype=np.float64)
     compuBackgr(coefsolve,polynome_to_fit,resultatpoly)
-    # plt.imsave("/ramdisk/resultat_poly",resultatpoly,cmap=plt.cm.gray)
     resultat=Image/resultatpoly
     return resultat
