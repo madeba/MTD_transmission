@@ -11,6 +11,7 @@ import time
 
 # Dossier de Données et fichier de configuration
 DossierData = '../PollenAziz/'
+nbFichier = len(os.listdir(DossierData))
 DossierAmplitude = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Amplitude/'
 DossierPhase = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Phase/'
 FichierConfig = DossierData + 'config_manip.txt' # Prévoir lecture des paramètres depuis le fichier texte
@@ -18,6 +19,7 @@ CheminMasque = 'Masque.tif'
 
 
 # Données de l'acquisition
+Rytov = True
 CamDim = 1024
 NA = ft.readvalue(FichierConfig,'NA')
 nimm = ft.readvalue(FichierConfig,'N0')
@@ -29,19 +31,23 @@ RapFoc = ft.readvalue(FichierConfig,'RF') # rapport des focales du doublet de r�
 Gtot = f_tube/f_obj/0.7
 REwald = CamDim*pix/Gtot*nimm/(Lambda) # rayon support de fréquence accessible en pixel
 fmaxHolo = round(REwald*NA/nimm) # support max de fréquence
-dimHolo = 2*fmaxHolo # dimension de l'hologramme
-CentreX = ft.readvalue(FichierConfig,'CIRCLE_CX') # position du centre de la pupille dans l'espace de Fourier
-CentreY = ft.readvalue(FichierConfig,'CIRCLE_CY')
-nb_holoTot = ft.readvalue(FichierConfig,'NB_HOLO')
-nb_holo = 1 # nombre d'hologrammes à traiter
+dimHolo = int(2*fmaxHolo) # dimension de l'hologramme
+CentreX = int(ft.readvalue(FichierConfig,'CIRCLE_CX')) # position du centre de la pupille dans l'espace de Fourier
+CentreY = int(ft.readvalue(FichierConfig,'CIRCLE_CY'))
+nb_holoTot = int(ft.readvalue(FichierConfig,'NB_HOLO'))
+nb_holo = 600 # nombre d'hologrammes à traiter
+CheminSAV_Re = "C:/Users/p1600109/Documents/Recherche/MatlabTomo/ReBorn" + "_" + str(dimHolo) + ".bin"
+CheminSAV_Im = "C:/Users/p1600109/Documents/Recherche/MatlabTomo/ImBorn" + "_" + str(dimHolo) + ".bin"
 
 # Traitement de la séquence
 cpt = 1
-cpt_exist = 1
+# cpt_exist = 1
 Centres = np.zeros((dimHolo,dimHolo))
-OTFTomo = np.zeros((2*dimHolo,2*dimHolo,2*dimHolo))
-SupRedon = np.zeros((2*dimHolo,2*dimHolo,2*dimHolo))
-Support2D = np.ones((dimHolo,dimHolo))
+Re_UBorn = np.zeros((dimHolo,dimHolo,nbFichier-2),np.float64)
+Im_UBorn = np.zeros((dimHolo,dimHolo,nbFichier-2),np.float64)
+# OTFTomo = np.zeros((2*dimHolo,2*dimHolo,2*dimHolo))
+# SupRedon = np.zeros((2*dimHolo,2*dimHolo,2*dimHolo))
+# Support2D = np.ones((dimHolo,dimHolo))
 
 # Initialisation correction amplitude et phase
 Masque = CAber.InitMasque(CheminMasque,dimHolo)
@@ -59,7 +65,8 @@ Poly = CAber.CalcPoly_xy(degrePoly,Masque,Poly)
 
 start_time = time.time()
 for hol in range(0,nb_holo):
-    filename = DossierData + 'i' + str('%03d' % cpt ) + '.pgm'
+    # print(hol)
+    filename = DossierData + 'i' + str('%03d' % hol ) + '.pgm'
     if os.path.isfile(filename):
         Image = plt.imread(filename)
         
@@ -87,37 +94,50 @@ for hol in range(0,nb_holo):
             
         # Correction de l'amplitude
         Amp_UBornCorr = CAber.ampliCorr(Amp_UBorn,Masque,Poly_US,Poly)
-        plt.title("Amp_Uborn")
-        plt.imshow(Amp_UBorn, cmap=plt.cm.gray)
-        plt.colorbar()
-        plt.show()
-        plt.title("Amp_Corr")
-        plt.imshow(Amp_UBornCorr, cmap=plt.cm.gray)
-        plt.colorbar()
-        plt.show()
+        # plt.title("Amp_Uborn")
+        # plt.imshow(Amp_UBorn, cmap=plt.cm.gray)
+        # plt.colorbar()
+        # plt.show()
+        # plt.title("Amp_Corr")
+        # plt.imshow(Amp_UBornCorr, cmap=plt.cm.gray)
+        # plt.colorbar()
+        # plt.show()
         
         Phase_UBornCorr = CAber.aberCorr(Phase_UBorn,Masque,Poly_US,Poly)
-        plt.title("Phase_Uborn")
-        plt.imshow(Phase_UBorn, cmap=plt.cm.gray)
-        plt.colorbar()
-        plt.show()
-        plt.title("Phase_Corr")
-        plt.imshow(Phase_UBornCorr, cmap=plt.cm.gray)
-        plt.colorbar()
-        plt.show()
+        # plt.title("Phase_Uborn")
+        # plt.imshow(Phase_UBorn, cmap=plt.cm.gray)
+        # plt.colorbar()
+        # plt.show()
+        # plt.title("Phase_Corr")
+        # plt.imshow(Phase_UBornCorr, cmap=plt.cm.gray)
+        # plt.colorbar()
+        # plt.show()
 
         
         # Enregistrement des résultats
-        CheminAmp = DossierAmplitude + 'AmpUBorn_' + str('%03d' % cpt ) + '.tiff'
-        CheminPh = DossierPhase + 'PhaseUBorn_' + str('%03d' % cpt ) + '.tiff'
+        CheminAmp = DossierAmplitude + 'AmpUBorn_' + str('%03d' % hol ) + '.tiff'
+        CheminPh = DossierPhase + 'PhaseUBorn_' + str('%03d' % hol ) + '.tiff'
         
         # Enregistrement de l'amplitude et la phase dépliée (avant correction pour le test)
         plt.imsave(CheminAmp,Amp_UBornCorr,cmap=plt.cm.gray)
         plt.imsave(CheminPh,Phase_UBornCorr,cmap=plt.cm.gray)    
         
-        cpt = cpt + 1
-        cpt_exist = cpt_exist + 1
-    else:
-        cpt = cpt + 1
+        if Rytov is True:
+            # print("Rytov")
+            Re_UBorn[:,:,cpt] = np.log(np.abs(Amp_UBornCorr))
+            Im_UBorn[:,:,cpt] = Phase_UBornCorr
+        else:
+            # print("Born")
+            Re_UBorn[:,:,cpt] = (Amp_UBornCorr-1)*np.cos(Phase_UBornCorr)
+            Im_UBorn[:,:,cpt] = (Amp_UBornCorr-1)*np.sin(Phase_UBornCorr)
+        cpt += 1
+
+# Sauvegarde    
+fidRe = open(CheminSAV_Re,"w")
+fidIm = open(CheminSAV_Im,"w")
+Re_UBorn.tofile(fidRe)
+Im_UBorn.tofile(fidIm)
+fidRe.close()
+fidIm.close()
 print("--- %s seconds ---" % np.round(time.time() - start_time))
 

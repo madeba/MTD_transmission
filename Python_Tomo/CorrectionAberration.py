@@ -182,15 +182,25 @@ def compuBackgr(coefficients,polynome_to_fit,PolyBackgr):
     """
     UsCoord1D = 0
     nbCoef, NbPtImg = np.shape(polynome_to_fit)
+    result_mltpn=np.zeros((nbCoef,1),dtype=np.float64)
     BackgrRows, BackgrCols = np.shape(PolyBackgr)
-    PolySize = nbCoef
-    for y in range(0,BackgrRows):
-        for x in range(0,BackgrCols):    
-            sum = 0.
-            for num_coef in range(0,PolySize):             
-                sum += coefficients[num_coef]*polynome_to_fit[num_coef,UsCoord1D]       
-            PolyBackgr[y,x] = sum
+    #PolySize = nbCoef
+    for y in range(0,BackgrCols):
+        for x in range(0,BackgrRows):
+            result_mltpn[:,0]=coefficients[:,0] * polynome_to_fit[:,UsCoord1D]
+            PolyBackgr[y,x] =np.sum(result_mltpn)
             UsCoord1D += 1
+    # UsCoord1D = 0
+    # nbCoef, NbPtImg = np.shape(polynome_to_fit)
+    # BackgrRows, BackgrCols = np.shape(PolyBackgr)
+    # PolySize = nbCoef
+    # for y in range(0,BackgrRows):
+    #     for x in range(0,BackgrCols):    
+    #         sum = 0.
+    #         for num_coef in range(0,PolySize):             
+    #             sum += coefficients[num_coef]*polynome_to_fit[num_coef,UsCoord1D]       
+    #         PolyBackgr[y,x] = sum
+    #         UsCoord1D += 1
       
 # Calcul des coefficients du polynome
 def compuCoefPoly(ImageBrut,Masque,coef_polynomial,polynomeUS_to_fit):
@@ -291,5 +301,5 @@ def ampliCorr(Image,Masque,polynomeUS_to_fit,polynome_to_fit):
     resultatpoly = np.zeros((ImgRows,ImgCols),dtype=np.float64)
     resultat = np.zeros((ImgRows,ImgCols),dtype=np.float64)
     compuBackgr(coefsolve,polynome_to_fit,resultatpoly)
-    resultat=Image/resultatpoly
+    resultat=Image/(resultatpoly+np.finfo(np.float32).eps)
     return resultat
