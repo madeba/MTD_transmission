@@ -7,14 +7,16 @@ import CorrectionAberration as CAber
 import os
 import FileTools as ft
 import time
-
+# from libtiff import TIFFfile, TIFFimage
 
 # Dossier de Données et fichier de configuration
 DossierData = '../PollenAziz/'
-nbFichier = len(os.listdir(DossierData))
+# DossierData = '../Test/'
+# nbFichier = len(os.listdir(DossierData))
+# print("Nombre de fichiers =", nbFichier)
 DossierAmplitude = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Amplitude/'
 DossierPhase = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Phase/'
-FichierConfig = DossierData + 'config_manip.txt' # Prévoir lecture des paramètres depuis le fichier texte
+FichierConfig = f"{DossierData}config_manip.txt" # Prévoir lecture des paramètres depuis le fichier texte
 CheminMasque = 'Masque.tif'
 
 
@@ -36,18 +38,13 @@ CentreX = int(ft.readvalue(FichierConfig,'CIRCLE_CX')) # position du centre de l
 CentreY = int(ft.readvalue(FichierConfig,'CIRCLE_CY'))
 nb_holoTot = int(ft.readvalue(FichierConfig,'NB_HOLO'))
 nb_holo = 600 # nombre d'hologrammes à traiter
-CheminSAV_Re = "C:/Users/p1600109/Documents/Recherche/MatlabTomo/ReBorn" + "_" + str(dimHolo) + ".bin"
-CheminSAV_Im = "C:/Users/p1600109/Documents/Recherche/MatlabTomo/ImBorn" + "_" + str(dimHolo) + ".bin"
+CheminSAV_Re = f"C:/Users/p1600109/Documents/Recherche/MatlabTomo/ReBorn_{dimHolo}.bin"
+CheminSAV_Im = f"C:/Users/p1600109/Documents/Recherche/MatlabTomo/ImBorn_{dimHolo}.bin"
 
 # Traitement de la séquence
 cpt = 1
-# cpt_exist = 1
+cpt_exist = 1
 Centres = np.zeros((dimHolo,dimHolo))
-Re_UBorn = np.zeros((dimHolo,dimHolo,nbFichier-2),np.float64)
-Im_UBorn = np.zeros((dimHolo,dimHolo,nbFichier-2),np.float64)
-# OTFTomo = np.zeros((2*dimHolo,2*dimHolo,2*dimHolo))
-# SupRedon = np.zeros((2*dimHolo,2*dimHolo,2*dimHolo))
-# Support2D = np.ones((dimHolo,dimHolo))
 
 # Initialisation correction amplitude et phase
 Masque = CAber.InitMasque(CheminMasque,dimHolo)
@@ -65,8 +62,7 @@ Poly = CAber.CalcPoly_xy(degrePoly,Masque,Poly)
 
 start_time = time.time()
 for hol in range(0,nb_holo):
-    # print(hol)
-    filename = DossierData + 'i' + str('%03d' % hol ) + '.pgm'
+    filename = f"{DossierData}i{'%03d' % cpt}.pgm"
     if os.path.isfile(filename):
         Image = plt.imread(filename)
         
@@ -94,42 +90,30 @@ for hol in range(0,nb_holo):
             
         # Correction de l'amplitude
         Amp_UBornCorr = CAber.ampliCorr(Amp_UBorn,Masque,Poly_US,Poly)
-        # plt.title("Amp_Uborn")
-        # plt.imshow(Amp_UBorn, cmap=plt.cm.gray)
-        # plt.colorbar()
-        # plt.show()
-        # plt.title("Amp_Corr")
-        # plt.imshow(Amp_UBornCorr, cmap=plt.cm.gray)
-        # plt.colorbar()
-        # plt.show()
         
+        # Correction de la phase
         Phase_UBornCorr = CAber.aberCorr(Phase_UBorn,Masque,Poly_US,Poly)
-        # plt.title("Phase_Uborn")
-        # plt.imshow(Phase_UBorn, cmap=plt.cm.gray)
-        # plt.colorbar()
-        # plt.show()
-        # plt.title("Phase_Corr")
-        # plt.imshow(Phase_UBornCorr, cmap=plt.cm.gray)
-        # plt.colorbar()
-        # plt.show()
-
         
         # Enregistrement des résultats
-        CheminAmp = DossierAmplitude + 'AmpUBorn_' + str('%03d' % hol ) + '.tiff'
-        CheminPh = DossierPhase + 'PhaseUBorn_' + str('%03d' % hol ) + '.tiff'
+        CheminAmp = f"{DossierAmplitude}AmpUBorn_{'%03d' % cpt}.tiff"
+        CheminPh = f"{DossierPhase}PhaseUBorn_{'%03d' % cpt}.tiff"
         
         # Enregistrement de l'amplitude et la phase dépliée (avant correction pour le test)
         plt.imsave(CheminAmp,Amp_UBornCorr,cmap=plt.cm.gray)
         plt.imsave(CheminPh,Phase_UBornCorr,cmap=plt.cm.gray)    
         
+        # Calcul du Champ
         if Rytov is True:
             # print("Rytov")
-            Re_UBorn[:,:,cpt] = np.log(np.abs(Amp_UBornCorr))
-            Im_UBorn[:,:,cpt] = Phase_UBornCorr
+            Re_UBorn = np.log(np.abs(Amp_UBornCorr))
+            Im_UBorn = Phase_UBornCorr
         else:
             # print("Born")
-            Re_UBorn[:,:,cpt] = (Amp_UBornCorr-1)*np.cos(Phase_UBornCorr)
-            Im_UBorn[:,:,cpt] = (Amp_UBornCorr-1)*np.sin(Phase_UBornCorr)
+            Re_UBorn = (Amp_UBornCorr-1)*np.cos(Phase_UBornCorr)
+            Im_UBorn = (Amp_UBornCorr-1)*np.sin(Phase_UBornCorr)
+        cpt += 1
+        cpt_exist += 1
+    else:
         cpt += 1
 
 # Sauvegarde    
@@ -139,5 +123,5 @@ Re_UBorn.tofile(fidRe)
 Im_UBorn.tofile(fidIm)
 fidRe.close()
 fidIm.close()
-print("--- %s seconds ---" % np.round(time.time() - start_time))
+print(f"Temps d'éxecution : {np.round(time.time() - start_time,decimals=2)} seconds")
 
