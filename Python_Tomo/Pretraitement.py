@@ -37,9 +37,10 @@ dimHolo = int(2*fmaxHolo) # dimension de l'hologramme
 CentreX = int(ft.readvalue(FichierConfig,'CIRCLE_CX')) # position du centre de la pupille dans l'espace de Fourier
 CentreY = int(ft.readvalue(FichierConfig,'CIRCLE_CY'))
 nb_holoTot = int(ft.readvalue(FichierConfig,'NB_HOLO'))
-nb_holo = 600 # nombre d'hologrammes à traiter
+nb_holo = 1 # nombre d'hologrammes à traiter
 CheminSAV_Re = f"C:/Users/p1600109/Documents/Recherche/MatlabTomo/ReBorn_{dimHolo}.bin"
 CheminSAV_Im = f"C:/Users/p1600109/Documents/Recherche/MatlabTomo/ImBorn_{dimHolo}.bin"
+CheminSAV_Centres = f"C:/Users/p1600109/Documents/Recherche/MatlabTomo/Centres_{dimHolo}.bin"
 
 # Traitement de la séquence
 cpt = 1
@@ -94,19 +95,23 @@ for hol in range(0,nb_holo):
         # Correction de la phase
         Phase_UBornCorr = CAber.aberCorr(Phase_UBorn,Masque,Poly_US,Poly)
         
-        # Enregistrement des résultats
-        CheminAmp = f"{DossierAmplitude}AmpUBorn_{'%03d' % cpt}.tiff"
-        CheminPh = f"{DossierPhase}PhaseUBorn_{'%03d' % cpt}.tiff"
+        # # Enregistrement des résultats
+        # CheminAmp = f"{DossierAmplitude}AmpUBorn_{'%03d' % cpt}.tiff"
+        # CheminPh = f"{DossierPhase}PhaseUBorn_{'%03d' % cpt}.tiff"
         
-        # Enregistrement de l'amplitude et la phase dépliée (avant correction pour le test)
-        plt.imsave(CheminAmp,Amp_UBornCorr,cmap=plt.cm.gray)
-        plt.imsave(CheminPh,Phase_UBornCorr,cmap=plt.cm.gray)    
+        # # Enregistrement de l'amplitude et la phase dépliée (avant correction pour le test)
+        # plt.imsave(CheminAmp,Amp_UBornCorr,cmap=plt.cm.gray)
+        # plt.imsave(CheminPh,Phase_UBornCorr,cmap=plt.cm.gray)     
         
+        fidRe = open(CheminSAV_Re,"a")
+        fidIm = open(CheminSAV_Im,"a")
         # Calcul du Champ
         if Rytov is True:
             # print("Rytov")
             Re_UBorn = np.log(np.abs(Amp_UBornCorr))
             Im_UBorn = Phase_UBornCorr
+            Re_UBorn.tofile(fidRe)
+            Im_UBorn.tofile(fidIm)
         else:
             # print("Born")
             Re_UBorn = (Amp_UBornCorr-1)*np.cos(Phase_UBornCorr)
@@ -116,11 +121,11 @@ for hol in range(0,nb_holo):
     else:
         cpt += 1
 
-# Sauvegarde    
-fidRe = open(CheminSAV_Re,"w")
-fidIm = open(CheminSAV_Im,"w")
-Re_UBorn.tofile(fidRe)
-Im_UBorn.tofile(fidIm)
+# Sauvegarde des centres   
+fidCentres = open(CheminSAV_Centres,"w")
+Centres.tofile(fidCentres)
+fidCentres.close()
 fidRe.close()
 fidIm.close()
 print(f"Temps d'éxecution : {np.round(time.time() - start_time,decimals=2)} seconds")
+
