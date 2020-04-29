@@ -116,6 +116,8 @@ for hol in range(0,nb_holo):
             # print("Born")
             Re_UBorn = (Amp_UBornCorr-1)*np.cos(Phase_UBornCorr)
             Im_UBorn = (Amp_UBornCorr-1)*np.sin(Phase_UBornCorr)
+            Re_UBorn.tofile(fidRe)
+            Im_UBorn.tofile(fidIm)
         cpt += 1
         cpt_exist += 1
     else:
