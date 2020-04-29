@@ -8,6 +8,7 @@
 #include "projet.h"
 #include "FFT_fonctions.h"
 #include "fonctions.h"
+
 using namespace std;
 using namespace cv;
 
@@ -591,4 +592,150 @@ void SAV2(double *var_sav,int NbPix2D, std::string chemin, enum PRECISION2 preci
         fclose(fichier_ID);
 }
 
+void SAV3D_Tiff(vector<complex <double>> var_sav, string partie, string chemin, double taille_pixel)
+{
+    int dim=round(std::pow(var_sav.size(), 1.0/3.0));
+    uint32 image_width, image_height, dimz;
+    float xres, yres;
+    uint16 spp, bpp, photo, res_unit,zpage;
+    TIFF *out;
+    size_t x, y, z;
+    float buffer2D[dim * dim];
+    out = TIFFOpen(chemin.c_str(), "w");
+    if (!out)
+            fprintf (stderr, "Can't open  for writing\n");
+    image_width = dim;
+    image_height = dim;
+    dimz=dim;
+    spp = 1; /* Samples per pixel */
+    bpp = 32; /* Bits per sample */
+   // photo = PHOTOMETRIC_MINISBLACK;
+   size_t num_page=0;
+    for(num_page = 0; num_page < dim; num_page++){//z=page
 
+      int nbPix_plan=num_page*dim*dim;
+      ///reel
+      if(partie=="Re" || partie=="re"){
+      //  #pragma omp parallel for private(y)
+        for (y = 0; y < dim; y++){
+          size_t num_lgn=y*dim;
+          for(x = 0; x < dim; x++){
+            buffer2D[num_lgn + x] = (float)var_sav[num_lgn + x+nbPix_plan].real();
+          }
+        }
+      }
+           ///imag
+      else{
+        if(partie=="Im" || partie=="im"){
+        //  #pragma omp parallel for private(y)
+          for (y = 0; y < dim; y++){
+            size_t num_lgn=y*dim;
+              for(x = 0; x < dim; x++){
+                buffer2D[num_lgn + x] = (float)var_sav[num_lgn + x+nbPix_plan].imag();
+              }
+            }
+        }
+        else
+          cout<<"Partie non identifiée : Re || re, Im, || im"<<endl;
+       }
+
+
+
+ //z=page
+        TIFFSetField(out, TIFFTAG_IMAGEWIDTH, image_width / spp);
+        TIFFSetField(out, TIFFTAG_IMAGELENGTH, image_height);
+        TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, bpp);
+        TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, spp);
+        TIFFSetField(out, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+       // TIFFSetField(out, TIFFTAG_PHOTOMETRIC, photo);
+        TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_BOTLEFT);
+        TIFFSetField (out, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP); //image en Floating point
+        /* It is good to set resolutions too (but it is not nesessary) */
+        xres = yres = 0.01/taille_pixel; //nbpixel par resunit (par centimetre, on multiplie par 0.01 pour tout passer en mètre)
+        res_unit = RESUNIT_CENTIMETER;
+        TIFFSetField(out, TIFFTAG_XRESOLUTION, xres);
+        TIFFSetField(out, TIFFTAG_YRESOLUTION, yres);
+        TIFFSetField(out, TIFFTAG_RESOLUTIONUNIT, res_unit);
+        /* We are writing single page of the multipage file */
+        TIFFSetField(out, TIFFTAG_SUBFILETYPE, FILETYPE_PAGE);
+        /* Set the page number */
+        TIFFSetField(out, TIFFTAG_PAGENUMBER, num_page, dimz);
+//auto start_tiff = std::chrono::system_clock::now();
+
+        for (y = 0; y < image_height; y++){//écriture d'une page numérotée num_page, ligne par ligne (y).
+            TIFFWriteScanline(out, &buffer2D[y * image_width], y, 0);
+       }
+             // auto end_tiff = std::chrono::system_clock::now();
+  //  auto elapsed_tiff = end_tiff - start_tiff;
+
+      //  cout<<"numpage="<<num_page<<endl;
+
+ //   std::cout <<"Temps ecriture 1 plan tiff= "<< elapsed_tiff.count()/(pow(10,9)) << '\n';
+
+        TIFFWriteDirectory(out);
+    }
+
+    TIFFClose(out);
+}
+
+vector<double> Import3D_Tiff(string chemin, double taille_pixel)
+{
+    vector<double> imgTiff;
+   // const size_t dim=round(std::pow(imgTiff.size(), 1.0/3.0));
+    uint32 image_width, image_height, dimz;
+
+    float xres, yres;
+    uint16 spp, bpp, photo, res_unit,zpage;
+    TIFF *Tiff_id;
+    size_t x, y, z;
+    TIFFGetField(Tiff_id, TIFFTAG_IMAGEWIDTH, image_width / spp);
+    TIFFGetField(Tiff_id, TIFFTAG_IMAGELENGTH, image_height);
+
+    float buffer2D[dim * dim];
+    Tiff_id = TIFFOpen(chemin.c_str(), "r");
+    if (!Tiff_id)
+            fprintf (stderr, "Can't open  for writing\n");
+
+    image_width = dim;
+    image_height = dim;
+    dimz=dim;
+    spp = 1; /* Samples per pixel */
+    bpp = 32; /* Bits per sample */
+   // photo = PHOTOMETRIC_MINISBLACK;
+    size_t num_page=0;
+
+    for(num_page = 0; num_page < dim; num_page++){//z=page
+ //z=page
+        TIFFGetField(Tiff_id, TIFFTAG_IMAGEWIDTH, image_width / spp);
+        TIFFGetField(Tiff_id, TIFFTAG_IMAGELENGTH, image_height);
+      /*  TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, bpp);
+        TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, spp);
+        TIFFSetField(out, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+       // TIFFSetField(out, TIFFTAG_PHOTOMETRIC, photo);
+        TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_BOTLEFT);
+        TIFFSetField (out, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP); //image en Floating point
+        /* It is good to set resolutions too (but it is not nesessary) */
+       /* xres = yres = 0.01/taille_pixel; //nbpixel par resunit (par centimetre, on multiplie par 0.01 pour tout passer en mètre)
+        res_unit = RESUNIT_CENTIMETER;
+        TIFFSetField(out, TIFFTAG_XRESOLUTION, xres);
+        TIFFSetField(out, TIFFTAG_YRESOLUTION, yres);
+        TIFFSetField(out, TIFFTAG_RESOLUTIONUNIT, res_unit);
+        /* We are writing single page of the multipage file */
+       // TIFFSetField(out, TIFFTAG_SUBFILETYPE, FILETYPE_PAGE);
+        /* Set the page number */
+      //  TIFFSetField(out, TIFFTAG_PAGENUMBER, num_page, dimz);*/
+
+        for (y = 0; y < image_height; y++){//écriture d'une page numérotée num_page, ligne par ligne (y).
+            TIFFReadScanline(Tiff_id, &buffer2D[y * image_width], y, 0);
+       }
+        int nbPix_plan=num_page*dim*dim;
+        for (y = 0; y < dim; y++){
+          size_t num_lgn=y*dim;
+          for(x = 0; x < dim; x++){
+             imgTiff[num_lgn + x+nbPix_plan]=buffer2D[num_lgn + x];
+          }
+        }
+    }
+
+    TIFFClose(Tiff_id);
+}

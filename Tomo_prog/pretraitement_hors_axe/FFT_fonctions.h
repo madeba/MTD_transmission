@@ -11,8 +11,12 @@
 
 std::vector<std::complex<double> >  fftshift2D(std::vector<std::complex<double> > const &entree);
 std::vector<double>  fftshift2D(std::vector<double> const &entree);
-void fftshift2D(std::vector<double> const &entree, std::vector<double> &sortie);
-void  fftshift2D(std::vector<std::complex<double>> const &entree,std::vector<std::complex<double>>  &sortie);
+//void fftshift2D(std::vector<double> const &entree, std::vector<double> &sortie);
+//void  fftshift2D(std::vector<std::complex<double>> const &entree,std::vector<std::complex<double>>  &sortie);
+///surcharge utilisant std:copy
+std::vector<double>  fftshift2D2(std::vector<double> const &entree);
+std::vector<std::complex<double>>  fftshift2D2(std::vector<std::complex<double>> const &entree);
+
 std::vector<vecteur>  fftshift2D(std::vector<vecteur> &entree);
 
 ///fftw c2r complex input
@@ -44,6 +48,6 @@ void TF2Dcplx_INV(std::vector<std::complex<double>> const &entree, std::vector<s
 void TF2Dcplx_INV(std::vector<std::complex<double>> const &entree, std::vector<std::complex<double> > &sortie, FFTW_init &tf2D_c2c, double Delta_f);//calcul TF inv
 //---------R2C-----------------------------------------------------------------------------------
 void TF2D_r2c_symetric(std::vector<double> const &entree, std::vector<std::complex<double> > &sortie, FFTW_init  &tf2D_Re);//calcul fft
-void TF2D_r2c(std::vector<double> const &entree, std::vector<std::complex<double> > &sortie, FFTW_init const &tf2D_Re, double delta_x);//calcul TF
+void TF2D_r2c(std::vector<double> const &entree, std::vector<std::complex<double> > &sortie, FFTW_init  &tf2D_Re, double delta_x);//calcul TF
 
 #endif

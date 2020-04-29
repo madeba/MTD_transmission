@@ -10,11 +10,11 @@ using namespace std;
     int nbPix=entree.size();
     int dimFinale=round(std::pow(entree.size(), 1.0/3.0));
     int nbPix2D=dimFinale*dimFinale;//taille d'un plan 2D
-    Var3D decal={round(dimFinale/2),round(dimFinale/2),round(dimFinale/2)}, dim={dimFinale,dimFinale,dimFinale};
+    Var3D  decal={round(dimFinale/2),round(dimFinale/2),round(dimFinale/2)}, dim={dimFinale,dimFinale,dimFinale};
     vector<complex<double>> result(nbPix);
     size_t yi=0,xi=0,zi=0;
     int nbPix_z=0, nbPix_zdecal=0,nbPixy=0;
-  // #pragma omp parallel for private(zi)
+   #pragma omp parallel for private(zi)
     for(zi=0;zi<dim.z/2;zi++){
         nbPix_z=zi*nbPix2D;
         nbPix_zdecal=(zi+decal.z)*nbPix2D;
@@ -85,11 +85,11 @@ void fftshift3D(vector<complex<double>> const &entree, vector<complex<double>> &
 //    vector<complex<double>> result(nbPix);
     size_t yi=0,xi=0,zi=0;
     int nbPix_z=0, nbPix_zdecal=0,nbPixy=0;
-   #pragma omp parallel for private (zi)
+   #pragma omp parallel for
     for(zi=0;zi<dim.z/2;zi++){
         nbPix_z=zi*nbPix2D;
         nbPix_zdecal=(zi+decal.z)*nbPix2D;
-        //#pragma omp parallel for private(yi)
+
         for(yi=0; yi<dim.y/2; yi++) {
                 decal.x=dim.x/2;
                 decal.y=dim.y/2;

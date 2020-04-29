@@ -16,6 +16,8 @@ public:
     FFT_encaps(Point3D dim,size_t nbThread);
     FFT_encaps(Point3D dim,size_t nbThread,bool inplace);
     FFT_encaps(Point2D dim);
+
+    bool import_wisdom(const char *filename);
     ~FFT_encaps();
 
 

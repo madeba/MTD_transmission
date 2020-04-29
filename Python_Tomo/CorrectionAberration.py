@@ -3,7 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import cv2
-
+import timeit
+from timeit import default_timer as timer
 
 # Initialisation du masque de filtrage
 def InitMasque(Chemin,dimMasque):
@@ -166,7 +167,51 @@ def CalcPoly_xy(degre_poly, Masque, polynome_to_fit):
                         powY += 1
                 Coord1D += 1
     return polynome_to_fit
+# Calcul du fond
+def compuBackgr_old(coefficients,polynome_to_fit,PolyBackgr):
+    """
+    Estimation of the hologram background
 
+    Parameters
+    ----------
+    coefficients : float64
+        Coefficients of the fitted polynome.
+    polynome_to_fit : float64
+        Calculated polynome.
+    PolyBackgr : float64
+        Background polynome.
+
+    Returns
+    -------
+    None.
+
+    """
+            
+    print("compubacklgr__OLD-----------------------------------------------")
+    coefX,coefY=np.shape(coefficients)
+    
+    UsCoord1D = 0
+    nbCoef, NbPtImg = np.shape(polynome_to_fit)
+    BackgrRows, BackgrCols = np.shape(PolyBackgr)
+    PolySize = nbCoef
+    #num_coef=(0,1,2,3,4,5,6,7,8,9,10,11)
+    #num_coef=np.linspace(0,nbCoef)
+    for y in range(0,BackgrCols):
+        for x in range(0,BackgrRows):           
+            sum=0.
+            for num_coef in range(0,PolySize):    
+                sum+=coefficients[num_coef] *polynome_to_fit[num_coef,UsCoord1D]
+            PolyBackgr[y,x] =sum
+            UsCoord1D += 1
+
+    
+    plt.imshow(PolyBackgr, cmap=plt.cm.gray)
+    plt.title("PolyBackGR_OLD")
+    plt.colorbar()
+    plt.show()
+    
+    print("FIN ompubacklgr__OLD-----------------------------------------------")
+    
 # Calcul du fond
 def compuBackgr(coefficients,polynome_to_fit,PolyBackgr):
     """
@@ -190,20 +235,43 @@ def compuBackgr(coefficients,polynome_to_fit,PolyBackgr):
     
     UsCoord1D = 0
     nbCoef, NbPtImg = np.shape(polynome_to_fit)
+    result_mltpn=np.zeros((nbCoef,1),dtype=np.float64)
+    #print("result ult coord=",np.shape(resultmult))
+    #print("coefficentcoord=",np.shape(coefficients))
+    
     #print("PolyRows, PolyCols=",PolyRows,PolyCols)
     BackgrRows, BackgrCols = np.shape(PolyBackgr)
     PolySize = nbCoef
-    for y in range(0,BackgrRows):
-        for x in range(0,BackgrCols):
-            sum = 0.
-            for num_coef in range(0,PolySize):             
-                sum += coefficients[num_coef] * polynome_to_fit[num_coef,UsCoord1D]       
-            PolyBackgr[y,x] = sum
+    #num_coef=(0,1,2,3,4,5,6,7,8,9,10,11)
+    num_coef=np.linspace(0,nbCoef)
+    for y in range(0,BackgrCols):
+        for x in range(0,BackgrRows):
+           
+            #sum=0
+            #for num_coef in range(0,PolySize):             
+            result_mltpn[:,0]=coefficients[:,0] * polynome_to_fit[:,UsCoord1D]  
+            
+             #   sum+=coefficients[num_coef] *polynome_to_fit[num_coef,UsCoord1D]
+            #result = map(lambda i: coefficients[i] *polynome_to_fit[i,UsCoord1D], num_coef )
+            #sum =c oefficients[0] * Polyt[UsCoord1D,0]+coefficients[1] * Polyt[UsCoord1D,0]+coefficients[2] * Polyt[UsCoord1D,0]+coefficients[3] * Polyt[UsCoord1D,0]+coefficients[4] * Polyt[UsCoord1D,0]+            coefficients[5] * Polyt[UsCoord1D,0]+coefficients[6] * Polyt[UsCoord1D,0]+coefficients[7] * Polyt[UsCoord1D,0]+coefficients[8] * Polyt[UsCoord1D,0]+coefficients[9] * Polyt[UsCoord1D,0]+coefficients[10] * Polyt[UsCoord1D,0]+coefficients[11] * Polyt[UsCoord1D,0]
+            sum=0
+            for num_coef in range(0,PolySize):    
+                sum+=coefficients[num_coef] *polynome_to_fit[num_coef,UsCoord1D]
+            if (result_mltpn.sum()>0.1):
+                print("result_mltpn.sum()", result_mltpn.sum())
+                print("sum=", sum)
+            #PolyBackgr[y,x] = np.sum(list(result))
+            PolyBackgr[y,x] =result_mltpn.sum()
+            #print("polynome_to_fit.flag=",polynome_to_fit.flags)
             UsCoord1D += 1
+            #print("resultmult=",resultmult)
+            #print("-----------------------------------------------")
             #print("UsCoord==",UsCoord1D)
-    #plt.imshow(PolyBackgr, cmap=plt.cm.gray)
-    #plt.colorbar()
-    #plt.show()
+    
+    plt.imshow(PolyBackgr, cmap=plt.cm.gray)
+    plt.title("PolybackGR_NEW")
+    plt.colorbar()
+    plt.show()
       
 # Calcul des coefficients du polynome
 def compuCoefPoly(ImageBrut,Masque,coef_polynomial,polynomeUS_to_fit,methode):
@@ -301,10 +369,8 @@ def aberCorr(Image,Masque,polynomeUS_to_fit,polynome_to_fit):
     compuCoefPoly(Image,Masque,coefsolve,polynomeUS_to_fit,True)
     resultatpolyBG = np.zeros((ImgRows,ImgCols),dtype=np.float64)
     resultat_final = np.zeros((ImgRows,ImgCols),dtype=np.float64)
+    
     compuBackgr(coefsolve,polynome_to_fit,resultatpolyBG)
-    # plt.imshow(resultatpolyBG, cmap=plt.cm.gray)
-    # plt.colorbar()
-    # plt.show()
     resultat_final=Image-resultatpolyBG
     return resultat_final
 
@@ -336,7 +402,15 @@ def ampliCorr(Image,Masque,polynomeUS_to_fit,polynome_to_fit):
     compuCoefPoly(Image,Masque,coefsolve,polynomeUS_to_fit,True)
     resultatpoly = np.zeros((ImgRows,ImgCols),dtype=np.float64)
     resultat = np.zeros((ImgRows,ImgCols),dtype=np.float64)
-    compuBackgr(coefsolve,polynome_to_fit,resultatpoly)
-    # plt.imsave("/ramdisk/resultat_poly",resultatpoly,cmap=plt.cm.gray)
-    resultat=Image/resultatpoly
+    #start=timer()
+    compuBackgr_old(coefsolve,polynome_to_fit,resultatpoly)
+    #compuBackgr(coefsolve,polynome_to_fit,resultatpoly)
+#    plt.imshow(resultatpoly, cmap=plt.cm.gray)
+#    plt.title("polyBackGr Amp")
+#    plt.colorbar()
+#    plt.show()
+
+    #end=timer()    # plt.imsave("/ramdisk/resultat_poly",resultatpoly,cmap=plt.cm.gray)
+    #print(end - start)
+    resultat=Image/(resultatpoly+0.00001)
     return resultat

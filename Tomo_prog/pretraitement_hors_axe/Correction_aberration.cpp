@@ -170,7 +170,7 @@ Mat  ampliCorr2(Mat const & image,  Mat const &polynomeUs_to_fit, Mat const &pol
     compuCoefPoly2(image, mask, coefsolve, polynomeUs_to_fit, true); /// Compute the coef of polynomial (Least Squares method)
     Mat resultatpoly(image.rows, image.cols, CV_64F), result(image.rows, image.cols, CV_64F);
     compuBackgr2(coefsolve, polynome_to_fit,  resultatpoly);/// Compute the background image with the coef of polynomial
-    SAV2((double*)resultatpoly.data,image.rows*image.cols,"/ramdisk/poly_aber_ampli.raw",t_float,"a+b");
+    //SAV2((double*)resultatpoly.data,image.rows*image.cols,"/ramdisk/poly_aber_ampli.raw",t_float,"a+b");
 
    //result = image/(resultatpoly+0.0001);
     result = image/resultatpoly;

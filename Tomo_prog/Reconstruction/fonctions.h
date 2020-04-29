@@ -71,7 +71,7 @@ void genere_OTF_T_Holo(nbCplx *OTFr, Var2D posSpec, Var3D dim_final, Var3D decal
 void genere_OTF_RH_Holo(nbCplx *OTFr, Var2D posSpec, Var3D dim_final, Var3D decal, Var2D NMAX, double rayon);
 
 void lire_bin(string chemin, double resultat[], short int precision, int NbParam);
-
+void Import3D_Tiff(vector<double> &imgTiff, string chemin, double taille_pixel);
 void genereCache(double masque[], int t_image, int t_mask, int centreX, int centreY);
 void interp3D(double *volume_interp_3D, int taille_x,int taille_y,int taille_z);
 void ecrire_rapport(int NXMAX,float rayon,float Rf, int DIMX_CCD2,int coin_x, int coin_y,short int precision_exportation,string chemin,int nb_proj,float n1,float NA,float Tp, int G);
@@ -97,7 +97,7 @@ double max(double* entree, int dim);
 void phase2pi(nbCplx* obj, Var2D taille,double* WrappedImage);
 //int retroPropag_Born(nbCplx *TF3D_PotObj, nbCplx *TF_Uborn_norm, double * sup_redon, int dim_final, Var2D posSpec, Var3D decal3D, Var2D NMAX, double rayon);
 //int retroPropag_Born(vector <complex <double>> &TF3D_PotObj, vector <complex <double>> &TF_Uborn_norm, double * sup_redon, int dim_final, Var2D posSpec, Var3D decal3D, Var2D NMAX, double rayon);
-int retroPropag_Born(vector <complex<double>> &TF3D_PotObj, vector<complex<double>> &TF_Uborn_norm, vector<double> &sup_redon, int dim_final, Var2D posSpec, Var3D decal3D, Var2D NMAX, double rayon, manip m1);
+int retroPropag_Born(vector <complex<double>> &TF3D_PotObj, vector<complex<double>> const &TF_Uborn_norm, vector<double> &sup_redon, int dim_final, Var2D posSpec, Var3D decal3D, Var2D NMAX, double rayon, manip m1);
 void retroPropagSA(int deltaZ, nbCplx *fft_shift_norm, nbCplx *planObjet, Var3D decal, Var2D NMAX, double rayon);
 void decalCoupeCplx(nbCplx *fft, nbCplx *fft_tmp, Var2D NMAX,Var2D dimCCD);
 void Plan_ds_VolCplx(nbCplx *Vol3D, nbCplx *plan2D, Var3D dimVol, Var2D dimPlan, int z3Di);
@@ -106,7 +106,7 @@ void Vol_ds_Plan(double *Vol3D, double *plan2D, Var3D dimVol, Var2D dimPlan, int
 int coordMaxMod2D(nbCplx *entree, int tailleTab);
 void InitTabCplx(nbCplx *z,int taille);
 //void decal2DCplxGen(nbCplx* entree, nbCplx* result, Var2D dim,Var2D decal);
-void decal2DCplxGen(vector<complex<double>> &entree, vector<complex<double>> &result, Var2D dim,Var2D decal);
+void decal2DCplxGen(vector<complex<double>> const &entree, vector<complex<double>> &result, Var2D dim,Var2D decal);
 
 void recale(nbCplx* obj,nbCplx* objDecal,nbCplx *objRecal, Var3D dimVol);
 

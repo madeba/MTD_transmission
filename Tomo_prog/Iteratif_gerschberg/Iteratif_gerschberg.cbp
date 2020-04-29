@@ -41,6 +41,7 @@
 		<Unit filename="FFT_fonctions.cpp" />
 		<Unit filename="FFT_fonctions.h" />
 		<Unit filename="fonctions.cpp" />
+		<Unit filename="fonctions.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="projet.h" />
 		<Extensions>

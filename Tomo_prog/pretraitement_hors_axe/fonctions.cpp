@@ -188,7 +188,7 @@ int coordSpec(vector<complex<double>> const &TF_UBorn, vector<double> &TF_champM
     //recalUBorn={-kxmi,-kymi};
     return cpt_max;
  }
-///crop image
+///crop image[0:dim_src,0:dim_src] to dest(coin.x:coin.x+dim_dest,coin.y+dim_dest)
 void coupeCplx(vector<complex<double>> const &src, vector<complex<double>> &dest, Var2D dim_src, Var2D dim_dest, Var2D coin, size_t NumAngle)
 {
 size_t nbPixSrc=src.size();
@@ -234,11 +234,11 @@ void holo2TF_UBorn(vector<double> holo1, vector<complex<double>> &TF_UBornTot,Va
         }
 
         ///--------Circshift et TF2D HOLOGRAMME------
-        holo_shift=fftshift2D(holo1);
+        holo_shift=fftshift2D2(holo1);
         //SAV2(holo1, "/home/mat/tomo_test/holo_shift_extract_holo.bin",t_float,"a+b");
 
         TF2Dcplx_vec(in,out,holo_shift, TF_Holo,p_forward_holo);
-        TFHoloCentre=fftshift2D(TF_Holo);//Décalage  sur fft_reel_tmp, pour recentrer le spectre avant découpe (pas obligatoire mais plus clair)
+        TFHoloCentre=fftshift2D2(TF_Holo);//Décalage  sur fft_reel_tmp, pour recentrer le spectre avant découpe (pas obligatoire mais plus clair)
         SAVCplx(TF_Holo,"Re","/home/mat/tmp/TFHolo_Re_classique_1024x1024x59.raw",t_float,"a+b");
 
         coupeCplx(TFHoloCentre, TF_UBornTot, dimROI, dim2DHA, coinHA, NumAngle);///Découpe à [-Nxmax,+NXmax]
@@ -282,36 +282,42 @@ void holo2TF_UBorn2(vector<double>  &holo1,vector<complex<double>> &TF_UBornTot,
     size_t NbPix2dROI=holo1.size(), dimx=sqrt(NbPix2dROI);
 
         size_t NbPixROI2d=holo1.size();
-        vector<double> holo_shift(NbPixROI2d);
-        vector<complex<double>> TF_Holo(NbPixROI2d), TFHoloCentre(NbPixROI2d);
+       // vector<double> holo_shift(NbPixROI2d);
+        vector<complex<double>> TF_Holo(NbPixROI2d);
+        // TFHoloCentre(NbPixROI2d);
     //    nbCplx *TF_UBorn_A=new nbCplx[NbPixROI2d];
     // auto start_tukey = std::chrono::system_clock::now();
 
         for(size_t pixel=0; pixel<NbPixROI2d; pixel++) {
                 holo1[pixel]=(double)holo1[pixel]*tukeyHolo[pixel];
         }
-                /*  auto end_tukey = std::chrono::system_clock::now();
+             /*     auto end_tukey = std::chrono::system_clock::now();
            auto elapsed_tukey = end_tukey - start_tukey;
     std::cout <<"Temps tukey= "<< elapsed_tukey.count()/(pow(10,9)) << '\n';*/
         ///--------Circshift et TF2D HOLOGRAMME------
-             auto start_fftshift = std::chrono::system_clock::now();
+
        // holo_shift=fftshift2D(holo1);
-        fftshift2D(holo1, holo_shift);
+      //  holo_shift=fftshift2D2(holo1);
 
-     /*     auto end_fftshift = std::chrono::system_clock::now();
-           auto elapsed_fftshift = end_fftshift - start_fftshift;
-    std::cout <<"Temps fftshift= "<< elapsed_fftshift.count()/(pow(10,9)) << '\n';*/
 
-   //    SAV2(holo_shift, "/home/mat/tmp/holo_shift_extract_holo.bin",t_float,"a+b");
 
-        TF2D_r2c_symetric(holo_shift,TF_Holo,param_fftw2DHolo);
+     //  SAV2(holo_shift, "/home/mat/tmp/holo_shift_extract_holo.bin",t_float,"a+b");
+    //    auto start_fftshift = std::chrono::system_clock::now();
+       // TF2D_r2c_symetric(fftshift2D(holo1);,TF_Holo,param_fftw2DHolo);
+
+        TF2D_r2c_symetric(fftshift2D2(holo1),TF_Holo,param_fftw2DHolo);
+ //   auto end_fftshift = std::chrono::system_clock::now();
+      //     auto elapsed_fftshift = end_fftshift - start_fftshift;
+  //  std::cout <<"Temps fft r2c= "<< elapsed_fftshift.count()/(pow(10,9)) << '\n';
 
 //        TF2Dcplx_vec(in,out,holo_shift, TF_Holo,p_forward_holo);
-  // SAVCplx(TF_Holo,"Re","/home/mat/tmp/TFHolo_Re_r2c_1024x1024x59.raw",t_float,"a+b");
-        TFHoloCentre=fftshift2D(TF_Holo);//Décalage  sur fft_reel_tmp, pour recentrer le spectre avant découpe (pas obligatoire mais plus clair)
-      //  SAVCplx(TFHoloCentre,"Re","/home/mat/tmp/TFHoloCentre_Re_r2c_1024x1024x59.raw",t_float,"a+b");
+   //SAVCplx(TF_Holo,"Re","/ramdisk/TFHolo_Re_r2c_1024x1024x59.raw",t_float,"a+b");
+       // TFHoloCentre=fftshift2D2(TF_Holo);//Décalage  sur fft_reel_tmp, pour recentrer le spectre avant découpe (pas obligatoire mais plus clair)
+      //  for(int cpt=0;cpt<TFHoloCentre.size();cpt++)
+           // cout<<TFHoloCentre[cpt]<<endl;
+     //  SAVCplx(TFHoloCentre,"Re","/home/mat/tmp/TFHoloCentre_Re_r2c_1024x1024x59.raw",t_float,"a+b");
  //auto start_coupe= std::chrono::system_clock::now();
-        coupeCplx(TFHoloCentre, TF_UBornTot, dimROI, dim2DHA, coinHA, NbAngleOk);///Découpe à [-Nxmax,+NXmax]
+        coupeCplx(fftshift2D2(TF_Holo), TF_UBornTot, dimROI, dim2DHA, coinHA, NbAngleOk);///Découpe à [-Nxmax,+NXmax]
 /*auto end_coupe= std::chrono::system_clock::now();
   auto elapsed_coupe = end_coupe - start_coupe;
     std::cout <<"Temps pour coupe FFT r2c= "<< elapsed_coupe.count()/(pow(10,9)) << '\n';*/

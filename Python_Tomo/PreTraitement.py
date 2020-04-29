@@ -7,12 +7,12 @@ import CorrectionAberration as CAber
 import os
 import FileTools as ft
 import time
-
+from timeit import default_timer as timer
 
 # Dossier de Données et fichier de configuration
-DossierData = '../PollenAziz/'
-DossierAmplitude = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Amplitude/'
-DossierPhase = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Phase/'
+DossierData = '/opt/Acquis/pollen_topi_21SEPT/Acquis/'
+DossierAmplitude = '/ramdisk/'
+DossierPhase = '/ramdisk/'
 FichierConfig = DossierData + 'config_manip.txt' # Prévoir lecture des paramètres depuis le fichier texte
 CheminMasque = 'Masque.tif'
 
@@ -34,7 +34,7 @@ CentreX = ft.readvalue(FichierConfig,'CIRCLE_CX') # position du centre de la pup
 CentreY = ft.readvalue(FichierConfig,'CIRCLE_CY')
 nb_holoTot = ft.readvalue(FichierConfig,'NB_HOLO')
 nb_holo = int(nb_holoTot) # nombre d'hologrammes à traiter
-
+print("nb_holo=",nb_holo)
 # Traitement de la séquence
 cpt = 1
 cpt_exist = 1
@@ -54,14 +54,15 @@ Poly_US = np.zeros((nbCoef,nbPtOK),dtype=np.float64)
 Poly_US = CAber.CalcPolyUS_xy(degrePoly,Masque,Poly_US)
 
 # Calcul du polynome total
-Poly = np.zeros((nbCoef,dimHolo*dimHolo),dtype=np.float64)          
+Poly = np.zeros((nbCoef,dimHolo*dimHolo),dtype=np.float64)     
 Poly = CAber.CalcPoly_xy(degrePoly,Masque,Poly)
 
 start_time = time.time()
-for hol in range(0,nb_holo):
+for cpt in range(189,190):
     filename = DossierData + 'i' + str('%03d' % cpt ) + '.pgm'
     if os.path.isfile(filename):
         Image = plt.imread(filename)
+        print("holo numero ",cpt)
         
         # Spectre hologramme
         FImage = nfft.fftshift(nfft.fft2(Image))
@@ -87,24 +88,24 @@ for hol in range(0,nb_holo):
             
         # Correction de l'amplitude
         Amp_UBornCorr = CAber.ampliCorr(Amp_UBorn,Masque,Poly_US,Poly)
-        # plt.title("Amp_Uborn")
-        # plt.imshow(Amp_UBorn, cmap=plt.cm.gray)
-        # plt.colorbar()
-        # plt.show()
-        # plt.title("Amp_Corr")
-        # plt.imshow(Amp_UBornCorr, cmap=plt.cm.gray)
-        # plt.colorbar()
-        # plt.show()
-        
-        Phase_UBornCorr = CAber.aberCorr(Phase_UBorn,Masque,Poly_US,Poly)
-        # plt.title("Phase_Uborn")
-        # plt.imshow(Phase_UBorn, cmap=plt.cm.gray)
-        # plt.colorbar()
-        # plt.show()
-        # plt.title("Phase_Corr")
-        # plt.imshow(Phase_UBornCorr, cmap=plt.cm.gray)
-        # plt.colorbar()
-        # plt.show()
+        plt.title("Amp_Uborn")
+        plt.imshow(Amp_UBorn, cmap=plt.cm.gray)
+        plt.colorbar()
+        plt.show()
+        plt.title("Amp_Corr")
+        plt.imshow(Amp_UBornCorr, cmap=plt.cm.gray)
+        plt.colorbar()
+        plt.show()
+      
+        #Phase_UBornCorr = CAber.aberCorr(Phase_UBorn,Masque,Poly_US,Poly)
+#        plt.title("Phase_Uborn")
+#        plt.imshow(Phase_UBorn, cmap=plt.cm.gray)
+#        plt.colorbar()
+#        plt.show()
+#        plt.title("Phase_Corr")
+#        plt.imshow(Phase_UBornCorr, cmap=plt.cm.gray)
+#        plt.colorbar()
+#        plt.show()
 
         
         # Enregistrement des résultats
@@ -113,9 +114,9 @@ for hol in range(0,nb_holo):
         
         # Enregistrement de l'amplitude et la phase dépliée (avant correction pour le test)
         plt.imsave(CheminAmp,Amp_UBornCorr,cmap=plt.cm.gray)
-        plt.imsave(CheminPh,Phase_UBornCorr,cmap=plt.cm.gray)    
+        #plt.imsave(CheminPh,Phase_UBornCorr,cmap=plt.cm.gray)    
         
-        cpt = cpt + 1
+        
         cpt_exist = cpt_exist + 1
     else:
         cpt = cpt + 1

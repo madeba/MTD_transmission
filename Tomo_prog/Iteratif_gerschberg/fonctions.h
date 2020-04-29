@@ -26,6 +26,7 @@
 //#include "vecteur.h"
 #include <vector>
 #include <complex>
+#include <tiffio.h>
 
 void calcPhase_mpi_pi_atan2(std::vector<std::complex <double> > obj, std::vector<double> &phaseMod2pi);
 void circshift2DCplx(std::vector<std::complex<double> > entree, std::vector<std::complex<double>> &result, Var2D dim,Var2D decal);

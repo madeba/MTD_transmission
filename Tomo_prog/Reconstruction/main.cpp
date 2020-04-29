@@ -147,6 +147,7 @@ int main(int argc, char *argv[])
             if(bool_wisdom2D==0){
                 prepare_wisdom2D(dimChpCplx,tmp.c_str());
             }*/
+  auto start_part1 = std::chrono::system_clock::now();
 
         for(int cpt_angle=premier_plan; cpt_angle<NbAngle; cpt_angle++) //boucle sur tous les angles
         {
@@ -164,17 +165,21 @@ int main(int argc, char *argv[])
 
             recal={posSpec.x,posSpec.y};
             ///recaler le spectre à la position du spéculaire (la variable est attendue ainsi par la fonction retropropag)
+
             decal2DCplxGen(TF_UBorn_normI,TF_UBorn_normC,dim2DHA,recal);
 
             if((cpt_angle-100*(cpt_angle/100))==0)
                 printf("cpt_angle=%i\n",cpt_angle);
-            temps_initial = clock ();
+
 
             //cout<<"POsSPec.x="<<posSpec.x<<"|PosSpec.y="<<posSpec.y<<endl;
             //cout<<"TabPosSpec[cpt_angle]="<<TabPosSpec[cpt_angle]<<"|TabPosSpec[cpt_angle+NbAngle]"<<TabPosSpec[cpt_angle]<<endl;
+
             retroPropag_Born(TF3D_PotObj, TF_UBorn_normC, sup_redon, dim_final, posSpec, decal3DTF, NMAX, m1.rayon, m1);  ///--Mapping 3D=retropropagation
         }//fin de boucle for sur tous les angles
-
+  auto end_part1 = std::chrono::system_clock::now();
+    auto elapsed_part1 = end_part1 - start_part1;
+    std::cout <<"Temps total fft+retroprop= "<< elapsed_part1.count()/(pow(10,9)) << '\n';
         delete[] TabPosSpec;
         printf("temps_total proj : %f \n",temps_total);
 
@@ -189,7 +194,7 @@ int main(int argc, char *argv[])
         temps_initial=clock();//enclenchement du chronometre
 
         ///------------------moyennage par sup_redon------------------------------------------------
-        for(int cpt=0; cpt<N_tab; cpt++) {
+        for(size_t cpt=0; cpt<N_tab; cpt++) {
                 if (sup_redon[cpt]==0) { ////////////////remplace les 0 de sup_redon par des 1---> evite la division par 0
                         //printf("sup_redon= %f \n" , sup_redon[cpt]);
                         sup_redon[cpt]=1;
@@ -208,13 +213,16 @@ int main(int argc, char *argv[])
 
         //////////////////////////////papillon binarisé
 
-        vector<double> papillon_masque(N_tab);
-        for(int compteur=0; compteur<N_tab; compteur++) {
-                if(TF3D_PotObj[compteur].real()==0)
+        vector<double> papillon_masque(N_tab,0);
+        for(size_t compteur=0; compteur<N_tab; compteur++){
+                if(TF3D_PotObj[compteur].real()!=0)
+                        papillon_masque[compteur]=1;
+        }
+        /*if(TF3D_PotObj[compteur].real()==0)
                         papillon_masque[compteur]=0;
                 else
                         papillon_masque[compteur]=1;
-        }
+        }*/
         if(m1.b_Export_OTF==1)
             SAV3D_Tiff(papillon_masque,m1.chemin_result+"/OTF3D.tif",tailleTheoPixelTomo);
 
@@ -235,7 +243,7 @@ int main(int argc, char *argv[])
         vector<complex<double>>().swap(TF3D_PotObj);///libérer mémoire
         temps_final = clock ();
         temps_cpu = (temps_final - temps_initial) * 1e-6;
-        printf("temps apres circshift 3D: %f\n",temps_cpu);
+        printf("temps apres fftshift 3D: %f\n",temps_cpu);
         printf("*******************************************\n");
         printf("TF3D...\n");
         printf("*******************************************\n");
@@ -268,6 +276,7 @@ int main(int argc, char *argv[])
         Point3D dim3D(dim_final,dim_final,dim_final,dim_final);
        // FFT_encaps tf3D_out(dim3D,m1.nbThreads);
         FFT_encaps tf3D_IN(dim3D,m1.nbThreads,1);
+
         high_resolution_clock::time_point t1v = high_resolution_clock::now();//temps vrai (pas CPU)
 
         //TF3Dcplx_INV(tf3D_out.in, tf3D_out.out,TF3D_PotObj_shift , PotObj_shift, tf3D_out.p_backward_OUT,m1.Delta_fUborn);
@@ -301,14 +310,17 @@ int main(int argc, char *argv[])
         }
         printf("ecriture de PotObj3D.Re, PotObj3D.Im \n");
            auto start_tiff = std::chrono::system_clock::now();
+
         SAV3D_Tiff(indice_cplx,"Re", m1.chemin_result+"/indice.tif",tailleTheoPixelTomo);
         SAV3D_Tiff(indice_cplx,"Im", m1.chemin_result+"/absorption.tif",tailleTheoPixelTomo);
+       //SAVCplx(indice_cplx,"Re", m1.chemin_result+"/indice.bin",t_float,"w");
+       // SAVCplx(indice_cplx,"Im", m1.chemin_result+"/absorption.bin",t_float,"w");
 
 
 
                  auto end_tiff = std::chrono::system_clock::now();
     auto elapsed_tiff = end_tiff - start_tiff;
-    std::cout <<"Temps ecriture tiff= "<< elapsed_tiff.count()/(pow(10,9)) << '\n';
+    std::cout <<"Temps total ecriture tiff= "<< elapsed_tiff.count()/(pow(10,9)) << '\n';
 
         temps_arrivee = clock ();
         temps_cpu = (temps_arrivee-temps_depart )/CLOCKS_PER_SEC;

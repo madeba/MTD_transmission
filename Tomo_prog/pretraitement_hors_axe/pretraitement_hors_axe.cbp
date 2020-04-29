@@ -29,7 +29,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="-fexceptions  -fopenmp -lpthread -std=c++11 `pkg-config --cppflags opencv`" />
+			<Add option="-fexceptions  -fopenmp  -lpthread -std=c++11 `pkg-config --cppflags opencv`  -mveclibabi=svml" />
 			<Add directory="/usr/include/opencv" />
 			<Add directory="include" />
 			<Add directory="." />
@@ -48,8 +48,6 @@
 		<Unit filename="FFT_fonctions.h" />
 		<Unit filename="deroulement_herraez.cpp" />
 		<Unit filename="deroulement_herraez.h" />
-		<Unit filename="deroulement_volkov.cpp" />
-		<Unit filename="deroulement_volkov.h" />
 		<Unit filename="fonctions.cpp" />
 		<Unit filename="fonctions.h" />
 		<Unit filename="include/FFTW_init.h" />

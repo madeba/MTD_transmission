@@ -155,8 +155,71 @@ size_t yi=0;
         }
      //   return result;
 }
-//surcharge avec passage par paramètre
+vector<complex<double>>  fftshift2D2(vector<complex<double>> const &entree)
+{
+unsigned int dim=sqrt(entree.size());
+vector<complex<double>> result(dim*dim);
+int decal=dim/2;
+size_t yi=0;
+     //  size_t xi=0;
+     //  size_t pixel=0;
+     //  size_t pixel_shift=0;
+     //   #pragma omp parallel for private(yi)
+       // #pragma omp parallel for private (xi,yi,pixel,pixel_shift)
+       for(yi=0; yi<decal; yi++) {
+          size_t num_ligne=yi*dim;
+            //1er quadrant vers 4 eme
+            copy(entree.begin()+num_ligne,    entree.begin()+num_ligne+decal,    result.begin()+(yi+decal)*dim+decal);
+            //4 eme quadrant vers 1er
+            copy(entree.begin()+(yi+decal)*dim+decal,   entree.begin()+(yi+decal)*dim+2*decal,   result.begin()+num_ligne);
+            //2eme vers 3eme
+            // result[(yi+decal)*dim+xi]=entree[pixel+decal];
+            copy(entree.begin()+num_ligne+decal,   entree.begin()+num_ligne+2*decal,   result.begin()+(yi+decal)*dim);
+            //3eme vers 2eme
+            //  result[pixel+decal]=entree[(yi+decal)*dim+xi];
+            copy(entree.begin()+(yi+decal)*dim,   entree.begin()+(yi+decal)*dim+decal,   result.begin()+num_ligne+decal);
+        }
+        return result;
+}
+vector<double>  fftshift2D2(vector<double> const &entree)
+{
+unsigned int dim=sqrt(entree.size());
+vector<double> result(dim*dim);
+int decal=dim/2;
+size_t yi=0;
+       size_t xi=0;
+       size_t pixel=0;
+       size_t pixel_shift=0;
+     //   #pragma omp parallel for private(yi)
+       // #pragma omp parallel for private (xi,yi,pixel,pixel_shift)
+       for(yi=0; yi<decal; yi++) {
+          size_t num_ligne=yi*dim;
 
+               // for(xi=0; xi<decal; xi++)
+                //{
+                    //  pixel=num_ligne+xi;
+                      //  cout<<"pixel="<<pixel<<endl;
+                      // cout<<"result[pixel]="<<result[pixel];
+                    //  pixel_shift=(yi+decal)*dim+xi+decal;
+                      //  cout<<"pixel_shift="<<pixel_shift<<endl;
+                      //1er quadrant vers 4 eme
+                      //result[pixel_shift]=entree[pixel];
+                     copy(entree.begin()+num_ligne,    entree.begin()+num_ligne+decal,    result.begin()+(yi+decal)*dim+decal);
+                      //4 eme quadrant vers 1er
+                     // result[pixel]=entree[pixel_shift];
+                      copy(entree.begin()+(yi+decal)*dim+decal,   entree.begin()+(yi+decal)*dim+2*decal,   result.begin()+num_ligne);
+                      //4 eme quadrant vers 1er
+                      //2eme vers 3eme
+                     // result[(yi+decal)*dim+xi]=entree[pixel+decal];
+                      copy(entree.begin()+num_ligne+decal,   entree.begin()+num_ligne+2*decal,   result.begin()+(yi+decal)*dim);
+
+                      //3eme vers 2eme
+                    //  result[pixel+decal]=entree[(yi+decal)*dim+xi];
+                      copy(entree.begin()+(yi+decal)*dim,   entree.begin()+(yi+decal)*dim+decal,   result.begin()+num_ligne+decal);
+
+        }
+        return result;
+}
 vector<double>  fftshift2D(vector<double> const &entree)
 {
 unsigned int dim=sqrt(entree.size());
@@ -399,7 +462,7 @@ void TF2Dcplx_INV(vector<complex<double>> const &entree, vector<complex<double> 
 
 ///-------TF2D purement reelle
 ///TF2D avec entrée purement réelle, utilise r2c et exporte le demi-espace.
-void TF2D_r2c(vector<double> const &entree, vector<complex<double> > &sortie, FFTW_init const &tf2D_Re, double delta_x){
+void TF2D_r2c(vector<double> const &entree, vector<complex<double> > &sortie, FFTW_init  &tf2D_Re, double delta_x){
 
   size_t nbPix=entree.size(),   dim=sqrt(nbPix);
   Var2D dimROI{dim,dim};
@@ -410,6 +473,7 @@ void TF2D_r2c(vector<double> const &entree, vector<complex<double> > &sortie, FF
   for(size_t  cpt=0; cpt<nbPix; cpt++){
     tf2D_Re.in_double[cpt]=entree[cpt];
   }
+    std::copy (entree.begin(),entree.end(), tf2D_Re.in_double );
   fftw_execute(tf2D_Re.p_forward_OUT);
   size_t cpt=0;
   for( cpt=0; cpt<(nbPixCplx); cpt++){
@@ -430,9 +494,9 @@ void TF2D_r2c_symetric(vector<double> const &entree, vector<complex<double> > &s
   for(int cpt=0; cpt<nbPix; cpt++){
     tf2D_Re.in_double[cpt]=entree[cpt];
   }
-
-int    fftwThreadInit=fftw_init_threads();
-    fftw_plan_with_nthreads(tf2D_Re.m_Nthread);
+   //std::copy (entree.begin(),entree.end(), tf2D_Re.in_double );
+/*int    fftwThreadInit=fftw_init_threads();
+    fftw_plan_with_nthreads(tf2D_Re.m_Nthread);*/
   fftw_execute(tf2D_Re.p_forward_OUT);
 
   //#pragma omp parallel for num_threads(2)
