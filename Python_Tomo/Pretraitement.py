@@ -7,18 +7,13 @@ import CorrectionAberration as CAber
 import os
 import FileTools as ft
 import time
-# from libtiff import TIFFfile, TIFFimage
 
-# Dossier de Données et fichier de configuration
+# Dossiers de Données et fichier de configuration
 DossierData = '../PollenAziz/'
-# DossierData = '../Test/'
-# nbFichier = len(os.listdir(DossierData))
-# print("Nombre de fichiers =", nbFichier)
 DossierAmplitude = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Amplitude/'
 DossierPhase = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Phase/'
 FichierConfig = f"{DossierData}config_manip.txt" # Prévoir lecture des paramètres depuis le fichier texte
 CheminMasque = 'Masque.tif'
-
 
 # Données de l'acquisition
 Rytov = True
@@ -37,9 +32,15 @@ dimHolo = int(2*fmaxHolo) # dimension de l'hologramme
 CentreX = int(ft.readvalue(FichierConfig,'CIRCLE_CX')) # position du centre de la pupille dans l'espace de Fourier
 CentreY = int(ft.readvalue(FichierConfig,'CIRCLE_CY'))
 nb_holoTot = int(ft.readvalue(FichierConfig,'NB_HOLO'))
-nb_holo = 600 # nombre d'hologrammes à traiter
+nb_holo = nb_holoTot # nombre d'hologrammes à traiter
 CheminSAV_Re = f"C:/Users/p1600109/Documents/Recherche/MatlabTomo/ReBorn_{dimHolo}.bin"
 CheminSAV_Im = f"C:/Users/p1600109/Documents/Recherche/MatlabTomo/ImBorn_{dimHolo}.bin"
+CheminSAV_Centres = f"C:/Users/p1600109/Documents/Recherche/MatlabTomo/Centres_{dimHolo}.bin"
+CheminSAV_Centrestxt = f"C:/Users/p1600109/Documents/Recherche/MatlabTomo/Centres_{dimHolo}.txt"
+CheminSAV_Param = f"C:/Users/p1600109/Documents/Recherche/MatlabTomo/Param.txt"
+fidCentrestxt = open(CheminSAV_Centrestxt,"a")
+fidParams = open(CheminSAV_Param,"a")
+fidParams.write(f"REwald {REwald}\n")
 
 # Traitement de la séquence
 cpt = 1
@@ -75,9 +76,11 @@ for hol in range(0,nb_holo):
         SpectreFilt=Spectre[int((nfx-dimHolo)/2):int((nfx-dimHolo)/2+dimHolo),int((nfy-dimHolo)/2):int((nfy-dimHolo)/2+dimHolo)]
         
         # Coordonnées du speculaire
-        ind = np.unravel_index(np.argmax(SpectreFilt, axis=None), SpectreFilt.shape)
+        ind = np.unravel_index(np.argmax(np.abs(SpectreFilt), axis=None), SpectreFilt.shape)
         kiy = ind[0]
         kix = ind[1]
+        fidCentrestxt.write(f"{kiy} {kix}\n")
+        
         Centres[kiy,kix] = 1
         
         # Champ complexe (UBorn + Ui)
@@ -92,35 +95,36 @@ for hol in range(0,nb_holo):
         Amp_UBornCorr = CAber.ampliCorr(Amp_UBorn,Masque,Poly_US,Poly)
         
         # Correction de la phase
-        Phase_UBornCorr = CAber.aberCorr(Phase_UBorn,Masque,Poly_US,Poly)
+        Phase_UBornCorr = CAber.aberCorr(Phase_UBorn,Masque,Poly_US,Poly)  
         
-        # Enregistrement des résultats
-        CheminAmp = f"{DossierAmplitude}AmpUBorn_{'%03d' % cpt}.tiff"
-        CheminPh = f"{DossierPhase}PhaseUBorn_{'%03d' % cpt}.tiff"
-        
-        # Enregistrement de l'amplitude et la phase dépliée (avant correction pour le test)
-        plt.imsave(CheminAmp,Amp_UBornCorr,cmap=plt.cm.gray)
-        plt.imsave(CheminPh,Phase_UBornCorr,cmap=plt.cm.gray)    
-        
+        fidRe = open(CheminSAV_Re,"a")
+        fidIm = open(CheminSAV_Im,"a")
         # Calcul du Champ
         if Rytov is True:
-            # print("Rytov")
             Re_UBorn = np.log(np.abs(Amp_UBornCorr))
             Im_UBorn = Phase_UBornCorr
+            Re_UBorn.tofile(fidRe)
+            Im_UBorn.tofile(fidIm)
         else:
-            # print("Born")
             Re_UBorn = (Amp_UBornCorr-1)*np.cos(Phase_UBornCorr)
             Im_UBorn = (Amp_UBornCorr-1)*np.sin(Phase_UBornCorr)
+            Re_UBorn.tofile(fidRe)
+            Im_UBorn.tofile(fidIm)
         cpt += 1
         cpt_exist += 1
     else:
         cpt += 1
-
-# Sauvegarde    
-fidRe = open(CheminSAV_Re,"w")
-fidIm = open(CheminSAV_Im,"w")
-Re_UBorn.tofile(fidRe)
-Im_UBorn.tofile(fidIm)
+# Sauvegarde des centres et fermeture des fichiers 
+fidParams.write(f"nb_angle {cpt_exist-1}\n")
+fidParams.write(f"fmaxHolo {fmaxHolo}\n")
+fidParams.write(f"dimHolo {dimHolo}\n")
+fidParams.write(f"pixTheo {pix/Gtot}\n") 
+fidCentres = open(CheminSAV_Centres,"w")
+Centres.tofile(fidCentres)
+fidCentres.close()
+fidCentrestxt.close()
+fidParams.close()
 fidRe.close()
 fidIm.close()
 print(f"Temps d'éxecution : {np.round(time.time() - start_time,decimals=2)} seconds")
+

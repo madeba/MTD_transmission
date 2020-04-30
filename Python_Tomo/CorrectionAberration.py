@@ -11,16 +11,19 @@ import numba
 def InitMasque(Chemin,dimMasque):
     """
     Initialization of the mask for aberration correction. If the path is not valid, a blank mask of dimension dimMasque * dimMasque is generated.
+
     Parameters
     ----------
     Chemin : str
         Path + filename + extension to the binary phase mask.
     dimMasque : int
         width (assumed to equal heigth) of the mask to be applied in pixel.
+
     Returns
     -------
     Masque : uint8
         Binary mask applied to both amplitude and phase images.
+
     """
     if os.path.isfile(Chemin):
         Masque = np.uint8(np.array(plt.imread(Chemin)))
@@ -31,18 +34,22 @@ def InitMasque(Chemin,dimMasque):
     return Masque
     
 # Détermination de la taille du polynome
-# @numba.jit(nopython=True)
+@numba.jit(nopython=True)
+# @numba.jit(int16(int16),nopython=True)
 def SizePoly2D(deg):
     """
     Estimation of the size of the computed polynom. Further used in estimation of the column number in PolynomToFit function
+
     Parameters
     ----------
     deg : int
         Degree of the polynom to be fitted.
+
     Returns
     -------
     size : int
         Size of the polynom (equivalent to the number of columns in PolynomToFit function).
+
     """
     j = size = 0
     for i in range(0,deg-1):
@@ -53,20 +60,22 @@ def SizePoly2D(deg):
     return size
 
 # Comptage des pixels dans le masque
-# @numba.jit(nopython=True)
+@numba.jit(nopython=True)
+# @numba.jit('int16(uint8[:,:])', nopython=True)
 def PixInMask(Masque):
     """
     Estimation of the number of pixels within the mask
+
     Parameters
     ----------
     Masque : uint8
         Mask generated with the function \" InitMasque \".
+
     Returns
     -------
     nbPtRand : int
-        Number of pixels used for the background estimation. The background is undersampled by a factor \" step \".
-    Masque : uint8
-        Modified mask.    
+        Number of pixels used for the background estimation. The background is undersampled by a factor \" step \".   
+
     """
     step = 5
     count = 0
@@ -85,9 +94,11 @@ def PixInMask(Masque):
 
 # Génération du polynome à ajuster pour tout x,y en dehors du masque (sous échantillonné)
 @numba.jit(nopython=True)
+# @numba.jit('float64[:,:](int16,uint8[:,:],float64[:,:])',nopython=True)
 def CalcPolyUS_xy(degre_poly, Masque, polynomeUS_to_fit):
     """
     Generation of the undersampled polynome to fit for estimation of the background image
+
     Parameters
     ----------
     degre_poly : int
@@ -96,10 +107,12 @@ def CalcPolyUS_xy(degre_poly, Masque, polynomeUS_to_fit):
         Mask applied to raw image for background estimation.
     polynomeUS_to_fit : float64
         Undersampled polynome to be calculated.
+
     Returns
     -------
     polynomeUS_to_fit : float64
         Undersampled polynome.
+
     """
     nbCoef,nbPtPolyUS = np.shape(polynomeUS_to_fit)
     dimMasqueX, dimMasqueY = np.shape(Masque) 
@@ -120,9 +133,11 @@ def CalcPolyUS_xy(degre_poly, Masque, polynomeUS_to_fit):
 
 # Génération du polynome à ajuster pour tout x,y en dehors du masque
 @numba.jit(nopython=True)
+# @numba.jit('float64[:,:](int16,uint8[:,:],float64[:,:])',nopython=True)
 def CalcPoly_xy(degre_poly, Masque, polynome_to_fit):
     """
     Generation of the polynome to fit for estimation of the background image
+
     Parameters
     ----------
     degre_poly : int
@@ -131,10 +146,12 @@ def CalcPoly_xy(degre_poly, Masque, polynome_to_fit):
         Mask applied to raw image for background estimation.
     polynome_to_fit : float64
         Polynome to be calculated.
+
     Returns
     -------
     polynome_to_fit : float64
         Calculated polynome.
+
     """
     nbCoef,nbPtPoly = np.shape(polynome_to_fit)   
     dimMasqueX, dimMasqueY = np.shape(Masque)
@@ -154,9 +171,11 @@ def CalcPoly_xy(degre_poly, Masque, polynome_to_fit):
 
 # Calcul du fond
 @numba.jit(nopython=True)
+# @numba.jit('void(float64[:,:],float64[:,:],float64[:,:])',nopython=True)
 def compuBackgr(coefficients,polynome_to_fit,PolyBackgr):
     """
     Estimation of the hologram background
+
     Parameters
     ----------
     coefficients : float64
@@ -165,9 +184,11 @@ def compuBackgr(coefficients,polynome_to_fit,PolyBackgr):
         Calculated polynome.
     PolyBackgr : float64
         Background polynome.
+
     Returns
     -------
     None.
+
     """
     UsCoord1D = 0
     nbCoef, NbPtImg = np.shape(polynome_to_fit)
@@ -196,6 +217,7 @@ def compuBackgr(coefficients,polynome_to_fit,PolyBackgr):
 def compuCoefPoly(ImageBrut,Masque,coef_polynomial,polynomeUS_to_fit):
     """
     Least-Square computation of the coefficient of the fitted polynome
+
     Parameters
     ----------
     ImageBrut : uint8
@@ -206,9 +228,11 @@ def compuCoefPoly(ImageBrut,Masque,coef_polynomial,polynomeUS_to_fit):
         Coefficients of the fit (copied from coef therein).
     polynomeUS_to_fit : float64
         Polynome to be fitted (undersampled version).
+
     Returns
     -------
     None.
+
     """
     ImgRows,ImgCols = np.shape(ImageBrut)
     nbCoef,nbPtUs = np.shape(polynomeUS_to_fit)
@@ -232,6 +256,7 @@ def compuCoefPoly(ImageBrut,Masque,coef_polynomial,polynomeUS_to_fit):
 def aberCorr(Image,Masque,polynomeUS_to_fit,polynome_to_fit):
     """
     Correction of the phase aberrations
+
     Parameters
     ----------
     Image : uint8
@@ -242,10 +267,12 @@ def aberCorr(Image,Masque,polynomeUS_to_fit,polynome_to_fit):
         Polynome to be fitted (under-sampled for computation speeding-up).
     polynome_to_fit : float64
         Polynome to be fitted.
+
     Returns
     -------
     resultat_final : float64
         Corrected phase image.
+
     """
     nbCoef,nbPtUs = np.shape(polynomeUS_to_fit)
     ImgRows,ImgCols = np.shape(Image)
@@ -262,6 +289,7 @@ def aberCorr(Image,Masque,polynomeUS_to_fit,polynome_to_fit):
 def ampliCorr(Image,Masque,polynomeUS_to_fit,polynome_to_fit):
     """
     Amplitude normalization
+
     Parameters
     ----------
     Image : uint8
@@ -272,10 +300,12 @@ def ampliCorr(Image,Masque,polynomeUS_to_fit,polynome_to_fit):
         Polynome to be fitted (under-sampled for computation speeding-up).
     polynome_to_fit : float64
         Polynome to be fitted.
+
     Returns
     -------
     resultat_final : float64
         Normalized amplitude image.
+
     """
     ImgRows,ImgCols = np.shape(Image)
     nbCoef,nbPtUs = np.shape(polynomeUS_to_fit)

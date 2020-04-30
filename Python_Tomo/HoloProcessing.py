@@ -12,6 +12,7 @@ def filtrage(spectrum, dx, dy, radius):
     
     Bandpass filtering of the hologram spectrum. A circular mask is applied to the
     Fourier space data. Filtered spectrum is finally shifted of the quantities dx and dy
+
     Parameters
     ----------
     spectrum : complex128
@@ -22,10 +23,12 @@ def filtrage(spectrum, dx, dy, radius):
         Shift in pixels of the filtered spectrum in \"y\" direction in pixel.
     radius : int
         Radius of the bandpass filter in pixel.
+
     Returns
     -------
     filtSpectrum : complex128
         Filtered and recentered spectrum.
+
     """
     ny, nx = np.shape(spectrum)
     xmin = 0
@@ -51,6 +54,7 @@ def reconstruction(I, z, Lambda, pix):
     
     Implementation of the Fresnel transform for hologram reconstruction. Depending on the object to sensor distance, reconstruction kernel is estimated in image or Fourier
     space.
+
     Parameters
     ----------
     I : float64
@@ -62,10 +66,12 @@ def reconstruction(I, z, Lambda, pix):
     pix : float
         Sensor pixel size. If working with microscope objective, effective pixel size
         (accounting for total magnification) has to be considered.
+
     Returns
     -------
     Irest : complex128
         Reconstructed hologram. Amplitude of the wavefront can be estimated via np.abs(Irecons), while wrapped phase is obtained via np.angle(Irecons).
+
     """
     nx, ny = np.shape(I)  # Taille de l'image
     xmin_m = -nx / 2
@@ -101,6 +107,7 @@ def unwrapping(PhiW, pix, approx=True):
     """
     
     Phase unwrapping algorithm as proposed in Vyacheslav V. Volkov and Yimei Zhu, \"Deterministic phase unwrapping in the presence of noise,\" Opt. Lett. 28, 2156-2158 (2003).
+
     Parameters
     ----------
     PhiW : float64
@@ -110,10 +117,12 @@ def unwrapping(PhiW, pix, approx=True):
         (accounting for total magnification) has to be considered.
     approx : bool, optional
         Choice of the unwrapping method. If approx is true, PhiUW is calculating using Eq. (4) to approximate phase gradients.
+
     Returns
     -------
     PhiUW : float64
         Unwrapped phase image.
+
     """
     nx, ny = np.shape(PhiW)  # Taille de l'image
     xmin_m = -nx / 2
