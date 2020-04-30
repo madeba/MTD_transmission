@@ -13,6 +13,8 @@ public :
         size_t premier_plan;
         size_t Num_Angle_final;
         size_t NbAngle;
+        size_t nbThreads;
+        size_t CamDimROI;
         double theta;
         double f_tube;
         double f_obj;

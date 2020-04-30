@@ -23,34 +23,23 @@ int main()
     manip m1; //créer un objet manip
     string chemin_result=m1.chemin_result, chemin_acquis=m1.chemin_acquis, Chemin_mask=m1.chemin_acquis+"/Image_mask.pgm";
     //dimensions hologrammes
-    Var2D dimROI= {1024,1024}, coin= {0,0};
-    Point2D dimHolo(1024,1024,1024);
+    cout<<"camdimROI"<<m1.CamDimROI;
+    Var2D dimROI= {m1.CamDimROI,m1.CamDimROI}, coin= {0,0};
+    Point2D dimHolo(m1.CamDimROI,m1.CamDimROI,m1.CamDimROI);
     size_t NbPixROI2d=dimROI.x*dimROI.y;
     //tableaux hologramme et réference en 1024x1024
     vector<double> holo1(NbPixROI2d), intensite_ref(NbPixROI2d), ampli_ref(NbPixROI2d);
     char charAngle[4+1];
     ///-----------Init FFTW Holo---------------
-    size_t nb_thread_fftw=3;
-
+    size_t nb_thread_fftw=m1.nbThreads;
     int fftwThreadInit=fftw_init_threads();
-   // cout<<"fftwthreadinit="<<fftwThreadInit<<endl;
     fftw_plan_with_nthreads(nb_thread_fftw);
-
-
     FFTW_init param_fftw2D_r2c_Holo(holo1,"r2c",nb_thread_fftw);/// /!\ init r2c->surcharge avec image2D en entrée!
     FFTW_init param_fftw2D_c2r_Holo(holo1,nb_thread_fftw);
     vector<double> masqueTukeyHolo(NbPixROI2d);
     masqueTukeyHolo=tukey2D(dimROI.x,dimROI.y,0.05);
     ///--------------------Init Référence Amplitude pour correction plan central-------------------------------------------
-    if(is_readable(chemin_acquis+"/Intensite_ref.pgm" )==1)
-         charger_image2D_OCV(intensite_ref,chemin_acquis+"/Intensite_ref.pgm", coin, dimROI);
-         else cout<<"/!\\  fichier intensité référence absent, création intensité unité"<<endl;
-    for(size_t cpt=0;cpt<NbPixROI2d;cpt++){
-        if(intensite_ref[cpt]!=0)
-        ampli_ref[cpt]=sqrt(intensite_ref[cpt]);
-        else
-        ampli_ref[cpt]=1;
-    }
+    ampli_ref=initRef(chemin_acquis+"/Intensite_ref.pgm",coin,dimROI);
     ///------Init variable champ complexe après découpe hors axe-----------------------------
     const size_t  NbPixUBorn=4*m1.NXMAX*m1.NXMAX, NbAngle=m1.NbAngle;//dimensions
     cout<<"NbAngle="<<NbAngle<<endl<<"m1.NXMAX="<<m1.NXMAX<<endl;//nombre d'hologrammes
@@ -59,8 +48,6 @@ int main()
     cout<<"dimension decoupe dimDHA="<<dim2DHA.x<<endl;
     vector<complex<double>> TF_UBornTot(NbPixUBorn*NbAngle);///variable stockant les N champs complexes decoupés depuis la zone 1024 (pour utilsier wisdom en 1024)
     vector<double>  TF_champMod(NbPixUBorn), centre(NbPixUBorn);///centre pour controler balayage
-
-
 
 auto start_decoupeHA = std::chrono::system_clock::now();///démarrage chrono Hors-axe
 ///Charger les acqusitions
@@ -74,23 +61,13 @@ for(cptAngle=0; cptAngle<NbAngle; cptAngle++){
     string nomFichierHolo=m1.chemin_acquis+"/i"+charAngle+".pgm";
     test_existence = fopen(nomFichierHolo.c_str(), "rb");
      //cout<<nomFichierHolo<<endl;
-    //  auto start_holo2TF = std::chrono::system_clock::now();
     if(test_existence!=NULL) {
       fclose(test_existence);
-   //   auto start_holo2TF = std::chrono::system_clock::now();
       charger_image2D_OCV(holo1,nomFichierHolo, coin, dimROI);
-      /* auto end_holo2TF = std::chrono::system_clock::now();
-      auto elapsed_holo2TF = end_holo2TF - start_holo2TF;
-       std::cout <<"Temps charger image= "<< elapsed_holo2TF.count()/(pow(10,9)) << '\n';*/
       for(size_t cpt=0;cpt<NbPixROI2d;cpt++){
         holo1[cpt]=holo1[cpt]/ampli_ref[cpt];
       }
-    //  auto start_holo2TF = std::chrono::system_clock::now();
-
       holo2TF_UBorn2(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calculer la TF des hologrammes et la découper de dimROI à 2NXMAX
-   /*  auto end_holo2TF = std::chrono::system_clock::now();
-      auto elapsed_holo2TF = end_holo2TF - start_holo2TF;
-       std::cout <<"Temps holo2TF= "<< elapsed_holo2TF.count()/(pow(10,9)) << '\n';*/
       NbAngleOk++;
     }
     else cout<<"fichier "<<cptAngle<<" inexistant\n";
@@ -98,21 +75,9 @@ for(cptAngle=0; cptAngle<NbAngle; cptAngle++){
 auto end_decoupeHA = std::chrono::system_clock::now();
 auto elapsed = end_decoupeHA - start_decoupeHA;
 std::cout <<"Temps pour FFT holo+découpe Spectre= "<< elapsed.count()/(pow(10,9)) << '\n';
-//--------------Init FFTW Hors axe-------------------------------------------------
-
-/*
-fftw_plan p_backward_HA,p_forward_HA;
-//fftw_complex *in_out=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * dimROI.x*dimROI.y);////in=out pour transformation "inplace".
-fftw_complex *in_HA=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * NbPixUBorn);
-fftw_complex *out_HA=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * NbPixUBorn);//
-
-p_backward_HA=fftw_plan_dft_2d(dim2DHA.x, dim2DHA.y, in_HA, out_HA, FFTW_BACKWARD,FFTW_MEASURE);
-p_forward_HA=fftw_plan_dft_2d(dim2DHA.x, dim2DHA.y, in_HA, out_HA, FFTW_FORWARD,FFTW_MEASURE);*/
-
-//-------------------------
 
 ///initialiser les variables de champ, phase, amplitude etc.
-//vector<complex<double>> TF_UBorn(TF_UBornTot.begin(),TF_UBornTot.begin()+NbPixUBorn);
+
 vector<complex<double>> TF_UBorn(NbPixUBorn),  UBorn(NbPixUBorn);
 vector<double> phase_2Pi_vec(NbPixUBorn),  UnwrappedPhase(NbPixUBorn),PhaseFinal(NbPixUBorn);
 double *UnwrappedPhase_herraez=new double[NbPixUBorn];
@@ -135,6 +100,7 @@ cout<<"\n#########################Calcul champs cplx 2D Uborn/Rytov + eventuelle
 vector<complex<double>> UBornFinal(NbPixUBorn), UBornFinalDecal(NbPixUBorn), TF_UBorn_norm(NbPixUBorn);
 vector<double> UBornAmpFinal(NbPixUBorn),  UBornAmp(NbPixUBorn);
 vector<double> tabPosSpec(NbAngle*2);  ///stockage des speculaires pour exportation vers reconstruction
+
 auto start_part2= std::chrono::system_clock::now();
 //#pragma omp parallel for
 for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les angles : correction aberrations
@@ -152,16 +118,7 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
   centre[kxmi*2*m1.NXMAX+kymi]=cpt_angle;
 
   if(m1.b_CorrAber==true){
-    //calc_Uborn(TF_UBorn,UBorn,dim2DHA,posSpec,in_HA,out_HA,p_backward_HA);///--/!\ recale le spectre dans Uborn!
-
-     // auto start_Uborn2 = std::chrono::system_clock::now();
- calc_Uborn2(TF_UBorn,UBorn,dim2DHA,posSpec,param_fftw2D_c2r_HA);
-
-     /* auto end_Uborn2 = std::chrono::system_clock::now();
-      auto elapsed_Uborn2 = end_Uborn2 - start_Uborn2;
-       std::cout <<"Temps Uborn2= "<< elapsed_Uborn2.count()/(pow(10,9)) << '\n';*/
-
-
+    calc_Uborn2(TF_UBorn,UBorn,dim2DHA,posSpec,param_fftw2D_c2r_HA);
    // SAVCplx(UBorn,"Re",chemin_result+"/ampli_UBorn_debut_extract.raw",t_float,"a+b");
     ///----------Calcul phase + deroulement--------------------------------
     calcPhase_mpi_pi_atan2(UBorn,phase_2Pi_vec); ///fonction atan2
@@ -174,13 +131,7 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
           UnwrappedPhase[cpt]=UnwrappedPhase_herraez[cpt];///plutôt passer pointeur ?
         }
         else{
-         // auto start_volkov = std::chrono::system_clock::now();///démarrage chrono
-          //deroul_volkov(in_HA, out_HA,phase_2Pi_vec,UnwrappedPhase, p_forward_HA, p_backward_HA);
           deroul_volkov2(phase_2Pi_vec,UnwrappedPhase, param_fftw2D_c2r_HA);
-
-        /*  auto end_volkov = std::chrono::system_clock::now();
-          auto elapsed_volkov = end_volkov - start_volkov;
-        std::cout <<"Temps pour Volkov = "<< elapsed_volkov.count()/(pow(10,9)) << '\n';*/
         }
     }
     else UnwrappedPhase=phase_2Pi_vec;
@@ -216,7 +167,7 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
    // SAV2(UBornAmpFinal,chemin_result+"/UBornAmpFinal.raw",t_float,"a+b");
     ///Recalculer la TF décalée pour le programme principal.
     Var2D recal= {kxmi,kymi};
-    decal2DCplxGen(UBornFinal,UBornFinalDecal, dim2DHA,decal2DHA);
+    decal2DCplxGen2(UBornFinal,UBornFinalDecal, decal2DHA);
     //TF2Dcplx_vec(in_HA,out_HA,UBornFinalDecal,TF_UBorn_norm,p_forward_HA);
     TF2Dcplx(UBornFinalDecal,TF_UBorn_norm,param_fftw2D_c2r_HA);
     SAVCplx(UBornFinal,"Re", chemin_result+"/UBornfinal_Re"+m1.dimImg+".raw", t_double, "a+b");
@@ -231,7 +182,6 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
       TF_UBorn_norm[cpt].imag((TF_UBorn[cpt].imag()*max_part_reel-TF_UBorn[cpt].real()*max_part_imag)/max_module);
     }
     //SAVCplx(TF_UBorn,"Re", chemin_result+"/TF_Uborn_Re.raw", t_double, "a+b");
-    //calc_Uborn(TF_UBorn_norm,UBorn,dim2DHA,posSpec,in_HA,out_HA,p_backward_HA);///--/!\ recale le spectre dans support Uborn!
     calc_Uborn2(TF_UBorn_norm,UBorn,dim2DHA,posSpec,param_fftw2D_c2r_HA);
     SAVCplx(UBorn,"Re", chemin_result+"/UBornfinal_Re"+m1.dimImg+".raw", t_double, "a+b");
     SAVCplx(UBorn,"Im", chemin_result+"/UBornfinal_Im"+m1.dimImg+".raw", t_double, "a+b");
@@ -248,6 +198,5 @@ SAV2(param,m1.chemin_result+"/parametres.raw", t_double, "wb");
 SAV2(tabPosSpec,m1.chemin_result+"/tab_posSpec.raw",t_double,"wb");
 SAV_Tiff2D(centre,m1.chemin_result+"/centres.tif",m1.NA/m1.NXMAX); //exportation des spéculaires en "unité NA"
 cout<<"Fin prétraitement"<<endl;
-
 return 0;
 }

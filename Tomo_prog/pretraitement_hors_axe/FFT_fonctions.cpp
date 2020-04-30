@@ -186,10 +186,9 @@ vector<double>  fftshift2D2(vector<double> const &entree)
 unsigned int dim=sqrt(entree.size());
 vector<double> result(dim*dim);
 int decal=dim/2;
-size_t yi=0;
-       size_t xi=0;
-       size_t pixel=0;
-       size_t pixel_shift=0;
+short unsigned int  yi=0,xi=0;
+      // size_t pixel=0;
+      // size_t pixel_shift=0;
      //   #pragma omp parallel for private(yi)
        // #pragma omp parallel for private (xi,yi,pixel,pixel_shift)
        for(yi=0; yi<decal; yi++) {

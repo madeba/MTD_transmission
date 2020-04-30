@@ -5,6 +5,7 @@
 #include "FFT_fonctions.h"
 #include "src/vecteur.h"
 #include "deroulement_volkov2.h"
+#define M_2PI 2*M_PI
 using namespace std;
 
 
@@ -40,7 +41,7 @@ void deroul_volkov2(vector<double> const &phase_enroul,vector<double> &phase_der
   integ_grad2(gradx_IntM,grady_IntM,IntM,param_c2c);
 
   for(size_t cpt=0;cpt<nbPix;cpt++){
-    phase_deroul[cpt]=phase_enroul[cpt]+2*3.14159*IntM[cpt].real();
+    phase_deroul[cpt]=phase_enroul[cpt]+2*3.1415*IntM[cpt].real();
   }
 
 }

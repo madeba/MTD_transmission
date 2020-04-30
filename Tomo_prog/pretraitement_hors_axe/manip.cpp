@@ -50,6 +50,8 @@ manip::manip()
     premier_plan=extract_val("PREMIER_ANGLE",fic_cfg_recon),
     Num_Angle_final=extract_val("NB_HOLO",fic_cfg_manip),//
     NbAngle=Num_Angle_final-premier_plan;
+    nbThreads=extract_val("NB_THREADS",fic_cfg_recon),
+    CamDimROI=extract_val("CCD_ROIX",fic_cfg_recon),
 
     cout<<"\n##################### Options de RECONSTRUCTION ##################\n"<<endl;
     ///boolean used to choose the type of reconstruction/phase unwrapping

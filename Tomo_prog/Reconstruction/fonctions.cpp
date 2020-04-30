@@ -2003,7 +2003,7 @@ void Import3D_Tiff(vector<double> &imgTiff, string chemin, double taille_pixel)
 
     TIFFClose(Tiff_id);
 }
-/*
+
 void SAV_Tiff3D(nbCplx *var_sav, string chemin_ind, string chemin_abs, int dim)
 {
     double *bufferRe=new double[dim*dim];
@@ -2024,5 +2024,5 @@ void SAV_Tiff3D(nbCplx *var_sav, string chemin_ind, string chemin_abs, int dim)
         SAV_Tiff2D(bufferIm, chemin_abs, dim);
 	    }
     delete[] bufferRe, bufferIm;
-}*/
+}
 
