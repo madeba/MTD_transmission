@@ -7,7 +7,6 @@ import numba
 
 
 # Initialisation du masque de filtrage
-# @numba.jit(nopython=True)
 def InitMasque(Chemin,dimMasque):
     """
     Initialization of the mask for aberration correction. If the path is not valid, a blank mask of dimension dimMasque * dimMasque is generated.
@@ -35,7 +34,6 @@ def InitMasque(Chemin,dimMasque):
     
 # Détermination de la taille du polynome
 @numba.jit(nopython=True)
-# @numba.jit(int16(int16),nopython=True)
 def SizePoly2D(deg):
     """
     Estimation of the size of the computed polynom. Further used in estimation of the column number in PolynomToFit function
@@ -61,7 +59,6 @@ def SizePoly2D(deg):
 
 # Comptage des pixels dans le masque
 @numba.jit(nopython=True)
-# @numba.jit('int16(uint8[:,:])', nopython=True)
 def PixInMask(Masque):
     """
     Estimation of the number of pixels within the mask
@@ -94,7 +91,6 @@ def PixInMask(Masque):
 
 # Génération du polynome à ajuster pour tout x,y en dehors du masque (sous échantillonné)
 @numba.jit(nopython=True)
-# @numba.jit('float64[:,:](int16,uint8[:,:],float64[:,:])',nopython=True)
 def CalcPolyUS_xy(degre_poly, Masque, polynomeUS_to_fit):
     """
     Generation of the undersampled polynome to fit for estimation of the background image
@@ -133,7 +129,6 @@ def CalcPolyUS_xy(degre_poly, Masque, polynomeUS_to_fit):
 
 # Génération du polynome à ajuster pour tout x,y en dehors du masque
 @numba.jit(nopython=True)
-# @numba.jit('float64[:,:](int16,uint8[:,:],float64[:,:])',nopython=True)
 def CalcPoly_xy(degre_poly, Masque, polynome_to_fit):
     """
     Generation of the polynome to fit for estimation of the background image
@@ -171,7 +166,6 @@ def CalcPoly_xy(degre_poly, Masque, polynome_to_fit):
 
 # Calcul du fond
 @numba.jit(nopython=True)
-# @numba.jit('void(float64[:,:],float64[:,:],float64[:,:])',nopython=True)
 def compuBackgr(coefficients,polynome_to_fit,PolyBackgr):
     """
     Estimation of the hologram background
@@ -194,26 +188,13 @@ def compuBackgr(coefficients,polynome_to_fit,PolyBackgr):
     nbCoef, NbPtImg = np.shape(polynome_to_fit)
     result_mltpn=np.zeros((nbCoef,1),dtype=np.float64)
     BackgrRows, BackgrCols = np.shape(PolyBackgr)
-    #PolySize = nbCoef
     for y in range(0,BackgrCols):
         for x in range(0,BackgrRows):
             result_mltpn[:,0]=coefficients[:,0] * polynome_to_fit[:,UsCoord1D]
             PolyBackgr[y,x] =np.sum(result_mltpn)
             UsCoord1D += 1
-    # UsCoord1D = 0
-    # nbCoef, NbPtImg = np.shape(polynome_to_fit)
-    # BackgrRows, BackgrCols = np.shape(PolyBackgr)
-    # PolySize = nbCoef
-    # for y in range(0,BackgrRows):
-    #     for x in range(0,BackgrCols):    
-    #         sum = 0.
-    #         for num_coef in range(0,PolySize):             
-    #             sum += coefficients[num_coef]*polynome_to_fit[num_coef,UsCoord1D]       
-    #         PolyBackgr[y,x] = sum
-    #         UsCoord1D += 1
       
 # Calcul des coefficients du polynome
-# @numba.jit(nopython=True)
 def compuCoefPoly(ImageBrut,Masque,coef_polynomial,polynomeUS_to_fit):
     """
     Least-Square computation of the coefficient of the fitted polynome
@@ -252,7 +233,6 @@ def compuCoefPoly(ImageBrut,Masque,coef_polynomial,polynomeUS_to_fit):
         tabCoef = np.zeros((nbCoef,1),dtype=np.float64)
 
 # Correction de la phase du fond
-# @numba.jit(nopython=True)
 def aberCorr(Image,Masque,polynomeUS_to_fit,polynome_to_fit):
     """
     Correction of the phase aberrations
@@ -285,7 +265,6 @@ def aberCorr(Image,Masque,polynomeUS_to_fit,polynome_to_fit):
     return resultat_final
 
 # Normalisation de l'amplitude du fond
-# @numba.jit(nopython=True)
 def ampliCorr(Image,Masque,polynomeUS_to_fit,polynome_to_fit):
     """
     Amplitude normalization
