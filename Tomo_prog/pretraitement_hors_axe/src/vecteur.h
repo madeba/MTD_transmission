@@ -2,12 +2,13 @@
 #define VECTEUR_INCLUDED
 #include <iostream>
 class vecteur {
-    private :
-        double x;
-        double y;
-        double z;
+    //private :
+
 
     public :
+          double x;
+        double y;
+        double z;
         vecteur();
         vecteur(double vx,double vy, double vz);
         void set_coord(double vx,double vy, double vz);

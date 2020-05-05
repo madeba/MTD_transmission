@@ -9,7 +9,7 @@
 using namespace std;
 
 
-void deroul_volkov2(vector<double> const &phase_enroul,vector<double> &phase_deroul , FFTW_init param_c2c)
+void deroul_volkov2(vector<double> const &phase_enroul,vector<double> &phase_deroul , FFTW_init param_c2c, FFTW_init param_r2c)
 {
   complex<double> I(0,1);
   unsigned int nbPix=phase_enroul.size();
@@ -20,7 +20,7 @@ void deroul_volkov2(vector<double> const &phase_enroul,vector<double> &phase_der
   //string repertoire_sav="/home/mat/tomo_test/";
   //SAV2_vec(phase_enroul,nbPix,repertoire_sav+"phase_enroul_dans_deroul_volkov.bin",t_float,"wb");
 
-  gradient_fft2(phase_enroul, gradx_enroul_fft,grady_enroul_fft, param_c2c);
+  gradient_fft2(phase_enroul, gradx_enroul_fft,grady_enroul_fft, param_c2c, param_r2c);
   //SAVCplx(gradx_enroul_fft,"Re",nbPix,"/home/mat/tomo_test/gradx_enroul_re.bin",t_float,"w+b");
   //SAVCplx(gradx_enroul_fft,"Im",nbPix,"/home/mat/tomo_test/gradx_enroul_Im.bin",t_float,"w+b");
   for(size_t cpt=0;cpt<nbPix;cpt++){
@@ -34,22 +34,21 @@ void deroul_volkov2(vector<double> const &phase_enroul,vector<double> &phase_der
   for(size_t cpt=0;cpt<nbPix;cpt++){
     ax=-I*(Gradx_Z_fft[cpt]/Z[cpt]);
     ay=-I*(Grady_Z_fft[cpt]/Z[cpt]);
-    gradx_IntM[cpt]=(ax.real()-gradx_enroul_fft[cpt].real())/(2*M_PI);//*(-0.159);//-1/2pi
-    grady_IntM[cpt]=(ay.real()-grady_enroul_fft[cpt].real())/(2*M_PI);
+    gradx_IntM[cpt]=(ax.real()-gradx_enroul_fft[cpt].real())/(M_2PI);//*(-0.159);//-1/2pi
+    grady_IntM[cpt]=(ay.real()-grady_enroul_fft[cpt].real())/(M_2PI);
   }
   vector<complex<double>> IntM(nbPix);
-  integ_grad2(gradx_IntM,grady_IntM,IntM,param_c2c);
+  integ_grad2(gradx_IntM,grady_IntM,IntM,param_c2c,param_r2c);
 
   for(size_t cpt=0;cpt<nbPix;cpt++){
-    phase_deroul[cpt]=phase_enroul[cpt]+2*3.1415*IntM[cpt].real();
+    phase_deroul[cpt]=phase_enroul[cpt]+M_2PI*IntM[cpt].real();
   }
-
 }
 
 
 //surcharge avec entree <double>
 
-void gradient_fft2(vector<double> const &entree, vector<complex<double>> &gradx, vector<complex<double>> &grady, FFTW_init &param_c2c)
+void gradient_fft2(vector<double> const &entree, vector<complex<double>> &gradx, vector<complex<double>> &grady, FFTW_init &param_c2c,  FFTW_init & param_r2c)
 {
      // string repertoire_sav="/home/mat/tomo_test/";
      complex<double> I(0,1);
@@ -61,7 +60,7 @@ void gradient_fft2(vector<double> const &entree, vector<complex<double>> &gradx,
      //SAV2(entree,nbPix,"/home/mat/tomo_test/phase.bin",t_float,"w+b");
     // TF2D_vec(in,out, entree, spectre, p_forward);
     TF2Dcplx(entree,spectre,param_c2c);
-
+  //TF2D_r2c_symetric(entree, spectre,param_r2c);
      vector<vecteur> kvect(nbPix),kvect_shift(nbPix);
 
      //spectre_shift=fftshift2D(spectre);
@@ -95,6 +94,7 @@ void gradient_fft2(vector<complex<double>> const&entree, vector<complex<double>>
   vector<complex<double>> spectre(nbPix);//spectre_shift(nbPix);
   //SAV2(entree,nbPix,"/home/mat/tomo_test/phase.bin",t_float,"w+b");
   TF2Dcplx(entree, spectre, param_c2c);
+
   vector<vecteur> kvect(nbPix),kvect_shift(nbPix);
   //SAVCplx(spectre,"Re",nbPix,repertoire_sav+"spectre_pyramide.bin",t_float,"w+b");
   //spectre_shift=fftshift2D(spectre);
@@ -115,7 +115,7 @@ void gradient_fft2(vector<complex<double>> const&entree, vector<complex<double>>
   TF2Dcplx_INV(tampony, grady, param_c2c);
 }
 
-void integ_grad2(vector<double> const &gradx, vector<double> const& grady, vector<complex<double>> &sortie,FFTW_init &param_c2c)
+void integ_grad2(vector<double> const &gradx, vector<double> const& grady, vector<complex<double>> &sortie,FFTW_init &param_c2c, FFTW_init &param_r2c)
 {
   complex<double> I(0,1);
   unsigned int nbPix=gradx.size(),dim=sqrt(nbPix);

@@ -3,7 +3,7 @@
 #include "manip.h"
 #include "omp.h"
 using namespace std;
-
+///Set of functions to calculate FFT with fftw : c2c, r2c, r2c symetric, fftshift
  vector<complex<double>> fftshift3D(vector<complex<double>> &entree)
 {       //si décalage supérieure à dim, on fait plus d'un tour, donc on prend le modulo
 

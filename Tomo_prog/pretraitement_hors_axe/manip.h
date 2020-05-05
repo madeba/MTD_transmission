@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include "struct.h"
 class manip {
 public :
         double NA, Tp;
@@ -30,6 +31,7 @@ public :
         double tailleTheoPixelUborn;
         double tailleTheoPixelTomo;
         size_t circle_cx,circle_cy;
+        Var2D fPort, fPortShift;
         std::string dimImg;
         std::string chemin_result;
         std::string chemin_acquis;

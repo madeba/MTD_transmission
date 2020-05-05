@@ -37,8 +37,12 @@ manip::manip()
     tailleTheoPixelHolo=TpCam/Gt*pow(10,9);//Pour info, taille des pixels sur un hologramme=Tpcam/GT
     cout<<"taille theorique pixel holo="<<tailleTheoPixelHolo<<endl;
     theta=asin(NA/n0);
-    circle_cx=extract_val("CIRCLE_CX",fic_cfg_manip);///coordinates of the off-axis career
+    circle_cx=extract_val("CIRCLE_CX",fic_cfg_manip);///fréquence porteuse/coordinates of the off-axis career
     circle_cy=extract_val("CIRCLE_CY",fic_cfg_manip);
+    fPort={circle_cx,circle_cy};
+    fPortShift=coord_to_coordShift(fPort,dimROI);
+    cout<<"fPortShift="<<fPortShift.x<<"',"<<fPortShift.y<<endl;
+    cout<<"fPort="<<fPort.x<<"',"<<fPort.y<<endl;
     NXMAX=extract_val("NXMAX",fic_cfg_manip);
     cout<<"m1.NXMAX="<<NXMAX<<endl;
     if(NXMAX==0)
@@ -130,6 +134,7 @@ manip::manip()
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
     fichier_sav_parametre<<"|    Tp Tomo theo|     "<<(2*NXMAX_theo)/dim_final*tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI.x<<" nm      |"<<endl;
     fichier_sav_parametre<<"+---------------------------------+"<<endl;
+    fichier_sav_parametre<<"NA="<<NA<<endl<<"f_tube="<<f_tube<<endl<<"f_obj="<<f_obj<<endl<<"Rf="<<Rf<<endl;
     fichier_sav_parametre<<"\n##################### FIN INFO Reconstruction ##################\n"<<endl;
 
     fichier_sav_parametre.close();

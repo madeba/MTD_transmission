@@ -9,10 +9,24 @@
 #include "projet.h"
 #include "FFT_fonctions.h"
 #include "fonctions.h"
-
+#include "IO_fonctions.h"
 using namespace std;
 using namespace cv;
 ///free functions used outside classes
+
+///translate normal coordinate to shifted coordinate
+///allows to work with shifted version of the spectrum (to avoir fftshift and speedup spectrum crop)
+Var2D coord_to_coordShift(Var2D coord2D, Var2D dimROI)
+{
+Var2D coord2D_shift;
+    if(coord2D.x-dimROI.x/2>0)
+        coord2D_shift.x=coord2D.x-dimROI.x/2;
+    else coord2D_shift.x=dimROI.x/2+coord2D.x;
+     if(coord2D.y-dimROI.y/2>0)
+        coord2D_shift.y=coord2D.y-dimROI.y/2;
+    else coord2D_shift.y=dimROI.y/2+coord2D.y;
+    return coord2D_shift;
+}
 ///calculate the wrapped phase from -pi to pi
 void calcPhase_mpi_pi_atan2(vector<complex<double>> const &cplxField, vector<double> &phaseMod2pi)///calcul phase -PI-PI
 {
@@ -37,7 +51,7 @@ vector<double> intensite_ref(nbPixROI2d);
 return ampli_ref;
 }
 ///---arbitrary shift (not fftshift)
-void   decal2DCplxGen2(vector<complex<double>> const &entree,vector<complex<double>>  &result, Var2D &decalGen){
+void   decal2DCplxGen2(vector<complex<double>> const &entree,vector<complex<double>>  &result, Var2D   &decalGen){
     size_t nbPix2D=entree.size();
     unsigned short int dim=sqrt(nbPix2D);
     Var2D const dim2D={dim,dim};
@@ -59,72 +73,8 @@ void   decal2DCplxGen2(vector<complex<double>> const &entree,vector<complex<doub
             copy(entree.begin()+yi*dim2D.x+dim2D.x-decal.x,   entree.begin()+yi*dim2D.x+dim2D.x,   result.begin()+(-dim2D.y+yi+decal.y)*dim2D.x);
         }
 }
-void decal2DCplxGen(vector<complex<double>> const &entree, vector<complex<double>> &result, Var2D dim,Var2D decal)
-{
-            //si décalage supérieure à dim, on fait plus d'un tour, donc on prend le modulo
-            //cout<<"decal.x,y="<<decal.x<<","<<decal.y<<endl;
-        decal.y=decal.y%dim.y;
-        decal.x=decal.x%dim.x;
-        if(decal.x<0)
-        decal.x=dim.x+decal.x;
-        if(decal.y<0)
-        decal.y=dim.y+decal.y;
-       size_t yi,xi;
-       //#pragma omp parallel for private(yi)
-       for(yi=0; yi<dim.y-decal.y; yi++) {
-
-                for(xi=0; xi<dim.x-decal.x; xi++)
-                { //cout<<"xi,yi="<<xi<<","<<yi<<endl;
-                        int pixel=yi*dim.x+xi;
-                        int pixel_shift=(yi+decal.y)*dim.x+xi+decal.x;
-                       // result[pixel_shift].real()=entree[pixel].real();
-
-                        result[pixel_shift].real(entree[pixel].real());
-                        result[pixel_shift].imag(entree[pixel].imag());
-                }
-
-
-                for(xi=dim.x-decal.x; xi<dim.x; xi++)
-                {
-                        int pixel=yi*dim.x+xi;
-                        int pixel_shift=(yi+decal.y)*dim.x+(-dim.x+xi+decal.x);//Y_shift*dim.x+X_shift;
-                        result[pixel_shift].real(entree[pixel].real());
-                        result[pixel_shift].imag(entree[pixel].imag());
-                       // result[pixel_shift]=entree[pixel];
-                }
-
-        }
-      // #pragma omp barrier
-         //   #pragma omp parallel for private(yi)
-              for(int yi=dim.y-decal.y; yi<dim.y; yi++) {
-
-                for(int xi=0; xi<dim.x-decal.x; xi++)
-                {
-                        int pixel=yi*dim.x+xi;
-                        int pixel_shift=(-dim.y+yi+decal.y)*dim.x+xi+decal.x;
-                        result[pixel_shift].real(entree[pixel].real());
-                        result[pixel_shift].imag(entree[pixel].imag());
-                        //result[pixel_shift]=entree[pixel];
-                }
-
-                for(int xi=dim.x-decal.x; xi<dim.x; xi++)
-                {
-                        int pixel=yi*dim.x+xi;
-                        int pixel_shift=(-dim.y+yi+decal.y)*dim.x+(-dim.x+xi+decal.x);//Y_shift*dim.x+X_shift;
-                        result[pixel_shift].real(entree[pixel].real());
-                        result[pixel_shift].imag(entree[pixel].imag());
-                        //result[pixel_shift]=entree[pixel];
-                }
-
-        }
-      //  #pragma omp barrier
-}
-
 
 ///@parameters PosSpec : position of the specular beam
-
-
-
 int coordSpec(vector<complex<double>> const &TF_UBorn, vector<double> &TF_champMod,Var2D NMAX)
  {
     int cpt_max=0;
@@ -139,7 +89,7 @@ int coordSpec(vector<complex<double>> const &TF_UBorn, vector<double> &TF_champM
     }
     return cpt_max;
  }
-///crop image[0:dim_src,0:dim_src] to dest(coin.x:coin.x+dim_dest,coin.y+dim_dest), human
+///crop src2D[0:dim_src,0:dim_src] to dest3D(coin.x:coin.x+dim_dest,coin.y+dim_dest), human
 void coupeCplx(vector<complex<double>> const &src, vector<complex<double>> &dest, Var2D dim_src, Var2D dim_dest, Var2D coin, size_t NumAngle)
 {
 size_t nbPixSrc=src.size();
@@ -162,8 +112,143 @@ cpt_Z_dest=(dim_dest.x*dim_dest.y)*NumAngle;
             //dest[cpt_dest1D]->imag=src[cpt_src1D].imag;
         }
     }
+
+}
+///coupe dans le repère informatique puis copie vers pile 3D.
+///crop on a fftshifted spectru, then copy to 3D stack
+//fonction très particulière à n'utiliser qu'après un fftshift, typiquement sur un spectre centre en repère informatique
+/*
+void coupe2D_RefI_to_I3D(vector<complex<double>> const &src, vector<complex<double>> &dest, Var2D dim_dest, unsigned short int numAngle)
+{
+size_t nbPixSrc=src.size();
+
+Var2D dim_src={sqrt(nbPixSrc),sqrt(nbPixSrc)};
+//cout<<"dim_src.x="<<dim_src.x<<endl;
+//Var2D dim_dest={sqrt(nbPixDest),sqrt(nbPixDest)};
+Var2D Nmax={dim_dest.x/2,dim_dest.y/2};
+//cout<<"Nmax="<<Nmax.x<<endl;
+unsigned short int X_dest,Y_dest, X_src, Y_src;
+size_t cpt_src,cpt_dest,Z_dest;
+
+Z_dest=(dim_dest.x*dim_dest.y)*numAngle;
+//partie haute (A&B)
+for(Y_src=0;Y_src<Nmax.y;Y_src++){
+  Y_dest=Y_src;///coord Y src
+  size_t num_ligne_dest=Y_dest*dim_dest.x,
+                     num_ligne_src=Y_src*dim_src.x;
+  for(X_src=0;X_src<Nmax.y;X_src++){
+     X_dest=X_src;///coord X src
+
+     cpt_src=X_src+num_ligne_src;///coord 1D source
+     cpt_dest=X_dest+num_ligne_dest+Z_dest;
+     dest[cpt_dest]=src[cpt_src];
+  }
+  for(X_src=dim_src.x-Nmax.x;X_src<dim_src.x;X_src++){
+     X_dest=X_src-(dim_src.x-2*Nmax.x);///coord X src
+     cpt_src=X_src+num_ligne_src;///coord 1D source
+     cpt_dest=X_dest+num_ligne_dest+Z_dest;
+     dest[cpt_dest]=src[cpt_src];
+  }
+}
+  //partie basse (C&D)
+ for(Y_src=dim_src.y-Nmax.y;Y_src<dim_src.y;Y_src++){
+    Y_dest=Y_src-(dim_src.y-2*Nmax.y);///coord X src
+      size_t num_ligne_dest=Y_dest*dim_dest.x,
+                     num_ligne_src=Y_src*dim_src.x;
+   for(X_src=0;X_src<Nmax.y;X_src++){
+     X_dest=X_src;///coord X src
+     cpt_src=X_src+num_ligne_src;///coord 1D source
+     cpt_dest=X_dest+num_ligne_dest+Z_dest;
+     dest[cpt_dest]=src[cpt_src];
+  }
+  for(X_src=dim_src.x-Nmax.x;X_src<dim_src.x;X_src++){
+     X_dest=X_src-(dim_src.x-2*Nmax.x);///coord X src
+     cpt_src=X_src+num_ligne_src;///coord 1D source
+     cpt_dest=X_dest+num_ligne_dest+Z_dest;
+     dest[cpt_dest]=src[cpt_src];
+   }
+  }
+}*/
+
+///crop dans le repère informatique vers repère humain . Crop src into dest, human-centered (zero=middle of the image)
+//fonction très particulière à n'utiliser qu'après un fftshift, typiquement sur un spectre centre en repère informatique
+///crop dans le repère informatique vers repère humain . Crop src into dest, human-centered (zero=middle of the image)
+//fonction très particulière à n'utiliser qu'après un fftshift, typiquement sur un spectre centre en repère informatique
+void coupe2D_I_to_H3D(vector<complex<double>> const &src2D, vector<complex<double>> &dest3D,Var2D dim_dest2D, unsigned short int numAngle)
+{
+size_t nbPixSrc=src2D.size();
+size_t nbPixDest=dest3D.size();
+Var2D dim_src={sqrt(nbPixSrc),sqrt(nbPixSrc)};
+//Var2D dim_dest={sqrt(nbPixDest),sqrt(nbPixDest)};
+Var2D Nmax={dim_dest2D.x/2,dim_dest2D.y/2};
+
+unsigned short int X_dest,Y_dest, X_src, Y_src;
+size_t cpt_src,cpt_dest,Z_dest;
+
+Z_dest=(dim_dest2D.x*dim_dest2D.y)*numAngle;
+//source partie haute (A&B) ver partie basse dest
+for(Y_src=0;Y_src<Nmax.y;Y_src++){
+  Y_dest=Y_src+Nmax.x;
+  size_t num_ligne_dest=Y_dest*dim_dest2D.x,
+                     num_ligne_src=Y_src*dim_src.x;
+  for(X_src=0;X_src<Nmax.x;X_src++){//A ver sA'
+     X_dest=X_src+Nmax.x;///coord X src
+
+     cpt_src=X_src+num_ligne_src;///coord 1D source
+     cpt_dest=X_dest+num_ligne_dest+Z_dest;
+     dest3D[cpt_dest]=src2D[cpt_src];
+  }
+  for(X_src=dim_src.x-Nmax.x;X_src<dim_src.x;X_src++){//B vers B'
+     X_dest=X_src-(dim_src.x-Nmax.x);///coord X src
+     cpt_src=X_src+num_ligne_src;///coord 1D source
+     cpt_dest=X_dest+num_ligne_dest+Z_dest;
+     dest3D[cpt_dest]=src2D[cpt_src];
+  }
+}
+for(Y_src=dim_src.y-Nmax.y;Y_src<dim_src.y;Y_src++){
+  Y_dest=Y_src-(dim_src.y-Nmax.y);
+  size_t num_ligne_dest=Y_dest*dim_dest2D.x,
+                     num_ligne_src=Y_src*dim_src.x;
+  for(X_src=0;X_src<Nmax.x;X_src++){//D vers D'
+      X_dest=X_src+Nmax.x;
+      cpt_src=X_src+num_ligne_src;///coord 1D source
+      cpt_dest=X_dest+num_ligne_dest+Z_dest;
+      dest3D[cpt_dest]=src2D[cpt_src];
+  }
+  for(X_src=dim_src.x-Nmax.x;X_src<dim_src.x;X_src++){//C vers C'
+      X_dest=X_src-(dim_src.x-Nmax.x);
+     cpt_src=X_src+num_ligne_src;///coord 1D source
+     cpt_dest=X_dest+num_ligne_dest+Z_dest;
+     dest3D[cpt_dest]=src2D[cpt_src];
+  }
+
 }
 
+}
+void holo2TF_UBorn2_shift(vector<double>  &holo1,vector<complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA_shift, size_t NbAngleOk, vector<double> const &tukeyHolo,FFTW_init  &param_fftw2DHolo)
+{
+    size_t NbPixROI2d=holo1.size();
+    vector<complex<double>> TF_Holo(NbPixROI2d);
+    for(size_t pixel=0; pixel<NbPixROI2d; pixel++)
+      holo1[pixel]=(double)holo1[pixel]*tukeyHolo[pixel];
+
+    TF2D_r2c_symetric(fftshift2D2(holo1),TF_Holo,param_fftw2DHolo);
+   // SAVCplx(TF_Holo,"Im","/home/mat/tmp/Tfholo_1024x1024.bin",t_float,"a+b");
+    coupeCplx(TF_Holo, TF_UBornTot, dimROI, dim2DHA, coinHA_shift, NbAngleOk);///Découpe à [-Nxmax,+NXmax]dans repère humain-lisible +envoi dans pile3D
+ //   SAVCplx(TF,"Im","/home/mat/tmp/Tfholo_220x220x60.bin",t_float,"a+b");
+}
+void holo2TF_UBorn2_shift_r2c(vector<double>  &holo1,vector<complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA_shift, size_t NbAngleOk, vector<double> const &tukeyHolo,FFTW_init  &param_fftw2DHolo)
+{
+    size_t NbPixROI2d=holo1.size();
+    vector<complex<double>> TF_Holo(NbPixROI2d);
+    for(size_t pixel=0; pixel<NbPixROI2d; pixel++)
+      holo1[pixel]=(double)holo1[pixel]*tukeyHolo[pixel];
+
+    TF2D_r2c_symetric(fftshift2D2(holo1),TF_Holo,param_fftw2DHolo);
+   // SAVCplx(TF_Holo,"Im","/home/mat/tmp/Tfholo_1024x1024.bin",t_float,"a+b");
+    coupeCplx(TF_Holo, TF_UBornTot, dimROI, dim2DHA, coinHA_shift, NbAngleOk);///Découpe à [-Nxmax,+NXmax]dans repère humain-lisible +envoi dans pile3D
+ //   SAVCplx(TF,"Im","/home/mat/tmp/Tfholo_220x220x60.bin",t_float,"a+b");
+}
 
 
 void holo2TF_UBorn2(vector<double>  &holo1,vector<complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA, size_t NbAngleOk, vector<double> const &tukeyHolo,FFTW_init  &param_fftw2DHolo)
@@ -174,12 +259,17 @@ void holo2TF_UBorn2(vector<double>  &holo1,vector<complex<double>> &TF_UBornTot,
       holo1[pixel]=(double)holo1[pixel]*tukeyHolo[pixel];
 
     TF2D_r2c_symetric(fftshift2D2(holo1),TF_Holo,param_fftw2DHolo);
-  //  SAVCplx(TF_Holo,"Im","/home/mat/tmp/Tfholo_1024x1024.bin",t_float,"a+b");
-    coupeCplx(fftshift2D2(TF_Holo), TF_UBornTot, dimROI, dim2DHA, coinHA, NbAngleOk);///Découpe à [-Nxmax,+NXmax]+envoi dans pile3D
+   // SAVCplx(TF_Holo,"Im","/home/mat/tmp/Tfholo_1024x1024.bin",t_float,"a+b");
+    coupeCplx(fftshift2D2(TF_Holo), TF_UBornTot, dimROI, dim2DHA, coinHA, NbAngleOk);///Découpe à [-Nxmax,+NXmax]dans repère humain-lisible +envoi dans pile3D
+   // coupeCplx(TF_Holo, TF_UBornTot, dimROI, dim2DHA, coinHA, NbAngleOk);///Découpe à [-Nxmax,+NXmax]dans repère humain-lisible +envoi dans pile3D
+
+
+ //   SAVCplx(TF,"Im","/home/mat/tmp/Tfholo_220x220x60.bin",t_float,"a+b");
 }
 ///@parameters PosSpec : position of the specular beam //surcharge FFTW_init
 void calc_Uborn2(vector<complex<double>> const &TF_UBorn,vector<complex<double>> &UBorn,Var2D dim2DHA,Var2D PosSpec,FFTW_init &param_c2c)
 {
+
     Var2D recalUBorn={-PosSpec.x,-PosSpec.y},DecalU_Born={dim2DHA.x/2,dim2DHA.y/2};
     size_t NbPixUBorn=dim2DHA.x*dim2DHA.y;
 
@@ -194,9 +284,10 @@ void calc_Uborn2(vector<complex<double>> const &TF_UBorn,vector<complex<double>>
 
 }
 
+
+/*
 void charger_image2D_OCV(std::vector<double> &imgTab, string imgFile, Var2D coin, Var2D dimROI)
 {
-        //Mat img(taille.x, taille.y,CV_8UC1);
         Mat img=imread(imgFile, 0);//0=grayscale
         if(! img.data )  // Check for invalid input
        {
@@ -207,14 +298,14 @@ void charger_image2D_OCV(std::vector<double> &imgTab, string imgFile, Var2D coin
         Var2D taille={img.cols,img.rows};
         Rect myROI(coin.x, coin.y, dimROI.x, dimROI.y);
         Mat imgCrop = img(myROI);
-       /*  for(size_t y=0;y<dimROI.y;y++)
-        for(size_t x=0;x<dimROI.x;x++){
-                    imgTab[taille.x*y+x]=(double)imgCrop.at<uchar>(y,x);//openCv->tableau
-                }    */
+       //  for(size_t y=0;y<dimROI.y;y++)
+      //  for(size_t x=0;x<dimROI.x;x++){
+       //             imgTab[taille.x*y+x]=(double)imgCrop.at<uchar>(y,x);//openCv->tableau
+            //    }
         imgTab.assign(imgCrop.begin<uchar>(), imgCrop.end<uchar>());
 }
 
-
+/*
 
 string extract_string(std::string token,  std::string chemin_fic)
 {
@@ -587,8 +678,8 @@ void SAV3D_Tiff(vector<complex <double>> const &var_sav, string partie, string c
     image_width = dim;
     image_height = dim;
     dimz=dim;
-    spp = 1; /* Samples per pixel */
-    bpp = 32; /* Bits per sample */
+    spp = 1; // Samples per pixel
+    bpp = 32; // Bits per sample
    // photo = PHOTOMETRIC_MINISBLACK;
 
     for (int num_page = 0; num_page < dim; num_page++)//z=page
@@ -618,15 +709,15 @@ void SAV3D_Tiff(vector<complex <double>> const &var_sav, string partie, string c
        // TIFFSetField(out, TIFFTAG_PHOTOMETRIC, photo);
         TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_BOTLEFT);
         TIFFSetField (out, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP); //image en Floating point
-        /* It is good to set resolutions too (but it is not nesessary) */
+        // It is good to set resolutions too (but it is not nesessary)
         xres = yres = 0.01/taille_pixel; //nbpixel par resunit (par centimetre, on multiplie par 0.01 pour tout passer en mètre)
         res_unit = RESUNIT_CENTIMETER;
         TIFFSetField(out, TIFFTAG_XRESOLUTION, xres);
         TIFFSetField(out, TIFFTAG_YRESOLUTION, yres);
         TIFFSetField(out, TIFFTAG_RESOLUTIONUNIT, res_unit);
-        /* We are writing single page of the multipage file */
+        // We are writing single page of the multipage file
         TIFFSetField(out, TIFFTAG_SUBFILETYPE, FILETYPE_PAGE);
-        /* Set the page number */
+        // Set the page number
         TIFFSetField(out, TIFFTAG_PAGENUMBER, num_page, dimz);
 
         for (y = 0; y < image_height; y++)
@@ -641,4 +732,64 @@ bool is_readable( const std::string & file )
 {
     std::ifstream fichier( file.c_str() );
     return !fichier.fail();
+}*/
+
+/*
+void decal2DCplxGen(vector<complex<double>> const &entree, vector<complex<double>> &result, Var2D dim,Var2D decal)
+{
+            //si décalage supérieure à dim, on fait plus d'un tour, donc on prend le modulo
+            //cout<<"decal.x,y="<<decal.x<<","<<decal.y<<endl;
+        decal.y=decal.y%dim.y;
+        decal.x=decal.x%dim.x;
+        if(decal.x<0)
+        decal.x=dim.x+decal.x;
+        if(decal.y<0)
+        decal.y=dim.y+decal.y;
+       size_t yi,xi;
+       //#pragma omp parallel for private(yi)
+       for(yi=0; yi<dim.y-decal.y; yi++) {
+
+                for(xi=0; xi<dim.x-decal.x; xi++)
+                { //cout<<"xi,yi="<<xi<<","<<yi<<endl;
+                        int pixel=yi*dim.x+xi;
+                        int pixel_shift=(yi+decal.y)*dim.x+xi+decal.x;
+                       // result[pixel_shift].real()=entree[pixel].real();
+
+                        result[pixel_shift].real(entree[pixel].real());
+                        result[pixel_shift].imag(entree[pixel].imag());
+                }
+
+
+                for(xi=dim.x-decal.x; xi<dim.x; xi++){
+                        int pixel=yi*dim.x+xi;
+                        int pixel_shift=(yi+decal.y)*dim.x+(-dim.x+xi+decal.x);//Y_shift*dim.x+X_shift;
+                        result[pixel_shift].real(entree[pixel].real());
+                        result[pixel_shift].imag(entree[pixel].imag());
+                       // result[pixel_shift]=entree[pixel];
+                }
+        }
+      // #pragma omp barrier
+         //   #pragma omp parallel for private(yi)
+              for(int yi=dim.y-decal.y; yi<dim.y; yi++) {
+
+                for(int xi=0; xi<dim.x-decal.x; xi++)
+                {
+                        int pixel=yi*dim.x+xi;
+                        int pixel_shift=(-dim.y+yi+decal.y)*dim.x+xi+decal.x;
+                        result[pixel_shift].real(entree[pixel].real());
+                        result[pixel_shift].imag(entree[pixel].imag());
+                        //result[pixel_shift]=entree[pixel];
+                }
+
+                for(int xi=dim.x-decal.x; xi<dim.x; xi++)
+                {
+                        int pixel=yi*dim.x+xi;
+                        int pixel_shift=(-dim.y+yi+decal.y)*dim.x+(-dim.x+xi+decal.x);//Y_shift*dim.x+X_shift;
+                        result[pixel_shift].real(entree[pixel].real());
+                        result[pixel_shift].imag(entree[pixel].imag());
+                        //result[pixel_shift]=entree[pixel];
+                }
+        }
+      //  #pragma omp barrier
 }
+*/

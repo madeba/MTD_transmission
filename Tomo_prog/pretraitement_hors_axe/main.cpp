@@ -8,6 +8,7 @@
 #include <string>
 #include "projet.h"
 #include "fonctions.h"
+//#include "IO_fonctions.h"
 //#include "FFTW_init.h"
 #include "FFT_fonctions.h"
 #include "deroulement_volkov2.h"
@@ -24,11 +25,11 @@ int main()
     string chemin_result=m1.chemin_result, chemin_acquis=m1.chemin_acquis, Chemin_mask=m1.chemin_acquis+"/Image_mask.pgm";
     //dimensions hologrammes
     cout<<"camdimROI"<<m1.CamDimROI;
-    Var2D dimROI= {m1.CamDimROI,m1.CamDimROI}, coin= {0,0};
-    Point2D dimHolo(m1.CamDimROI,m1.CamDimROI,m1.CamDimROI);
-    size_t NbPixROI2d=dimROI.x*dimROI.y;
+    Var2D const dimROI= {m1.CamDimROI,m1.CamDimROI}, coin= {0,0};
+    Point2D const dimHolo(m1.CamDimROI,m1.CamDimROI,m1.CamDimROI);
+    size_t const NbPixROI2d=dimROI.x*dimROI.y;
     //tableaux hologramme et réference en 1024x1024
-    vector<double> holo1(NbPixROI2d), intensite_ref(NbPixROI2d), ampli_ref(NbPixROI2d);
+    vector<double> static holo1(NbPixROI2d), intensite_ref(NbPixROI2d), ampli_ref(NbPixROI2d);
     char charAngle[4+1];
     ///-----------Init FFTW Holo---------------
     size_t nb_thread_fftw=m1.nbThreads;
@@ -36,15 +37,16 @@ int main()
     fftw_plan_with_nthreads(nb_thread_fftw);
     FFTW_init param_fftw2D_r2c_Holo(holo1,"r2c",nb_thread_fftw);/// /!\ init r2c->surcharge avec image2D en entrée!
     FFTW_init param_fftw2D_c2r_Holo(holo1,nb_thread_fftw);
-    vector<double> masqueTukeyHolo(NbPixROI2d);
-    masqueTukeyHolo=tukey2D(dimROI.x,dimROI.y,0.05);
+    vector<double> static const masqueTukeyHolo(tukey2D(dimROI.x,dimROI.y,0.05));
+    //masqueTukeyHolo=tukey2D(dimROI.x,dimROI.y,0.05);
     ///--------------------Init Référence Amplitude pour correction plan central-------------------------------------------
     ampli_ref=initRef(chemin_acquis+"/Intensite_ref.pgm",coin,dimROI);
     ///------Init variable champ complexe après découpe hors axe-----------------------------
     const size_t  NbPixUBorn=4*m1.NXMAX*m1.NXMAX, NbAngle=m1.NbAngle;//dimensions
     cout<<"NbAngle="<<NbAngle<<endl<<"m1.NXMAX="<<m1.NXMAX<<endl;//nombre d'hologrammes
     size_t NbAngleOk=0;//Nbangle reellement utilisé
-    Var2D dim2DHA= {(size_t)2*m1.NXMAX,(size_t)2*m1.NXMAX},coinHA= {m1.circle_cx-m1.NXMAX,m1.circle_cy-m1.NXMAX},decal2DHA= {m1.NXMAX,m1.NXMAX},posSpec= {0,0};
+    Var2D const dim2DHA= {(size_t)2*m1.NXMAX,(size_t)2*m1.NXMAX},coinHA= {m1.circle_cx-m1.NXMAX,m1.circle_cy-m1.NXMAX},coinHA_shift={m1.fPortShift.x-m1.NXMAX,m1.fPortShift.y-m1.NXMAX};
+    Var2D posSpec= {0,0},decal2DHA= {m1.NXMAX,m1.NXMAX};;
     cout<<"dimension decoupe dimDHA="<<dim2DHA.x<<endl;
     vector<complex<double>> TF_UBornTot(NbPixUBorn*NbAngle);///variable stockant les N champs complexes decoupés depuis la zone 1024 (pour utilsier wisdom en 1024)
     vector<double>  TF_champMod(NbPixUBorn), centre(NbPixUBorn);///centre pour controler balayage
@@ -53,7 +55,7 @@ auto start_decoupeHA = std::chrono::system_clock::now();///démarrage chrono Hor
 ///Charger les acqusitions
 //#pragma omp parallel for reduction(cpt)
 FILE* test_existence;//tester l'existence des fichiers
-size_t cptAngle=0;
+unsigned short int cptAngle=0;
 //#pragma omp parallel forTF2D_r2c
 for(cptAngle=0; cptAngle<NbAngle; cptAngle++){
   if((cptAngle-100*(cptAngle/100))==0)    cout<<cptAngle<<endl;
@@ -67,7 +69,9 @@ for(cptAngle=0; cptAngle<NbAngle; cptAngle++){
       for(size_t cpt=0;cpt<NbPixROI2d;cpt++){
         holo1[cpt]=holo1[cpt]/ampli_ref[cpt];
       }
-      holo2TF_UBorn2(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calculer la TF des hologrammes et la découper de dimROI à 2NXMAX
+     // holo2TF_UBorn2(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calculer la TF des hologrammes et la découper de dimROI à 2NXMAX
+    //holo2TF_UBorn2(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calculer la TF des hologrammes et la découper de dimROI à 2NXMAX
+    holo2TF_UBorn2_shift(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA_shift,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calculer la TF des hologrammes et la découper de dimROI à 2NXMAX
       NbAngleOk++;
     }
     else cout<<"fichier "<<cptAngle<<" inexistant\n";
@@ -84,8 +88,8 @@ double *UnwrappedPhase_herraez=new double[NbPixUBorn];
 
 float alpha=0.1;//coeff pour le masque de tuckey
 vector<double> masqueTukeyHA(tukey2D(dim2DHA.x,dim2DHA.y,alpha));
-FFTW_init param_fftw2D_c2r_HA(TF_UBorn,3);
-
+FFTW_init param_fftw2D_c2r_HA(TF_UBorn,m1.nbThreads);
+FFTW_init param_fftw2D_r2c_HA(phase_2Pi_vec,"r2c",m1.nbThreads);
 
 ///variable pour correction aberration
 Mat src=Mat(1, ampli_ref.size(), CV_64F, ampli_ref.data()), mask_aber=init_mask_aber(Chemin_mask,dim2DHA);
@@ -105,7 +109,7 @@ auto start_part2= std::chrono::system_clock::now();
 //#pragma omp parallel for
 for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les angles : correction aberrations
   TF_UBorn.assign(TF_UBornTot.begin()+NbPixUBorn*cpt_angle, TF_UBornTot.begin()+NbPixUBorn*(cpt_angle+1));  ///Récupérer la TF2D dans la pile de spectre2D
-  // SAVCplx(TF_UBorn,"Re","/home/mat/tmp/TF_Uborn_iterateur.raw",t_float,"a+b");
+ // SAVCplx(TF_UBorn,"Re","/home/mat/tmp/TF_Uborn_iterateur_220x220x59x32.raw",t_float,"a+b");
   //Recherche de la valeur maximum du module dans ref non centré-----------------------------------------
   size_t cpt_max=coordSpec(TF_UBorn, TF_champMod,decal2DHA);
   double  max_part_reel = TF_UBorn[cpt_max].real(),///sauvegarde de la valeur cplx des  spéculaires
@@ -131,14 +135,19 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
           UnwrappedPhase[cpt]=UnwrappedPhase_herraez[cpt];///plutôt passer pointeur ?
         }
         else{
-          deroul_volkov2(phase_2Pi_vec,UnwrappedPhase, param_fftw2D_c2r_HA);
+          deroul_volkov2(phase_2Pi_vec,UnwrappedPhase, param_fftw2D_c2r_HA,param_fftw2D_r2c_HA);
         }
     }
     else UnwrappedPhase=phase_2Pi_vec;
       //SAV2(UnwrappedPhase,chemin_result+"/phase_deroul_volkov.raw",t_float,"a+b");
       //-------------Correction aberration phase-------------------------------
       src=Mat(dim2DHA.x,dim2DHA.y,CV_64F, UnwrappedPhase.data());
+      // auto start_calcAber = std::chrono::system_clock::now();
       Mat Phase_corr(aberCorr2(src, mask_aber,polynomeUs_to_fit,polynome_to_fit));
+    //  auto end_calcAber = std::chrono::system_clock::now();
+//auto elapsed = end_calcAber - start_calcAber;
+//std::cout <<"Temps pour FFT holo+découpe Spectre= "<< elapsed.count()/(pow(10,9)) << '\n';
+
       // SAV2((double*)Phase_corr.data,Phase_corr.rows*Phase_corr.cols,"/home/mat/tmp/phaseCorr_main.raw",t_float,"a+b");
     ///---------------Correction amplitude----------------------------------------
     for(size_t cpt=0; cpt<(NbPixUBorn); cpt++)
