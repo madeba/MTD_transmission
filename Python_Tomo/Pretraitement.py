@@ -25,7 +25,7 @@ f_tube = ft.readvalue(FichierConfig,'F_TUBE') # focale de la lentille de tube
 f_obj = ft.readvalue(FichierConfig,'F_OBJ') # focale de l'objectif
 pix = ft.readvalue(FichierConfig,'TPCAM') # taille des pixels du capteur
 RapFoc = ft.readvalue(FichierConfig,'RF') # rapport des focales du doublet de rééchantillonnage
-Gtot = f_tube/f_obj/0.7
+Gtot = f_tube/f_obj/RapFoc
 REwald = CamDim*pix/Gtot*nimm/(Lambda) # rayon support de fréquence accessible en pixel
 fmaxHolo = round(REwald*NA/nimm) # support max de fréquence
 dimHolo = int(2*fmaxHolo) # dimension de l'hologramme
@@ -67,20 +67,17 @@ for hol in range(0,nb_holo):
     if os.path.isfile(filename):
         Image = plt.imread(filename)
         
-        # Spectre hologramme
+        # Spectre hologramme et découpe hors-axe
         FImage = nfft.fftshift(nfft.fft2(Image))
-        nfy,nfx = np.shape(FImage)
-        
-        # Découpe hors-axe
-        Spectre = holo.filtrage(FImage,CentreX,CentreY,fmaxHolo)
-        SpectreFilt=Spectre[int((nfx-dimHolo)/2):int((nfx-dimHolo)/2+dimHolo),int((nfy-dimHolo)/2):int((nfy-dimHolo)/2+dimHolo)]
+        SpectreFilt=FImage[int(CentreY-fmaxHolo):int(CentreY+fmaxHolo),int(CentreX-fmaxHolo):int(CentreX+fmaxHolo)]
         
         # Coordonnées du speculaire
         ind = np.unravel_index(np.argmax(np.abs(SpectreFilt), axis=None), SpectreFilt.shape)
         kiy = ind[0]
         kix = ind[1]
+        # Fichier de coordonnées
         fidCentrestxt.write(f"{kiy} {kix}\n")
-        
+        # Position des centres pour enregistrement du balayage en fin d'exécution
         Centres[kiy,kix] = 1
         
         # Champ complexe (UBorn + Ui)
@@ -95,17 +92,20 @@ for hol in range(0,nb_holo):
         Amp_UBornCorr = CAber.ampliCorr(Amp_UBorn,Masque,Poly_US,Poly)
         
         # Correction de la phase
-        Phase_UBornCorr = CAber.aberCorr(Phase_UBorn,Masque,Poly_US,Poly)  
+        Phase_UBornCorr = CAber.aberCorr(Phase_UBorn,Masque,Poly_US,Poly) 
         
+        # Ouverture des fichiers de sauvegarde du champ
         fidRe = open(CheminSAV_Re,"a")
         fidIm = open(CheminSAV_Im,"a")
         # Calcul du Champ
         if Rytov is True:
+            #Rytov
             Re_UBorn = np.log(np.abs(Amp_UBornCorr))
             Im_UBorn = Phase_UBornCorr
             Re_UBorn.tofile(fidRe)
             Im_UBorn.tofile(fidIm)
         else:
+            # Born
             Re_UBorn = (Amp_UBornCorr-1)*np.cos(Phase_UBornCorr)
             Im_UBorn = (Amp_UBornCorr-1)*np.sin(Phase_UBornCorr)
             Re_UBorn.tofile(fidRe)
