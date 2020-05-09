@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
-import numpy.fft as nfft
+# import numpy.fft as nfft
+import scipy.fftpack as sfft
 import numpy as np
 import HoloProcessing as holo
 import CorrectionAberration as CAber
@@ -46,6 +47,7 @@ fidParams.write(f"REwald {REwald}\n")
 cpt = 1
 cpt_exist = 1
 Centres = np.zeros((dimHolo,dimHolo))
+CentreXShift,CentreYShift = holo.CoordToCoordShift(CentreX, CentreY, CamDim, CamDim)
 
 # Amplitude and phase correction initialisation
 Masque = CAber.InitMasque(CheminMasque,dimHolo)
@@ -68,8 +70,8 @@ for hol in range(0,nb_holo):
         Image = plt.imread(filename)
         
         # Hologram spectrum and off-axis filtering
-        FImage = nfft.fftshift(nfft.fft2(Image))
-        SpectreFilt=FImage[int(CentreY-fmaxHolo):int(CentreY+fmaxHolo),int(CentreX-fmaxHolo):int(CentreX+fmaxHolo)]
+        FImage = sfft.fft2(Image)
+        SpectreFilt=FImage[int(CentreYShift-fmaxHolo):int(CentreYShift+fmaxHolo),int(CentreXShift-fmaxHolo):int(CentreXShift+fmaxHolo)]
         
         # Specular spot coordinates calculation
         ind = np.unravel_index(np.argmax(np.abs(SpectreFilt), axis=None), SpectreFilt.shape)
@@ -81,7 +83,7 @@ for hol in range(0,nb_holo):
         Centres[kiy,kix] = 1
         
         # Complex Field (UBorn + Ui)
-        UBorn = nfft.ifft2(nfft.ifftshift(SpectreFilt))
+        UBorn = sfft.ifft2(sfft.ifftshift(SpectreFilt))
         Amp_UBorn = np.abs(UBorn)
         Phase_UBornWrap = np.angle(UBorn)
         
