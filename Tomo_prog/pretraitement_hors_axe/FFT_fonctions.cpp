@@ -460,7 +460,7 @@ void TF2Dcplx_INV(vector<complex<double>> const &entree, vector<complex<double> 
 
 
 ///-------TF2D purement reelle
-///TF2D avec entrée purement réelle, utilise r2c et exporte le demi-espace.
+///fft2D avec entrée purement réelle, utilise r2c et exporte le demi-espace.
 void TF2D_r2c(vector<double> const &entree, vector<complex<double> > &sortie, FFTW_init  &tf2D_Re, double delta_x){
 
   size_t nbPix=entree.size(),   dim=sqrt(nbPix);
@@ -480,22 +480,63 @@ void TF2D_r2c(vector<double> const &entree, vector<complex<double> > &sortie, FF
     sortie[cpt].imag(tf2D_Re.out[cpt][1]/Coef_norm);
   }
 }
+
+///fft2D avec entrée purement réelle, utilise r2c et exporte le demi-espace.
+///crop the hologramm spectrum to scomplex field pectrum and add it to a stack ccontaining all the fields.
+void TF2D_r2c_coupeHA_to_stack(vector<double> const &src2D, vector<complex<double>> &dest3D, Var2D dim2DHA, Var2D coinHA_r2c,  unsigned short int numAngle, FFTW_init tf2D_r2c){
+
+  size_t nbPix=src2D.size();
+  Var2D  dim_entree={sqrt(nbPix),sqrt(nbPix)};//inpout of the function
+  Var2D  dim_src={dim_entree.x,dim_entree.y/2+1};//src copy, after fft calculation
+ // Var2D dimROI{dim,dim};
+  Var2D dim_dest={dim2DHA.x, dim2DHA.y};
+  size_t nbPixCplx=dim_entree.x*(dim_entree.y/2+1);
+  double Coef_norm=1.0/nbPixCplx;
+
+  for(size_t  cpt=0; cpt<nbPix; cpt++){
+    tf2D_r2c.in_double[cpt]=src2D[cpt];
+  }
+   // std::copy (entree.begin(),entree.end(), tf2D_Re.in_double );
+  fftw_execute(tf2D_r2c.p_forward_OUT);
+  size_t cpt=0;
+
+
+  size_t X_dest,Y_dest, cpt_dest1D,
+X_src, Y_src, cpt_src1D, cpt_Z_dest;
+
+cpt_Z_dest=(dim_dest.x*dim_dest.y)*numAngle;
+///crop the hologramm spectrum to scomplex field pectrum and add it to a stack ccontaining all the fields.
+        for(Y_dest=0; Y_dest<dim_dest.y; Y_dest++){
+          size_t num_lgn= Y_dest*dim_dest.x;
+          for(X_dest=0; X_dest<dim_dest.x; X_dest++){
+            cpt_dest1D=cpt_Z_dest+X_dest+num_lgn;///coord 1D destination
+
+            //coordonnées de découpe dans la source
+            X_src=coinHA_r2c.x+X_dest;///coord X src
+            Y_src=coinHA_r2c.y+Y_dest;///coord Y src
+            cpt_src1D=X_src+Y_src*dim_src.y;///coord 1D source
+
+          //  dest3D[cpt_dest1D].real(tf2D_r2c.out[cpt_src1D][0]*Coef_norm);
+         //   dest3D[cpt_dest1D].imag(tf2D_r2c.out[cpt_src1D][1]*Coef_norm);
+
+        dest3D[cpt_dest1D].real(tf2D_r2c.out[cpt_src1D][0]*Coef_norm);
+            dest3D[cpt_dest1D].imag(tf2D_r2c.out[cpt_src1D][1]*Coef_norm);
+        }
+    }
+}
 ///TF2D avec entrée purement réelle, utlise r2c, mais resymétrise la sortie
 void TF2D_r2c_symetric(vector<double> const &entree, vector<complex<double> > &sortie, FFTW_init  &tf2D_Re){
   size_t dim=sqrt(entree.size());
   Var2D dimROI{dim,dim};
   double nbPix=entree.size();
-  // double Coef_norm=dim*m1.Tp_Uborn;
- // double Coef_norm=pow(delta_x,2);
-  double Coef_norm=1/(nbPix);
+
+  double Coef_norm=1.0/(nbPix);
  // cout<<"Coef_norm"<<Coef_norm<<endl;
-// #pragma omp parallel
+
   for(int cpt=0; cpt<nbPix; cpt++){
     tf2D_Re.in_double[cpt]=entree[cpt];
   }
-   //std::copy (entree.begin(),entree.end(), tf2D_Re.in_double );
-/*int    fftwThreadInit=fftw_init_threads();
-    fftw_plan_with_nthreads(tf2D_Re.m_Nthread);*/
+
   fftw_execute(tf2D_Re.p_forward_OUT);
 
   //#pragma omp parallel for num_threads(2)
@@ -509,23 +550,7 @@ void TF2D_r2c_symetric(vector<double> const &entree, vector<complex<double> > &s
       sortie[cptB].imag(tf2D_Re.out[cptA][1]*Coef_norm);
     }
   }
-  for(int yA=1;yA<dimROI.y;yA++){///copie de A* vers  la partie droite (C), sans l'axe de symétrie (donc partie A jusque dim.x/2-1)
-    size_t num_lgnA=yA*(dimROI.x/2+1);
-    size_t num_lgnB=(dimROI.y-yA)*(dimROI.x);
-    for(size_t xA=1;xA<dimROI.x/2;xA++){
-      size_t cptA=xA+num_lgnA;
-      size_t cptC=(dimROI.x-xA)+num_lgnB;
-      sortie[cptC].real(tf2D_Re.out[cptA][0]*Coef_norm);
-      sortie[cptC].imag(-tf2D_Re.out[cptA][1]*Coef_norm);
-    }
-  }
-  //copie (conjuguée) de la demi ligne de y=0, x=[0,dim/2-1]
-  for(size_t xA=1;xA<dimROI.x/2;xA++){
-    size_t cptA=xA;
-    size_t cptD=(dimROI.x-xA);
-    sortie[cptD].real(tf2D_Re.out[cptA][0]*Coef_norm);
-    sortie[cptD].imag(-tf2D_Re.out[cptA][1]*Coef_norm);
-  }
+
 }
 /*
 void TF2D_r2c_symetric(vector<double> const &entree, vector<complex<double> > &sortie, FFTW_init  &tf2D_Re){

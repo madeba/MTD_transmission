@@ -225,6 +225,7 @@ for(Y_src=dim_src.y-Nmax.y;Y_src<dim_src.y;Y_src++){
 }
 
 }
+///r2c symetric to 2D, the hologram is fftshifted, but the spectrum is not inverse-fftshifted. The  shifted spectrum is  (cropped @ coin_shifted and send to stack) by the function coupeCplx.
 void holo2TF_UBorn2_shift(vector<double>  &holo1,vector<complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA_shift, size_t NbAngleOk, vector<double> const &tukeyHolo,FFTW_init  &param_fftw2DHolo)
 {
     size_t NbPixROI2d=holo1.size();
@@ -233,24 +234,27 @@ void holo2TF_UBorn2_shift(vector<double>  &holo1,vector<complex<double>> &TF_UBo
       holo1[pixel]=(double)holo1[pixel]*tukeyHolo[pixel];
 
     TF2D_r2c_symetric(fftshift2D2(holo1),TF_Holo,param_fftw2DHolo);
-   // SAVCplx(TF_Holo,"Im","/home/mat/tmp/Tfholo_1024x1024.bin",t_float,"a+b");
+//SAVCplx(TF_Holo,"Im","/home/mat/tmp/Tfholo_1024x1024x599x32.bin",t_float,"a+b");
+
     coupeCplx(TF_Holo, TF_UBornTot, dimROI, dim2DHA, coinHA_shift, NbAngleOk);///Découpe à [-Nxmax,+NXmax]dans repère humain-lisible +envoi dans pile3D
  //   SAVCplx(TF,"Im","/home/mat/tmp/Tfholo_220x220x60.bin",t_float,"a+b");
 }
-void holo2TF_UBorn2_shift_r2c(vector<double>  &holo1,vector<complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA_shift, size_t NbAngleOk, vector<double> const &tukeyHolo,FFTW_init  &param_fftw2DHolo)
+///r2c non symmetrized to 3D stack, fastest method
+void holo2TF_UBorn2_shift_r2c(vector<double>  &holo1,vector<complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA_shift, size_t NbAngleOk, vector<double> const &tukeyHolo,FFTW_init  &param_fftw2D_r2c_Holo)
 {
     size_t NbPixROI2d=holo1.size();
     vector<complex<double>> TF_Holo(NbPixROI2d);
     for(size_t pixel=0; pixel<NbPixROI2d; pixel++)
       holo1[pixel]=(double)holo1[pixel]*tukeyHolo[pixel];
 
-    TF2D_r2c_symetric(fftshift2D2(holo1),TF_Holo,param_fftw2DHolo);
+   // TF2D_r2c_symetric(fftshift2D2(holo1),TF_Holo,param_fftw2DHolo);
+     TF2D_r2c_coupeHA_to_stack(fftshift2D2(holo1), TF_UBornTot, dim2DHA, coinHA_shift,  NbAngleOk, param_fftw2D_r2c_Holo);///warning, fftshift for the 14st argument
+
    // SAVCplx(TF_Holo,"Im","/home/mat/tmp/Tfholo_1024x1024.bin",t_float,"a+b");
-    coupeCplx(TF_Holo, TF_UBornTot, dimROI, dim2DHA, coinHA_shift, NbAngleOk);///Découpe à [-Nxmax,+NXmax]dans repère humain-lisible +envoi dans pile3D
+   // coupeCplx(TF_Holo, TF_UBornTot, dimROI, dim2DHA, coinHA_shift, NbAngleOk);///Découpe à [-Nxmax,+NXmax]dans repère humain-lisible +envoi dans pile3D
  //   SAVCplx(TF,"Im","/home/mat/tmp/Tfholo_220x220x60.bin",t_float,"a+b");
 }
-
-
+///r2c symetric to 2D, the hologram must fftshifted,  then the spectrum must be fftshifted,  cropped and send to stack by the function CoupeCplx
 void holo2TF_UBorn2(vector<double>  &holo1,vector<complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA, size_t NbAngleOk, vector<double> const &tukeyHolo,FFTW_init  &param_fftw2DHolo)
 {
     size_t NbPixROI2d=holo1.size();

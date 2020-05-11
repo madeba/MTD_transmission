@@ -11,6 +11,7 @@
 //#include "IO_fonctions.h"
 //#include "FFTW_init.h"
 #include "FFT_fonctions.h"
+#include "deroulement_volkov3.h"
 #include "deroulement_volkov2.h"
 #include "deroulement_volkov.h"
 #include "deroulement_herraez.h"
@@ -70,8 +71,8 @@ for(cptAngle=0; cptAngle<NbAngle; cptAngle++){
         holo1[cpt]=holo1[cpt]/ampli_ref[cpt];
       }
      // holo2TF_UBorn2(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calculer la TF des hologrammes et la découper de dimROI à 2NXMAX
-    //holo2TF_UBorn2(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calculer la TF des hologrammes et la découper de dimROI à 2NXMAX
-    holo2TF_UBorn2_shift(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA_shift,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calculer la TF des hologrammes et la découper de dimROI à 2NXMAX
+     // holo2TF_UBorn2_shift(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA_shift,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calculer la TF des hologrammes et la découper de dimROI à 2NXMAX
+      holo2TF_UBorn2_shift_r2c(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA_shift,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);
       NbAngleOk++;
     }
     else cout<<"fichier "<<cptAngle<<" inexistant\n";
@@ -88,7 +89,8 @@ double *UnwrappedPhase_herraez=new double[NbPixUBorn];
 
 float alpha=0.1;//coeff pour le masque de tuckey
 vector<double> masqueTukeyHA(tukey2D(dim2DHA.x,dim2DHA.y,alpha));
-FFTW_init param_fftw2D_c2r_HA(TF_UBorn,m1.nbThreads);
+FFTW_init param_fftw2D_c2r_HA(TF_UBorn,m1.nbThreads);//OUTPLACE
+//FFTW_init param_fftw2D_c2r_HA(dim2DHA,1,m1.nbThreads);//INPLACE
 FFTW_init param_fftw2D_r2c_HA(phase_2Pi_vec,"r2c",m1.nbThreads);
 
 ///variable pour correction aberration
@@ -103,13 +105,17 @@ cout<<"\n#########################Calcul champs cplx 2D Uborn/Rytov + eventuelle
 
 vector<complex<double>> UBornFinal(NbPixUBorn), UBornFinalDecal(NbPixUBorn), TF_UBorn_norm(NbPixUBorn);
 vector<double> UBornAmpFinal(NbPixUBorn),  UBornAmp(NbPixUBorn);
-vector<double> tabPosSpec(NbAngle*2);  ///stockage des speculaires pour exportation vers reconstruction
+vector<double> tabPosSpec(NbAngle*2);  ///stockage des spéculaires pour exportation vers reconstruction
+///init opérateur différentiation kvect
 
+vector<vecteur>  kvect_shift(init_kvect_shift(dim2DHA));
+vector<double> kvect_mod2Shift(init_kvect_mod2Shift(kvect_shift));
 auto start_part2= std::chrono::system_clock::now();
 //#pragma omp parallel for
 for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les angles : correction aberrations
   TF_UBorn.assign(TF_UBornTot.begin()+NbPixUBorn*cpt_angle, TF_UBornTot.begin()+NbPixUBorn*(cpt_angle+1));  ///Récupérer la TF2D dans la pile de spectre2D
- // SAVCplx(TF_UBorn,"Re","/home/mat/tmp/TF_Uborn_iterateur_220x220x59x32.raw",t_float,"a+b");
+ // SAVCplx(TF_UBorn,"Re",chemin_result+"/TF_Uborn_iterateur_Re_220x220x599x32.raw",t_float,"a+b");
+ // SAVCplx(TF_UBorn,"Im",chemin_result+"/TF_Uborn_iterateur_Im_220x220x599x32.raw",t_float,"a+b");
   //Recherche de la valeur maximum du module dans ref non centré-----------------------------------------
   size_t cpt_max=coordSpec(TF_UBorn, TF_champMod,decal2DHA);
   double  max_part_reel = TF_UBorn[cpt_max].real(),///sauvegarde de la valeur cplx des  spéculaires
@@ -123,7 +129,7 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
 
   if(m1.b_CorrAber==true){
     calc_Uborn2(TF_UBorn,UBorn,dim2DHA,posSpec,param_fftw2D_c2r_HA);
-   // SAVCplx(UBorn,"Re",chemin_result+"/ampli_UBorn_debut_extract.raw",t_float,"a+b");
+//    SAVCplx(UBorn,"Re",chemin_result+"/ampli_UBorn_debut_extract.raw",t_float,"a+b");
     ///----------Calcul phase + deroulement--------------------------------
     calcPhase_mpi_pi_atan2(UBorn,phase_2Pi_vec); ///fonction atan2
     //SAV2(phase_2Pi_vec,chemin_result+"/phasePI_atan2.raw",t_float,"a+b");
@@ -135,7 +141,13 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
           UnwrappedPhase[cpt]=UnwrappedPhase_herraez[cpt];///plutôt passer pointeur ?
         }
         else{
-          deroul_volkov2(phase_2Pi_vec,UnwrappedPhase, param_fftw2D_c2r_HA,param_fftw2D_r2c_HA);
+           // auto start_volkov = std::chrono::system_clock::now();
+           // deroul_volkov2(phase_2Pi_vec,UnwrappedPhase, param_fftw2D_c2r_HA,param_fftw2D_r2c_HA);    //  auto end_calcAber = std::chrono::system_clock::now();
+           deroul_volkov3(phase_2Pi_vec,UnwrappedPhase, kvect_shift, param_fftw2D_c2r_HA);
+
+           // auto end_volkov = std::chrono::system_clock::now();
+          //  auto elapsed_volkov = end_volkov - start_volkov;
+           // std::cout <<"Temps pour deroul volkov2= "<< elapsed_volkov.count()/(pow(10,9)) << '\n';
         }
     }
     else UnwrappedPhase=phase_2Pi_vec;
@@ -167,7 +179,7 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
           UBornFinal[cpt].imag((UBornAmpFinal[cpt]-1)*sin(PhaseFinal[cpt]));
         }
         else{ //RYTOV URytov = log a_t/a_i (=log a_t après correction AmpliCorr)
-          UBornFinal[cpt].real(log(sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt])));///racine(U^2) pour éliminer les éventueles amplitudes négatives
+          UBornFinal[cpt].real(log(sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt])));///racine(U^2) pour éliminer les éventuelles amplitudes négatives
           UBornFinal[cpt].imag(PhaseFinal[cpt]);
         }
       }

@@ -57,7 +57,7 @@ FFTW_init::FFTW_init(vector<double>const &entree, string str_geometry,size_t nbT
 
 //choisir inplace ou outplace (str  IN || OUT),
 
-///init fftw c2c : input is a square matrix
+///init fftw c2c : input is a square complex matrix
 FFTW_init::FFTW_init(vector<complex<double>>const &entree,size_t nbThread)
 {
     size_t nbPix=entree.size();
@@ -71,7 +71,7 @@ FFTW_init::FFTW_init(vector<complex<double>>const &entree,size_t nbThread)
     p_backward_OUT=fftw_plan_dft_2d(dim, dim, in, out,FFTW_BACKWARD, FFTW_PATIENT);
 }
 
-///init fftw c2c : input is a square matrix
+///init fftw c2c : input is a square complex matrix
 FFTW_init::FFTW_init(Var2D dim, size_t nbThread)
 {
 
@@ -99,7 +99,7 @@ FFTW_init::FFTW_init(Var2D dim, size_t nbThread)
    // p_backward_OUT=fftw_plan_dft_2d(dim.x, dim.y, in, out,FFTW_BACKWARD, FFTW_MEASURE);
 }*/
 
-///init fftw c2c : input is a square matrix
+///init fftw c2c : input is a square REAL matrix
 FFTW_init::FFTW_init(vector<double>const &entree,size_t nbThread)
 {
 
@@ -116,10 +116,13 @@ FFTW_init::FFTW_init(vector<double>const &entree,size_t nbThread)
 }
 
 ///-----------Init INPLACE (ou OUTPLACE) C2C-------------------
-FFTW_init::FFTW_init(Point2D dim2D,bool b_inplace)
+FFTW_init::FFTW_init(Var2D dim2D,bool b_inplace,size_t nbThread)
 {
-    unsigned int nbPixCplx=dim2D.x*(dim2D.y/2+1);
+   // unsigned int nbPixCplx=dim2D.x*(dim2D.y/2+1);
     unsigned int nbPix = dim2D.x*dim2D.y;
+    m_Nthread=nbThread;
+    fftwThreadInit=fftw_init_threads();
+    fftw_plan_with_nthreads(m_Nthread);
 
    if(b_inplace==false){
     out=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);//Attention out est défini avec 2 fois moins de pixel !

@@ -41,7 +41,7 @@ int coordSpec(std::vector<std::complex<double>> const &TF_UBorn, std::vector<dou
 void holo2TF_UBorn2(std::vector<double>  &holo1,std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA, size_t NbAngleOk, std::vector<double> const &tukeyHolo,FFTW_init  &FFTparam_fftw2DHolo);
 //////extract complex field form off-axis hologram, but shifted (zero frequency on the top left). Warning you have to pass a shifted coin_HA !
 void holo2TF_UBorn2_shift(std::vector<double>  &holo1,std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA_shift, size_t NbAngleOk, std::vector<double> const &tukeyHolo,FFTW_init  &FFTparam_fftw2DHolo);
-
+void holo2TF_UBorn2_shift_r2c(std::vector<double>  &holo1,std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA_shift, size_t NbAngleOk, std::vector<double> const &tukeyHolo,FFTW_init  &param_fftw2D_r2c_Holo);
 void coupeCplx(std::vector<std::complex<double>> const &src, Var2D dim_src, std::vector<std::complex<double>> &dest, Var2D dim_dest, Var2D coin,size_t NumAngle);
 void coupe2D_RefI_to3D(std::vector<std::complex<double>> const &src, std::vector<std::complex<double>> &dest, Var2D dim_dest, unsigned short int numAngle);
 void coupe2D_I_to_H3D(std::vector<std::complex<double>> const &src2D, std::vector<std::complex<double>> &dest3D,Var2D dim_dest2D, unsigned short int numAngle);
