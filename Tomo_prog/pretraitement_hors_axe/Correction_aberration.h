@@ -1,3 +1,6 @@
+#ifndef __CORR_ABER__
+#define __CORR_ABER__
+
 //Manuscript Title: Tomographic diffracitive micrscopy and multiview profilometry
 //                  with flexible aberration correction
 //
@@ -58,3 +61,4 @@ public:
     ImgSeuil();
     void threshCallback(int, void* ); // non-static
 };*/
+#endif

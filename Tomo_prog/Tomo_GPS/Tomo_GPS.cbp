@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Tomo_GPS" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/Tomo_GPS" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Tomo_GPS" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-march=corei7-avx" />
+					<Add option="-fexpensive-optimizations" />
+					<Add option="-O3" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions  -fopenmp  -lpthread -std=c++11 `pkg-config --cppflags opencv`  -mveclibabi=svml" />
+			<Add directory="/usr/include/opencv" />
+			<Add directory="./include" />
+		</Compiler>
+		<Linker>
+			<Add option="`pkg-config --libs opencv`  -lpthread -lm -lgomp  -lopencv_core -lopencv_imgproc" />
+			<Add option="-lopencv_highgui -ltiff  -lfftw3 -lfftw3_threads" />
+		</Linker>
+		<Unit filename="include/FFTW_init.h" />
+		<Unit filename="include/FFT_fonctions.h" />
+		<Unit filename="include/IO_fonctions.h" />
+		<Unit filename="include/Point2D.h" />
+		<Unit filename="include/Point3D.h" />
+		<Unit filename="include/fonctions.h" />
+		<Unit filename="include/manip.h" />
+		<Unit filename="include/projet.h" />
+		<Unit filename="include/struct.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="src/FFTW_init.cpp" />
+		<Unit filename="src/FFT_fonctions.cpp" />
+		<Unit filename="src/IO_fonctions.cpp" />
+		<Unit filename="src/Point2D.cpp" />
+		<Unit filename="src/Point3D.cpp" />
+		<Unit filename="src/fonctions.cpp" />
+		<Unit filename="src/manip.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

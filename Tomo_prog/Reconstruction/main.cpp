@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
                 prepare_wisdom2D(dimChpCplx,tmp.c_str());
             }*/
   auto start_part1 = std::chrono::system_clock::now();
-#pragma omp parallel for
+//#pragma omp parallel for
         for(int cpt_angle=premier_plan; cpt_angle<NbAngle; cpt_angle++) //boucle sur tous les angles
         {
             //récupérer spéculaire puis champ cplx depuis sauvegarde prétraitement
@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
                 UBornFinal2D[cpt].imag(UBornFinal3D[cpt+cpt_angle*NbPixU_Born].imag()*mask_tukey2D[cpt]);
             }
             decal2DCplxGen(UBornFinal2D,UBorn2DFinalDecal, dim2DHA,NMAX);
-            #pragma omp single
+//            #pragma omp single
                  TF2Dcplx(UBorn2DFinalDecal,TF_UBorn_normI, tf2D, m1.tailleTheoPixelUborn);
 
 

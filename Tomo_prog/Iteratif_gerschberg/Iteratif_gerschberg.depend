@@ -134,24 +134,16 @@
 	"CImg.h"
 	<stdint.h>
 
-1411092226 /usr/include/opencv/cv.h
+1494560727 /usr/include/opencv/cv.h
 	"opencv2/core/core_c.h"
-	"opencv2/core/core.hpp"
 	"opencv2/imgproc/imgproc_c.h"
-	"opencv2/imgproc/imgproc.hpp"
-	"opencv2/video/tracking.hpp"
-	"opencv2/features2d/features2d.hpp"
-	"opencv2/flann/flann.hpp"
-	"opencv2/calib3d/calib3d.hpp"
-	"opencv2/objdetect/objdetect.hpp"
-	"opencv2/legacy/compat.hpp"
-	"opencv2/core/internal.hpp"
+	"opencv2/photo/photo_c.h"
+	"opencv2/video/tracking_c.h"
+	"opencv2/objdetect/objdetect_c.h"
 
-1411092226 /usr/include/opencv/highgui.h
+1494560727 /usr/include/opencv/highgui.h
 	"opencv2/core/core_c.h"
-	"opencv2/core/core.hpp"
 	"opencv2/highgui/highgui_c.h"
-	"opencv2/highgui/highgui.hpp"
 
 1556892534 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Iteratif_gerschberg/FFT_fonctions.cpp
 	"FFT_fonctions.h"
@@ -316,7 +308,7 @@
 	<complex>
 	<fftw3.h>
 
-1581414738 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Iteratif_gerschberg/fonctions.h
+1588011144 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Iteratif_gerschberg/fonctions.h
 	"struct.h"
 	<time.h>
 	<math.h>
@@ -333,8 +325,21 @@
 	"projet.h"
 	<vector>
 	<complex>
+	<tiffio.h>
 
 1516465799 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Iteratif_gerschberg/struct.h
 
 1513779411 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Iteratif_gerschberg/projet.h
+
+1589384626 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Iteratif_gerschberg/fonctions.cpp
+	<fstream>
+	<vector>
+	<complex>
+	<fftw3.h>
+	"struct.h"
+	<cv.h>
+	<highgui.h>
+	"projet.h"
+	"FFT_fonctions.h"
+	"fonctions.h"
 
