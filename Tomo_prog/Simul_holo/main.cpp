@@ -14,7 +14,7 @@
 #define pi M_PI
 #include "Point3D.h"
 #include "FFT_fonctions.h" //fonctions fftw
-#include "FFT_encaps.h" //gestion init fftw
+#include "FFTW_init.h" //gestion init fftw
 #include "manip.h" //gestion manip
 
 using namespace std;
@@ -69,7 +69,7 @@ int main( int argc, char** argv )
 
 
 ///Calcul spectre objet
-    FFT_encaps tf3D(dim3D),tf2D(dim2D); ///init fftw pour spectre 3D et 2D
+    FFTW_init tf3D(dim3D),tf2D(dim2D); ///init fftw pour spectre 3D et 2D
     TF3Dcplx(tf3D.in,tf3D.out,fftshift3D(vol_bille),TF_bille,tf3D.p_forward_OUT,m1.Tp_Tomo);
     SAV3D_Tiff(fftshift3D(TF_bille),"Re",m1.chemin_result+"TF_bille_Re.tif", m1.Delta_f_tomo*pow(10,-6));
 

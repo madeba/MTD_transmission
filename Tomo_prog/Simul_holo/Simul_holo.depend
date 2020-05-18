@@ -967,7 +967,7 @@
 1549900680 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Simul_holo/src/Point3D.cpp
 	"Point3D.h"
 
-1589792265 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/main.cpp
+1589794870 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/main.cpp
 	<iostream>
 	<cmath>
 	<fstream>
@@ -983,7 +983,7 @@
 	"include/OTF.h"
 	"Point3D.h"
 	"FFT_fonctions.h"
-	"FFT_encaps.h"
+	"FFTW_init.h"
 	"manip.h"
 
 1573422021 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/include/fonctions.h
@@ -1061,12 +1061,12 @@
 	<cstdlib>
 	<iostream>
 
-1549643640 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/include/FFT_fonctions.h
+1589795061 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/include/FFT_fonctions.h
 	<vector>
 	<complex>
 	<fftw3.h>
 	"manip.h"
-	"FFT_encaps.h"
+	"FFTW_init.h"
 
 1544194816 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/include/FFT_encaps.h
 	"Point3D.h"
@@ -1076,7 +1076,7 @@
 1549641328 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/src/FFT_encaps.cpp
 	"FFT_encaps.h"
 
-1549643640 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/src/FFT_fonctions.cpp
+1589794870 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/src/FFT_fonctions.cpp
 	"FFT_fonctions.h"
 	"fonctions.h"
 	"manip.h"
@@ -1114,4 +1114,12 @@
 	"fonctions.h"
 	"projet.h"
 	<iomanip>
+
+1589795045 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/include/FFTW_init.h
+	"Point3D.h"
+	"Point2D.h"
+	<fftw3.h>
+
+1589795100 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/src/FFTW_init.cpp
+	"FFTW_init.h"
 
