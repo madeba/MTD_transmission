@@ -24,8 +24,8 @@ using namespace cv;
 int main( int argc, char** argv )
 {
     string home=getenv("HOME");
-    string dir_sav=home+"/tomo_test/";
-    cout<<"dirsav="<<dir_sav<<endl;
+   // string dir_sav=home+"/tomo_test/";
+   // cout<<"dirsav="<<dir_sav<<endl;
 ///--------------- Chargement ou création de l'objet (bille, spectre etc.)------------
     int dimROI=512;
     manip m1(dimROI);//Initialiser la manip avec la taille du champ holographique (acquisition) en pixel
@@ -51,7 +51,7 @@ int main( int argc, char** argv )
     double indice=1.45,kappa=0.001;//indice + coef d'extinction
     complex<double> nObj= {indice,kappa},n0= {m1.n0,0.0},Delta_n=nObj-n0;///init propriété bille
     genere_bille(vol_bille,centre_boule, rayon_boule_pix,nObj-n0,n0-n0,dim3D.x);
-    SAV3D_Tiff((vol_bille),"Re",dir_sav+"bille_Re.tif",m1.Tp_Tomo);
+    SAV3D_Tiff((vol_bille),"Re",m1.chemin_result+"bille_Re.tif",m1.Tp_Tomo);
 
 ///--------------- Données physiques (en µm)----------------------------
 
@@ -71,7 +71,7 @@ int main( int argc, char** argv )
 ///Calcul spectre objet
     FFT_encaps tf3D(dim3D),tf2D(dim2D); ///init fftw pour spectre 3D et 2D
     TF3Dcplx(tf3D.in,tf3D.out,fftshift3D(vol_bille),TF_bille,tf3D.p_forward_OUT,m1.Tp_Tomo);
-    SAV3D_Tiff(fftshift3D(TF_bille),"Re",dir_sav+"TF_bille_Re.tif", m1.Delta_f_tomo*pow(10,-6));
+    SAV3D_Tiff(fftshift3D(TF_bille),"Re",m1.chemin_result+"TF_bille_Re.tif", m1.Delta_f_tomo*pow(10,-6));
 
 ///Balayage : onde incidente k_inc
     double phi_i=0,theta_i=0;//angle polaire et azimuthal.
@@ -99,9 +99,9 @@ int main( int argc, char** argv )
      TF2Dcplx_INV(TF_holo_shift,holo,tf2D,m1.Delta_f_Uborn);
    // SAV2D_Tiff(TF_holo_shift,"Mod",dir_sav+"Tf_holo_Mod_shift.tif",m1.Tp_Uborn);
     //SAV2D_Tiff(fftshift2D(holo),"Im",dir_sav+"holo_Im.tif",m1.Tp_Uborn);
-    SAVCplx(fftshift2D(holo),"Im",dir_sav+"holo_Im.raw",t_double,"a+b");
+    SAVCplx(fftshift2D(holo),"Im",m1.chemin_result+"holo_Im.raw",t_double,"a+b");
    }
- SAV_Tiff2D(centres,dir_sav+"centres.tif",m1.Tp_holo);
+ SAV_Tiff2D(centres,m1.chemin_result+"centres.tif",m1.Tp_holo);
 ///calcul objet convolué
     cout<<"nb_holo="<<m1.nbHolo<<endl;
   /*  OTF mon_OTF(dimROI, m1);
@@ -115,6 +115,6 @@ int main( int argc, char** argv )
     TF3Dcplx_INV(tf3D.in,tf3D.out,test,obj_conv,tf3D.p_forward_OUT,m1.Delta_f_tomo);
     SAV3D_Tiff(fftshift3D(obj_conv),"Re",dir_sav+"obj_conf_Re.tif",m1.Tp_Tomo);
 */
-    SAV2(tabPosSpec,dir_sav+"/tab_posSpec.raw",t_double,"wb");
+    SAV2(tabPosSpec,m1.chemin_result+"/tab_posSpec.raw",t_double,"wb");
     return 0;
 }

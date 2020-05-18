@@ -23,6 +23,7 @@ struct manip {
         double Delta_f_holo;
         double Delta_f_tomo;//a priori inutile car egal à Delta_f_Uborn
         double Delta_f_Uborn;
+        std::string chemin_result;
         manip(int dimROI);
 } ;
 
