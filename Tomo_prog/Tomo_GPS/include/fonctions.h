@@ -23,7 +23,7 @@
 #include <fstream>
 #include <sstream>
 #include <assert.h>
-#include "projet.h"
+//#include "projet.h"
 #include "IO_fonctions.h"
 #include "Point2D.h"
 //#include "vecteur.h"

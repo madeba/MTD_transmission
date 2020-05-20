@@ -239,7 +239,7 @@ size_t yi=0;
         return result;
 }
 
-void TF2D(vector<double> entree, vector<complex<double> > &sortie, FFT_encaps &tf2D, double delta_x){
+void TF2D(vector<double> entree, vector<complex<double> > &sortie, FFTW_init &tf2D, double delta_x){
 
     int nbPix=entree.size();
     //int dim=sqrt(nbPix*m1.Tp_Uborn);
@@ -258,7 +258,7 @@ void TF2D(vector<double> entree, vector<complex<double> > &sortie, FFT_encaps &t
 }
 
 
-void TF2Dcplx(vector<complex<double>> entree, vector<complex<double> > &sortie, FFT_encaps &tf2D, double delta_x){
+void TF2Dcplx(vector<complex<double>> entree, vector<complex<double> > &sortie, FFTW_init &tf2D, double delta_x){
     int nbPix=entree.size();
     int dim=sqrt(nbPix);
     //double Coef_norm=dim*m1.Tp_Uborn;
@@ -277,7 +277,7 @@ void TF2Dcplx(vector<complex<double>> entree, vector<complex<double> > &sortie, 
 }
 
 
-void TF2Dcplx_INV(vector<complex<double> > entree, vector<complex<double> > &sortie, FFT_encaps &tf2D, double delta_f)
+void TF2Dcplx_INV(vector<complex<double> > entree, vector<complex<double> > &sortie, FFTW_init &tf2D, double delta_f)
 {
     int nbPix=entree.size();
     int dim=sqrt(nbPix);

@@ -30,7 +30,7 @@ void TF2Dcplx_vec_INV(fftw_complex *in,fftw_complex *out, std::vector<std::compl
 void TF2Dcplx_vec(fftw_complex *in,fftw_complex *out, std::vector<double> entree, std::vector<std::complex<double> > &sortie, fftw_plan p);
 void TF2Dcplx_vec_INV(fftw_complex *in, fftw_complex *out, std::vector<double> entree, std::vector<std::complex<double> > &sortie, fftw_plan p);
 void TF2Dcplx_vec_INPLACE(fftw_complex *in_out, std::vector<double> entree,  std::vector< std::complex<double> > &sortie, fftw_plan p);
-
+void TF2D_r2c_coupeHA_to_stack(std::vector<double> const &src2D, std::vector<std::complex<double>> &dest3D, Var2D dim2DHA, Var2D coinHA_r2c, unsigned short int numAngle, FFTW_init tf2D_r2c);
 std::vector<double> tukey2D(int dimx,int dimy, float alpha);
 
 

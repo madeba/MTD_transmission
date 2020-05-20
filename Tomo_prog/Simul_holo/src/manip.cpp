@@ -39,7 +39,12 @@ manip::manip(int dimROI)
     Tp_Tomo=Tp_Uborn*(2*NXMAX)/dim_final;
     Delta_f_tomo=1/(Tp_Tomo*dim_final);
     string home=getenv("HOME");
-    string sav_param=home+"/tomo_test/SAV_param_manip.txt";
+    //string sav_param=home+"/tomo_test/SAV_param_manip.txt";
+    string fin_chemin_gui_tomo="/.config/gui_tomo.conf";
+    string chemin_config_GUI=getenv("HOME")+fin_chemin_gui_tomo;
+    string repertoire_config=extract_string("CHEMIN_CONFIG",home+fin_chemin_gui_tomo);
+    chemin_result=extract_string("CHEMIN_RESULT",home+fin_chemin_gui_tomo);
+    string sav_param=chemin_result+"/SAV_param_manip.txt";
     cout<<sav_param<<endl;
     ofstream fichier_sav_parametre(sav_param);
 

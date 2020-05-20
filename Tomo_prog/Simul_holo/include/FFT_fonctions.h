@@ -5,18 +5,18 @@
 #include <complex>
 #include <fftw3.h>
 #include "manip.h"
-#include "FFT_encaps.h"
+#include "FFTW_init.h"
 //std::vector<std::complex<double> >  fftshift2D(std::vector<std::complex<double> > &entree);
 std::vector<double>  fftshift2D(std::vector<double> &entree);
 std::vector<std::complex<double>> fftshift2D(std::vector<std::complex<double>> &entree);
 std::vector<std::complex<double>> fftshift3D(std::vector<std::complex<double>> &entree);
 
 
-void TF2D(std::vector<double>  entree, std::vector<std::complex<double> > &sortie, FFT_encaps &tf2D, double delta_x);
+void TF2D(std::vector<double>  entree, std::vector<std::complex<double> > &sortie, FFTW_init &tf2D, double delta_x);
 
-void TF2Dcplx(std::vector<std::complex<double> > entree, std::vector<std::complex<double> > &sortie, FFT_encaps &tf2D, double delta_x);
+void TF2Dcplx(std::vector<std::complex<double> > entree, std::vector<std::complex<double> > &sortie, FFTW_init &tf2D, double delta_x);
 
-void TF2Dcplx_INV(std::vector<std::complex<double> > entree, std::vector<std::complex<double> > &sortie, FFT_encaps &tf2D, double Delta_f);
+void TF2Dcplx_INV(std::vector<std::complex<double> > entree, std::vector<std::complex<double> > &sortie, FFTW_init &tf2D, double Delta_f);
 
 
 

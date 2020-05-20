@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include "CImg.h"
 #include "fonctions.h"
+#include <chrono>
 #define NITER 20
 
 using namespace cimg_library;
@@ -64,11 +65,11 @@ int main(int argc, char *argv[])
    // masque_support.load_tiff("/media/bruno/Donnees/OSIRIS_NP/sup_redon_C_deg_0.bin.tiff");
 
 
-    if (!hidden) indice.display();
+ //   if (!hidden) indice.display();
 
 //   masque_support.shift(masque_support.width()/2,masque_support.height()/2,masque_support.depth()/2,0,2);
 
-  if (!hidden) masque_support.display();
+  //if (!hidden) masque_support.display();
  //  indice.shift(indice.width()/2,indice.height()/2,indice.depth()/2,0,2);
    // CImgList<float> Image(indice*1.0,abso.fill(0));  //Estimation de l'objet initialisée avec le champ mesuré
     CImgList<float> Image(indice*1.0,abso*1.0);  //Estimation de l'objet initialisée avec le champ mesuré
@@ -77,11 +78,13 @@ int main(int argc, char *argv[])
     F_mesure.FFT(false);
 
 cout<<"GS-Papoulis.."<<endl;
+cout<<"niterations="<<niterations<<endl;
+
 
     for(int i=1; i<niterations; i++)
     {
         cout<<"Iteration "<< i <<endl;
-
+auto start = std::chrono::system_clock::now();///démarrage chrono Hors-axe
         cimg_forXYZ(Image[0],x,y,z)
         {
             if (Image[0](x,y,z)<deltaNmin) Image[0](x,y,z)=deltaNmin; // contrainte sur la variation d'indice: le fond est fixé à zero le delta est positif
@@ -114,10 +117,14 @@ cout<<"GS-Papoulis.."<<endl;
 
         Image.FFT(true);
       //  Image[1].fill(0);
-        if ((i % 5) == 0) Image[0].save_tiff(outputfilename_indice);
+      //  if ((i % 5) == 0) Image[0].save_tiff(outputfilename_indice);
+      auto end = std::chrono::system_clock::now();
+auto elapsed = end - start;
+std::cout <<"Temps pour 1 iter= "<< elapsed.count()/(pow(10,9)) << '\n';
+
     }
-    Image[0].save_tiff(outputfilename_indice);
-    Image[1].save_tiff(outputfilename_kappa);
+   // Image[0].save_tiff(outputfilename_indice);
+   // Image[1].save_tiff(outputfilename_kappa);
 
     if (!hidden) Image.display();
 

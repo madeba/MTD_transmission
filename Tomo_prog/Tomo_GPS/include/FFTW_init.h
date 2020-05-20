@@ -21,14 +21,16 @@ public:
     FFTW_init(std::vector<double> const &entree, Point2D dim, size_t nbThread);//init r2c (real input)
     //init r2c or c2c
     FFTW_init(std::vector<double>const &entree, std::string str_geometry,size_t nbThread);
-
+    FFTW_init(Point3D dim,size_t nbThreads, bool b_inPlace);//init FFT3D
     FFTW_init(std::vector<std::complex<double>> const &entree,size_t nbThread);///init c2r for complex input
     FFTW_init(std::vector<double> const &entree, size_t nbThread);///init c2r for real input
     FFTW_init(Var2D dim, size_t nbThread);
     FFTW_init(Var2D dim2D,bool b_inplace, size_t nbThread);///INIT  INPLACE or OUTPLACE with boolean
+    FFTW_init(Point3D dim,size_t nbThread,bool b_inplace, unsigned int plan_type);
+    FFTW_init(std::vector<double> const &entree,size_t nbThread,bool b_inplace, unsigned int plan_type);
     ~FFTW_init();
- void prepare_wisdom2D(Var2D dim, std::string chemin);
-
+    void prepare_wisdom2D(Var2D dim, std::string chemin);
+    bool import_wisdom(const char *filename);
 };
 
 #endif
