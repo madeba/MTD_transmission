@@ -32,7 +32,7 @@ public :
         double tailleTheoPixelTomo;
         size_t circle_cx,circle_cy;
         Var2D fPort, fPortShift;
-        std::string dimImg;
+        std::string dimImg;//string containing dimension of the field, and put in the name of the saved file
         std::string chemin_result;
         std::string chemin_acquis;
         manip();

@@ -31,7 +31,9 @@ class OTF{
 
       //  std::vector<std::complex<double>> valeur;
         void retropropag(Point2D spec);
-        void bFleur();
+       // void bFleur();
+
+        std::vector<Var2D> bFleur();
         void bSpiral();
         void bSpiralNU();
         void bDblSpiral();

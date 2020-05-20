@@ -87,7 +87,7 @@ manip::manip()
         if( remove(result.c_str()) == 0 )
         perror( "Fichier UBornfinal_Re impossible à effacer" );
 
-      rayon=round(NXMAX*n0/NA);//calcul du rayon à partir de la fréquence NXMAX defini pare l'utlisateur
+      rayon=round(NXMAX*n0/NA);//calcul du rayon Ewald à partir de la fréquence NXMAX defini pare l'utlisateur
       double R_Ewald=IMAGE_DIMX*tailleTheoPixelHolo*n0/(lambda0*pow(10,9)); //vraie valeur de R_Ewald.
       double NXMAX_theo=R_Ewald*NA/n0;
     ///-------------enregistrer les paramètres dans un fichier log.--------------------------------------

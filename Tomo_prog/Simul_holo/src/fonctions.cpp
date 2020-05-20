@@ -34,8 +34,8 @@ Point2D maj_fleur(Point2D Vin, float rho, int nbHolo, double *theta, manip m1)//
     *theta=t;///maj theta prog principal
     return Vout;
 }
-///extraction d'une calotte d'Ewald dans le spectre 3D de l'objet
-void calcHolo(Point2D spec,std::vector<std::complex<double>> TF_vol3D,std::vector<std::complex<double>> &TF_hologramme, manip m1)
+///extraction d'une calotte centrée sur (spec.x,spec.y) d'Ewald dans le spectre 3D de l'objet
+void calcHolo(Point2D spec,std::vector<std::complex<double>> const &TF_vol3D,std::vector<std::complex<double>> &TF_hologramme, manip m1)
 {
 int Nmax=m1.NXMAX,rayon=m1.R_EwaldPix, dim2D=m1.dim_Uborn, dim3D=m1.dim_final;
 double fmcarre=Nmax*Nmax;///frequence max

@@ -23,7 +23,9 @@ struct manip {
         double Delta_f_holo;
         double Delta_f_tomo;//a priori inutile car egal à Delta_f_Uborn
         double Delta_f_Uborn;
+        std::string dimImg;//string containing dimension of the field, and put in the name of the saved file
         std::string chemin_result;
+        std::string chemin_acquis;
         manip(int dimROI);
 } ;
 

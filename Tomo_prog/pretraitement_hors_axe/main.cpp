@@ -212,7 +212,8 @@ auto end_part2= std::chrono::system_clock::now();
 auto elapsed_part2 = end_part2 - start_part2;
 std::cout <<"Temps pour part2= "<< elapsed_part2.count()/(pow(10,9)) << '\n';
 delete[] UnwrappedPhase_herraez;
-///------------SAUVER LES PARAMETRES UTILES À RECONSTRUCTION ou au contrôle
+
+///------------SAUVER LES PARAMETRES UTILES À RECONSTRUCTION ou au contrôle//Save useful paramaters for tomo_reconstruction
 cout<<"NXMAX sauve="<<m1.NXMAX<<endl;
 vector<double> param{m1.NXMAX,NbAngle,m1.rayon,dimROI.x,m1.tailleTheoPixelHolo};
 SAV2(param,m1.chemin_result+"/parametres.raw", t_double, "wb");

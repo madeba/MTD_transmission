@@ -38,16 +38,13 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-Wall `pkg-config --cflags opencv` -fopenmp -fexceptions -std=c++11" />
+			<Add option="-Wall `pkg-config --cflags opencv` -fopenmp -fexceptions -std=c++14" />
 			<Add directory="/usr/include/opencv2/" />
 		</Compiler>
 		<Linker>
 			<Add option="-lpthread -lX11 -lfftw3_threads -lfftw3 -lm -ltiff  `pkg-config --libs opencv`" />
 		</Linker>
-		<Unit filename="include/FFT_encaps.h">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="include/FFTW_init.h" />
 		<Unit filename="include/FFT_fonctions.h">
 			<Option target="Debug" />
 			<Option target="Release" />
@@ -60,10 +57,7 @@
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
-		<Unit filename="include/Point2D.h">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="include/Point2D.h" />
 		<Unit filename="include/Point3D.h">
 			<Option target="Debug" />
 			<Option target="Release" />
@@ -88,10 +82,7 @@
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/FFT_encaps.cpp">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="src/FFTW_init.cpp" />
 		<Unit filename="src/FFT_fonctions.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />

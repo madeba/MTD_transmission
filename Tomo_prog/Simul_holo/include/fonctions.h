@@ -33,7 +33,7 @@
 #include "manip.h"
 //void SAV_Tiff2D2(vector<double> v, std::string chemin, unsigned int dim);
 Point2D maj_fleur(Point2D Vin, float rho, int nbHolo, double *theta, manip m1);
-void calcHolo(Point2D spec,std::vector<std::complex<double>> TF_vol3D,std::vector<std::complex<double>> &TF_hologramme,manip m1);
+void calcHolo(Point2D spec,std::vector<std::complex<double>> const& TF_vol3D,std::vector<std::complex<double>> &TF_hologramme,manip m1);
 void Conv_Ewald(Point2D spec,std::vector<std::complex<double>> TF_vol3D,std::vector<std::complex<double>> &TF_conv3D, manip m1);
 void calcPhase_mpi_pi_atan2(vector<complex<double>> obj, vector<double> &phaseMod2pi);///calcul phase -PI-PI
 void SAV2(std::vector<double> v, std::string chemin, enum PRECISION precision, char options[]);

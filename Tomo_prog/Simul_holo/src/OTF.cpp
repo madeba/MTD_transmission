@@ -261,11 +261,11 @@ cout<<"nombre de spires="<<Nmax/(2*a*M_PI)<<endl;
   }
 myfile.close();
 //cout<<"nbSpec="<<nbSpec<<endl;
-SAVCplx(Valeur,"Re","/home/mat/tomo_test/otf_Re.bin",t_float,"wb");
-SAV2(centre,"/home/mat/tomo_test/centre.bin",t_float,"wb");
+//SAVCplx(Valeur,"Re","/home/mat/tomo_test/otf_Re.bin",t_float,"wb");
+//SAV2(centre,"/home/mat/tomo_test/centre.bin",t_float,"wb");
 }
 
-void OTF::bFleur(){
+/*void OTF::bFleur(){
 int Nmax=manipOTF.NXMAX;
 int dim_Uborn=manipOTF.dim_Uborn;
 vector<double> centre(dim_Uborn*dim_Uborn,0);
@@ -288,8 +288,72 @@ for(double theta=0;theta<2*M_PI;theta=theta+2*M_PI/manipOTF.nbHolo){
 SAVCplx(Valeur,"Re","/home/mat/tomo_test/otf_Re.bin",t_float,"wb");
 SAV2(centre,"/home/mat/tomo_test/centre.bin",t_float,"wb");
 //cout<<"nbspec="<<nbSpec<<endl;
+}*/
+/*
+vector<Var2D> OTF::bFleur(){
+int Nmax=manipOTF.NXMAX;
+int dim_Uborn=manipOTF.dim_Uborn;
+vector<double> centre(dim_Uborn*dim_Uborn,0);
+
+vector<Var2D> CoordSpec(manipOTF.nbHolo);
+size_t nb=4;///controle du nombre de branches
+Point2D spec(0,0,dim_Uborn);
+
+//cout<<"Nxmax====="<<Nmax<<endl;
+double rcarre=Nmax*Nmax;
+int nbSpec=0;
+short unsigned int num_holo=0;
+for(double theta=0;theta<2*M_PI;theta=theta+2*M_PI/manipOTF.nbHolo){
+         spec.x=round(Nmax*cos(nb*theta)*cos(theta));
+         spec.y=round(Nmax*cos(nb*theta)*sin(theta));//arrondi trop tot?
+
+        if(spec.x*spec.x+spec.y*spec.y<=rcarre){
+            nbSpec++;
+            centre[spec.coordI().cpt2D()]=1;
+            CoordSpec[num_holo].x=spec.x;
+            CoordSpec[num_holo].y=spec.y;
+            retropropag(spec);
+        }
+        num_holo++;
+    }
+SAVCplx(Valeur,"Re","/home/mat/tomo_test/otf_Re.bin",t_float,"wb");
+SAV2(centre,"/home/mat/tomo_test/centre.bin",t_float,"wb");
+return CoordSpec;
+//cout<<"nbspec="<<nbSpec<<endl;
 }
+*/
 
+vector<Var2D> OTF::bFleur(){
+int Nmax=manipOTF.NXMAX;
+int dim_Uborn=manipOTF.dim_Uborn;
+vector<double> centre(dim_Uborn*dim_Uborn,0);
 
+vector<Var2D> CoordSpec(manipOTF.nbHolo);
 
+size_t nb=4;///controle du nombre de branches
+Point2D spec(0,0,dim_Uborn);
+
+//cout<<"Nxmax====="<<Nmax<<endl;
+double rcarre=Nmax*Nmax;
+int nbSpec=0;
+short unsigned int num_holo=0;
+for(double theta=0;theta<2*M_PI;theta=theta+2*M_PI/manipOTF.nbHolo){
+        //cout<<"num_holo="<<num_holo<<endl;
+         spec.x=round(Nmax*cos(nb*theta)*cos(theta));
+         spec.y=round(Nmax*cos(nb*theta)*sin(theta));//arrondi trop tot?
+
+        if(spec.x*spec.x+spec.y*spec.y<=rcarre){
+            nbSpec++;
+            centre[spec.coordI().cpt2D()]=1;
+            CoordSpec[num_holo].x=spec.x;
+            CoordSpec[num_holo].y=spec.y;
+            retropropag(spec);
+        }
+        num_holo++;
+    }
+//SAVCplx(Valeur,"Re","/home/mat/tomo_test/otf_Re.bin",t_float,"wb");
+//SAV2(centre,"/home/mat/tomo_test/centre.bin",t_float,"wb");
+return CoordSpec;
+//cout<<"nbspec="<<nbSpec<<endl;
+}
 
