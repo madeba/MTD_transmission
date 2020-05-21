@@ -71,6 +71,7 @@ int main( int argc, char** argv )
 ///Calcul spectre objet
     FFTW_init tf3D(dim3D),tf2D(dim2D); ///init fftw pour spectre 3D et 2D
     TF3Dcplx(tf3D.in,tf3D.out,fftshift3D(vol_bille),TF_bille,tf3D.p_forward_OUT,m1.Tp_Tomo);
+    vector<complex<double>>().swap(vol_bille);
     TF_bille=fftshift3D(TF_bille);
 //   SAV3D_Tiff(TF_bille,"Re",m1.chemin_result+"TF_bille_Re.tif", m1.Delta_f_tomo*pow(10,-6));
 
@@ -82,15 +83,16 @@ int main( int argc, char** argv )
     OTF mon_OTF(m1);//init OTF
     CoordSpec=mon_OTF.bFleur();//retrieve tabular of specular beam from class OTF & create 3D OTF;
     SAV3D_Tiff(mon_OTF.Valeur,"Re",m1.chemin_result+"OTF_Re.tif",m1.Tp_Tomo);
+
      ///calcul objet convolué
     //OTF_shift=fftshift3D(mon_OTF.Valeur);
 
     for(int cpt=0; cpt<pow(m1.dim_final,3); cpt++)
         test[cpt]=mon_OTF.Valeur[cpt]*TF_bille[cpt];
-
+   vector<complex<double>>().swap(mon_OTF.Valeur);
     TF3Dcplx_INV(tf3D.in,tf3D.out,fftshift3D(test),obj_conv,tf3D.p_forward_OUT,m1.Delta_f_tomo);
     SAV3D_Tiff(fftshift3D(obj_conv),"Re",m1.chemin_result+"obj_conv_Re.tif",m1.Tp_Tomo);
-
+   vector<complex<double>>().swap(obj_conv);
     ///extract complex field from 3D spectrum
     for(int holo_numero=1; holo_numero<m1.nbHolo+1; holo_numero++){
 
