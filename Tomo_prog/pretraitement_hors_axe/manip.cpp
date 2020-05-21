@@ -37,27 +37,32 @@ manip::manip()
     tailleTheoPixelHolo=TpCam/Gt*pow(10,9);//Pour info, taille des pixels sur un hologramme=Tpcam/GT
     cout<<"taille theorique pixel holo="<<tailleTheoPixelHolo<<endl;
     theta=asin(NA/n0);
-    circle_cx=extract_val("CIRCLE_CX",fic_cfg_manip);///fréquence porteuse/coordinates of the off-axis career
+    ///---fréquence porteuse/coordinates of the off-axis career---
+    circle_cx=extract_val("CIRCLE_CX",fic_cfg_manip);
     circle_cy=extract_val("CIRCLE_CY",fic_cfg_manip);
     fPort={circle_cx,circle_cy};
-    fPortShift=coord_to_coordShift(fPort,dimROI);
+    fPortShift=coord_to_coordShift(fPort,dimROI);//porteuse espace décalé informatique
     cout<<"fPortShift="<<fPortShift.x<<"',"<<fPortShift.y<<endl;
     cout<<"fPort="<<fPort.x<<"',"<<fPort.y<<endl;
+    ///---fréquence de coupure/ cut-off frequency---
     NXMAX=extract_val("NXMAX",fic_cfg_manip);
     cout<<"m1.NXMAX="<<NXMAX<<endl;
     if(NXMAX==0)
         cout<<"----- ERREUR : NXMAX absent du fichier de configuration" <<fic_cfg_manip<<endl;
+    ///---dimension et échantillonnage/Dimension and sampling
+    CamDimROI=extract_val("CCD_ROIX",fic_cfg_recon);
     dim_final=extract_val("DIM_FINAL",fic_cfg_recon);
     tailleTheoPixelUborn=tailleTheoPixelHolo*dimROI.x/(2*NXMAX);
     tailleTheoPixelTomo=tailleTheoPixelUborn*(2*NXMAX)/dim_final;
-
+    ///---number of holograms
     premier_plan=extract_val("PREMIER_ANGLE",fic_cfg_recon),
     Num_Angle_final=extract_val("NB_HOLO",fic_cfg_manip),//
     NbAngle=Num_Angle_final-premier_plan;
+    ///---fftw parameters
     nbThreads=extract_val("NB_THREADS",fic_cfg_recon),
-    CamDimROI=extract_val("CCD_ROIX",fic_cfg_recon),
+    //chemin_wisdom=extract_string("WISDOM_PATH",fic_cfg_recon),
 
-    cout<<"\n##################### Options de RECONSTRUCTION ##################\n"<<endl;
+    cout<<"\n##################### Options  RECONSTRUCTION ##################\n"<<endl;
     ///boolean used to choose the type of reconstruction/phase unwrapping
     b_CorrAber=extract_val("C_ABER",fic_cfg_recon);///corriger les aberrations?
     b_Deroul=extract_val("DEROUL",fic_cfg_recon);///Dérouler la phase?

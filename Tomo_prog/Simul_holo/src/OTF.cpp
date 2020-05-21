@@ -5,7 +5,7 @@
 using namespace std;
 
 //OTF::OTF(manip m1):manipOTF(m1.dim_final),Obj3D::Obj3D(m1.dim_final)
-OTF::OTF(int dimROI, manip m1):manipOTF(dimROI),Valeur(pow(m1.dim_final,3))
+OTF::OTF(manip m1):manipOTF(m1.dimROI_Cam),Valeur(pow(m1.dim_final,3))
 {
 
     int nbPix=pow(m1.dim_final,3);

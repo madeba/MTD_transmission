@@ -7,9 +7,10 @@ using namespace std;
 
 
 
-manip::manip(int dimROI)
+manip::manip(unsigned short int dimROI)
 {
-    Var2D dim2D= {dimROI,dimROI};
+    Var2D dim2D= {dimROI_Cam,dimROI};
+    dimROI_Cam=dimROI;
     nbHolo=200;
     cout<<"\n##################### INFO MANIP ##################\n"<<endl;
     n0=1.515,//indice de l'huile
@@ -17,7 +18,7 @@ manip::manip(int dimROI)
     lambda_v=0.532*pow(10,-6), Gt=120; //longueur d'onde dans le vide, grandissement total microscope
     TpCam=5.5*pow(10,-6);//taille pixel caméra
     Tp_holo=TpCam/Gt;
-    Delta_f_holo=1/(dimROI*Tp_holo);//echantillonnage dans Fourier = constante car aucun bourrage dans l'espace direct
+    Delta_f_holo=1/(dimROI_Cam*Tp_holo);//echantillonnage dans Fourier = constante car aucun bourrage dans l'espace direct
     theta_max=asin(NAObj/n0);
     //NXMAX=dimROI*Tp_Uborn*n0/(lambda_v);
     NXMAX=NAObj/(lambda_v*Delta_f_holo);//pas de Gt car inclu dans Delta_f via Tp_holo
@@ -32,7 +33,7 @@ manip::manip(int dimROI)
 
     R_EwaldPix=round(NXMAX/sin(theta_max));//R_Ewald pixels
     R_EwaldMet=round(NXMAX/sin(theta_max)*Delta_f_holo);//R_Ewald metric
-    Tp_Uborn=Tp_holo*dimROI/(2*NXMAX);//pixel size of complex field
+    Tp_Uborn=Tp_holo*dimROI_Cam/(2*NXMAX);//pixel size of complex field
     Delta_f_Uborn=1/(2*NXMAX*Tp_Uborn);//sampling size of complex field spectrum
 
     cout<<"Rayon Ewald classique="<<dim_Uborn*Tp_Uborn*n0/(lambda_v)<<endl;
@@ -59,8 +60,8 @@ manip::manip(int dimROI)
     cout<<"|Tp Caméra       |"<<TpCam*pow(10,6)<<"µm             |"<<endl;
     cout<<"|Tp_holo         |     "<<Tp_holo*pow(10,9)<<"nm    |"<<endl;
     cout<<"|-----------------------------------|"<<endl;
-    cout<<"|champ holo pixel|     "<<dimROI          <<" pix      |"<<endl;
-    cout<<"|Champ holo metre|     "<<dimROI*Tp_holo*pow(10,6)<<" µm   |"<<endl;
+    cout<<"|champ holo pixel|     "<<dimROI_Cam          <<" pix      |"<<endl;
+    cout<<"|Champ holo metre|     "<<dimROI_Cam*Tp_holo*pow(10,6)<<" µm   |"<<endl;
     cout<<"|-----------------------------------|"<<endl;
     cout<<"|    Tp UBorn    |     "<<Tp_Uborn*pow(10,9)<<" nm    |"<<endl;
     cout<<"|-----------------------------------|"<<endl;
@@ -86,11 +87,11 @@ manip::manip(int dimROI)
     fichier_sav_parametre<<"+----------------+-------------------+"<<endl;
     fichier_sav_parametre<<"|    Grandeur    |    Valeur         |"<<endl;
     fichier_sav_parametre<<"|------------------------------------|"<<endl;
-    fichier_sav_parametre<<"| champ en pixel |     "<<dimROI          <<" pix       |"<<endl;
+    fichier_sav_parametre<<"| champ en pixel |     "<<dimROI_Cam         <<" pix       |"<<endl;
     fichier_sav_parametre<<"|    Tp Holo     |     "<<Tp_Uborn<<" nm |"<<endl;
     fichier_sav_parametre<<"|    Delta_f     |     "<<Delta_f_tomo<<" µm-1  |"<<endl;
     fichier_sav_parametre<<"|------------------------------------|"<<endl;
-    fichier_sav_parametre<<"|     Champ      |     "<<dimROI*Tp_Uborn<<" µm|"<<endl;
+    fichier_sav_parametre<<"|     Champ      |     "<<dimROI_Cam*Tp_Uborn<<" µm|"<<endl;
     fichier_sav_parametre<<"|------------------------------------|"<<endl;
     fichier_sav_parametre<<"|     R_Ewald    |     "<<R_EwaldPix<<" pixels     |"<<endl;
     fichier_sav_parametre<<"|     R_Ewald m  |     "<<R_EwaldMet<<" µm-1|"<<endl;

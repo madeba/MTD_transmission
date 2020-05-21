@@ -31,7 +31,7 @@ int main( int argc, char** argv )
     Point2D dim2D((double)m1.dim_Uborn,(double)m1.dim_Uborn,round(m1.dim_Uborn));
     unsigned int nbPix3D=pow(m1.dim_final,3),nbPix2D=pow(m1.dim_Uborn,2);
 ///variables 3D : objet+spectre
-    vector<complex<double>> vol_bille(nbPix3D),  TF_bille(nbPix3D), OTF_shift(nbPix3D);
+    vector<complex<double>> vol_bille(nbPix3D),  TF_bille(nbPix3D);
     vector<complex<double>> test(nbPix3D);
     // vector<complex<double>> spectre_conv(nbPix3D);
     vector<complex<double>> obj_conv(nbPix3D);
@@ -79,8 +79,18 @@ int main( int argc, char** argv )
     ///Generate OTF and 2D center (specular beam).
     vector<Var2D> CoordSpec(m1.nbHolo);//table of specular coordinates
     cout<<"creation point 2D m1.nbHolo="<<m1.nbHolo<<endl;
-    OTF mon_OTF(dimROI, m1);//init OTF
+    OTF mon_OTF(m1);//init OTF
     CoordSpec=mon_OTF.bFleur();//retrieve tabular of specular beam from class OTF & create 3D OTF;
+    SAV3D_Tiff(mon_OTF.Valeur,"Re",m1.chemin_result+"OTF_Re.tif",m1.Tp_Tomo);
+     ///calcul objet convolué
+    //OTF_shift=fftshift3D(mon_OTF.Valeur);
+
+    for(int cpt=0; cpt<pow(m1.dim_final,3); cpt++)
+        test[cpt]=mon_OTF.Valeur[cpt]*TF_bille[cpt];
+
+    TF3Dcplx_INV(tf3D.in,tf3D.out,fftshift3D(test),obj_conv,tf3D.p_forward_OUT,m1.Delta_f_tomo);
+    SAV3D_Tiff(fftshift3D(obj_conv),"Re",m1.chemin_result+"obj_conv_Re.tif",m1.Tp_Tomo);
+
     ///extract complex field from 3D spectrum
     for(int holo_numero=1; holo_numero<m1.nbHolo+1; holo_numero++){
 
@@ -133,15 +143,7 @@ int main( int argc, char** argv )
        }*/
     SAV_Tiff2D(centres,m1.chemin_result+"centres.tif",m1.Tp_holo);
 
-    ///calcul objet convolué
-    cout<<"nb_holo="<<m1.nbHolo<<endl;
-    OTF_shift=fftshift3D(mon_OTF.Valeur);
-    SAV3D_Tiff(fftshift3D(OTF_shift),"Re",m1.chemin_result+"OTF_shift_Re.tif",m1.Tp_Tomo);
-    for(int cpt=0; cpt<pow(m1.dim_final,3); cpt++)
-        test[cpt]=OTF_shift[cpt]*TF_bille[cpt];
 
-    TF3Dcplx_INV(tf3D.in,tf3D.out,test,obj_conv,tf3D.p_forward_OUT,m1.Delta_f_tomo);
-    SAV3D_Tiff(fftshift3D(obj_conv),"Re",m1.chemin_result+"obj_conf_Re.tif",m1.Tp_Tomo);
 
     SAV2(tabPosSpec,m1.chemin_result+"/tab_posSpec.raw",t_double,"wb");
     vector<double> param{m1.NXMAX,m1.nbHolo,m1.R_EwaldPix,dimROI,m1.Tp_holo};

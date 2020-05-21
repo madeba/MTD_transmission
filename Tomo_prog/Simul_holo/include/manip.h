@@ -13,6 +13,7 @@ struct manip {
         int NXMAX;      //fréquence spatiale maximum enregistrée par le miscrocope en pixel
         int NXMAX_cond;
         size_t nbHolo;
+        unsigned short int dimROI_Cam;
         double theta_max;  //angle de collection max de l'objectif
         double Gt;         //grandissemen total
         size_t dim_final,dim_Uborn; //dimension epsace objet tomo et dimension champ complexe
@@ -26,7 +27,7 @@ struct manip {
         std::string dimImg;//string containing dimension of the field, and put in the name of the saved file
         std::string chemin_result;
         std::string chemin_acquis;
-        manip(int dimROI);
+        manip(unsigned short int dimROI);
 } ;
 
 #endif // DEF_MANIP

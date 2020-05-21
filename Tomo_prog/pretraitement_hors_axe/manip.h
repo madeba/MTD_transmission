@@ -35,6 +35,7 @@ public :
         std::string dimImg;//string containing dimension of the field, and put in the name of the saved file
         std::string chemin_result;
         std::string chemin_acquis;
+
         manip();
 
 } ;

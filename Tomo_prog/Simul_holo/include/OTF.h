@@ -12,7 +12,7 @@ class OTF{
 
 
     public:
-        OTF(int dimROI, manip m1);
+        OTF(manip m1);
         //OTF(size_t rayon_ewald);
 
 
