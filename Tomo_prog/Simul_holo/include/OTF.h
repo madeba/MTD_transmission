@@ -4,8 +4,8 @@
 #include <vector>
 #include <complex>
 #include <fftw3.h>
-#include "Point3D.h"
-#include  "Obj3D.h"
+#include "Point2D.h"
+#include  "manip.h"
 
 class OTF{
     private:
@@ -14,8 +14,6 @@ class OTF{
     public:
         OTF(manip m1);
         //OTF(size_t rayon_ewald);
-
-
         //const std::vector<std::complex<double>>& GetV() const{return valeur;}
 
         virtual ~OTF();
@@ -33,7 +31,10 @@ class OTF{
         void retropropag(Point2D spec);
        // void bFleur();
 
-        std::vector<Var2D> bFleur();
+       // std::vector<Var2D> bFleur();
+
+        std::vector<Point2D> bFleur();
+        void bFleur(std::vector<Point2D> &CoordSpec);
         void bSpiral();
         void bSpiralNU();
         void bDblSpiral();

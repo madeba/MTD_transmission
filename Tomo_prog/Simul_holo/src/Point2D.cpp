@@ -20,12 +20,12 @@ void Point2D::set_xy(double x, double y)
     this->y=y;
 
 }
-Point2D::Point2D(int x, int y,int m_dim2D)//coordonnée+dimension de l'espace
+/*Point2D::Point2D(int x, int y,int m_dim2D)//coordonnée+dimension de l'espace
 {
-    this->x=x;
-    this->y=y;
+    this->x=double(x);
+    this->y=double(y);
     this->dim2D=m_dim2D;
-}
+}*/
 
 
 Point2D::~Point2D()

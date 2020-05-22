@@ -322,7 +322,7 @@ return CoordSpec;
 //cout<<"nbspec="<<nbSpec<<endl;
 }
 */
-
+/*
 vector<Var2D> OTF::bFleur(){
 int Nmax=manipOTF.NXMAX;
 int dim_Uborn=manipOTF.dim_Uborn;
@@ -339,21 +339,113 @@ int nbSpec=0;
 short unsigned int num_holo=0;
 for(double theta=0;theta<2*M_PI;theta=theta+2*M_PI/manipOTF.nbHolo){
         //cout<<"num_holo="<<num_holo<<endl;
+      //  cout<<"theta="<<theta<<endl;
+         spec.x=(int)round(Nmax*cos(nb*theta)*cos(theta));
+         spec.y=(int)round(Nmax*cos(nb*theta)*sin(theta));//arrondi trop tot?
+
+      //  if(spec.x*spec.x+spec.y*spec.y<=rcarre){
+            nbSpec++;
+            centre[spec.coordI().cpt2D()]=1;
+            CoordSpec[num_holo].x=1;//(int)round(spec.x);
+            CoordSpec[num_holo].y=1;//(int)round(spec.y);
+            retropropag(spec);
+            if(num_holo>98 && num_holo<110){
+           //cout<<"num_holo="<<num_holo<<" : specOTF=("<<spec.x<<","<<spec.y<<")"<<endl;
+           cout<<"num_holo="<<num_holo<<" : CoordOTF=("<<CoordSpec[num_holo].x<<","<<CoordSpec[num_holo].y<<")"<<endl;
+            }
+          //  cout<<"num_holoOTF="<<num_holo<<endl;
+      //  }
+        num_holo++;
+    }
+
+//SAVCplx(Valeur,"Re","/home/mat/tomo_test/otf_Re.bin",t_float,"wb");
+SAV2(centre,manipOTF.chemin_result+"/centre_dans_otf.bin",t_float,"wb");
+return CoordSpec;
+//cout<<"nbspec="<<nbSpec<<endl;
+}
+*/
+
+vector<Point2D> OTF::bFleur(){
+int Nmax=manipOTF.NXMAX;
+int dim_Uborn=manipOTF.dim_Uborn;
+vector<double> centre(dim_Uborn*dim_Uborn,0);
+Point2D ptInit(0,0,dim_Uborn);
+vector<Point2D> CoordSpec(manipOTF.nbHolo,ptInit);
+
+size_t nb=4;///controle du nombre de branches
+Point2D spec(0,0,dim_Uborn);
+
+//cout<<"Nxmax====="<<Nmax<<endl;
+double rcarre=Nmax*Nmax;
+int nbSpec=0;
+ int num_holo=0;
+for(double theta=0;theta<2*M_PI;theta=theta+2*M_PI/manipOTF.nbHolo){
+        //cout<<"num_holo="<<num_holo<<endl;
+      //  cout<<"theta="<<theta<<endl;
+         spec.x=(int)round(Nmax*cos(nb*theta)*cos(theta));
+         spec.y=(int)round(Nmax*cos(nb*theta)*sin(theta));//arrondi trop tot?
+
+        if(spec.x*spec.x+spec.y*spec.y<=rcarre){
+            nbSpec++;
+            centre[spec.coordI().cpt2D()]=1;
+            CoordSpec[num_holo].x=round(spec.x);
+            CoordSpec[num_holo].y=round(spec.y);
+          //  cout<<"num_holo"<< num_holo<<", "<<CoordSpec[num_holo].dim2D<<endl;
+            retropropag(spec);
+            if(num_holo>20 && num_holo<30){
+           cout<<"num_holo="<<num_holo<<" : specOTF=("<<spec.x<<","<<spec.y<<")"<<endl;
+           cout<<" : CoordOTF=("<<CoordSpec[num_holo].x<<","<<CoordSpec[num_holo].y<<")"<<endl;
+            }
+          //  cout<<"num_holoOTF="<<num_holo<<endl;
+        }
+        num_holo++;
+    }
+
+//SAVCplx(Valeur,"Re","/home/mat/tomo_test/otf_Re.bin",t_float,"wb");
+//SAV2(centre,manipOTF.chemin_result+"/centre_dans_otf.bin",t_float,"wb");
+return CoordSpec;
+//cout<<"nbspec="<<nbSpec<<endl;
+}
+
+void OTF::bFleur(vector<Point2D> &CoordSpec){
+int Nmax=manipOTF.NXMAX;
+int dim_Uborn=manipOTF.dim_Uborn;
+vector<double> centre(dim_Uborn*dim_Uborn,0);
+Point2D ptInit(0,0,dim_Uborn);
+//vector<Point2D> CoordSpec(manipOTF.nbHolo,ptInit);
+
+size_t nb=4;///controle du nombre de branches
+Point2D spec(0,0,dim_Uborn);
+
+//cout<<"Nxmax====="<<Nmax<<endl;
+double rcarre=Nmax*Nmax;
+int nbSpec=0;
+ int num_holo=0;
+for(double theta=0;theta<2*M_PI;theta=theta+2*M_PI/manipOTF.nbHolo){
+        //cout<<"num_holo="<<num_holo<<endl;
+      //  cout<<"theta="<<theta<<endl;
          spec.x=round(Nmax*cos(nb*theta)*cos(theta));
          spec.y=round(Nmax*cos(nb*theta)*sin(theta));//arrondi trop tot?
 
         if(spec.x*spec.x+spec.y*spec.y<=rcarre){
             nbSpec++;
             centre[spec.coordI().cpt2D()]=1;
-            CoordSpec[num_holo].x=spec.x;
-            CoordSpec[num_holo].y=spec.y;
+            CoordSpec[num_holo].x=round(spec.x);
+            CoordSpec[num_holo].y=round(spec.y);
+          //  cout<<"num_holo"<< num_holo<<", "<<CoordSpec[num_holo].dim2D<<endl;
             retropropag(spec);
+            if(num_holo>20 && num_holo<30){
+           cout<<"num_holo="<<num_holo<<" : specOTF=("<<spec.x<<","<<spec.y<<")"<<endl;
+           cout<<" : CoordOTF=("<<CoordSpec[num_holo].x<<","<<CoordSpec[num_holo].y<<")"<<endl;
+            }
+          //  cout<<"num_holoOTF="<<num_holo<<endl;
         }
         num_holo++;
     }
+
 //SAVCplx(Valeur,"Re","/home/mat/tomo_test/otf_Re.bin",t_float,"wb");
-//SAV2(centre,"/home/mat/tomo_test/centre.bin",t_float,"wb");
-return CoordSpec;
+//SAV2(centre,manipOTF.chemin_result+"/centre_dans_otf.bin",t_float,"wb");
+
 //cout<<"nbspec="<<nbSpec<<endl;
 }
 

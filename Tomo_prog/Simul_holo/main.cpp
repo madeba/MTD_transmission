@@ -25,17 +25,18 @@ int main( int argc, char** argv )
 {
     string home=getenv("HOME");
 ///--------------- Chargement ou création de l'objet (bille, spectre etc.)------------
-    int dimROI=512;
+    int dimROI=1024;
     manip m1(dimROI);//Initialiser la manip avec la taille du champ holographique (acquisition) en pixel
     Point3D dim3D(m1.dim_final,m1.dim_final,m1.dim_final);
     Point2D dim2D((double)m1.dim_Uborn,(double)m1.dim_Uborn,round(m1.dim_Uborn));
     unsigned int nbPix3D=pow(m1.dim_final,3),nbPix2D=pow(m1.dim_Uborn,2);
 ///variables 3D : objet+spectre
     vector<complex<double>> vol_bille(nbPix3D),  TF_bille(nbPix3D);
-    vector<complex<double>> test(nbPix3D);
+
     // vector<complex<double>> spectre_conv(nbPix3D);
     vector<complex<double>> obj_conv(nbPix3D);
-    vector<complex<double>> TF_convEwald(nbPix3D);
+    vector<complex<double>> SpectreObjConv(nbPix3D);
+    //vector<complex<double>> TF_convEwald(nbPix3D);
 ///variables 2D : champ complexe
     vector<complex<double>> TF_holo(nbPix2D);
     vector<complex<double>> TF_holo_shift(nbPix2D);
@@ -75,32 +76,44 @@ int main( int argc, char** argv )
     TF_bille=fftshift3D(TF_bille);
 //   SAV3D_Tiff(TF_bille,"Re",m1.chemin_result+"TF_bille_Re.tif", m1.Delta_f_tomo*pow(10,-6));
 
-    Point2D spec(0,0,m1.dim_Uborn);//corrdonnée spec2D identique ki lateral mais definit
+    Point2D spec(0.0,0.0,m1.dim_Uborn);//corrdonnée spec2D identique ki lateral mais definit
     //en 2D pour cpt2D
     ///Generate OTF and 2D center (specular beam).
-    vector<Var2D> CoordSpec(m1.nbHolo);//table of specular coordinates
+    //vector<Var2D> CoordSpec(m1.nbHolo);//table of specular coordinates
+
+    vector<Point2D> CoordSpec2(m1.nbHolo, spec);
+
     cout<<"creation point 2D m1.nbHolo="<<m1.nbHolo<<endl;
+    cout<<"------------------------Calcul OTF et objet convolué"<<endl;
     OTF mon_OTF(m1);//init OTF
-    CoordSpec=mon_OTF.bFleur();//retrieve tabular of specular beam from class OTF & create 3D OTF;
+    //mon_OTF.bFleur(CoordSpec2);//retrieve tabular of specular beam from class OTF & create 3D OTF;
+    mon_OTF.bFleur(CoordSpec2);//retrieve tabular of specular beam from class OTF & create 3D OTF;
+   //for(int cpt=0;cpt<m1.nbHolo;cpt++)
+     //   cout<<"main, cpt="<<cpt<<" : CoorSpec=("<<CoordSpec2[cpt].x<<","<<CoordSpec2[cpt].y<<")"<<endl;
     SAV3D_Tiff(mon_OTF.Valeur,"Re",m1.chemin_result+"OTF_Re.tif",m1.Tp_Tomo);
 
      ///calcul objet convolué
     //OTF_shift=fftshift3D(mon_OTF.Valeur);
 
     for(int cpt=0; cpt<pow(m1.dim_final,3); cpt++)
-        test[cpt]=mon_OTF.Valeur[cpt]*TF_bille[cpt];
+        SpectreObjConv[cpt]=mon_OTF.Valeur[cpt]*TF_bille[cpt];
    vector<complex<double>>().swap(mon_OTF.Valeur);
-    TF3Dcplx_INV(tf3D.in,tf3D.out,fftshift3D(test),obj_conv,tf3D.p_forward_OUT,m1.Delta_f_tomo);
+    TF3Dcplx_INV(tf3D.in,tf3D.out,fftshift3D(SpectreObjConv),obj_conv,tf3D.p_forward_OUT,m1.Delta_f_tomo);
+   vector<complex<double>>().swap(SpectreObjConv);
     SAV3D_Tiff(fftshift3D(obj_conv),"Re",m1.chemin_result+"obj_conv_Re.tif",m1.Tp_Tomo);
    vector<complex<double>>().swap(obj_conv);
     ///extract complex field from 3D spectrum
-    for(int holo_numero=1; holo_numero<m1.nbHolo+1; holo_numero++){
+    cout<<"extraction hologramme"<<endl;
+    for(int holo_numero=0; holo_numero<m1.nbHolo; holo_numero++){
+        cout<<"holo_numero="<<holo_numero<<endl;
+        spec.x=CoordSpec2[holo_numero].x;//the old code use spec, so we convert OTF.centre to spec
+        spec.y=CoordSpec2[holo_numero].y;
 
-        spec.x=CoordSpec[holo_numero].x;//the old code use spec, so we convert OTF.centre to spec
-        spec.y=CoordSpec[holo_numero].y;
-        tabPosSpec[holo_numero]=(double)CoordSpec[holo_numero].x; //save tab_posSpec to a format readable by Tomo_reconstruction
+
+       cout<<"main spec=("<<spec.x<<","<<spec.y<<")"<<endl;
+        tabPosSpec[holo_numero]=(double)CoordSpec2[holo_numero].x; //save tab_posSpec to a format readable by Tomo_reconstruction
         tabPosSpec[holo_numero+m1.nbHolo]=(double)spec.y;
-        int cpt2D=round(spec.y)*m1.dim_Uborn+spec.x;
+        int cpt2D=round(spec.y)*m1.dim_Uborn+round(spec.x);
         centres[spec.coordI().cpt2D()]=holo_numero;//used save centres in a image file, for quick visualisation
 
         ///Calcul des TF2D  des hologrammes à partir du spectre 3D de l'objet.

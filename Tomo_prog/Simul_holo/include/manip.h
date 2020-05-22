@@ -15,6 +15,7 @@ struct manip {
         size_t nbHolo;
         unsigned short int dimROI_Cam;
         double theta_max;  //angle de collection max de l'objectif
+        double f_tube,f_obj,Rf;
         double Gt;         //grandissemen total
         size_t dim_final,dim_Uborn; //dimension epsace objet tomo et dimension champ complexe
         double TpCam;               //---échantillonnage

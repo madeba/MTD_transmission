@@ -21,13 +21,14 @@ class Point2D{
 
         Point2D();
         Point2D(double x, double y,int dim);
-        Point2D(int x, int y,int m_dim2D);
+      //  Point2D(int x, int y,int m_dim2D);
 
         virtual ~Point2D();
         size_t cpt2D();
         void decale(int decalx, int decaley);
         Point2D coordI();
         Point2D coordI2coordH();
+
         void set_xy(double x, double y);
         void setDim(unsigned short int dim);
 

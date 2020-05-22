@@ -11,12 +11,29 @@ manip::manip(unsigned short int dimROI)
 {
     Var2D dim2D= {dimROI_Cam,dimROI};
     dimROI_Cam=dimROI;
-    nbHolo=200;
+
+    string home=getenv("HOME");
+    //string sav_param=home+"/tomo_test/SAV_param_manip.txt";
+    string fin_chemin_gui_tomo="/.config/gui_tomo.conf";
+    string chemin_config_GUI=getenv("HOME")+fin_chemin_gui_tomo;
+    string repertoire_config=extract_string("CHEMIN_CONFIG",home+fin_chemin_gui_tomo);
+    chemin_result=extract_string("CHEMIN_RESULT",home+fin_chemin_gui_tomo);
+    string fic_cfg_recon=repertoire_config+"/recon.txt";
+    cout<<"fichier recon="<<fic_cfg_recon<<endl;
+    string fic_cfg_manip=repertoire_config+"/config_manip.txt";
+    cout<<"chemin config="<<fic_cfg_manip<<endl;
+
+    nbHolo=extract_val("NB_HOLO",fic_cfg_manip);
     cout<<"\n##################### INFO MANIP ##################\n"<<endl;
-    n0=1.515,//indice de l'huile
-    NACond=1.4, NAObj=1.4,	//ouverture numerique de l'objectif? (celle du condenseur intervient sur la forme, la taille, du papillon)
-    lambda_v=0.532*pow(10,-6), Gt=120; //longueur d'onde dans le vide, grandissement total microscope
-    TpCam=5.5*pow(10,-6);//taille pixel caméra
+    n0=extract_val("N0",fic_cfg_manip);//indice de l'huile
+    NACond=extract_val("NA_COND",fic_cfg_manip);
+    NAObj=extract_val("NA_OBJ",fic_cfg_manip);	//ouverture numerique de l'objectif? (celle du condenseur intervient sur la forme, la taille, du papillon)
+    lambda_v=extract_val("LAMBDA",fic_cfg_manip);
+    f_tube=extract_val("F_TUBE",fic_cfg_manip);
+    f_obj=extract_val("F_OBJ",fic_cfg_manip);
+    Rf=extract_val("RF",fic_cfg_manip);
+    Gt=f_tube/(f_obj*Rf); //longueur d'onde dans le vide, grandissement total microscope
+    TpCam=extract_val("TPCAM",fic_cfg_manip);//taille pixel caméra
     Tp_holo=TpCam/Gt;
     Delta_f_holo=1/(dimROI_Cam*Tp_holo);//echantillonnage dans Fourier = constante car aucun bourrage dans l'espace direct
     theta_max=asin(NAObj/n0);
@@ -40,12 +57,7 @@ manip::manip(unsigned short int dimROI)
     Tp_Tomo=Tp_Uborn*(2*NXMAX)/dim_final;
     Delta_f_tomo=1/(Tp_Tomo*dim_final);
     dimImg=to_string(dim_Uborn)+"x"+to_string(dim_Uborn)+"x"+to_string(nbHolo);
-    string home=getenv("HOME");
-    //string sav_param=home+"/tomo_test/SAV_param_manip.txt";
-    string fin_chemin_gui_tomo="/.config/gui_tomo.conf";
-    string chemin_config_GUI=getenv("HOME")+fin_chemin_gui_tomo;
-    string repertoire_config=extract_string("CHEMIN_CONFIG",home+fin_chemin_gui_tomo);
-    chemin_result=extract_string("CHEMIN_RESULT",home+fin_chemin_gui_tomo);
+
     string sav_param=chemin_result+"/SAV_param_manip.txt";
     cout<<sav_param<<endl;
     ofstream fichier_sav_parametre(sav_param);

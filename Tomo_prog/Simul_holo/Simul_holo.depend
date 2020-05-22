@@ -967,7 +967,7 @@
 1549900680 source:/home/mat/Dropbox/projet_c/2019/Projet_tomo/Tomo_prog/Simul_holo/src/Point3D.cpp
 	"Point3D.h"
 
-1590073717 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/main.cpp
+1590152474 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/main.cpp
 	<iostream>
 	<cmath>
 	<fstream>
@@ -986,7 +986,7 @@
 	"FFTW_init.h"
 	"manip.h"
 
-1589983533 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/include/fonctions.h
+1590148527 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/include/fonctions.h
 	"struct.h"
 	<time.h>
 	<math.h>
@@ -1035,19 +1035,19 @@
 	<iostream>
 	"Point2D.h"
 
-1589983533 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/include/Point2D.h
+1590150915 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/include/Point2D.h
 	<vector>
 	<complex>
 	<fftw3.h>
 	<vector>
 	<complex>
 
-1590067320 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/include/OTF.h
+1590152474 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/include/OTF.h
 	<vector>
 	<complex>
 	<fftw3.h>
-	"Point3D.h"
-	"Obj3D.h"
+	"Point2D.h"
+	"manip.h"
 
 1589983533 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/include/Obj3D.h
 	<fftw3.h>
@@ -1057,7 +1057,7 @@
 	"manip.h"
 	"struct.h"
 
-1590067119 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/include/manip.h
+1590088642 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/include/manip.h
 	<cstdlib>
 	<iostream>
 
@@ -1081,7 +1081,7 @@
 	"fonctions.h"
 	"manip.h"
 
-1589983533 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/src/fonctions.cpp
+1590148527 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/src/fonctions.cpp
 	"fonctions.h"
 	<tiffio.h>
 	<opencv/cxcore.h>
@@ -1097,18 +1097,18 @@
 	<fftw3.h>
 	"Point3D.h"
 
-1590067369 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/src/OTF.cpp
+1590152474 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/src/OTF.cpp
 	"OTF.h"
 	"fonctions.h"
 	<fstream>
 
-1589983533 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/src/Point2D.cpp
+1590150915 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/src/Point2D.cpp
 	"Point2D.h"
 
 1589983533 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/src/Point3D.cpp
 	"Point3D.h"
 
-1590067119 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/src/manip.cpp
+1590088642 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/src/manip.cpp
 	"manip.h"
 	<iostream>
 	"fonctions.h"
