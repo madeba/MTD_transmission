@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+"""
+@author: Nicolas Verrier
+"""
+
 import os
 from linecache import getline
 
@@ -50,12 +54,12 @@ def readvalue(filename,keyword):
     nbLignes = lineinfile(filename)
     nbLignesOK = 0
     Value = 0.
-    for cpt in range(1,nbLignes):
+    for cpt in range(1,nbLignes+1):
         Ligne = getline(filename,cpt).split()
         if len(Ligne) != 0:
             FileContent.append(Ligne)
             nbLignesOK += 1
-    for cpt in range(0,nbLignesOK-1):
+    for cpt in range(0,nbLignesOK):
         if FileContent[cpt][0] == keyword:
             Value = float(FileContent[cpt][1])
     return Value

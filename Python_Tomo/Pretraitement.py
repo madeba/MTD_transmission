@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+"""
+@author: Nicolas Verrier
+"""
+
 import matplotlib.pyplot as plt
-# import numpy.fft as nfft
-import scipy.fftpack as sfft
+from scipy.fftpack import fft2,ifft2,ifftshift
 import numpy as np
 import HoloProcessing as holo
 import CorrectionAberration as CAber
@@ -70,7 +73,7 @@ for hol in range(0,nb_holo):
         Image = plt.imread(filename)
         
         # Hologram spectrum and off-axis filtering
-        FImage = sfft.fft2(Image)
+        FImage = fft2(Image)
         SpectreFilt=FImage[int(CentreYShift-fmaxHolo):int(CentreYShift+fmaxHolo),int(CentreXShift-fmaxHolo):int(CentreXShift+fmaxHolo)]
         
         # Specular spot coordinates calculation
@@ -83,7 +86,7 @@ for hol in range(0,nb_holo):
         Centres[kiy,kix] = 1
         
         # Complex Field (UBorn + Ui)
-        UBorn = sfft.ifft2(sfft.ifftshift(SpectreFilt))
+        UBorn = ifft2(ifftshift(SpectreFilt))
         Amp_UBorn = np.abs(UBorn)
         Phase_UBornWrap = np.angle(UBorn)
         
