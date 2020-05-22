@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-# import numpy.fft as nfft
-import scipy.fftpack as sfft
+"""
+@author: Nicolas Verrier
+"""
+
+from scipy.fftpack import fft2,ifft2,ifftshift
 import numpy as np
 import numba
 
@@ -91,13 +94,13 @@ def reconstruction(I, z, Lambda, pix):
         KX, KY = np.meshgrid(kx, ky)
 
         H = np.exp(-1j * z * np.pi * Lambda * (KX ** 2 + KY ** 2))
-        C11 = sfft.fft2(I) * H
-        Irecons = sfft.ifft2(C11)
+        C11 = fft2(I) * H
+        Irecons = ifft2(C11)
         return Irecons
     else:
         phaseQ = np.exp(1j*np.pi/(Lambda*z)*(X_m**2+Y_m**2))
-        C22 = sfft.fft2(I)*sfft.fft2(phaseQ)/nx
-        D22 = (sfft.ifft2(C22))
+        C22 = fft2(I)*fft2(phaseQ)/nx
+        D22 = (ifft2(C22))
         F22 = D22/1j
         Irecons=(F22)
         return Irecons
@@ -141,27 +144,27 @@ def unwrapping(PhiW, pix, approx=True):
     ky = np.linspace(ymin_m, ymax_m, ny) * pasv
 
     KX, KY = np.meshgrid(kx, ky)
-    KX = sfft.ifftshift(KX)
-    KY = sfft.ifftshift(KY)
+    KX = ifftshift(KX)
+    KY = ifftshift(KY)
     NormK = KX**2+KY**2
     NormK[0, 0] = 1/3*(NormK[0, 1]+NormK[1, 0]+NormK[1,1])
 
     # Phase jump management
     Zphi = np.exp(1j*PhiW)
-    Gradz_x = 2*1j*np.pi*sfft.ifft2(sfft.fft2(Zphi)*KX)
-    Gradz_y = 2*1j*np.pi*sfft.ifft2(sfft.fft2(Zphi)*KY)
+    Gradz_x = 2*1j*np.pi*ifft2(fft2(Zphi)*KX)
+    Gradz_y = 2*1j*np.pi*ifft2(fft2(Zphi)*KY)
     if approx is True:
-        Eq_x = sfft.fft2(np.conj(1j*Zphi)*Gradz_x)*KX/NormK
-        Eq_y = sfft.fft2(np.conj(1j*Zphi)*Gradz_y)*KY/NormK
-        PhiUW = np.real(1/(2*1j*np.pi)*sfft.ifft2(Eq_x+Eq_y))
+        Eq_x = fft2(np.conj(1j*Zphi)*Gradz_x)*KX/NormK
+        Eq_y = fft2(np.conj(1j*Zphi)*Gradz_y)*KY/NormK
+        PhiUW = np.real(1/(2*1j*np.pi)*ifft2(Eq_x+Eq_y))
     else:
-        Gradpw_x = 2*1j*np.pi*sfft.ifft2(sfft.fft2(PhiW)*KX)
-        Gradpw_y = 2*1j*np.pi*sfft.ifft2(sfft.fft2(PhiW)*KY)
+        Gradpw_x = 2*1j*np.pi*ifft2(fft2(PhiW)*KX)
+        Gradpw_y = 2*1j*np.pi*ifft2(fft2(PhiW)*KY)
         Gradk_x = 1/(2*np.pi)*(np.real(Gradz_x/(1j*Zphi))-Gradpw_x)
         Gradk_y = 1/(2*np.pi)*(np.real(Gradz_y/(1j*Zphi))-Gradpw_y)
-        q_x = sfft.fft2(Gradk_x)*KX/NormK
-        q_y = sfft.fft2(Gradk_y)*KY/NormK
-        kphi = np.real(1/(2*1j*np.pi)*sfft.ifft2(q_x+q_y))
+        q_x = fft2(Gradk_x)*KX/NormK
+        q_y = fft2(Gradk_y)*KY/NormK
+        kphi = np.real(1/(2*1j*np.pi)*ifft2(q_x+q_y))
         PhiUW = PhiW+2*np.pi*kphi
     return PhiUW
 

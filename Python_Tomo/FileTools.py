@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+"""
+@author: Nicolas Verrier
+"""
+
 import os
 from linecache import getline
 
