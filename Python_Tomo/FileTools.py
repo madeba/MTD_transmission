@@ -5,6 +5,7 @@
 
 import os
 from linecache import getline
+import numpy as np
 
 def lineinfile(filename):
     """
@@ -87,3 +88,29 @@ def SAVbin(image,chemin,dim):
     fid = open(nom_fichier,"w")
     image.tofile(fid)
     fid.close()
+    
+def ReadBornCube(Chemin,dimX,dimY,nb_img):
+    """
+    Opening raw values of UBorn files and transforming it as a data cube with (dimX,dimY,nb_img) dimensions
+
+    Parameters
+    ----------
+    Chemin : str
+        Path to the file containing raw data.
+    dimX : int
+        X dimension of the datacube.
+    dimY : int
+        Y dimension of the datacube.
+    nb_img : int
+        Number of images in the datacube.
+
+    Returns
+    -------
+    DataCube : float64
+        raw data rearranged as a datacube.
+
+    """
+    with open(Chemin,'r') as fid:
+        DataCube = np.fromfile(fid, np.float64)
+    DataCube = DataCube.reshape((nb_img,dimX,dimY)).transpose(1,2,0)
+    return DataCube
