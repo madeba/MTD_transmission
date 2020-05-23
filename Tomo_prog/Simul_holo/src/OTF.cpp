@@ -365,21 +365,22 @@ return CoordSpec;
 }
 */
 
-vector<Point2D> OTF::bFleur(){
+vector<Point2D> OTF::bFleur(short unsigned int const nbAxes){
 int Nmax=manipOTF.NXMAX;
 int dim_Uborn=manipOTF.dim_Uborn;
 vector<double> centre(dim_Uborn*dim_Uborn,0);
 Point2D ptInit(0,0,dim_Uborn);
 vector<Point2D> CoordSpec(manipOTF.nbHolo,ptInit);
-
-size_t nb=4;///controle du nombre de branches
+//vector<Point2D> *CoordSpec2=new vector<Point2D>(manipOTF.nbHolo);
+short unsigned int const nb=nbAxes;///controle du nombre de branches
 Point2D spec(0,0,dim_Uborn);
 
 //cout<<"Nxmax====="<<Nmax<<endl;
 double rcarre=Nmax*Nmax;
 int nbSpec=0;
  int num_holo=0;
-for(double theta=0;theta<2*M_PI;theta=theta+2*M_PI/manipOTF.nbHolo){
+ double const delta_theta=2*M_PI/manipOTF.nbHolo;
+for(double theta=0;theta<2*M_PI;theta=theta+delta_theta){
         //cout<<"num_holo="<<num_holo<<endl;
       //  cout<<"theta="<<theta<<endl;
          spec.x=(int)round(Nmax*cos(nb*theta)*cos(theta));
@@ -387,15 +388,15 @@ for(double theta=0;theta<2*M_PI;theta=theta+2*M_PI/manipOTF.nbHolo){
 
         if(spec.x*spec.x+spec.y*spec.y<=rcarre){
             nbSpec++;
-            centre[spec.coordI().cpt2D()]=1;
+            //centre[spec.coordI().cpt2D()]=1;//erreur exportation Coorspec si on laisse cette ligne
             CoordSpec[num_holo].x=round(spec.x);
             CoordSpec[num_holo].y=round(spec.y);
           //  cout<<"num_holo"<< num_holo<<", "<<CoordSpec[num_holo].dim2D<<endl;
             retropropag(spec);
-            if(num_holo>20 && num_holo<30){
+          /*  if(num_holo>20 && num_holo<30){
            cout<<"num_holo="<<num_holo<<" : specOTF=("<<spec.x<<","<<spec.y<<")"<<endl;
            cout<<" : CoordOTF=("<<CoordSpec[num_holo].x<<","<<CoordSpec[num_holo].y<<")"<<endl;
-            }
+            }*/
           //  cout<<"num_holoOTF="<<num_holo<<endl;
         }
         num_holo++;

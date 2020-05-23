@@ -86,8 +86,9 @@ int main( int argc, char** argv )
     cout<<"creation point 2D m1.nbHolo="<<m1.nbHolo<<endl;
     cout<<"------------------------Calcul OTF et objet convolué"<<endl;
     OTF mon_OTF(m1);//init OTF
+    short unsigned int const nbAxes=6;
+   CoordSpec2=mon_OTF.bFleur(nbAxes);//retrieve tabular of specular beam from class OTF & create 3D OTF;
     //mon_OTF.bFleur(CoordSpec2);//retrieve tabular of specular beam from class OTF & create 3D OTF;
-    mon_OTF.bFleur(CoordSpec2);//retrieve tabular of specular beam from class OTF & create 3D OTF;
    //for(int cpt=0;cpt<m1.nbHolo;cpt++)
      //   cout<<"main, cpt="<<cpt<<" : CoorSpec=("<<CoordSpec2[cpt].x<<","<<CoordSpec2[cpt].y<<")"<<endl;
     SAV3D_Tiff(mon_OTF.Valeur,"Re",m1.chemin_result+"OTF_Re.tif",m1.Tp_Tomo);
@@ -105,12 +106,14 @@ int main( int argc, char** argv )
     ///extract complex field from 3D spectrum
     cout<<"extraction hologramme"<<endl;
     for(int holo_numero=0; holo_numero<m1.nbHolo; holo_numero++){
-        cout<<"holo_numero="<<holo_numero<<endl;
+
         spec.x=CoordSpec2[holo_numero].x;//the old code use spec, so we convert OTF.centre to spec
         spec.y=CoordSpec2[holo_numero].y;
 
-
+       if(holo_numero<30){
+        cout<<"holo_numero="<<holo_numero<<endl;
        cout<<"main spec=("<<spec.x<<","<<spec.y<<")"<<endl;
+       }
         tabPosSpec[holo_numero]=(double)CoordSpec2[holo_numero].x; //save tab_posSpec to a format readable by Tomo_reconstruction
         tabPosSpec[holo_numero+m1.nbHolo]=(double)spec.y;
         int cpt2D=round(spec.y)*m1.dim_Uborn+round(spec.x);

@@ -57,6 +57,19 @@ manip::manip(unsigned short int dimROI)
     Tp_Tomo=Tp_Uborn*(2*NXMAX)/dim_final;
     Delta_f_tomo=1/(Tp_Tomo*dim_final);
     dimImg=to_string(dim_Uborn)+"x"+to_string(dim_Uborn)+"x"+to_string(nbHolo);
+      ///Effacer précédent résultatscar fonction d'enregistrement cumulative ("a+b")
+    Var2D dim2DHA={2*NXMAX,2*NXMAX};
+    //string tampon="/UBornfinal_Im.raw";
+    string tampon="/UBornfinal_Im"+dimImg+".raw";
+    string result=chemin_result+tampon;
+    cout<<"Effacement Uborn : "<<result<<endl;
+    if( remove(result.c_str())== 0 )
+        perror( "Fichier Ubornfinal_Im déjà effacé" );
+    // tampon="/UBornfinal_Re.raw";
+    tampon="/UBornfinal_Re"+dimImg+".raw";
+    result=chemin_result+tampon;
+    if( remove(result.c_str()) == 0 )
+        perror( "Fichier UBornfinal_Re déjà éffacé" );
 
     string sav_param=chemin_result+"/SAV_param_manip.txt";
     cout<<sav_param<<endl;

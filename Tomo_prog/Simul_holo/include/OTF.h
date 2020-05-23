@@ -33,7 +33,7 @@ class OTF{
 
        // std::vector<Var2D> bFleur();
 
-        std::vector<Point2D> bFleur();
+        std::vector<Point2D> bFleur(short unsigned int nbAxes);
         void bFleur(std::vector<Point2D> &CoordSpec);
         void bSpiral();
         void bSpiralNU();
