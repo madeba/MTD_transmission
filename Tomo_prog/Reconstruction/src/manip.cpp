@@ -32,9 +32,10 @@ manip::manip()
     lire_bin(chemin_result+"/parametres.raw",parametre,64,nbParam);
     NXMAX=parametre[0],NYMAX=parametre[0],NbAngle=parametre[1],rayon=parametre[2],dimROI=parametre[3],tailleTheoPixelHolo=parametre[4];
 
-
+    cout<<"NbAngle="<<NbAngle<<endl;
     cout<<"NXMAX="<<NXMAX<<endl;
     cout<<"rayon param=="<<rayon<<endl;
+    cout<<"dimROIparam="<<dimROI<<endl;
     cout<<"\n##################### INFO MANIP ##################\n"<<endl;
     n0=extract_val("N0",fic_cfg_manip);	//indice de l'huile
     NA=extract_val("NA",fic_cfg_manip);	//ouverture numerique de l'objectif? (celle du condenseur intervient sur la forme, la taille, du papillon)

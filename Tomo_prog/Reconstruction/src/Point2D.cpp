@@ -40,11 +40,11 @@ Point2D Point2D::coordI()
     return coordI;
 }
 
-Point2D Point2D::coordI2coordH()
+/*Point2D Point2D::coordI2coordH()
 {
     Point2D coordI(this->x+dim2D/2,-this->y+dim2D/2,dim2D);
     return coordI;
-}
+}*/
 
 void Point2D::decale(int decalx, int decaly)
 {

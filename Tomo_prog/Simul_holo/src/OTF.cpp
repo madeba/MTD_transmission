@@ -37,15 +37,21 @@ void OTF::retropropag(Point2D spec)
     //cout<<"rcarre"<<rcarre<<endl;
     if(rcarre-spec.x*spec.x-spec.y*spec.y<0)
           cout<<"problème : ki imaginaire"<<endl;
-    Point3D ki(spec,round(sqrt(rcarre-spec.x*spec.x-spec.y*spec.y)),dim_final);
+   // Point3D ki(spec,round(sqrt(rcarre-spec.x*spec.x-spec.y*spec.y)),dim_final);
+    Point3D ki(spec,sqrt(rcarre-spec.x*spec.x-spec.y*spec.y),dim_final);
     Point3D kobj(0,0,0,dim_final);
     Point3D kd(0,0,0,dim_final);//dim espace erronée mais sinon problème soustraction
 
-        for(kd.x=-Nmax; kd.x<=Nmax; kd.x++){
-            for(kd.y=-Nmax; kd.y<=Nmax; kd.y++){
-                kd.z=round(sqrt(rcarre-(kd.x)*(kd.x)-(kd.y)*(kd.y)));
-                if(round(kd.x*kd.x)+round(kd.y*kd.y)<fmcarre){//le spectre est dans un disque de rayon NXMAX
-                    kobj=kd-ki;
+        for(kd.x=-Nmax; kd.x<Nmax; kd.x++){
+            for(kd.y=-Nmax; kd.y<Nmax; kd.y++){
+
+                //kd.z=round(sqrt(rcarre-(kd.x)*(kd.x)-(kd.y)*(kd.y)));
+                if((kd.x*kd.x)+(kd.y*kd.y)<fmcarre){//le spectre est dans un disque de rayon NXMAX
+                    kd.z=sqrt(rcarre-(kd.x)*(kd.x)-(kd.y)*(kd.y));
+                        //kobj=kd-ki;
+                    kobj.z=round(kd.z-ki.z);
+                    kobj.y=kd.y-ki.y;
+                    kobj.x=kd.x-ki.x;
 
                     if(Valeur[kobj.coordI().cpt3D()].real()==0){
                     Valeur[kobj.coordI().cpt3D()].real(1);
@@ -53,6 +59,7 @@ void OTF::retropropag(Point2D spec)
                     nbPixEff++;
                     }
                     else{
+
                        // Valeur[kobj.coordI().cpt3D()].real(1+Valeur[kobj.coordI().cpt3D()].real());//supredon
                         nbPixRedon++;
                     }
@@ -379,7 +386,9 @@ Point2D spec(0,0,dim_Uborn);
 double rcarre=Nmax*Nmax;
 int nbSpec=0;
  int num_holo=0;
- double const delta_theta=2*M_PI/manipOTF.nbHolo;
+// double const delta_theta=2*M_PI/(manipOTF.nbHolo);
+//for(double theta=0;theta<2*M_PI;theta=theta+delta_theta){
+ double const delta_theta=2*M_PI/(manipOTF.nbHolo);
 for(double theta=0;theta<2*M_PI;theta=theta+delta_theta){
         //cout<<"num_holo="<<num_holo<<endl;
       //  cout<<"theta="<<theta<<endl;
@@ -407,7 +416,7 @@ for(double theta=0;theta<2*M_PI;theta=theta+delta_theta){
 return CoordSpec;
 //cout<<"nbspec="<<nbSpec<<endl;
 }
-
+/*
 void OTF::bFleur(vector<Point2D> &CoordSpec){
 int Nmax=manipOTF.NXMAX;
 int dim_Uborn=manipOTF.dim_Uborn;
@@ -416,31 +425,35 @@ Point2D ptInit(0,0,dim_Uborn);
 //vector<Point2D> CoordSpec(manipOTF.nbHolo,ptInit);
 
 size_t nb=4;///controle du nombre de branches
-Point2D spec(0,0,dim_Uborn);
+Point2D spec_H(0,0,dim_Uborn);
 
 //cout<<"Nxmax====="<<Nmax<<endl;
 double rcarre=Nmax*Nmax;
 int nbSpec=0;
  int num_holo=0;
-for(double theta=0;theta<2*M_PI;theta=theta+2*M_PI/manipOTF.nbHolo){
-        //cout<<"num_holo="<<num_holo<<endl;
-      //  cout<<"theta="<<theta<<endl;
-         spec.x=round(Nmax*cos(nb*theta)*cos(theta));
-         spec.y=round(Nmax*cos(nb*theta)*sin(theta));//arrondi trop tot?
+ int K_attenuation=1;
+  double const delta_theta=2*M_PI/(K_attenuation*manipOTF.nbHolo);
+for(double theta=0;theta<2*M_PI/K_attenuation;theta=theta+delta_theta){
+//for(double theta=0;theta<2*M_PI;theta=theta+2*M_PI/manipOTF.nbHolo){
+//cout<<"num_holo="<<num_holo<<endl;
+//cout<<"delta_theta"<<delta_theta<<endl;
+  //      cout<<"theta="<<theta<<endl;
+         spec_H.x=(Nmax-1)*cos(nb*theta)*cos(theta);
+         spec_H.y=(Nmax-1)*cos(nb*theta)*sin(theta);//arrondi trop tot?
 
-        if(spec.x*spec.x+spec.y*spec.y<=rcarre){
+       // if(spec_H.x*spec_H.x+spec_H.y*spec_H.y<=rcarre){
             nbSpec++;
-            centre[spec.coordI().cpt2D()]=1;
-            CoordSpec[num_holo].x=round(spec.x);
-            CoordSpec[num_holo].y=round(spec.y);
-          //  cout<<"num_holo"<< num_holo<<", "<<CoordSpec[num_holo].dim2D<<endl;
-            retropropag(spec);
-            if(num_holo>20 && num_holo<30){
-           cout<<"num_holo="<<num_holo<<" : specOTF=("<<spec.x<<","<<spec.y<<")"<<endl;
-           cout<<" : CoordOTF=("<<CoordSpec[num_holo].x<<","<<CoordSpec[num_holo].y<<")"<<endl;
-            }
+            centre[spec_H.coordI().cpt2D()]=1;
+            CoordSpec[num_holo].x=round(spec_H.x);
+            CoordSpec[num_holo].y=round(spec_H.y);
+
+            retropropag(spec_H);
+
+         //  cout<<"num_holo="<<num_holo<<" : specOTF=("<<spec_H.x<<","<<spec_H.y<<")"<<endl;
+          //cout<<" : CoordOTF=("<<CoordSpec[num_holo].x<<","<<CoordSpec[num_holo].y<<")"<<endl;
+
           //  cout<<"num_holoOTF="<<num_holo<<endl;
-        }
+      //  }
         num_holo++;
     }
 
@@ -449,4 +462,27 @@ for(double theta=0;theta<2*M_PI;theta=theta+2*M_PI/manipOTF.nbHolo){
 
 //cout<<"nbspec="<<nbSpec<<endl;
 }
+*/
+void OTF::bFleur(vector<Point2D> &CoordSpec, size_t const nbAxes){
+size_t Nmax=manipOTF.NXMAX;
+size_t dim_Uborn=manipOTF.dim_Uborn;
+vector<double> centre(dim_Uborn*dim_Uborn,0);
+Point2D ptInit(0,0,dim_Uborn);
+Point2D spec_H(0,0,dim_Uborn);
 
+double rcarre=Nmax*Nmax;
+size_t num_holo=0;
+int K_attenuation=1;
+double theta=0;
+double const delta_theta=2*M_PI/(K_attenuation*manipOTF.nbHolo);;
+
+for(num_holo=0;num_holo<manipOTF.nbHolo;num_holo++){
+    theta=delta_theta*num_holo;
+    spec_H.x=(Nmax-1)*cos(nbAxes*theta)*cos(theta);
+    spec_H.y=(Nmax-1)*cos(nbAxes*theta)*sin(theta);
+
+    CoordSpec[num_holo].x=round(spec_H.x);
+    CoordSpec[num_holo].y=round(spec_H.y);
+    retropropag(spec_H);
+    }
+}

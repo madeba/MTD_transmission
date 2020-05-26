@@ -63,9 +63,21 @@ int main(int argc, char *argv[])
         ///------Récupérer spéculaire dans le fichier binaire---
         //lire_bin(chemin_fichier,variable de stockage, type de donnée en bits (32,64...), nombre d'images 2D)
         double *TabPosSpec=new double[2*m1.NbAngle];
+        vector<double> centres(dimChpCplx.x*dimChpCplx.y);
+
+
         cout<<"chemin tomo test ="<<m1.chemin_result+"/tab_posSpec.raw"<<endl;
         cout<<"lecture posSpec"<<endl;
         lire_bin(m1.chemin_result+"/tab_posSpec.raw",TabPosSpec,64,2*m1.NbAngle);
+
+        for(int holo_numero=0;holo_numero<m1.NbAngle;holo_numero++)
+        {cout<<holo_numero<<endl;
+            cout<<"spec="<<TabPosSpec[holo_numero]<<","<<TabPosSpec[holo_numero+m1.NbAngle]<<")"<<endl;
+            cout<<"--------------------------"<<endl;
+        int cpt2D=round(TabPosSpec[holo_numero+m1.NbAngle])*dimChpCplx.x+round(TabPosSpec[holo_numero]);
+        centres[cpt2D]=holo_numero;//used save centres in a image file, for quick visualisation
+        }
+        SAV_Tiff2D(centres,m1.chemin_result+"centre_reconstruction.tif",1);
         ///--------------FFTW2D init----
         FFT_encaps  tf2D(dim2DUBorn);
         ///---Variable de dimensions (taille pixel, volume, zoom)-------------------
@@ -103,7 +115,8 @@ int main(int argc, char *argv[])
             UBornFinal3D[cpt].real(UBornFinal3D_Re[cpt]);
             UBornFinal3D[cpt].imag(UBornFinal3D_Im[cpt]);
         }
-        //SAV3D_Tiff(UBornFinal3D,"Im",m1.chemin_result+"/UBornfinal3D_Im.tif",tailleTheoPixelUborn*1000);
+        //Var3D dim_stack_holo={dim2DUBorn.x,dim2DUBorn.y,NbAngle};
+       // SAV3D_Tiff(UBornFinal3D,dim_stack_holo,"Im",m1.chemin_result+"/UBornfinal3D_Im.tif",tailleTheoPixelUborn*1000);
         delete[] UBornFinal3D_Re;delete[] UBornFinal3D_Im;
 
 
@@ -147,35 +160,34 @@ int main(int argc, char *argv[])
             if(bool_wisdom2D==0){
                 prepare_wisdom2D(dimChpCplx,tmp.c_str());
             }*/
-  auto start_part1 = std::chrono::system_clock::now();
+    auto start_part1 = std::chrono::system_clock::now();
 //#pragma omp parallel for
-        for(int cpt_angle=premier_plan; cpt_angle<NbAngle; cpt_angle++) //boucle sur tous les angles
+    for(int cpt_angle=premier_plan; cpt_angle<NbAngle; cpt_angle++) //boucle sur tous les angles
+    {
+        //récupérer spéculaire puis champ cplx depuis sauvegarde prétraitement
+        posSpec= {(int)TabPosSpec[cpt_angle],(int)TabPosSpec[NbAngle+cpt_angle]};
+
+        for(int cpt=0; cpt<NbPixU_Born; cpt++)
         {
-            //récupérer spéculaire puis champ cplx depuis sauvegarde prétraitement
-            posSpec={(int)TabPosSpec[cpt_angle],(int)TabPosSpec[NbAngle+cpt_angle]};
-
-            for(int cpt=0;cpt<NbPixU_Born;cpt++){
-                UBornFinal2D[cpt].real(UBornFinal3D[cpt+cpt_angle*NbPixU_Born].real()*mask_tukey2D[cpt]);
-                UBornFinal2D[cpt].imag(UBornFinal3D[cpt+cpt_angle*NbPixU_Born].imag()*mask_tukey2D[cpt]);
-            }
-            decal2DCplxGen(UBornFinal2D,UBorn2DFinalDecal, dim2DHA,NMAX);
+            UBornFinal2D[cpt].real(UBornFinal3D[cpt+cpt_angle*NbPixU_Born].real()*mask_tukey2D[cpt]);
+            UBornFinal2D[cpt].imag(UBornFinal3D[cpt+cpt_angle*NbPixU_Born].imag()*mask_tukey2D[cpt]);
+        }
+        decal2DCplxGen(UBornFinal2D,UBorn2DFinalDecal, dim2DHA,NMAX);
 //            #pragma omp single
-                 TF2Dcplx(UBorn2DFinalDecal,TF_UBorn_normI, tf2D, m1.tailleTheoPixelUborn);
+        TF2Dcplx(UBorn2DFinalDecal,TF_UBorn_normI, tf2D, m1.tailleTheoPixelUborn);
+        recal= {posSpec.x,posSpec.y};
+        ///recaler le spectre à la position du spéculaire (la variable est attendue ainsi par la fonction retropropag)
 
+        decal2DCplxGen(TF_UBorn_normI,TF_UBorn_normC,dim2DHA,recal);
+        SAVCplx(TF_UBorn_normC,"Re",m1.chemin_result+"TF_UBorn_208x208_normC.raw",t_float,"a+b");
+         SAVCplx(TF_UBorn_normI,"Re",m1.chemin_result+"TF_UBorn_208x208_normI.raw",t_float,"a+b");
+        if((cpt_angle-100*(cpt_angle/100))==0)
+            printf("cpt_angle=%i\n",cpt_angle);
+        //cout<<"POsSPec.x="<<posSpec.x<<"|PosSpec.y="<<posSpec.y<<endl;
+        //cout<<"TabPosSpec[cpt_angle]="<<TabPosSpec[cpt_angle]<<"|TabPosSpec[cpt_angle+NbAngle]"<<TabPosSpec[cpt_angle]<<endl;
 
-
-            recal={posSpec.x,posSpec.y};
-            ///recaler le spectre à la position du spéculaire (la variable est attendue ainsi par la fonction retropropag)
-
-            decal2DCplxGen(TF_UBorn_normI,TF_UBorn_normC,dim2DHA,recal);
-
-            if((cpt_angle-100*(cpt_angle/100))==0)
-                printf("cpt_angle=%i\n",cpt_angle);
-            //cout<<"POsSPec.x="<<posSpec.x<<"|PosSpec.y="<<posSpec.y<<endl;
-            //cout<<"TabPosSpec[cpt_angle]="<<TabPosSpec[cpt_angle]<<"|TabPosSpec[cpt_angle+NbAngle]"<<TabPosSpec[cpt_angle]<<endl;
-
-            retroPropag_Born(TF3D_PotObj, TF_UBorn_normC, sup_redon, dim_final, posSpec, decal3DTF, NMAX, m1.rayon, m1);  ///--Mapping 3D=retropropagation
-        }//fin de boucle for sur tous les angles
+        retroPropag_Born(TF3D_PotObj, TF_UBorn_normC, sup_redon, dim_final, posSpec, decal3DTF, NMAX, m1.rayon, m1);  ///--Mapping 3D=retropropagation
+    }//fin de boucle for sur tous les angles
   auto end_part1 = std::chrono::system_clock::now();
     auto elapsed_part1 = end_part1 - start_part1;
     std::cout <<"Temps total fft+retroprop= "<< elapsed_part1.count()/(pow(10,9)) << '\n';
@@ -205,7 +217,6 @@ int main(int argc, char *argv[])
         temps_final = clock ();
         temps_cpu = (temps_final - temps_initial) * 1e-6;
         printf("temps apres normalisation : %lf\n",temps_cpu);
-//        delete[] sup_redon;
         //SAV(TF3D_PotObj_Re, N_tab, "/home/aziz/Projet_tomo/Tomo_Images/TF2d_apres_masquage/TF3D_PotObj_Re_norm_avant.bin", float,"wb");
         //interp3D(TF3D_PotObj_Re,  dimVolX,dimVolX, dimVolX);  //////////////interpolation dans Fourier
         //interp3D(TF3D_PotObj_Im,  dimVolX,dimVolX, dimVolX);
@@ -243,6 +254,18 @@ int main(int argc, char *argv[])
         temps_final = clock ();
         temps_cpu = (temps_final - temps_initial) * 1e-6;
         printf("temps apres fftshift 3D: %f\n",temps_cpu);
+
+
+                ///------------------------ TF3D-------------------------------------
+
+        vector <complex<double >> PotObj_shift(N_tab);
+        Point3D dim3D(dim_final,dim_final,dim_final,dim_final);
+       // FFT_encaps tf3D_out(dim3D,m1.nbThreads);
+       // FFT_encaps tf3D_IN(dim3D,m1.nbThreads,1);
+        FFT_encaps tf3D_out(dim3D,m1.nbThreads,0);
+        cout<<"dim3D="<<dim3D.x<<endl;
+        high_resolution_clock::time_point t1v = high_resolution_clock::now();//temps vrai (pas CPU)
+
         printf("*******************************************\n");
         printf("TF3D...\n");
         printf("*******************************************\n");
@@ -269,17 +292,10 @@ int main(int argc, char *argv[])
                       cout<<"Calcul wisdom 3D (~8heures)"<<endl;
                       prepare_wisdom3D(dimVol,"/home/aziz/Projet_tomo/Tomo_Images/wisdom/test3D.wisdom");
                 }*/
-        ///------------------------ TF3D-------------------------------------
 
-        vector <complex<double >> PotObj_shift(N_tab);
-        Point3D dim3D(dim_final,dim_final,dim_final,dim_final);
-       // FFT_encaps tf3D_out(dim3D,m1.nbThreads);
-        FFT_encaps tf3D_IN(dim3D,m1.nbThreads,1);
+        TF3Dcplx_INV(tf3D_out.in, tf3D_out.out,TF3D_PotObj_shift , PotObj_shift, tf3D_out.p_backward_OUT,m1.Delta_fUborn);
+        //TF3Dcplx_Inplace_INV(TF3D_PotObj_shift , PotObj_shift,tf3D_IN,m1.Delta_fUborn);
 
-        high_resolution_clock::time_point t1v = high_resolution_clock::now();//temps vrai (pas CPU)
-
-        //TF3Dcplx_INV(tf3D_out.in, tf3D_out.out,TF3D_PotObj_shift , PotObj_shift, tf3D_out.p_backward_OUT,m1.Delta_fUborn);
-        TF3Dcplx_Inplace_INV(TF3D_PotObj_shift , PotObj_shift,tf3D_IN,m1.Delta_fUborn);
         vector<complex<double>>().swap(TF3D_PotObj_shift);
         high_resolution_clock::time_point t2v = high_resolution_clock::now();
         auto duration = duration_cast<microseconds>( t2v - t1v ).count();

@@ -57,10 +57,13 @@ complex<double> cteNormalisation(-1/(2*PI),0);
     for(fd.x=-Nmax; fd.x<=Nmax; fd.x++){
         for(fd.y=-Nmax; fd.y<=Nmax; fd.y++){
                 sdz=(double)sqrt(rcarre-(fd.x)*(fd.x)-(fd.y)*(fd.y))/(double)rayon;
-                fd.z=round(sqrt(rcarre-(fd.x)*(fd.x)-(fd.y)*(fd.y)));
-
+                //fd.z=round(sqrt(rcarre-(fd.x)*(fd.x)-(fd.y)*(fd.y)));
+                fd.z=sqrt(rcarre-(fd.x)*(fd.x)-(fd.y)*(fd.y));
                 if(fd.x*fd.x+fd.y*fd.y<fmcarre){
-                    fobj=fd-fi;
+                    //fobj=fd-fi;
+                    fobj.x=round(fd.x-fi.x);
+                    fobj.y=round(fd.y-fi.y);
+                    fobj.z=round(fd.z-fi.z);
                     fLat.set_xy(fd.x,fd.y);
                     TF_hologramme[fLat.coordI().cpt2D()]=cteNormalisation*ctePot2UBorn*cteInd2Pot/(sdz)*TF_vol3D[fobj.coordI().cpt3D()];
             }

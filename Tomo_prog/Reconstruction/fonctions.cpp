@@ -82,6 +82,8 @@ float extract_val(string token,  string chemin_fic)
             }
         }
     }
+      if(valeurMot.empty())
+        cout<<"mot_clé "<<token<<" inexistant dans le fichier "<<chemin_fic<<endl;
     fichier.close();
     return valeur;
 }
@@ -736,44 +738,44 @@ void InitTabCplx(nbCplx *z,int taille)//initailiser un tableau (taille totale="t
 
 int retroPropag_Born(vector <complex<double>> &TF3D_PotObj, vector<complex<double>> const &TF_Uborn_norm, vector<double>  &sup_redon, int dim_final, Var2D posSpec, Var3D decal3D, Var2D NMAX, double rayon, manip m1)
 {
-                        int fxmi=posSpec.x, fymi=posSpec.y;
-                        int fxm0=(fxmi-NMAX.x), fym0=(fymi-NMAX.x);//coordonnée dans l'image2D centrée (xm0,ym0)=(0,0)=au centre de l'image
-                        int points_faux=0;
-                        //rayon=rayon;
-                        int dimVolX=round(dim_final), dimPlanFinal=round(dim_final*dim_final);
-                        float n0=m1.n0, kv=2*PI/m1.lambda0, k0=kv*n0;
+    int fxmi=posSpec.x, fymi=posSpec.y;
+    cout<<"fi : "<<fxmi<<","<<fymi<<endl;
+    int fxm0=(fxmi-NMAX.x), fym0=(fymi-NMAX.x);//coordonnée dans l'image2D centrée (xm0,ym0)=(0,0)=au centre de l'image
+    int points_faux=0;
+    //rayon=rayon;
+    int dimVolX=round(dim_final), dimPlanFinal=round(dim_final*dim_final);
+    float n0=m1.n0, kv=2*PI/m1.lambda0, k0=kv*n0;
 
-                                //création de variable pou-9r éviter N calculs dans la boucle sur le volume 3D
-                                int cptPot=0; //indice tableau 1d des données du potentiel3D
-                                double cteNorm=-2*PI;
-                                double r2=rayon*rayon, fzm0, fzm0_carre = rayon*rayon-fxm0*fxm0-fym0*fym0;
-                                double norm_altitude=1/rayon;//normaliser fdz pour passer en  sdz;
+    //création de variable pou-9r éviter N calculs dans la boucle sur le volume 3D
+    int cptPot=0; //indice tableau 1d des données du potentiel3D
+    double cteNorm=-2*PI;
+    double r2=rayon*rayon, fzm0, fzm0_carre = rayon*rayon-fxm0*fxm0-fym0*fym0;
+    double norm_altitude=1.0/rayon;//normaliser fdz pour passer en  sdz;
 
-                                if(round(fzm0_carre)>-1){
+    if(fzm0_carre>=0){
+        fzm0=sqrt(fzm0_carre);
+        int NMAX_CARRE=NMAX.x*NMAX.x;
 
-                                        fzm0=sqrt(fzm0_carre);
-                                        int NMAX_CARRE=NMAX.x*NMAX.x;
+        complex<double> cteUb2Pot(0,k0/PI);//
+        #pragma omp parallel for
+        for (int fdy = -NMAX.y; fdy < NMAX.y; fdy++){   //on balaye le champ Uborn2D en x , origine (0,0) de l'image au milieu
+            int fdy_carre=fdy*fdy;
+            for (int fdx = -NMAX.x; fdx < NMAX.x; fdx++){   //on balaye l'image 2D en y, centre au milieu
+                int cpt=(fdy+NMAX.y)*2*NMAX.x+fdx+NMAX.x;//calcul du cpt du tableau 1D de l'image 2D
+                if(fdx*fdx+fdy_carre<NMAX_CARRE){   //ne pas depasser l'ouverture numérique pour 1 hologramme
+                    double fdz_carre=r2-fdx*fdx-fdy_carre; //altitude au carré des données
+                    double koz=round(sqrt(fdz_carre)-fzm0);
+                    double sdz=sqrt(rayon*rayon-fdx*fdx-fdy*fdy)*norm_altitude;
+                    double altitude=(koz+decal3D.z)*dimPlanFinal; //donne n'importequoi sans l'arrondi sur koz!!
 
-                                        complex<double> cteUb2Pot(0,k0/PI);//
-                                        #pragma omp parallel for
-                                        for (int fdy = -NMAX.y; fdy < NMAX.y; fdy++) { //on balaye le champ Uborn2D en x , origine (0,0) de l'image au milieu
-                                                int fdy_carre=fdy*fdy;
-                                                for (int fdx = -NMAX.x; fdx < NMAX.x; fdx++) { //on balaye l'image 2D en y, centre au milieu
-                                                        int cpt=(fdy+NMAX.y)*2*NMAX.x+fdx+NMAX.x;//calcul du cpt du tableau 1D de l'image 2D
-                                                        if(fdx*fdx+fdy_carre<NMAX_CARRE) { //ne pas depasser l'ouverture numérique pour 1 hologramme
-                                                                double fdz_carre=r2-fdx*fdx-fdy_carre; //altitude au carré des données
-                                                                double koz=round(sqrt(fdz_carre)-fzm0);
-                                                                double sdz=sqrt(rayon*rayon-fdx*fdx-fdy*fdy)*norm_altitude;
-                                                                double altitude=(koz+decal3D.z)*dimPlanFinal; //donne n'importequoi sans l'arrondi sur koz!!
-
-                                                                cptPot=(-fxm0+fdx+decal3D.x)+(-fym0+fdy+decal3D.y)*dimVolX+round(altitude);//indice du tableau 1D du volume 3D
-                                                                TF3D_PotObj[cptPot]+=cteUb2Pot*cteNorm*sdz*TF_Uborn_norm[cpt];
-                                                                sup_redon[cptPot]+=1;//pour calculer le support
-                                                        } else
-                                                                points_faux++;
-                                                }
-                                        }
-                                }
+                    cptPot=(-fxm0+fdx+decal3D.x)+(-fym0+fdy+decal3D.y)*dimVolX+round(altitude);//indice du tableau 1D du volume 3D
+                    TF3D_PotObj[cptPot]+=cteUb2Pot*cteNorm*sdz*TF_Uborn_norm[cpt];
+                    sup_redon[cptPot]+=1;//pour calculer le support
+                }
+                else points_faux++;
+            }
+        }
+    }
 }
 
 double max(double *entree, int tailleTab)
@@ -1662,7 +1664,7 @@ void SAVCplx(std::vector<complex<double> > var_sav, string partie, std::string c
 {        //double* var_sav = &v[0];
         unsigned int cpt;
         unsigned int NbPix=var_sav.size();
-        cout<<"taille volume="<<NbPix<<endl;
+       // cout<<"taille volume="<<NbPix<<endl;
         FILE *fichier_ID;
         fichier_ID= fopen(chemin.c_str(), options);
         if(fichier_ID==0)
@@ -1854,6 +1856,97 @@ void SAV3D_Tiff(vector<double> var_sav, string chemin, double taille_pixel)
 
     TIFFClose(out);
 }
+void SAV3D_Tiff(vector<complex <double>> var_sav, Var3D dim, string partie, string chemin, double taille_pixel)
+{
+//    int dim=round(std::pow(var_sav.size(), 1.0/3.0));
+    uint32 image_width, image_height, dimz;
+    float xres, yres;
+    uint16 spp, bpp, photo, res_unit,zpage;
+    TIFF *out;
+    size_t x, y, z;
+    float buffer2D[dim.x * dim.y];
+    out = TIFFOpen(chemin.c_str(), "w");
+    if (!out)
+            fprintf (stderr, "Can't open  for writing\n");
+    image_width = dim.x;
+    image_height = dim.y;
+  //  dimz=dim.z;
+    spp = 1; /* Samples per pixel */
+    bpp = 32; /* Bits per sample */
+   // photo = PHOTOMETRIC_MINISBLACK;
+   size_t num_page=0;
+    for(num_page = 0; num_page < dim.z; num_page++){//z=page
+
+      int nbPix_plan=num_page*dim.x*dim.y;
+      ///reel
+      if(partie=="Re" || partie=="re"){
+      //  #pragma omp parallel for private(y)
+        for (y = 0; y < dim.y; y++){
+          size_t num_lgn=y*dim.x;
+          for(x = 0; x < dim.x; x++){
+            buffer2D[num_lgn + x] = (float)var_sav[num_lgn + x+nbPix_plan].real();
+          }
+        }
+      }
+           ///imag
+      else{
+        if(partie=="Im" || partie=="im"){
+        //  #pragma omp parallel for private(y)
+          for (y = 0; y < dim.y; y++){
+            size_t num_lgn=y*dim.x;
+              for(x = 0; x < dim.x; x++){
+                buffer2D[num_lgn + x] = (float)var_sav[num_lgn + x+nbPix_plan].imag();
+              }
+            }
+        }
+        else
+          cout<<"Partie non identifiée : Re || re, Im, || im"<<endl;
+       }
+
+
+
+ //z=page
+        TIFFSetField(out, TIFFTAG_IMAGEWIDTH, image_width / spp);
+        //TIFFSetField(out, TIFFTAG_COMPRESSION, LZW_SUPPORT);
+        TIFFSetField(out, TIFFTAG_IMAGELENGTH, image_height);
+        TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, bpp);
+        TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, spp);
+        TIFFSetField(out, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+       // TIFFSetField(out, TIFFTAG_PHOTOMETRIC, photo);
+        TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_BOTLEFT);
+        TIFFSetField (out, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP); //image en Floating point
+        /* It is good to set resolutions too (but it is not nesessary) */
+        xres = yres = 0.01/taille_pixel; //nbpixel par resunit (par centimetre, on multiplie par 0.01 pour tout passer en mètre)
+        res_unit = RESUNIT_CENTIMETER;
+        TIFFSetField(out, TIFFTAG_XRESOLUTION, xres);
+        TIFFSetField(out, TIFFTAG_YRESOLUTION, yres);
+        TIFFSetField(out, TIFFTAG_RESOLUTIONUNIT, res_unit);
+        /* We are writing single page of the multipage file */
+        TIFFSetField(out, TIFFTAG_SUBFILETYPE, FILETYPE_PAGE);
+        /* Set the page number */
+        TIFFSetField(out, TIFFTAG_PAGENUMBER, num_page, dim.z);
+//auto start_tiff = std::chrono::system_clock::now();
+
+
+
+        for (y = 0; y < image_height; y++){//écriture d'une page numérotée num_page, ligne par ligne (y).
+            TIFFWriteScanline(out, &buffer2D[y * image_width], y, 0);
+       }
+             // auto end_tiff = std::chrono::system_clock::now();
+  //  auto elapsed_tiff = end_tiff - start_tiff;
+
+      //  cout<<"numpage="<<num_page<<endl;
+
+ //   std::cout <<"Temps ecriture 1 plan tiff= "<< elapsed_tiff.count()/(pow(10,9)) << '\n';
+
+        TIFFWriteDirectory(out);
+
+    }
+
+
+    TIFFClose(out);
+}
+
 
 void SAV3D_Tiff(vector<complex <double>> var_sav, string partie, string chemin, double taille_pixel)
 {

@@ -43,7 +43,7 @@ FFT_encaps::FFT_encaps(Point3D dim,size_t nbThreads, bool b_inPlace)
     }
     else{
     //int isWisdomOK=import_wisdom("/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_config/Wisdom/wisdom3D_512_c2c_double_backward_PATIENT_inplace_i5-3550.txt");
-    int isWisdomOK=import_wisdom("/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_config/Wisdom/wisdom3D_512_c2c_double_backward_EXHAUSTIVE_inplace_i5-3550.txt");
+    int isWisdomOK=import_wisdom("/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_config/Wisdom/wisdom3D_512_c2c_double_backward_EXHAUSTIVE_inplace_4Thrd_i5-3550.txt");
     cout<<"isWisdomOk="<<isWisdomOK<<endl;
     in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
     //out=nullptr;

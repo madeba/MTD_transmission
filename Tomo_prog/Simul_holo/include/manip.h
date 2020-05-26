@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <stdint.h>
 struct manip {
 
         double NAObj,NACond; //ouverture numérique objectif et condenseur
@@ -10,10 +11,10 @@ struct manip {
         double R_EwaldPix; //Rayon de la sphere d'Ewald en pixel
         double R_EwaldMet; //Rayon de la sphere d'Ewald métrique
         double lambda_v;   //longueur d'onde dans levide
-        int NXMAX;      //fréquence spatiale maximum enregistrée par le miscrocope en pixel
-        int NXMAX_cond;
-        size_t nbHolo;
-        unsigned short int dimROI_Cam;
+        uint16_t NXMAX;      //fréquence spatiale maximum enregistrée par le miscrocope en pixel
+        uint16_t NXMAX_cond;
+        uint16_t nbHolo;
+        uint16_t dimROI_Cam, nbAxesRosace;
         double theta_max;  //angle de collection max de l'objectif
         double f_tube,f_obj,Rf;
         double Gt;         //grandissemen total

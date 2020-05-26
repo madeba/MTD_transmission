@@ -34,6 +34,11 @@ Point3D::~Point3D()
 {
     //dtor
 }
+void Point3D::round3D(){
+this->x=round(x);
+this->y=round(y);
+this->z=round(z);
+}
 
 int Point3D::get_dim3D()
 {

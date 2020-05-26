@@ -88,6 +88,7 @@ void prepare_wisdom3D(Var3D dim, char *chemin);
 void SAV2(double *var_sav, int NbPix2D, string chemin, enum PRECISION precision, char options[]);
 void SAVCplx(std::vector<complex<double> > var_sav, string partie, std::string chemin, enum PRECISION precision, char options[]);
 void SAV3D_Tiff(vector<complex <double>> var_sav, string partie, string chemin, double taille_pixel);
+void SAV3D_Tiff(vector<complex <double>> var_sav, Var3D dim, string partie, string chemin, double taille_pixel);
 void SAV3D_Tiff(vector<double> var_sav, string chemin, double taille_pixel);
 void SAV_Tiff2D(double *var_sav, string chemin, int dim);
 

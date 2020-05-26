@@ -25,6 +25,7 @@ manip::manip(unsigned short int dimROI)
 
     nbHolo=extract_val("NB_HOLO",fic_cfg_manip);
     cout<<"\n##################### INFO MANIP ##################\n"<<endl;
+    nbAxesRosace=extract_val("NB_AXES_FLEUR",fic_cfg_manip);//indice de l'huile
     n0=extract_val("N0",fic_cfg_manip);//indice de l'huile
     NACond=extract_val("NA_COND",fic_cfg_manip);
     NAObj=extract_val("NA_OBJ",fic_cfg_manip);	//ouverture numerique de l'objectif? (celle du condenseur intervient sur la forme, la taille, du papillon)
@@ -68,6 +69,7 @@ manip::manip(unsigned short int dimROI)
     // tampon="/UBornfinal_Re.raw";
     tampon="/UBornfinal_Re"+dimImg+".raw";
     result=chemin_result+tampon;
+     cout<<"Effacement Uborn : "<<result<<endl;
     if( remove(result.c_str()) == 0 )
         perror( "Fichier UBornfinal_Re déjà éffacé" );
 

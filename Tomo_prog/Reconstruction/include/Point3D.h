@@ -29,6 +29,7 @@ class Point3D{
         Point3D coordH();
         int get_dim3D();
         Point3D sym_xoz();
+        void round3D();
         Point3D operator-(Point3D const &Pt2);///const & permet d'éviter une copie mais rend non modifiable
 
     protected:
