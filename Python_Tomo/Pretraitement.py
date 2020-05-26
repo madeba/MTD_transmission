@@ -132,4 +132,3 @@ fidParams.close()
 fidRe.close()
 fidIm.close()
 print(f"Pre-Processing time for {cpt_exist-1} holograms: {np.round(time.time() - start_time,decimals=2)} seconds")
-
