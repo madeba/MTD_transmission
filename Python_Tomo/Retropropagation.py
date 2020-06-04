@@ -6,7 +6,6 @@
 from linecache import getline
 from scipy.fftpack import fftn,ifftn,fftshift
 import numpy as np
-import numba
 
 def ReadBornCube(Chemin,dimX,dimY,nb_img):
     """
@@ -87,15 +86,15 @@ def Calc_fd(Nmax,REwald):
         Ordonnae of the filtered coordinate.
 
     """
-    dy, dx, _ = np.meshgrid(np.arange(-Nmax,Nmax+1), np.arange(-Nmax,Nmax+1), np.arange(-Nmax,Nmax+1))
+    dy, dx, _ = np.meshgrid(np.arange(-Nmax,Nmax), np.arange(-Nmax,Nmax), np.arange(-Nmax,Nmax))
     Mask = dx**2+dy**2 < Nmax**2
     dxm = dx[Mask]
     dym = dy[Mask]
-    dzm = np.round(2*np.sqrt(REwald**2 - dxm**2 - dym**2))
-    sdzm = 2*np.sqrt(REwald**2 - dxm**2 - dym**2) / REwald
-    fdm =  np.array([2*dym ,2*dxm, dzm])
+    dzm = np.round(np.sqrt(REwald**2 - dxm**2 - dym**2))
+    sdzm = np.sqrt(REwald**2 - dxm**2 - dym**2) / REwald
+    fdm =  np.array([dym ,dxm, dzm])
     return fdm, sdzm, dxm, dym
-@numba.jit(nopython=True)
+
 def decal_TF_holo(TF_holo,decal,P_holo):
     """
     Shifting the holograms according to illumination frequency
@@ -116,28 +115,16 @@ def decal_TF_holo(TF_holo,decal,P_holo):
 
     """
     TF_holo_shift = np.zeros_like(TF_holo)
-
     decal[0] = decal[0]%P_holo
     decal[1] = decal[1]%P_holo
-
     if decal[0] < 0 : decal[0] +=P_holo
-
     if decal[1] < 0 : decal[1] +=P_holo
-
-     
     TF_holo_shift[decal[0]:,decal[1]:] = TF_holo[0:P_holo-decal[0], 0:P_holo-decal[1]]  
-    TF_holo_shift[:decal[0],:decal[1]]   = TF_holo[P_holo-decal[0]:, P_holo-decal[1]:]
-
+    TF_holo_shift[:decal[0],:decal[1]] = TF_holo[P_holo-decal[0]:, P_holo-decal[1]:]
     TF_holo_shift[decal[0]:,:decal[1]] = TF_holo[0:P_holo-decal[0], P_holo-decal[1]:]
     TF_holo_shift[:decal[0],decal[1]:] = TF_holo[P_holo-decal[0]:, 0:P_holo-decal[1]]
-    # TF_holo = np.roll(TF_holo, decal[0]-P_holo, axis=0)
-    # TF_holo = np.roll(TF_holo, decal[1]-P_holo, axis=1)
-    
-    # TF_holo_shift = TF_holo
-   
     return TF_holo_shift
 
-# @numba.jit(nopython=True)
 def calc_tf_calotte(TF_holo,fd_m, sdz_m, dx_m, dy_m,P,P_holo,Nmax,k_inc,R_Ewald,lambda_v,n0):
     """
     Calculation of the cap of sphere
@@ -165,7 +152,7 @@ def calc_tf_calotte(TF_holo,fd_m, sdz_m, dx_m, dy_m,P,P_holo,Nmax,k_inc,R_Ewald,
     R_Ewald : float
         Ewald sphere radius.
     lambda_v : float
-        Wavelength in vaccum of the illumination source.
+        Wavelength in vacuum of the illumination source.
     n0 : float
         Refractive index of the immersion medium.
 
@@ -188,7 +175,8 @@ def calc_tf_calotte(TF_holo,fd_m, sdz_m, dx_m, dy_m,P,P_holo,Nmax,k_inc,R_Ewald,
     ctePot2UBorn  =  np.complex(0,-np.pi/k0)
     cteNormalisation = np.complex(-1/(2*np.pi),0)
 
-    fobj_m = (np.round(fd_m)-np.round(fi[:,np.newaxis]*2)).astype(int)
+    fobj_m = (np.round(fd_m)-np.round(fi[:,np.newaxis])).astype(int)
+    # print(f"Vecteur Objet de dimension : {fobj_m.shape}")
 
     TF_vol3D[fobj_m[0,:],fobj_m[1,:],fobj_m[2,:]] = TF_holo[dx_m+Nmax,dy_m+Nmax] * sdz_m
     
@@ -197,7 +185,7 @@ def calc_tf_calotte(TF_holo,fd_m, sdz_m, dx_m, dy_m,P,P_holo,Nmax,k_inc,R_Ewald,
 
     return TF_vol3D,mask_calotte
 
-def retropropagation(holo_pile,SpecCoord,Nmax,R_Ewald,lambda_v,n0,P,P_holo,Tp_Tomo,dim_Uborn,Delta_f_Uborn):
+def retropropagation(holo_pile,nb_holo,SpecCoord,Nmax,R_Ewald,lambda_v,n0,P,P_holo,Tp_Tomo,dim_Uborn,Delta_f_Uborn):
     """
     Retropropagation algorithm
 
@@ -236,25 +224,21 @@ def retropropagation(holo_pile,SpecCoord,Nmax,R_Ewald,lambda_v,n0,P,P_holo,Tp_To
         3D OTF.
         
     """
-    nb_holo = holo_pile.shape[2]
+    if nb_holo>holo_pile.shape[2]:
+        nb_holo = holo_pile.shape[2]
 
     TF_vol = np.zeros(shape=(P,P,P),dtype=complex)
     mask_sum = np.zeros(shape=(P,P,P),dtype=int) # changer pour OTF_filling
-    
     fd_m, sdz_m, dx_m, dy_m = Calc_fd(Nmax,R_Ewald)
         
-    for i in range(10):
+    for i in range(nb_holo):
         k_inc = np.array([SpecCoord[1,i], SpecCoord[0,i]])
-        TF_holo_shift_r = fftshift(fftn(holo_pile[:,:,i]/(Delta_f_Uborn**2*Nmax**2))) # Nmax !
-        decal = np.round(-np.array([-k_inc[1]+dim_Uborn/2, -k_inc[0]+dim_Uborn/2])).astype(int)
+        TF_holo_shift_r = fftshift(fftn(holo_pile[:,:,i]))/(Delta_f_Uborn**2*Nmax**2) # Nmax !
+        decal = np.round(np.array([-k_inc[1]+dim_Uborn/2, -k_inc[0]+dim_Uborn/2])).astype(int)
         TF_holo_r = decal_TF_holo(TF_holo_shift_r,decal,P_holo)
         TF_calotte,mask_calotte = calc_tf_calotte(TF_holo_r, fd_m, sdz_m, dx_m, dy_m, P, P_holo, Nmax, k_inc, R_Ewald, lambda_v, n0)
-
         TF_vol += TF_calotte
         mask_sum += mask_calotte
-
-    TF_vol[mask_sum !=0] = TF_vol[mask_sum!=0] / mask_sum[mask_sum!=0]    
-
+    TF_vol[mask_sum !=0] = TF_vol[mask_sum!=0] / mask_sum[mask_sum!=0]
     f_recon = fftshift(ifftn(TF_vol))/(Tp_Tomo**3)
     return f_recon, TF_vol, mask_sum
-
