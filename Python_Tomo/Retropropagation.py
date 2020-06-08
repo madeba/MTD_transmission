@@ -125,12 +125,16 @@ def decal_TF_holo(TF_holo,decal,P_holo):
     TF_holo_shift[:decal[0],decal[1]:] = TF_holo[P_holo-decal[0]:, 0:P_holo-decal[1]]
     return TF_holo_shift
 
-def calc_tf_calotte(TF_holo,fd_m, sdz_m, dx_m, dy_m,P,P_holo,Nmax,k_inc,R_Ewald,lambda_v,n0):
+def calc_tf_calotte(TF_vol3D,mask_calotte,TF_holo,fd_m, sdz_m, dx_m, dy_m,P,P_holo,Nmax,k_inc,R_Ewald,lambda_v,n0):
     """
     Calculation of the cap of sphere
 
     Parameters
     ----------
+    TF_vol3D : complex128
+        3D Fourier transform of the object.
+    mask_calotte : int32
+        3D Mask corresponding to the OTF.    
     TF_holo : complex128
         2D Fourier transform of the hologram.
     fd_m : int
@@ -164,9 +168,7 @@ def calc_tf_calotte(TF_holo,fd_m, sdz_m, dx_m, dy_m,P,P_holo,Nmax,k_inc,R_Ewald,
         3D Mask corresponding to the OTF.
 
     """
-    TF_vol3D = np.zeros(shape=(P,P,P),dtype=complex)
-    mask_calotte = np.zeros_like(TF_vol3D,dtype=bool)
-    fi = np.array([k_inc[0], k_inc[1], (np.sqrt(R_Ewald**2 - k_inc[0]**2 - k_inc[1]**2))])
+    fi = np.array([k_inc[0], k_inc[1], np.round(np.sqrt(R_Ewald**2 - k_inc[0]**2 - k_inc[1]**2))])
     
     kv = 2*np.pi/lambda_v
     k0 =  kv * n0
@@ -175,14 +177,10 @@ def calc_tf_calotte(TF_holo,fd_m, sdz_m, dx_m, dy_m,P,P_holo,Nmax,k_inc,R_Ewald,
     ctePot2UBorn  =  np.complex(0,-np.pi/k0)
     cteNormalisation = np.complex(-1/(2*np.pi),0)
 
-    fobj_m = (np.round(fd_m)-np.round(fi[:,np.newaxis])).astype(int)
-    # print(f"Vecteur Objet de dimension : {fobj_m.shape}")
-
-    TF_vol3D[fobj_m[0,:],fobj_m[1,:],fobj_m[2,:]] = TF_holo[dx_m+Nmax,dy_m+Nmax] * sdz_m
+    fobj_m = (fd_m-(fi[:,np.newaxis])).astype(int)
+    TF_vol3D[fobj_m[0,:],fobj_m[1,:],fobj_m[2,:]] += TF_holo[dx_m+Nmax,dy_m+Nmax]*sdz_m/(cteInd2Pot*ctePot2UBorn*cteNormalisation)
+    mask_calotte[fobj_m[0,:],fobj_m[1,:],fobj_m[2,:]] += 1
     
-    mask_calotte[fobj_m[0,:],fobj_m[1,:],fobj_m[2,:]] = 1
-    TF_vol3D /= (cteInd2Pot*ctePot2UBorn*cteNormalisation)
-
     return TF_vol3D,mask_calotte
 
 def retropropagation(holo_pile,nb_holo,SpecCoord,Nmax,R_Ewald,lambda_v,n0,P,P_holo,Tp_Tomo,dim_Uborn,Delta_f_Uborn):
@@ -219,7 +217,7 @@ def retropropagation(holo_pile,nb_holo,SpecCoord,Nmax,R_Ewald,lambda_v,n0,P,P_ho
     f_recon : complex128
         Reconstructed 3D object.
     TF_vol : complex128
-        3D Fourier transform of the object masked accordinf to experimental parameters.
+        3D Fourier transform of the object masked according to experimental parameters.
     mask_sum : int32
         3D OTF.
         
@@ -228,17 +226,17 @@ def retropropagation(holo_pile,nb_holo,SpecCoord,Nmax,R_Ewald,lambda_v,n0,P,P_ho
         nb_holo = holo_pile.shape[2]
 
     TF_vol = np.zeros(shape=(P,P,P),dtype=complex)
-    mask_sum = np.zeros(shape=(P,P,P),dtype=int) # changer pour OTF_filling
+    mask_sum = np.zeros(shape=(P,P,P),dtype=int)
     fd_m, sdz_m, dx_m, dy_m = Calc_fd(Nmax,R_Ewald)
         
     for i in range(nb_holo):
         k_inc = np.array([SpecCoord[1,i], SpecCoord[0,i]])
-        TF_holo_shift_r = fftshift(fftn(holo_pile[:,:,i]))/(Delta_f_Uborn**2*Nmax**2) # Nmax !
-        decal = np.round(np.array([-k_inc[1]+dim_Uborn/2, -k_inc[0]+dim_Uborn/2])).astype(int)
+        TF_holo_shift_r = fftshift(fftn(holo_pile[:,:,i]))/(Delta_f_Uborn**2*Nmax**2)
+        decal = np.array([k_inc[1], k_inc[0]]).astype(int)
         TF_holo_r = decal_TF_holo(TF_holo_shift_r,decal,P_holo)
-        TF_calotte,mask_calotte = calc_tf_calotte(TF_holo_r, fd_m, sdz_m, dx_m, dy_m, P, P_holo, Nmax, k_inc, R_Ewald, lambda_v, n0)
-        TF_vol += TF_calotte
-        mask_sum += mask_calotte
+        TF_vol,mask_sum = calc_tf_calotte(TF_vol,mask_sum,TF_holo_r, fd_m, sdz_m, dx_m, dy_m, P, P_holo, Nmax, k_inc, R_Ewald, lambda_v, n0)
     TF_vol[mask_sum !=0] = TF_vol[mask_sum!=0] / mask_sum[mask_sum!=0]
     f_recon = fftshift(ifftn(TF_vol))/(Tp_Tomo**3)
+    mask_sum = fftshift(mask_sum)
+    f_recon = fftshift(f_recon,[0,1])
     return f_recon, TF_vol, mask_sum
