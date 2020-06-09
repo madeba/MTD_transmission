@@ -739,8 +739,9 @@ void InitTabCplx(nbCplx *z,int taille)//initailiser un tableau (taille totale="t
 int retroPropag_Born(vector <complex<double>> &TF3D_PotObj, vector<complex<double>> const &TF_Uborn_norm, vector<double>  &sup_redon, int dim_final, Var2D posSpec, Var3D decal3D, Var2D NMAX, double rayon, manip m1)
 {
     int fxmi=posSpec.x, fymi=posSpec.y;
-    cout<<"fi : "<<fxmi<<","<<fymi<<endl;
-    int fxm0=(fxmi-NMAX.x), fym0=(fymi-NMAX.x);//coordonnée dans l'image2D centrée (xm0,ym0)=(0,0)=au centre de l'image
+  //  cout<<"fi : "<<fxmi<<","<<fymi<<endl;
+    int fxm0=(fxmi-NMAX.x), fym0=(fymi-NMAX.x);//coordonnée dans le repère humain (xm0,ym0)=(0,0)=au centre de l'image
+   // cout<<"fm0 : "<<fxm0<<","<<fym0<<endl;
     int points_faux=0;
     //rayon=rayon;
     int dimVolX=round(dim_final), dimPlanFinal=round(dim_final*dim_final);
@@ -752,17 +753,24 @@ int retroPropag_Born(vector <complex<double>> &TF3D_PotObj, vector<complex<doubl
     double r2=rayon*rayon, fzm0, fzm0_carre = rayon*rayon-fxm0*fxm0-fym0*fym0;
     double norm_altitude=1.0/rayon;//normaliser fdz pour passer en  sdz;
 
-    if(fzm0_carre>=0){
+    if(round(fzm0_carre)>=0){
         fzm0=sqrt(fzm0_carre);
         int NMAX_CARRE=NMAX.x*NMAX.x;
 
         complex<double> cteUb2Pot(0,k0/PI);//
-        #pragma omp parallel for
+
+        //#pragma omp parallel for
+       // cout<<"NMAX.y="<<NMAX.y<<endl;
         for (int fdy = -NMAX.y; fdy < NMAX.y; fdy++){   //on balaye le champ Uborn2D en x , origine (0,0) de l'image au milieu
+            //cout<<"-----------------------"<<fdy<<endl;
+              // cout<<"fdy haut="<<fdy<<endl;
             int fdy_carre=fdy*fdy;
             for (int fdx = -NMAX.x; fdx < NMAX.x; fdx++){   //on balaye l'image 2D en y, centre au milieu
                 int cpt=(fdy+NMAX.y)*2*NMAX.x+fdx+NMAX.x;//calcul du cpt du tableau 1D de l'image 2D
                 if(fdx*fdx+fdy_carre<NMAX_CARRE){   //ne pas depasser l'ouverture numérique pour 1 hologramme
+                  //  cout<<"---------------------"<<endl;
+                  //  cout<<"fi,fy="<<fxm0<<","<<fym0<<endl;
+                 //   cout<<"fdx,fdy="<<fdx<<","<<fdy<<endl;
                     double fdz_carre=r2-fdx*fdx-fdy_carre; //altitude au carré des données
                     double koz=round(sqrt(fdz_carre)-fzm0);
                     double sdz=sqrt(rayon*rayon-fdx*fdx-fdy*fdy)*norm_altitude;

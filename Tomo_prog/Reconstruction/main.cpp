@@ -71,11 +71,11 @@ int main(int argc, char *argv[])
         lire_bin(m1.chemin_result+"/tab_posSpec.raw",TabPosSpec,64,2*m1.NbAngle);
 
         for(int holo_numero=0;holo_numero<m1.NbAngle;holo_numero++)
-        {cout<<holo_numero<<endl;
-            cout<<"spec="<<TabPosSpec[holo_numero]<<","<<TabPosSpec[holo_numero+m1.NbAngle]<<")"<<endl;
-            cout<<"--------------------------"<<endl;
+        {//cout<<holo_numero<<endl;
+            //cout<<"spec="<<TabPosSpec[holo_numero]<<","<<TabPosSpec[holo_numero+m1.NbAngle]<<")"<<endl;
+            //cout<<"--------------------------"<<endl;
         int cpt2D=round(TabPosSpec[holo_numero+m1.NbAngle])*dimChpCplx.x+round(TabPosSpec[holo_numero]);
-        centres[cpt2D]=holo_numero;//used save centres in a image file, for quick visualisation
+        centres[cpt2D]=holo_numero;//save centres in a image file, for quick visualisation
         }
         SAV_Tiff2D(centres,m1.chemin_result+"centre_reconstruction.tif",1);
         ///--------------FFTW2D init----
@@ -161,19 +161,21 @@ int main(int argc, char *argv[])
                 prepare_wisdom2D(dimChpCplx,tmp.c_str());
             }*/
     auto start_part1 = std::chrono::system_clock::now();
+    cout<<"Reconstruction..."<<endl;
 //#pragma omp parallel for
     for(int cpt_angle=premier_plan; cpt_angle<NbAngle; cpt_angle++) //boucle sur tous les angles
     {
         //récupérer spéculaire puis champ cplx depuis sauvegarde prétraitement
         posSpec= {(int)TabPosSpec[cpt_angle],(int)TabPosSpec[NbAngle+cpt_angle]};
 
-        for(int cpt=0; cpt<NbPixU_Born; cpt++)
+        for(int cpt=0; cpt<NbPixU_Born; cpt++)//retrieve complex fields in the stack
         {
             UBornFinal2D[cpt].real(UBornFinal3D[cpt+cpt_angle*NbPixU_Born].real()*mask_tukey2D[cpt]);
             UBornFinal2D[cpt].imag(UBornFinal3D[cpt+cpt_angle*NbPixU_Born].imag()*mask_tukey2D[cpt]);
         }
+
         decal2DCplxGen(UBornFinal2D,UBorn2DFinalDecal, dim2DHA,NMAX);
-//            #pragma omp single
+        //            #pragma omp single
         TF2Dcplx(UBorn2DFinalDecal,TF_UBorn_normI, tf2D, m1.tailleTheoPixelUborn);
         recal= {posSpec.x,posSpec.y};
         ///recaler le spectre à la position du spéculaire (la variable est attendue ainsi par la fonction retropropag)

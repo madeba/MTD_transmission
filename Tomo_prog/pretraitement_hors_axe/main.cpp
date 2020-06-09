@@ -217,7 +217,7 @@ delete[] UnwrappedPhase_herraez;
 cout<<"NXMAX sauve="<<m1.NXMAX<<endl;
 vector<double> param{m1.NXMAX,NbAngle,m1.rayon,dimROI.x,m1.tailleTheoPixelHolo};
 SAV2(param,m1.chemin_result+"/parametres.raw", t_double, "wb");
-SAV2(tabPosSpec,m1.chemin_result+"/tab_posSpec.raw",t_double,"wb");
+SAV2(tabPosSpec,m1.chemin_result+"/tab_posSpec.raw",t_double,"wb");///sav speculaire en copord informatique [0->2NXMAX-1]
 SAV_Tiff2D(centre,m1.chemin_result+"/centres.tif",m1.NA/m1.NXMAX); //exportation des spéculaires en "unité NA"
 cout<<"Fin prétraitement"<<endl;
 return 0;
