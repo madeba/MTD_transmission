@@ -2,7 +2,7 @@
 """
 @author: Nicolas Verrier
 """
-
+import matplotlib.pyplot as plt
 import numpy as np
 import FileTools as ft
 import Retropropagation as rp
@@ -29,8 +29,8 @@ SpecCoordPath = f"C:/Users/p1600109/Documents/Recherche/MatlabTomo/Centres_{dimH
 fi = rp.Calc_fi(SpecCoordPath, nb_angle, REwald, dimHolo)
 
 # Field files reading
-ReUBorn = rp.ReadBornCube(CheminReUBorn, dimHolo, dimHolo, nb_angle)
-ImUBorn = rp.ReadBornCube(CheminImUBorn, dimHolo, dimHolo, nb_angle)
+ReUBorn = rp.ReadBornCube(CheminReUBorn, dimHolo, dimHolo, nb_angle, False)
+ImUBorn = rp.ReadBornCube(CheminImUBorn, dimHolo, dimHolo, nb_angle, False)
 UBornCplx = ReUBorn + ImUBorn * 1j
 del ReUBorn, ImUBorn
 
@@ -40,18 +40,25 @@ print(f"Reconstruction time for a {2*dimHolo}x{2*dimHolo}x{2*dimHolo} volume, wi
 
 Refraction = f_recon.real
 Absorption = f_recon.imag
-
+OTF = np.zeros_like(mask_sum)
+OTF[mask_sum != 0] = 1
+plt.imshow(Refraction[:,:,210].real, cmap="gray")
+plt.show()
 
 fidRef = open(f"Refraction_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
 fidAbs = open(f"Absorption_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
 fidRedon =  open(f"SupRedon_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
+fidOTF =  open(f"OTF_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
 for cpt in range(Refraction.shape[2]):
     Refr = Refraction[:,:,cpt]
     Abs = Absorption[:,:,cpt]
     Redon = mask_sum[:,:,cpt]
+    Support = OTF[:,:,cpt]
     Refr.tofile(fidRef)
     Abs.tofile(fidAbs) 
     Redon.tofile(fidRedon)
+    Support.tofile(fidOTF)
 fidRef.close()
 fidAbs.close()
 fidRedon.close()
+fidOTF.close()

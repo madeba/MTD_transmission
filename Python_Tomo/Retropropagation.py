@@ -6,8 +6,9 @@
 from linecache import getline
 from scipy.fftpack import fftn,ifftn,fftshift
 import numpy as np
+import time
 
-def ReadBornCube(Chemin,dimX,dimY,nb_img):
+def ReadBornCube(Chemin,dimX,dimY,nb_img,isint):
     """
     Opening raw values of UBorn files and transforming it as a data cube with (dimX,dimY,nb_img) dimensions
 
@@ -21,16 +22,23 @@ def ReadBornCube(Chemin,dimX,dimY,nb_img):
         Y dimension of the datacube.
     nb_img : int
         Number of images in the datacube.
+    isint : bool
+        Data type. If True, data to be loaded are int32, if False, data to be loaded are float64
 
     Returns
     -------
-    DataCube : float64
+    DataCube : int32 or float64 depending on isint value
         Raw data rearranged as a datacube.
 
     """
-    with open(Chemin,'r') as fid:
-        DataCube = np.fromfile(fid, np.float64)
-    DataCube = DataCube.reshape((nb_img,dimX,dimY)).transpose(1,2,0)
+    if isint == False:
+        with open(Chemin,'r') as fid:
+            DataCube = np.fromfile(fid, np.float64)
+        DataCube = DataCube.reshape((nb_img,dimX,dimY)).transpose(1,2,0)
+    else:
+        with open(Chemin,'r') as fid:
+            DataCube = np.fromfile(fid, np.int32)
+        DataCube = DataCube.reshape((nb_img,dimX,dimY)).transpose(1,2,0)        
     return DataCube
 
 def Calc_fi(Chemin,nb_angle, REwald, dimHolo):
@@ -240,3 +248,64 @@ def retropropagation(holo_pile,nb_holo,SpecCoord,Nmax,R_Ewald,lambda_v,n0,P,P_ho
     mask_sum = fftshift(mask_sum)
     f_recon = fftshift(f_recon,[0,1])
     return f_recon, TF_vol, mask_sum
+
+def Gerchberg(ReconsObjOrig,OTF,Delta_nmin,Delta_nmax,Kappa_min,Kappa_max,nbiter):
+    """
+    Iterative Gerchberg processing
+
+    Parameters
+    ----------
+    ReconsObjOrig : complex128
+        3D distribution of the complex refractive index of the object.
+    OTF : int32
+        Frequency support for regularization.
+    Delta_nmin : float
+        Minimal value of the real part of the refractive index.
+    Delta_nmax : float
+        Maximal value of the real part of the refractive index.
+    Kappa_min : flaot
+        Minimal value of the imaginary part of the refractive index (absorption).
+    Kappa_max : float
+        Maximal value of the imaginary part of the refractive index (absorption).
+    nbiter : int
+        Number of iterations.
+
+    Returns
+    -------
+    ReconsObjEst : complex128
+        Estimated reconstruction.
+
+    """
+    OTF = fftshift(OTF)
+    ReconsFieldOrig = fftn(ReconsObjOrig)
+    ReconsObjEst=ReconsObjOrig
+    for cpt in range(nbiter):
+        start_time = time.time()
+        print(f"Gerchberg iteration {cpt}")
+        Refr_index = ReconsObjEst.real
+        Absorb_val = ReconsObjEst.imag
+        
+        # Refr_index[np.unravel_index(Refr_index<Delta_nmin, Refr_index.shape)]=Delta_nmin
+        # Refr_index[np.unravel_index(Refr_index>Delta_nmax, Refr_index.shape)]=Delta_nmax
+        # Absorb_val[np.unravel_index(Absorb_val<Kappa_min, Absorb_val.shape)]=Kappa_min
+        # Absorb_val[np.unravel_index(Absorb_val>Kappa_max, Absorb_val.shape)]=Kappa_max
+        
+        Refr_index[Refr_index<Delta_nmin]=Delta_nmin
+        Refr_index[Refr_index>Delta_nmax]=Delta_nmax
+        Absorb_val[Absorb_val<Kappa_min]=Kappa_min
+        Absorb_val[Absorb_val>Kappa_max]=Kappa_max
+        
+        ReconsObjEst = Refr_index + Absorb_val*1j
+        ReconsFieldEst = fftn(ReconsObjEst)
+        
+        if cpt<nbiter/2:
+            # index = np.unravel_index(OTF[0:int(OTF.shape[0]/2-1),:,:], OTF.shape)
+            index = np.nonzero(OTF[0:int(OTF.shape[0]/2-1),:,:])
+            
+        if cpt>=nbiter/2:
+            # index = np.unravel_index(OTF, OTF.shape)
+            index = np.nonzero(OTF)
+        ReconsFieldEst[index] = ReconsFieldOrig[index]
+        ReconsObjEst = ifftn(ReconsFieldEst)
+        print(f"Iteration duration: {np.round(time.time() - start_time,decimals=2)} seconds")
+    return ReconsObjEst
