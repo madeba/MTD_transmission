@@ -244,7 +244,7 @@ cout<<"  ####################################" <<endl;
 
 
 
-    ///Copie des fichiers de config dans le repertoire d'acquisition
+    ///Copie des fichiers de config (depuis repertoire PC acquis : projet_tomo) dans le repertoire d'acquisition
 
 
     std::ifstream srce_recon(chemin_recon, std::ios::binary ) ;

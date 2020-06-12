@@ -10,14 +10,14 @@ int main()
 {
     manip m1;
   ///Init complex refractive index
-  vector<float> indice(readTiff3D("/home/mat/tmp/indice.tif"));  //load refracive index
-  vector<float> absorption(readTiff3D("/home/mat/tmp/absorption.tif"));//load absorption
+  vector<float> indice(readTiff3D(m1.chemin_result+"/indice.tif"));  //load refracive index
+  vector<float> absorption(readTiff3D(m1.chemin_result+"/absorption.tif"));//load absorption
   vector<complex<double>> indiceCplx(indice.size());//init complex refractive index
   vector<complex<double>> SpectreIndiceCplx(indice.size());//init complex refractive index
   size_t nbPix3D=indice.size();
 
 
-  vector<float> OTF3D(readTiff3D("/home/mat/tmp/OTF3D.tif"));//init complex refractive index
+  vector<float> OTF3D(readTiff3D(m1.chemin_result+"/OTF3D.tif"));//init complex refractive index
   cout<<"indice.size()"<<indice.size()<<endl;
   ///measured refractive index
   for(size_t cpt=0;cpt<indice.size();cpt++){
@@ -54,8 +54,9 @@ int main()
   //constraints on refractive index
      for(cpt=0;cpt<nbPix3D;cpt++){
         if(indiceCplx[cpt].real()>m1.delta_nMax) indiceCplx[cpt].real(m1.delta_nMax);
-            else if(indiceCplx[cpt].real()<m1.delta_nMin) indiceCplx[cpt].real(m1.delta_nMax);
-        if(indiceCplx[cpt].imag()<m1.delta_nMin) indiceCplx[cpt].imag(m1.delta_nMin);
+            else if(indiceCplx[cpt].real()<m1.delta_nMin) indiceCplx[cpt].real(m1.delta_nMin);
+        if(indiceCplx[cpt].imag()<m1.kappa_Min) indiceCplx[cpt].imag(m1.delta_nMin);
+            else if(indiceCplx[cpt].imag()>m1.kappa_Max) indiceCplx[cpt].real(m1.kappa_Max);
         }
 
      FFT3Dcplx_Inplace(fftshift3D(indiceCplx), SpectreIndiceCplx_estim,tf3D_INP);

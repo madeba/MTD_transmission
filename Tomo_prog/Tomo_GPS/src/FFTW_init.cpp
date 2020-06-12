@@ -42,7 +42,8 @@ FFTW_init::FFTW_init(Point3D dim,size_t nbThreads, bool b_inPlace)
     in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
     out=nullptr;
     p_forward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_FORWARD, FFTW_MEASURE);///problème, wisdom calculée en backward !!->MEASURE! possiblité d'avoir 2 wisdom ?
-    p_backward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_BACKWARD, FFTW_WISDOM_ONLY);
+    p_backward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_BACKWARD, FFTW_MEASURE);
+    //p_backward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_BACKWARD, FFTW_WISDOM_ONLY);
    // p_forward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_FORWARD, FFTW_ESTIMATE);///problème, wisdom calculée en backward !!
    // p_backward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_BACKWARD, FFTW_ESTIMATE);
     }

@@ -25,9 +25,6 @@
 					<Add option="-fexpensive-optimizations" />
 					<Add option="-O3" />
 				</Compiler>
-				<Linker>
-					<Add option="-s" />
-				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
