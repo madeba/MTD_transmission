@@ -1,0 +1,138 @@
+
+
+
+%%% LaTeX Template: Two column article
+%%%
+%%% Source: http://www.howtotex.com/
+%%% Feel free to distribute this template, but please keep to referal to http://www.howtotex.com/ here.
+%%% Date: February 2011
+
+%%% Preamble
+\documentclass[	french,DIV=calc,paper=a4,fontsize=10pt,
+							twocolumn]{scrartcl}	 					% KOMA-article class
+\usepackage{lmodern}
+\usepackage{lipsum}													% Package to create dummy text
+\usepackage[utf8x]{inputenc}
+\usepackage[francais]{babel}	
+% English language/hyphenation
+\usepackage[protrusion=true,expansion=true]{microtype}				% Better typography
+\usepackage{amsmath,amsfonts,amsthm}					% Math packages
+\usepackage[pdftex]{graphicx}									% Enable pdflatex
+\usepackage[svgnames]{xcolor}									% Enabling colors by their 'svgnames'
+\usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption}	% Custom captions under/above floats
+\usepackage{epstopdf}												% Converts .eps to .pdf
+\usepackage{subfig}													% Subfigures
+\usepackage{booktabs}												% Nicer tables
+\usepackage{fix-cm}	
+\usepackage{listings}% 
+%\usepackage{bclogo} ne compile pas en pdflatex
+\usepackage[tikz]{bclogo}
+\usepackage[squaren,Gray]{SIunits}
+\usepackage{adjustbox}%marge pour fcolorbox
+%%% Custom sectioning (sectsty package)
+\usepackage{sectsty}													% Custom sectioning (see below)
+\allsectionsfont{%															% Change font of al section commands
+	\usefont{OT1}{phv}{b}{n}%										% bch-b-n: CharterBT-Bold font
+	}
+
+\sectionfont{%																% Change font of \section command
+	\usefont{OT1}{phv}{b}{n}%										% bch-b-n: CharterBT-Bold font
+	}
+
+\lstset{language=C++,
+                basicstyle=\ttfamily,
+                keywordstyle=\color{blue}\ttfamily,
+                stringstyle=\color{red}\ttfamily,
+                commentstyle=\color{green}\ttfamily,
+                morecomment=[l][\color{magenta}]{\#}
+}
+
+%%% Headers and footers
+\usepackage{fancyhdr}												% Needed to define custom headers/footers
+	\pagestyle{fancy}														% Enabling the custom headers/footers
+\usepackage{lastpage}	
+
+% Header (empty)
+\lhead{}
+\chead{}
+\rhead{}
+% Footer (you may change this to your own needs)
+\lfoot{\footnotesize \texttt{Calcul} \textbullet Bases}
+\cfoot{}
+\rfoot{\footnotesize page \thepage\ of \pageref{LastPage}}	% "Page 1 of 2"
+\renewcommand{\headrulewidth}{0.0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\newcommand{\code}[1]{\texttt{#1}}
+
+
+%%% Creating an initial of the very first character of the content
+\usepackage{lettrine}
+\newcommand{\initial}[1]{%
+     \lettrine[lines=3,lhang=0.3,nindent=0em]{
+     				\color{DarkGoldenrod}
+     				{\textsf{#1}}}{}}
+
+\newcommand{\boitegrise}[1]{\fcolorbox{lightgray}{SteelBlue}{\hspace{0.5mm} \textcolor{Cornsilk}{\textbf{{\tiny #1}}} }
+}
+
+%%% Title, author and date metadata
+\usepackage{titling}															% For custom titles
+
+\newcommand{\HorRule}{\color{DarkGoldenrod}%			% Creating a horizontal rule
+									  	\rule{\linewidth}{1pt}%
+										}
+
+\pretitle{\vspace{-30pt} \begin{flushleft} \HorRule 
+				\fontsize{30}{30} \usefont{OT1}{phv}{b}{n} \color{DarkRed} \selectfont 
+				}
+\title{Découpe Hors-axe}					% Title of your article goes here
+\posttitle{\par\end{flushleft}\vskip 0.5em}
+
+\preauthor{\begin{flushleft}
+					\large \lineskip 0.5em \usefont{OT1}{phv}{b}{sl} \color{DarkRed}}
+\author{}											% Author name goes here
+\postauthor{\footnotesize \usefont{OT1}{phv}{m}{sl} \color{Black} 
+													% Institution of author
+					\par\end{flushleft}\HorRule}
+
+\date{}																				% No date
+
+
+
+%%% Begin document
+\begin{document}
+\maketitle
+\thispagestyle{fancy} 			% Enabling the custom headers/footers for the first page 
+% The first character should be within \initial{}
+
+
+L'extraction du champ complexe depuis un hologramme hors-axe est simple : il suffit de découper le spectre de l'ordre +1 ou -1 aux coordonnées de l'onde porteuse, et aux dimensions du spectre fixées par l'ouverture du numérique de l'objectif et l'échantillonnage $\Delta f$.
+
+L'hologramme étant une image réelle, son spectre présente une symétrie hermitienne : le spectre est impaire et l'objet et le jumeau son complexe conjugués.  La bibliothèque \code{fftw} 
+permet d'exploiter cette symétrie afin de ne calculer qu'un demi-spectre (en réalité, un demi spectre +1 pixel selon l'axe $y$) avec la fonction de création de plan  :   \code{fftw\_plan\_dft\_r2c\_2d}.
+
+Plusieurs fonctions ont donc été développées. Dans l'ordre croissant de vitesse  :
+\begin{enumerate}
+\item \code{holo2TF\_UBorn} Le spectre est calculé en c2c, resymétrisé et recentré avec \code{fftshift}.
+\item \code{holo2TF\_UBorn2} Le spectre est calculé en r2c, resymétrisé et recentré avec \code{fftshift}. 
+ \item \code{holo2TF\_UBorn2\_shift} : la fft est calculée en r2c, mais resymétrisée. Le spectre n'est pas redécalé apres la TF. ON découpe dans le spectre éclaté aux 4 coins, ce qui gagne 1 fftshift.
+ \item \code{holo2TF\_UBorn2\_shift\_r2c} : la fft est calculée en r2c simple (pas de symétrisation). Le spectre n'est aps redécalé. On gagne donc sur la symétrisation et le fftshift. C'est la méthode la plus rapide.
+\end{enumerate}
+
+Les gain dépendent donc beaucoup des fft calculé. 
+\begin{table}
+ 
+
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|}\hline
+             &c2c & r2c symétrisée & r2c & fftshift 1024\\\hline
+1 appel (ms) &18,4 & 11,7 & 9,2 & 2,4\\\hline
+600 appel (s)&11,0 & 7,0 & 5,5 & 1,44\\\hline
+\end{tabular}
+\caption{Temps pour les différentes fft en 1024x1024, 64 bits, outplace, FFTW\_MEASURE, 3 threads sur un core i5-3550.}
+\end{center}
+\end{table}
+
+\end{document}

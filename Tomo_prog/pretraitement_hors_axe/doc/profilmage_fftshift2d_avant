@@ -1,0 +1,418 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ms/call  ms/call  name    
+ 24.59      6.12     6.12                             holo2TF_UBorn2(std::vector<double, std::allocator<double> >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, Var2D, Var2D, Var2D, unsigned long, std::vector<double, std::allocator<double> > const&, FFTW_init&)
+ 22.38     11.69     5.57      599     9.30     9.30  fftshift2D(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&)
+ 18.40     16.27     4.58      599     7.65     7.65  TF2D_r2c_symetric(std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&)
+  5.34     17.60     1.33      599     2.22     2.22  fftshift2D(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> >&)
+  4.62     18.75     1.15                             charger_image2D_OCV(std::vector<double, std::allocator<double> >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Var2D, Var2D)
+  4.34     19.83     1.08     1198     0.90     0.90  compuBackgr2(cv::Mat const&, cv::Mat const&, cv::Mat&)
+  2.89     20.55     0.72     3594     0.20     0.20  TF2Dcplx_INV(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&)
+  2.73     21.23     0.68                             deroul_volkov2(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> >&, FFTW_init)
+  2.33     21.81     0.58     1797     0.32     0.32  TF2Dcplx(std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&)
+  1.89     22.28     0.47      599     0.78     1.91  gradient_fft2(std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&)
+  1.53     22.66     0.38      599     0.63     1.94  integ_grad2(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&)
+  1.33     22.99     0.33      599     0.55     1.82  gradient_fft2(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&)
+  1.12     23.27     0.28      599     0.47     0.47  TF2Dcplx(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&)
+  0.68     23.44     0.17 260924400     0.00     0.00  vecteur::vecteur()
+  0.68     23.61     0.17                             calc_Uborn2(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, Var2D, Var2D, FFTW_init&)
+  0.56     23.75     0.14 202941200     0.00     0.00  vecteur::getx()
+  0.56     23.89     0.14     1797     0.08     0.22  fftshift2D(std::vector<vecteur, std::allocator<vecteur> >&)
+  0.48     24.01     0.12       49     2.45     2.45  std::vector<std::complex<double>, std::allocator<std::complex<double> > >::vector(unsigned long, std::allocator<std::complex<double> > const&)
+  0.44     24.12     0.11 202941200     0.00     0.00  vecteur::gety()
+  0.44     24.23     0.11 173949600     0.00     0.00  vecteur::sety(double)
+  0.44     24.34     0.11                             coordSpec(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<double, std::allocator<double> >&, Var2D)
+  0.40     24.44     0.10      599     0.17     0.17  decal2DCplxGen(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, Var2D, Var2D)
+  0.36     24.53     0.09 173949600     0.00     0.00  vecteur::setx(double)
+  0.28     24.60     0.07                             SAVCplx(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, PRECISION2, char*)
+  0.20     24.65     0.05     1198     0.04     0.04  compuCoefPoly2(cv::Mat const&, cv::Mat const&, cv::Mat&, cv::Mat const&, bool)
+  0.20     24.70     0.05                             SAV2(std::vector<double, std::allocator<double> >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, PRECISION2, char*)
+  0.20     24.75     0.05                             Point2D::decale(int, int)
+  0.20     24.80     0.05                             vecteur::getz()
+  0.12     24.83     0.03      599     0.05     0.05  SAV2(double*, int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, PRECISION2, char*)
+  0.12     24.86     0.03                             calcPhase_mpi_pi_atan2(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<double, std::allocator<double> >&)
+  0.08     24.88     0.02                             vecteur::set_coord(double, double, double)
+  0.04     24.89     0.01                             tukey2D(int, int, float)
+  0.00     24.89     0.00      126     0.00     0.00  void std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_realloc_insert<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&>(__gnu_cxx::__normal_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+  0.00     24.89     0.00       18     0.00     0.00  extract_val(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)
+  0.00     24.89     0.00        5     0.00     0.00  std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&) [clone .constprop.36]
+  0.00     24.89     0.00        3     0.00     0.00  extract_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)
+  0.00     24.89     0.00        3     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > __gnu_cxx::__to_xstring<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char>(int (*)(char*, unsigned long, char const*, __va_list_tag*), unsigned long, char const*, ...) [clone .constprop.35]
+  0.00     24.89     0.00        1     0.00     0.00  _GLOBAL__sub_I__Z10fftshift2DRSt6vectorI7vecteurSaIS0_EE
+  0.00     24.89     0.00        1     0.00     0.00  _GLOBAL__sub_I__Z12initCorrAberNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKN2cv3MatEm5Var2DRS6_SA_
+  0.00     24.89     0.00        1     0.00     0.00  _GLOBAL__sub_I__Z14deroul_volkov2RKSt6vectorIdSaIdEERS1_9FFTW_init
+  0.00     24.89     0.00        1     0.00     0.00  _GLOBAL__sub_I__Z22calcPhase_mpi_pi_atan2RKSt6vectorISt7complexIdESaIS1_EERS_IdSaIdEE
+  0.00     24.89     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZN5manipC2Ev
+  0.00     24.89     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZN7vecteurC2Ev
+  0.00     24.89     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZN9FFTW_initC2E7Point3Dm
+  0.00     24.89     0.00        1     0.00     0.00  _GLOBAL__sub_I_main
+  0.00     24.89     0.00        1     0.00     0.00  CalcPolyUs_xy(int, cv::Mat const&, Var2D, cv::Mat&)
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 2 byte(s) for 0.04% of 24.89 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     70.7    6.12   11.48                 holo2TF_UBorn2(std::vector<double, std::allocator<double> >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, Var2D, Var2D, Var2D, unsigned long, std::vector<double, std::allocator<double> > const&, FFTW_init&) [1]
+                5.57    0.00     599/599         fftshift2D(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&) [2]
+                4.58    0.00     599/599         TF2D_r2c_symetric(std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [3]
+                1.33    0.00     599/599         fftshift2D(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> >&) [5]
+-----------------------------------------------
+                5.57    0.00     599/599         holo2TF_UBorn2(std::vector<double, std::allocator<double> >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, Var2D, Var2D, Var2D, unsigned long, std::vector<double, std::allocator<double> > const&, FFTW_init&) [1]
+[2]     22.4    5.57    0.00     599         fftshift2D(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&) [2]
+-----------------------------------------------
+                4.58    0.00     599/599         holo2TF_UBorn2(std::vector<double, std::allocator<double> >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, Var2D, Var2D, Var2D, unsigned long, std::vector<double, std::allocator<double> > const&, FFTW_init&) [1]
+[3]     18.4    4.58    0.00     599         TF2D_r2c_symetric(std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [3]
+-----------------------------------------------
+                                                 <spontaneous>
+[4]     16.4    0.68    3.40                 deroul_volkov2(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> >&, FFTW_init) [4]
+                0.38    0.78     599/599         integ_grad2(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [6]
+                0.47    0.67     599/599         gradient_fft2(std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [8]
+                0.33    0.76     599/599         gradient_fft2(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [9]
+-----------------------------------------------
+                1.33    0.00     599/599         holo2TF_UBorn2(std::vector<double, std::allocator<double> >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, Var2D, Var2D, Var2D, unsigned long, std::vector<double, std::allocator<double> > const&, FFTW_init&) [1]
+[5]      5.3    1.33    0.00     599         fftshift2D(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> >&) [5]
+-----------------------------------------------
+                0.38    0.78     599/599         deroul_volkov2(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> >&, FFTW_init) [4]
+[6]      4.7    0.38    0.78     599         integ_grad2(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [6]
+                0.39    0.00    1198/1797        TF2Dcplx(std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [13]
+                0.05    0.09     599/1797        fftshift2D(std::vector<vecteur, std::allocator<vecteur> >&) [15]
+                0.12    0.00     599/3594        TF2Dcplx_INV(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [11]
+                0.04    0.00 57983200/202941200     vecteur::getx() [19]
+                0.04    0.00 57983200/260924400     vecteur::vecteur() [18]
+                0.03    0.00 57983200/202941200     vecteur::gety() [22]
+                0.02    0.00 28991600/173949600     vecteur::sety(double) [23]
+                0.02    0.00 28991600/173949600     vecteur::setx(double) [26]
+-----------------------------------------------
+                                                 <spontaneous>
+[7]      4.6    1.15    0.00                 charger_image2D_OCV(std::vector<double, std::allocator<double> >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Var2D, Var2D) [7]
+-----------------------------------------------
+                0.47    0.67     599/599         deroul_volkov2(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> >&, FFTW_init) [4]
+[8]      4.6    0.47    0.67     599         gradient_fft2(std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [8]
+                0.24    0.00    1198/3594        TF2Dcplx_INV(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [11]
+                0.19    0.00     599/1797        TF2Dcplx(std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [13]
+                0.05    0.09     599/1797        fftshift2D(std::vector<vecteur, std::allocator<vecteur> >&) [15]
+                0.04    0.00 57983200/260924400     vecteur::vecteur() [18]
+                0.02    0.00 28991600/202941200     vecteur::getx() [19]
+                0.02    0.00 28991600/173949600     vecteur::sety(double) [23]
+                0.02    0.00 28991600/202941200     vecteur::gety() [22]
+                0.02    0.00 28991600/173949600     vecteur::setx(double) [26]
+-----------------------------------------------
+                0.33    0.76     599/599         deroul_volkov2(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> >&, FFTW_init) [4]
+[9]      4.4    0.33    0.76     599         gradient_fft2(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [9]
+                0.28    0.00     599/599         TF2Dcplx(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [17]
+                0.24    0.00    1198/3594        TF2Dcplx_INV(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [11]
+                0.05    0.09     599/1797        fftshift2D(std::vector<vecteur, std::allocator<vecteur> >&) [15]
+                0.04    0.00 57983200/260924400     vecteur::vecteur() [18]
+                0.02    0.00 28991600/202941200     vecteur::getx() [19]
+                0.02    0.00 28991600/173949600     vecteur::sety(double) [23]
+                0.02    0.00 28991600/202941200     vecteur::gety() [22]
+                0.02    0.00 28991600/173949600     vecteur::setx(double) [26]
+-----------------------------------------------
+                0.54    0.00     599/1198        aberCorr2(cv::Mat const&, cv::Mat const&, cv::Mat const&, cv::Mat const&) [14]
+                0.54    0.00     599/1198        ampliCorr2(cv::Mat const&, cv::Mat const&, cv::Mat const&, cv::Mat) [12]
+[10]     4.3    1.08    0.00    1198         compuBackgr2(cv::Mat const&, cv::Mat const&, cv::Mat&) [10]
+-----------------------------------------------
+                0.12    0.00     599/3594        calc_Uborn2(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, Var2D, Var2D, FFTW_init&) [16]
+                0.12    0.00     599/3594        integ_grad2(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [6]
+                0.24    0.00    1198/3594        gradient_fft2(std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [8]
+                0.24    0.00    1198/3594        gradient_fft2(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [9]
+[11]     2.9    0.72    0.00    3594         TF2Dcplx_INV(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [11]
+-----------------------------------------------
+                                                 <spontaneous>
+[12]     2.4    0.00    0.60                 ampliCorr2(cv::Mat const&, cv::Mat const&, cv::Mat const&, cv::Mat) [12]
+                0.54    0.00     599/1198        compuBackgr2(cv::Mat const&, cv::Mat const&, cv::Mat&) [10]
+                0.03    0.00     599/599         SAV2(double*, int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, PRECISION2, char*) [32]
+                0.03    0.00     599/1198        compuCoefPoly2(cv::Mat const&, cv::Mat const&, cv::Mat&, cv::Mat const&, bool) [28]
+-----------------------------------------------
+                0.19    0.00     599/1797        gradient_fft2(std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [8]
+                0.39    0.00    1198/1797        integ_grad2(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [6]
+[13]     2.3    0.58    0.00    1797         TF2Dcplx(std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [13]
+-----------------------------------------------
+                                                 <spontaneous>
+[14]     2.3    0.00    0.57                 aberCorr2(cv::Mat const&, cv::Mat const&, cv::Mat const&, cv::Mat const&) [14]
+                0.54    0.00     599/1198        compuBackgr2(cv::Mat const&, cv::Mat const&, cv::Mat&) [10]
+                0.03    0.00     599/1198        compuCoefPoly2(cv::Mat const&, cv::Mat const&, cv::Mat&, cv::Mat const&, bool) [28]
+-----------------------------------------------
+                0.05    0.09     599/1797        gradient_fft2(std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [8]
+                0.05    0.09     599/1797        gradient_fft2(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [9]
+                0.05    0.09     599/1797        integ_grad2(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [6]
+[15]     1.6    0.14    0.26    1797         fftshift2D(std::vector<vecteur, std::allocator<vecteur> >&) [15]
+                0.06    0.00 86974800/202941200     vecteur::getx() [19]
+                0.06    0.00 86974800/260924400     vecteur::vecteur() [18]
+                0.06    0.00 86974800/173949600     vecteur::sety(double) [23]
+                0.05    0.00 86974800/202941200     vecteur::gety() [22]
+                0.05    0.00 86974800/173949600     vecteur::setx(double) [26]
+-----------------------------------------------
+                                                 <spontaneous>
+[16]     1.6    0.17    0.22                 calc_Uborn2(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, Var2D, Var2D, FFTW_init&) [16]
+                0.12    0.00     599/3594        TF2Dcplx_INV(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [11]
+                0.10    0.00     599/599         decal2DCplxGen(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, Var2D, Var2D) [25]
+-----------------------------------------------
+                0.28    0.00     599/599         gradient_fft2(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [9]
+[17]     1.1    0.28    0.00     599         TF2Dcplx(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [17]
+-----------------------------------------------
+                0.04    0.00 57983200/260924400     gradient_fft2(std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [8]
+                0.04    0.00 57983200/260924400     gradient_fft2(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [9]
+                0.04    0.00 57983200/260924400     integ_grad2(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [6]
+                0.06    0.00 86974800/260924400     fftshift2D(std::vector<vecteur, std::allocator<vecteur> >&) [15]
+[18]     0.7    0.17    0.00 260924400         vecteur::vecteur() [18]
+-----------------------------------------------
+                0.02    0.00 28991600/202941200     gradient_fft2(std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [8]
+                0.02    0.00 28991600/202941200     gradient_fft2(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [9]
+                0.04    0.00 57983200/202941200     integ_grad2(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [6]
+                0.06    0.00 86974800/202941200     fftshift2D(std::vector<vecteur, std::allocator<vecteur> >&) [15]
+[19]     0.6    0.14    0.00 202941200         vecteur::getx() [19]
+-----------------------------------------------
+                0.12    0.00      49/49          manip::manip() [21]
+[20]     0.5    0.12    0.00      49         std::vector<std::complex<double>, std::allocator<std::complex<double> > >::vector(unsigned long, std::allocator<std::complex<double> > const&) [20]
+-----------------------------------------------
+                                                 <spontaneous>
+[21]     0.5    0.00    0.12                 manip::manip() [21]
+                0.12    0.00      49/49          std::vector<std::complex<double>, std::allocator<std::complex<double> > >::vector(unsigned long, std::allocator<std::complex<double> > const&) [20]
+                0.00    0.00      18/18          extract_val(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [44]
+                0.00    0.00       5/5           std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&) [clone .constprop.36] [45]
+                0.00    0.00       3/3           extract_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [46]
+                0.00    0.00       3/3           std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > __gnu_cxx::__to_xstring<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char>(int (*)(char*, unsigned long, char const*, __va_list_tag*), unsigned long, char const*, ...) [clone .constprop.35] [47]
+-----------------------------------------------
+                0.02    0.00 28991600/202941200     gradient_fft2(std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [8]
+                0.02    0.00 28991600/202941200     gradient_fft2(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [9]
+                0.03    0.00 57983200/202941200     integ_grad2(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [6]
+                0.05    0.00 86974800/202941200     fftshift2D(std::vector<vecteur, std::allocator<vecteur> >&) [15]
+[22]     0.4    0.11    0.00 202941200         vecteur::gety() [22]
+-----------------------------------------------
+                0.02    0.00 28991600/173949600     gradient_fft2(std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [8]
+                0.02    0.00 28991600/173949600     gradient_fft2(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [9]
+                0.02    0.00 28991600/173949600     integ_grad2(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [6]
+                0.06    0.00 86974800/173949600     fftshift2D(std::vector<vecteur, std::allocator<vecteur> >&) [15]
+[23]     0.4    0.11    0.00 173949600         vecteur::sety(double) [23]
+-----------------------------------------------
+                                                 <spontaneous>
+[24]     0.4    0.11    0.00                 coordSpec(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<double, std::allocator<double> >&, Var2D) [24]
+-----------------------------------------------
+                0.10    0.00     599/599         calc_Uborn2(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, Var2D, Var2D, FFTW_init&) [16]
+[25]     0.4    0.10    0.00     599         decal2DCplxGen(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, Var2D, Var2D) [25]
+-----------------------------------------------
+                0.02    0.00 28991600/173949600     gradient_fft2(std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [8]
+                0.02    0.00 28991600/173949600     gradient_fft2(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [9]
+                0.02    0.00 28991600/173949600     integ_grad2(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [6]
+                0.05    0.00 86974800/173949600     fftshift2D(std::vector<vecteur, std::allocator<vecteur> >&) [15]
+[26]     0.4    0.09    0.00 173949600         vecteur::setx(double) [26]
+-----------------------------------------------
+                                                 <spontaneous>
+[27]     0.3    0.07    0.00                 SAVCplx(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, PRECISION2, char*) [27]
+-----------------------------------------------
+                0.03    0.00     599/1198        aberCorr2(cv::Mat const&, cv::Mat const&, cv::Mat const&, cv::Mat const&) [14]
+                0.03    0.00     599/1198        ampliCorr2(cv::Mat const&, cv::Mat const&, cv::Mat const&, cv::Mat) [12]
+[28]     0.2    0.05    0.00    1198         compuCoefPoly2(cv::Mat const&, cv::Mat const&, cv::Mat&, cv::Mat const&, bool) [28]
+-----------------------------------------------
+                                                 <spontaneous>
+[29]     0.2    0.05    0.00                 SAV2(std::vector<double, std::allocator<double> >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, PRECISION2, char*) [29]
+-----------------------------------------------
+                                                 <spontaneous>
+[30]     0.2    0.05    0.00                 Point2D::decale(int, int) [30]
+-----------------------------------------------
+                                                 <spontaneous>
+[31]     0.2    0.05    0.00                 vecteur::getz() [31]
+-----------------------------------------------
+                0.03    0.00     599/599         ampliCorr2(cv::Mat const&, cv::Mat const&, cv::Mat const&, cv::Mat) [12]
+[32]     0.1    0.03    0.00     599         SAV2(double*, int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, PRECISION2, char*) [32]
+-----------------------------------------------
+                                                 <spontaneous>
+[33]     0.1    0.03    0.00                 calcPhase_mpi_pi_atan2(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<double, std::allocator<double> >&) [33]
+-----------------------------------------------
+                                                 <spontaneous>
+[34]     0.1    0.02    0.00                 vecteur::set_coord(double, double, double) [34]
+-----------------------------------------------
+                                                 <spontaneous>
+[35]     0.0    0.01    0.00                 tukey2D(int, int, float) [35]
+-----------------------------------------------
+                0.00    0.00      18/126         extract_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [46]
+                0.00    0.00     108/126         extract_val(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [44]
+[43]     0.0    0.00    0.00     126         void std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_realloc_insert<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&>(__gnu_cxx::__normal_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [43]
+-----------------------------------------------
+                0.00    0.00      18/18          manip::manip() [21]
+[44]     0.0    0.00    0.00      18         extract_val(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [44]
+                0.00    0.00     108/126         void std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_realloc_insert<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&>(__gnu_cxx::__normal_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [43]
+-----------------------------------------------
+                0.00    0.00       5/5           manip::manip() [21]
+[45]     0.0    0.00    0.00       5         std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&) [clone .constprop.36] [45]
+-----------------------------------------------
+                0.00    0.00       3/3           manip::manip() [21]
+[46]     0.0    0.00    0.00       3         extract_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [46]
+                0.00    0.00      18/126         void std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_realloc_insert<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&>(__gnu_cxx::__normal_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [43]
+-----------------------------------------------
+                0.00    0.00       3/3           manip::manip() [21]
+[47]     0.0    0.00    0.00       3         std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > __gnu_cxx::__to_xstring<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char>(int (*)(char*, unsigned long, char const*, __va_list_tag*), unsigned long, char const*, ...) [clone .constprop.35] [47]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [144]
+[48]     0.0    0.00    0.00       1         _GLOBAL__sub_I__Z10fftshift2DRSt6vectorI7vecteurSaIS0_EE [48]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [144]
+[49]     0.0    0.00    0.00       1         _GLOBAL__sub_I__Z12initCorrAberNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKN2cv3MatEm5Var2DRS6_SA_ [49]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [144]
+[50]     0.0    0.00    0.00       1         _GLOBAL__sub_I__Z14deroul_volkov2RKSt6vectorIdSaIdEERS1_9FFTW_init [50]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [144]
+[51]     0.0    0.00    0.00       1         _GLOBAL__sub_I__Z22calcPhase_mpi_pi_atan2RKSt6vectorISt7complexIdESaIS1_EERS_IdSaIdEE [51]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [144]
+[52]     0.0    0.00    0.00       1         _GLOBAL__sub_I__ZN5manipC2Ev [52]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [144]
+[53]     0.0    0.00    0.00       1         _GLOBAL__sub_I__ZN7vecteurC2Ev [53]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [144]
+[54]     0.0    0.00    0.00       1         _GLOBAL__sub_I__ZN9FFTW_initC2E7Point3Dm [54]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [144]
+[55]     0.0    0.00    0.00       1         _GLOBAL__sub_I_main [55]
+-----------------------------------------------
+                0.00    0.00       1/1           initCorrAber(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, cv::Mat const&, unsigned long, Var2D, cv::Mat&, cv::Mat&) [77]
+[56]     0.0    0.00    0.00       1         CalcPolyUs_xy(int, cv::Mat const&, Var2D, cv::Mat&) [56]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+  [48] _GLOBAL__sub_I__Z10fftshift2DRSt6vectorI7vecteurSaIS0_EE [56] CalcPolyUs_xy(int, cv::Mat const&, Var2D, cv::Mat&) [13] TF2Dcplx(std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&)
+  [49] _GLOBAL__sub_I__Z12initCorrAberNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKN2cv3MatEm5Var2DRS6_SA_ [9] gradient_fft2(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [24] coordSpec(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<double, std::allocator<double> >&, Var2D)
+  [50] _GLOBAL__sub_I__Z14deroul_volkov2RKSt6vectorIdSaIdEERS1_9FFTW_init [8] gradient_fft2(std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [30] Point2D::decale(int, int)
+  [51] _GLOBAL__sub_I__Z22calcPhase_mpi_pi_atan2RKSt6vectorISt7complexIdESaIS1_EERS_IdSaIdEE [28] compuCoefPoly2(cv::Mat const&, cv::Mat const&, cv::Mat&, cv::Mat const&, bool) [19] vecteur::getx()
+  [52] _GLOBAL__sub_I__ZN5manipC2Ev [25] decal2DCplxGen(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, Var2D, Var2D) [22] vecteur::gety()
+  [53] _GLOBAL__sub_I__ZN7vecteurC2Ev [4] deroul_volkov2(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> >&, FFTW_init) [31] vecteur::getz()
+  [54] _GLOBAL__sub_I__ZN9FFTW_initC2E7Point3Dm [46] extract_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [26] vecteur::setx(double)
+  [55] _GLOBAL__sub_I_main     [1] holo2TF_UBorn2(std::vector<double, std::allocator<double> >&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, Var2D, Var2D, Var2D, unsigned long, std::vector<double, std::allocator<double> > const&, FFTW_init&) [23] vecteur::sety(double)
+   [2] fftshift2D(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&) [3] TF2D_r2c_symetric(std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [34] vecteur::set_coord(double, double, double)
+   [5] fftshift2D(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> >&) [7] charger_image2D_OCV(std::vector<double, std::allocator<double> >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Var2D, Var2D) [18] vecteur::vecteur()
+  [15] fftshift2D(std::vector<vecteur, std::allocator<vecteur> >&) [33] calcPhase_mpi_pi_atan2(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<double, std::allocator<double> >&) [47] std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > __gnu_cxx::__to_xstring<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char>(int (*)(char*, unsigned long, char const*, __va_list_tag*), unsigned long, char const*, ...) [clone .constprop.35]
+  [16] calc_Uborn2(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, Var2D, Var2D, FFTW_init&) [32] SAV2(double*, int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, PRECISION2, char*) [43] void std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_realloc_insert<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&>(__gnu_cxx::__normal_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+  [44] extract_val(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [29] SAV2(std::vector<double, std::allocator<double> >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, PRECISION2, char*) [20] std::vector<std::complex<double>, std::allocator<std::complex<double> > >::vector(unsigned long, std::allocator<std::complex<double> > const&)
+   [6] integ_grad2(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [27] SAVCplx(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, PRECISION2, char*) [45] std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&) [clone .constprop.36]
+  [11] TF2Dcplx_INV(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&) [35] tukey2D(int, int, float)
+  [10] compuBackgr2(cv::Mat const&, cv::Mat const&, cv::Mat&) [17] TF2Dcplx(std::vector<std::complex<double>, std::allocator<std::complex<double> > > const&, std::vector<std::complex<double>, std::allocator<std::complex<double> > >&, FFTW_init&)
