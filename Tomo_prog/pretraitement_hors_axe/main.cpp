@@ -63,7 +63,7 @@ for(cptAngle=0; cptAngle<NbAngle; cptAngle++){
     sprintf(charAngle,"%03i",cptAngle);
     string nomFichierHolo=m1.chemin_acquis+"/i"+charAngle+".pgm";
     test_existence = fopen(nomFichierHolo.c_str(), "rb");
-     //cout<<nomFichierHolo<<endl;
+    cout<<nomFichierHolo<<endl;
     if(test_existence!=NULL) {
       fclose(test_existence);
       charger_image2D_OCV(holo1,nomFichierHolo, coin, dimROI);

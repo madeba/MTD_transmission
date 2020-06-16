@@ -26,16 +26,24 @@
 
 1513764829 /home/mat/Dropbox/projet_c/2017/extract_holo/struct.h
 
-1494560727 /usr/include/opencv/cv.h
+1411092226 /usr/include/opencv/cv.h
 	"opencv2/core/core_c.h"
+	"opencv2/core/core.hpp"
 	"opencv2/imgproc/imgproc_c.h"
-	"opencv2/photo/photo_c.h"
-	"opencv2/video/tracking_c.h"
-	"opencv2/objdetect/objdetect_c.h"
+	"opencv2/imgproc/imgproc.hpp"
+	"opencv2/video/tracking.hpp"
+	"opencv2/features2d/features2d.hpp"
+	"opencv2/flann/flann.hpp"
+	"opencv2/calib3d/calib3d.hpp"
+	"opencv2/objdetect/objdetect.hpp"
+	"opencv2/legacy/compat.hpp"
+	"opencv2/core/internal.hpp"
 
-1494560727 /usr/include/opencv/highgui.h
+1411092226 /usr/include/opencv/highgui.h
 	"opencv2/core/core_c.h"
+	"opencv2/core/core.hpp"
 	"opencv2/highgui/highgui_c.h"
+	"opencv2/highgui/highgui.hpp"
 
 1508429480 /home/mat/Dropbox/projet_c/2017/extract_holo/manip.h
 	<cstdlib>
@@ -182,8 +190,9 @@
 	<highgui.h>
 	<cv.h>
 
-1494560727 /usr/include/opencv/cxcore.h
+1411092226 /usr/include/opencv/cxcore.h
 	"opencv2/core/core_c.h"
+	"opencv2/core/core.hpp"
 
 1494489226 source:/home/mat/Dropbox/projet_c/2018/extract_holo/src/vecteur.cpp
 	"vecteur.h"
@@ -575,7 +584,7 @@
 	<cstring>
 	<string>
 
-1519231966 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_herraez.cpp
+1581523936 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_herraez.cpp
 	"deroulement_herraez.h"
 	<stdlib.h>
 	<string.h>
@@ -583,11 +592,11 @@
 	<vector>
 	<math.h>
 
-1519227912 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_herraez.h
+1581523936 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_herraez.h
 	"struct.h"
 	<vector>
 
-1516469398 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/struct.h
+1592225530 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/struct.h
 
 1516811852 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_volkov.cpp
 	"deroulement_volkov.h"
@@ -597,12 +606,12 @@
 	"FFT_fonctions.h"
 	"src/vecteur.h"
 
-1519226836 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_volkov.h
+1592225530 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/deroulement_volkov.h
 	<fftw3.h>
 	<vector>
 	<complex>
 
-1557328878 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/fonctions.h
+1592225530 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/fonctions.h
 	"struct.h"
 	<time.h>
 	<math.h>
@@ -610,6 +619,7 @@
 	<cstdlib>
 	<strstream>
 	<fftw3.h>
+	"FFTW_init.h"
 	<opencv2/core/core.hpp>
 	<opencv2/highgui/highgui.hpp>
 	<cstring>
@@ -617,24 +627,28 @@
 	<sstream>
 	<assert.h>
 	"projet.h"
+	"IO_fonctions.h"
+	"Point2D.h"
 	<vector>
 	<complex>
 	<tiffio.h>
 
-1513783010 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/projet.h
+1581523936 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/projet.h
 
-1516880808 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/FFT_fonctions.h
+1592225530 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/FFT_fonctions.h
 	<vector>
 	<complex>
 	<fftw3.h>
 	"src/vecteur.h"
+	"FFTW_init.h"
 
-1494511718 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/vecteur.h
+1592225530 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/vecteur.h
 	<iostream>
 
-1557504385 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/fonctions.cpp
+1592225530 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/fonctions.cpp
 	<fstream>
 	<vector>
+	<chrono>
 	<complex>
 	<fftw3.h>
 	"struct.h"
@@ -643,18 +657,20 @@
 	"projet.h"
 	"FFT_fonctions.h"
 	"fonctions.h"
+	"IO_fonctions.h"
 
-1558965269 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/manip.cpp
+1592225530 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/manip.cpp
 	"manip.h"
 	<iostream>
 	"fonctions.h"
 	"projet.h"
 
-1550679385 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/manip.h
+1592225530 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/manip.h
 	<cstdlib>
 	<iostream>
+	"struct.h"
 
-1494492826 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/vecteur.cpp
+1592225530 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/vecteur.cpp
 	"vecteur.h"
 	<cmath>
 	<cstdlib>
@@ -662,7 +678,7 @@
 	<cstring>
 	<string>
 
-1550587655 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/Correction_aberration.cpp
+1592225530 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/Correction_aberration.cpp
 	<iostream>
 	<fstream>
 	<sstream>
@@ -670,9 +686,10 @@
 	<stdlib.h>
 	<math.h>
 	"fonctions.h"
+	<chrono>
 	"Correction_aberration.h"
 
-1557328371 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/Correction_aberration.h
+1592225530 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/Correction_aberration.h
 	<iostream>
 	<fstream>
 	<sstream>
@@ -683,11 +700,12 @@
 	<highgui.h>
 	<cv.h>
 
-1549031522 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/FFT_fonctions.cpp
+1592225530 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/FFT_fonctions.cpp
 	"FFT_fonctions.h"
 	"fonctions.h"
+	"omp.h"
 
-1558622680 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/main.cpp
+1592312295 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/main.cpp
 	<iostream>
 	<vector>
 	"struct.h"
@@ -697,6 +715,8 @@
 	"projet.h"
 	"fonctions.h"
 	"FFT_fonctions.h"
+	"deroulement_volkov3.h"
+	"deroulement_volkov2.h"
 	"deroulement_volkov.h"
 	"deroulement_herraez.h"
 	"Correction_aberration.h"
@@ -1042,4 +1062,77 @@
 	"src/vecteur.h"
 	"deroulement_volkov3.h"
 	<chrono>
+
+1592225530 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/include/FFTW_init.h
+	"Point3D.h"
+	"Point2D.h"
+	<fftw3.h>
+	"struct.h"
+
+1581523936 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/include/Point3D.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	<iostream>
+	"Point2D.h"
+
+1581523936 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/include/Point2D.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	<vector>
+	<complex>
+
+1592311969 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/include/struct.h
+
+1592311969 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/include/IO_fonctions.h
+	"FFTW_init.h"
+	<vector>
+	<complex>
+	<tiffio.h>
+	"projet.h"
+
+1592311969 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/include/deroulement_volkov3.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"vecteur.h"
+	"FFTW_init.h"
+
+1592225530 /home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/include/deroulement_volkov2.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"FFTW_init.h"
+
+1592225530 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/deroulement_volkov2.cpp
+	<vector>
+	<complex>
+	"fonctions.h"
+	"FFT_fonctions.h"
+	"src/vecteur.h"
+	"deroulement_volkov2.h"
+	<chrono>
+
+1592311969 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/deroulement_volkov3.cpp
+	<vector>
+	<complex>
+	"fonctions.h"
+	"FFT_fonctions.h"
+	"src/vecteur.h"
+	"deroulement_volkov3.h"
+	<chrono>
+
+1592225530 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/FFTW_init.cpp
+	"FFTW_init.h"
+	"struct.h"
+
+1592311969 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/IO_fonctions.cpp
+	"IO_fonctions.h"
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+	<fstream>
+
+1581523936 source:/home/tomo/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/Point2D.cpp
+	"Point2D.h"
 
