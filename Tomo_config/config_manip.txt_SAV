@@ -36,7 +36,11 @@ VXMAX 8.50
 VYMIN -6.5
 VYMAX 6.00
 
+<<<<<<< HEAD
 NA_COND_LIM 0.90
+=======
+NA_COND_LIM 0.50
+>>>>>>> 3790bf17def102bfb833f1adc25b0e9a8b237a06
 AMPLI_REF 0
 
 
@@ -90,6 +94,7 @@ AMPLI_REF 0
 
 
 
+<<<<<<< HEAD
 
 
 
@@ -100,3 +105,5 @@ AMPLI_REF 0
 
 
 
+=======
+>>>>>>> 3790bf17def102bfb833f1adc25b0e9a8b237a06

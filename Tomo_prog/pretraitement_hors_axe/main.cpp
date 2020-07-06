@@ -42,6 +42,8 @@ int main()
     //masqueTukeyHolo=tukey2D(dimROI.x,dimROI.y,0.05);
     ///--------------------Init Référence Amplitude pour correction plan central-------------------------------------------
     ampli_ref=initRef(chemin_acquis+"/Intensite_ref.pgm",coin,dimROI);
+    //ampli_ref=initRef("/opt/Acquis/phytolites/acquis2/ACQUIS/Intensite_ref.pgm",coin,dimROI);
+
     ///------Init variable champ complexe après découpe hors axe-----------------------------
     const size_t  NbPixUBorn=4*m1.NXMAX*m1.NXMAX, NbAngle=m1.NbAngle;//dimensions
     cout<<"NbAngle="<<NbAngle<<endl<<"m1.NXMAX="<<m1.NXMAX<<endl;//nombre d'hologrammes
@@ -58,21 +60,28 @@ auto start_decoupeHA = std::chrono::system_clock::now();///démarrage chrono Hor
 FILE* test_existence;//tester l'existence des fichiers
 unsigned short int cptAngle=0;
 //#pragma omp parallel forTF2D_r2c
+//cout<<"hello"<<endl;
 for(cptAngle=0; cptAngle<NbAngle; cptAngle++){
   if((cptAngle-100*(cptAngle/100))==0)    cout<<cptAngle<<endl;
     sprintf(charAngle,"%03i",cptAngle);
     string nomFichierHolo=m1.chemin_acquis+"/i"+charAngle+".pgm";
     test_existence = fopen(nomFichierHolo.c_str(), "rb");
+<<<<<<< HEAD
     cout<<nomFichierHolo<<endl;
+=======
+    // cout<<nomFichierHolo<<endl;
+>>>>>>> 3790bf17def102bfb833f1adc25b0e9a8b237a06
     if(test_existence!=NULL) {
       fclose(test_existence);
+    //  cout<<"cahrger..."<<endl;
       charger_image2D_OCV(holo1,nomFichierHolo, coin, dimROI);
       for(size_t cpt=0;cpt<NbPixROI2d;cpt++){
         holo1[cpt]=holo1[cpt]/ampli_ref[cpt];
       }
-     // holo2TF_UBorn2(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calculer la TF des hologrammes et la découper de dimROI à 2NXMAX
-     // holo2TF_UBorn2_shift(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA_shift,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calculer la TF des hologrammes et la découper de dimROI à 2NXMAX
-      holo2TF_UBorn2_shift_r2c(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA_shift,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);
+     // holo2TF_UBorn2(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF holo+ découpe dans TF symétrisée, repère humain
+     holo2TF_UBorn2_shift(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA_shift,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF hologrammes +  découper de dimROI à 2NXMAX dans TF symétrisée, repère informatique
+     // cout<<"Coin_Ha_shift="<<coinHA_shift.x<<","<<coinHA_shift.y<<endl;
+     // holo2TF_UBorn2_shift_r2c(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA_shift,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF hologrammes +  découper de dimROI à 2NXMAX dans TF NON symétrique, repère info
       NbAngleOk++;
     }
     else cout<<"fichier "<<cptAngle<<" inexistant\n";
@@ -129,7 +138,7 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
 
   if(m1.b_CorrAber==true){
     calc_Uborn2(TF_UBorn,UBorn,dim2DHA,posSpec,param_fftw2D_c2r_HA);
-//    SAVCplx(UBorn,"Re",chemin_result+"/ampli_UBorn_debut_extract.raw",t_float,"a+b");
+    //SAVCplx(UBorn,"Re",chemin_result+"/ampli_UBorn_debut_extract.raw",t_float,"a+b");
     ///----------Calcul phase + deroulement--------------------------------
     calcPhase_mpi_pi_atan2(UBorn,phase_2Pi_vec); ///fonction atan2
     //SAV2(phase_2Pi_vec,chemin_result+"/phasePI_atan2.raw",t_float,"a+b");

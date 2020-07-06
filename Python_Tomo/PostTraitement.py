@@ -22,33 +22,34 @@ CheminOTF = f"OTF_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin"
 Absorption = rp.ReadBornCube(CheminAbsorp, 2*dimHolo, 2*dimHolo, 2*dimHolo, False)
 Refraction = rp.ReadBornCube(CheminRefrac, 2*dimHolo, 2*dimHolo, 2*dimHolo,False)
 OTF = rp.ReadBornCube(CheminOTF, 2*dimHolo, 2*dimHolo, 2*dimHolo, True)
-Rec_Object = Absorption + Refraction*1j
-plt.imshow(Refraction[:,:,210].real, cmap="gray")
+Rec_Object = Refraction + Absorption*1j
+plt.imshow(Refraction[dimHolo,:,:], cmap="gray")
 plt.show()
-plt.imshow(Absorption[:,:,210].real, cmap="gray")
+plt.imshow(Absorption[dimHolo,:,:], cmap="gray")
 plt.show()
 
 # Gerchberg parameters
-nbiter = 50    
-nmin = -.1
-nmax = .1
+nbiter = 100    
+nmin = 0.01
+nmax = .2
 kappamin = 0
-kappamax = 0
+kappamax = 0.1
 
 # Gerchberg reconstruction
+del Absorption, Refraction
 start_time = time.time()
 FilteredObj = rp.Gerchberg(Rec_Object,OTF,nmin,nmax,kappamin,kappamax,nbiter)
 print(f"Reconstruction time for {nbiter} iterations: {np.round(time.time() - start_time,decimals=2)} seconds")
-plt.imshow(FilteredObj[:,:,210].real, cmap="gray")
+plt.imshow(FilteredObj[dimHolo,:,:].real, cmap="gray")
 plt.show()
-plt.imshow(FilteredObj[:,:,210].imag, cmap="gray")
+plt.imshow(FilteredObj[dimHolo,:,:].imag, cmap="gray")
 plt.show() 
 
 fidRef = open(f"RefractionGerch_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
 fidAbs = open(f"AbsorptionGerch_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
 for cpt in range(FilteredObj.shape[2]):
-    Refr = FilteredObj[:,:,cpt].imag
-    Abs = FilteredObj[:,:,cpt].real
+    Refr = FilteredObj[:,:,cpt].real
+    Abs = FilteredObj[:,:,cpt].imag
     Refr.tofile(fidRef)
     Abs.tofile(fidAbs) 
 fidRef.close()
