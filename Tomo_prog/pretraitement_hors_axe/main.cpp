@@ -66,7 +66,11 @@ for(cptAngle=0; cptAngle<NbAngle; cptAngle++){
     sprintf(charAngle,"%03i",cptAngle);
     string nomFichierHolo=m1.chemin_acquis+"/i"+charAngle+".pgm";
     test_existence = fopen(nomFichierHolo.c_str(), "rb");
+
     // cout<<nomFichierHolo<<endl;
+
+   // cout<<nomFichierHolo<<endl;
+
     if(test_existence!=NULL) {
       fclose(test_existence);
     //  cout<<"cahrger..."<<endl;
@@ -74,8 +78,8 @@ for(cptAngle=0; cptAngle<NbAngle; cptAngle++){
       for(size_t cpt=0;cpt<NbPixROI2d;cpt++){
         holo1[cpt]=holo1[cpt]/ampli_ref[cpt];
       }
-     // holo2TF_UBorn2(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF holo+ découpe dans TF symétrisée, repère humain
-     holo2TF_UBorn2_shift(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA_shift,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF hologrammes +  découper de dimROI à 2NXMAX dans TF symétrisée, repère informatique
+      holo2TF_UBorn2(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF holo+ découpe dans TF symétrisée, repère humain
+   //  holo2TF_UBorn2_shift(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA_shift,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF hologrammes +  découper de dimROI à 2NXMAX dans TF symétrisée, repère informatique
      // cout<<"Coin_Ha_shift="<<coinHA_shift.x<<","<<coinHA_shift.y<<endl;
      // holo2TF_UBorn2_shift_r2c(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA_shift,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF hologrammes +  découper de dimROI à 2NXMAX dans TF NON symétrique, repère info
       NbAngleOk++;

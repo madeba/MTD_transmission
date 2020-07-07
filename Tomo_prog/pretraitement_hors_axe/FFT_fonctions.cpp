@@ -524,6 +524,7 @@ cpt_Z_dest=(dim_dest.x*dim_dest.y)*numAngle;
         }
     }
 }
+/* JE NE SAIS PAS CEQUE FAIS CETTE FONCTION? ELLE ne symétrise pas.
 ///TF2D avec entrée purement réelle, utlise r2c, mais resymétrise la sortie
 void TF2D_r2c_symetric(vector<double> const &entree, vector<complex<double> > &sortie, FFTW_init  &tf2D_Re){
   size_t dim=sqrt(entree.size());
@@ -551,8 +552,8 @@ void TF2D_r2c_symetric(vector<double> const &entree, vector<complex<double> > &s
     }
   }
 
-}
-/*
+}*/
+
 void TF2D_r2c_symetric(vector<double> const &entree, vector<complex<double> > &sortie, FFTW_init  &tf2D_Re){
   size_t dim=sqrt(entree.size()),  nbPix=entree.size();
   Var2D dimROI{dim,dim};
@@ -596,6 +597,6 @@ void TF2D_r2c_symetric(vector<double> const &entree, vector<complex<double> > &s
     sortie[cptD].imag(-tf2D_Re.out[cptA][1]*Coef_norm);
   }
 
-}*/
+}
 
 

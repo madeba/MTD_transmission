@@ -219,6 +219,7 @@ int main(int argc, char *argv[])
     chemin_acquis=extract_string("CHEMIN_ACQUIS",home+fin_chemin_gui_tomo);
     chemin_result=extract_string("CHEMIN_RESULT",home+fin_chemin_gui_tomo);
     chemin_recon=repertoire_config+"/recon.txt";
+
     chemin_config_manip=repertoire_config+"/config_manip.txt";
     cout<<"fichier config : "<<chemin_config_manip<<endl;
 
