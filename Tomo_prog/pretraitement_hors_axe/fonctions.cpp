@@ -254,7 +254,8 @@ void holo2TF_UBorn2_shift_r2c(vector<double>  &holo1,vector<complex<double>> &TF
    // coupeCplx(TF_Holo, TF_UBornTot, dimROI, dim2DHA, coinHA_shift, NbAngleOk);///Découpe à [-Nxmax,+NXmax]dans repère humain-lisible +envoi dans pile3D
  //   SAVCplx(TF,"Im","/home/mat/tmp/Tfholo_220x220x60.bin",t_float,"a+b");
 }
-///r2c symetric. The input hologram must be fftshifted,  then the spectrum must be back-fftshifted,  cropped and send to stack by the function CoupeCplx
+///r2c symetric. cons : The input hologram must be fftshifted,  then the spectrum must be back-fftshifted. then the image is  cropped and send to the stack of complex fields  by the function "CoupeCplx"
+///pros : slower but easier to understand, because the fft is complete.
 void holo2TF_UBorn2(vector<double>  &holo1,vector<complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA, size_t NbAngleOk, vector<double> const &tukeyHolo,FFTW_init  &param_fftw2DHolo)
 {
     size_t NbPixROI2d=holo1.size();
@@ -263,7 +264,7 @@ void holo2TF_UBorn2(vector<double>  &holo1,vector<complex<double>> &TF_UBornTot,
       holo1[pixel]=(double)holo1[pixel]*tukeyHolo[pixel];
 
     TF2D_r2c_symetric(fftshift2D2(holo1),TF_Holo,param_fftw2DHolo);
-    SAVCplx(TF_Holo,"Im","/home/mat/tmp/Tfholo_1024x1024.bin",t_float,"a+b");
+   // SAVCplx(TF_Holo,"Im","/home/mat/tmp/Tfholo_1024x1024.bin",t_float,"a+b");
     coupeCplx(fftshift2D2(TF_Holo), TF_UBornTot, dimROI, dim2DHA, coinHA, NbAngleOk);///Découpe à [-Nxmax,+NXmax]dans repère humain-lisible +envoi dans pile3D
    // coupeCplx(TF_Holo, TF_UBornTot, dimROI, dim2DHA, coinHA, NbAngleOk);///Découpe à [-Nxmax,+NXmax]dans repère humain-lisible +envoi dans pile3D
 

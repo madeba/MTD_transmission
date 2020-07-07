@@ -36,11 +36,11 @@ VXMAX 8.50
 VYMIN -6.5
 VYMAX 6.00
 
-<<<<<<< HEAD
-NA_COND_LIM 0.50
-=======
+
 NA_COND_LIM 0.90
->>>>>>> 01cedd32c2ece1f6346a6bc18c3b70971b9b37c5
+
+
+
 AMPLI_REF 0
 
 
@@ -94,8 +94,7 @@ AMPLI_REF 0
 
 
 
-<<<<<<< HEAD
-=======
+<<<<<<<<< Temporary merge branch 1
 
 
 
@@ -106,4 +105,5 @@ AMPLI_REF 0
 
 
 
->>>>>>> 01cedd32c2ece1f6346a6bc18c3b70971b9b37c5
+=========
+>>>>>>>>> Temporary merge branch 2

@@ -6,6 +6,7 @@
 from linecache import getline
 from scipy.fftpack import fftn,ifftn,fftshift
 import numpy as np
+import numexpr as ne
 import time
 
 def ReadBornCube(Chemin,dimX,dimY,nb_img,isint):
@@ -125,8 +126,8 @@ def decal_TF_holo(TF_holo,decal,P_holo):
     TF_holo_shift = np.zeros_like(TF_holo)
     decal[0] = decal[0]%P_holo
     decal[1] = decal[1]%P_holo
-    if decal[0] < 0 : decal[0] +=P_holo
-    if decal[1] < 0 : decal[1] +=P_holo
+    if decal[0] < 0 : decal[0] += P_holo
+    if decal[1] < 0 : decal[1] += P_holo
     TF_holo_shift[decal[0]:,decal[1]:] = TF_holo[0:P_holo-decal[0], 0:P_holo-decal[1]]  
     TF_holo_shift[:decal[0],:decal[1]] = TF_holo[P_holo-decal[0]:, P_holo-decal[1]:]
     TF_holo_shift[decal[0]:,:decal[1]] = TF_holo[0:P_holo-decal[0], P_holo-decal[1]:]
@@ -181,7 +182,7 @@ def calc_tf_calotte(TF_vol3D,mask_calotte,TF_holo,fd_m, sdz_m, dx_m, dy_m,P,P_ho
     kv = 2*np.pi/lambda_v
     k0 =  kv * n0
     
-    cteInd2Pot =np.complex(-2*kv**2*n0,0)
+    cteInd2Pot = np.complex(-2*kv**2*n0,0)
     ctePot2UBorn  =  np.complex(0,-np.pi/k0)
     cteNormalisation = np.complex(-1/(2*np.pi),0)
 
@@ -284,27 +285,20 @@ def Gerchberg(ReconsObjOrig,OTF,Delta_nmin,Delta_nmax,Kappa_min,Kappa_max,nbiter
         print(f"Gerchberg iteration {cpt}")
         Refr_index = ReconsObjEst.real
         Absorb_val = ReconsObjEst.imag
-        
-        # Refr_index[np.unravel_index(Refr_index<Delta_nmin, Refr_index.shape)]=Delta_nmin
-        # Refr_index[np.unravel_index(Refr_index>Delta_nmax, Refr_index.shape)]=Delta_nmax
-        # Absorb_val[np.unravel_index(Absorb_val<Kappa_min, Absorb_val.shape)]=Kappa_min
-        # Absorb_val[np.unravel_index(Absorb_val>Kappa_max, Absorb_val.shape)]=Kappa_max
-        
+
         Refr_index[Refr_index<Delta_nmin]=Delta_nmin
         Refr_index[Refr_index>Delta_nmax]=Delta_nmax
         Absorb_val[Absorb_val<Kappa_min]=Kappa_min
         Absorb_val[Absorb_val>Kappa_max]=Kappa_max
         
-        ReconsObjEst = Refr_index + Absorb_val*1j
+        ReconsObjEst = ne.evaluate("Refr_index + Absorb_val*1j")
         ReconsFieldEst = fftn(ReconsObjEst)
         
         if cpt<nbiter/2:
-            # index = np.unravel_index(OTF[0:int(OTF.shape[0]/2-1),:,:], OTF.shape)
             index = np.nonzero(OTF[0:int(OTF.shape[0]/2-1),:,:])
-            
         if cpt>=nbiter/2:
-            # index = np.unravel_index(OTF, OTF.shape)
             index = np.nonzero(OTF)
+            
         ReconsFieldEst[index] = ReconsFieldOrig[index]
         ReconsObjEst = ifftn(ReconsFieldEst)
         print(f"Iteration duration: {np.round(time.time() - start_time,decimals=2)} seconds")

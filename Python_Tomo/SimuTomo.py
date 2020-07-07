@@ -61,7 +61,7 @@ def OTF_Flower(dimHolo, NA_ill, nimm, nbangle):
     OTF_Simu[np.int32(KOY[index]+dimHolo),np.int32(KOX[index]+dimHolo),np.int32(KOZ[index]+dimHolo)]=1
     return OTF_Simu
 
-def BeadSimu(Radius,dimHolo,nimm,nbead):
+def BeadSimu(Radius,dimHolo,nimm,nbead,kappa):
     """
     Simulation of a spherical bead for testing purposes
 
@@ -75,16 +75,22 @@ def BeadSimu(Radius,dimHolo,nimm,nbead):
         Refractive index of the immersion medium.
     nbead : float
         Refractive index of the bead
+    kappa : float
+        Absorption of the bead
 
     Returns
     -------
-    Bead : float64
+    Bead : Complex128
         Simulated bead.
 
     """
-    Bead = np.zeros((2*dimHolo,2*dimHolo,2*dimHolo))
-    [X,Y,Z] = np.meshgrid(np.arange(0,Bead.shape[1]),np.arange(0,Bead.shape[0]),np.arange(0,Bead.shape[2]))
-    Center = np.array([Bead.shape[1]/2,Bead.shape[0]/2,Bead.shape[2]/2])
-    Bead = (X - Center[1])**2 + (Y - Center[0])**2 + (Z - Center[2])**2 <= Radius**2
-    Bead = Bead * (nbead-nimm) + nimm
+    Refraction = np.zeros((2*dimHolo,2*dimHolo,2*dimHolo))
+    Absorption = np.zeros((2*dimHolo,2*dimHolo,2*dimHolo))
+    [X,Y,Z] = np.meshgrid(np.arange(0,Refraction.shape[1]),np.arange(0,Refraction.shape[0]),np.arange(0,Refraction.shape[2]))
+    Center = np.array([Refraction.shape[1]/2,Refraction.shape[0]/2,Refraction.shape[2]/2])
+    Refraction = (X - Center[1])**2 + (Y - Center[0])**2 + (Z - Center[2])**2 <= Radius**2
+    Absorption = (X - Center[1]+10)**2 + (Y - Center[0]+10)**2 + (Z - Center[2])**2 <= (0.5*Radius)**2
+    Absorption = kappa * Absorption
+    Refraction = Refraction * (nbead-nimm) + nimm
+    Bead = Refraction + 1j* Absorption
     return Bead
