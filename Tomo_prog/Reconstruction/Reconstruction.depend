@@ -12,28 +12,19 @@
 	"fonctions.h"
 	"Correction_aberration.h"
 
-1411092226 /usr/include/opencv/cxcore.h
+1494560727 /usr/include/opencv/cxcore.h
 	"opencv2/core/core_c.h"
-	"opencv2/core/core.hpp"
 
-1411092226 /usr/include/opencv/highgui.h
+1494560727 /usr/include/opencv/highgui.h
 	"opencv2/core/core_c.h"
-	"opencv2/core/core.hpp"
 	"opencv2/highgui/highgui_c.h"
-	"opencv2/highgui/highgui.hpp"
 
-1411092226 /usr/include/opencv/cv.h
+1494560727 /usr/include/opencv/cv.h
 	"opencv2/core/core_c.h"
-	"opencv2/core/core.hpp"
 	"opencv2/imgproc/imgproc_c.h"
-	"opencv2/imgproc/imgproc.hpp"
-	"opencv2/video/tracking.hpp"
-	"opencv2/features2d/features2d.hpp"
-	"opencv2/flann/flann.hpp"
-	"opencv2/calib3d/calib3d.hpp"
-	"opencv2/objdetect/objdetect.hpp"
-	"opencv2/legacy/compat.hpp"
-	"opencv2/core/internal.hpp"
+	"opencv2/photo/photo_c.h"
+	"opencv2/video/tracking_c.h"
+	"opencv2/objdetect/objdetect_c.h"
 
 1445263776 /home/mat/Dropbox/projet_c/2015/Reconstruction_Tr_hors_axe/fonctions.h
 	"struct.h"

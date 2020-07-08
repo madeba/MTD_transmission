@@ -2,14 +2,14 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Release" />
+	<File name="src/FFT_fonctions.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="11860" topLine="263" />
+		</Cursor>
+	</File>
 	<File name="src/FFTW_init.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="2004" topLine="17" />
-		</Cursor>
-	</File>
-	<File name="include/FFT_fonctions.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="757" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="src/IO_fonctions.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -17,24 +17,9 @@
 			<Cursor1 position="3606" topLine="97" />
 		</Cursor>
 	</File>
-	<File name="main.cpp" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include/FFTW_init.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2821" topLine="26" />
-		</Cursor>
-	</File>
-	<File name="src/FFT_fonctions.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="11860" topLine="263" />
-		</Cursor>
-	</File>
-	<File name="src/fonctions.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="501" topLine="24" />
-		</Cursor>
-	</File>
-	<File name="include/IO_fonctions.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1879" topLine="0" />
+			<Cursor1 position="1235" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="include/manip.h" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -42,19 +27,34 @@
 			<Cursor1 position="481" topLine="0" />
 		</Cursor>
 	</File>
+	<File name="main.cpp" open="1" top="1" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2550" topLine="26" />
+		</Cursor>
+	</File>
+	<File name="include/FFT_fonctions.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="757" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/fonctions.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="501" topLine="24" />
+		</Cursor>
+	</File>
+	<File name="src/manip.cpp" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3651" topLine="40" />
+		</Cursor>
+	</File>
 	<File name="include/fonctions.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="619" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="include/FFTW_init.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include/IO_fonctions.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1235" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src/manip.cpp" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="3805" topLine="9" />
+			<Cursor1 position="1879" topLine="0" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>
