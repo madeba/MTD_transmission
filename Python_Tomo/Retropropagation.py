@@ -235,7 +235,7 @@ def retropropagation(holo_pile,nb_holo,SpecCoord,Nmax,R_Ewald,lambda_v,n0,P,P_ho
         nb_holo = holo_pile.shape[2]
 
     TF_vol = np.zeros(shape=(P,P,P),dtype=complex)
-    mask_sum = np.zeros(shape=(P,P,P),dtype=int)
+    mask_sum = np.zeros(shape=(P,P,P),dtype=np.int32)
     fd_m, sdz_m, dx_m, dy_m = Calc_fd(Nmax,R_Ewald)
         
     for i in range(nb_holo):

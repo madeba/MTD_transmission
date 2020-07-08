@@ -13,11 +13,17 @@ import FileTools as ft
 import time
 
 # Data folders and config files
-DossierData = '../PollenAziz/'
-DossierAmplitude = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Amplitude/'
-DossierPhase = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Phase/'
-FichierConfig = f"{DossierData}config_manip.txt"
-CheminMasque = 'Masque.tif'
+DossierAcquis = "/home/nicolas/Acquisitions/BillesCluster/"
+DossierData = f"{DossierAcquis}blanc/"
+# DossierAmplitude = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Amplitude/'
+# DossierPhase = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Phase/'
+FichierConfig = f"{DossierAcquis}config/config_manip.txt"
+CheminMasque = f"{DossierData}Masque.tif"
+
+# Creating results Folders
+ProcessingFolder = f"{DossierData}Pretraitement"
+if not os.path.exists(ProcessingFolder):
+    os.makedirs(ProcessingFolder)
 
 # Acquisition data initialisation
 Rytov = True
@@ -37,11 +43,11 @@ CentreX = int(ft.readvalue(FichierConfig,'CIRCLE_CX')) # Pupil center in Fourier
 CentreY = int(ft.readvalue(FichierConfig,'CIRCLE_CY'))
 nb_holoTot = int(ft.readvalue(FichierConfig,'NB_HOLO'))
 nb_holo = nb_holoTot # Number of holograms in the sequence
-CheminSAV_Re = f"C:/Users/p1600109/Documents/Recherche/MatlabTomo/ReBorn_{dimHolo}.bin"
-CheminSAV_Im = f"C:/Users/p1600109/Documents/Recherche/MatlabTomo/ImBorn_{dimHolo}.bin"
-CheminSAV_Centres = f"C:/Users/p1600109/Documents/Recherche/MatlabTomo/Centres_{dimHolo}.bin"
-CheminSAV_Centrestxt = f"C:/Users/p1600109/Documents/Recherche/MatlabTomo/Centres_{dimHolo}.txt"
-CheminSAV_Param = f"C:/Users/p1600109/Documents/Recherche/MatlabTomo/Param.txt"
+CheminSAV_Re = f"{DossierData}Pretraitement/ReBorn_{dimHolo}.bin"
+CheminSAV_Im = f"{DossierData}Pretraitement/ImBorn_{dimHolo}.bin"
+CheminSAV_Centres = f"{DossierData}Pretraitement/Centres_{dimHolo}.bin"
+CheminSAV_Centrestxt = f"{DossierData}Pretraitement/Centres_{dimHolo}.txt"
+CheminSAV_Param = f"{DossierData}Pretraitement/Param.txt"
 fidCentrestxt = open(CheminSAV_Centrestxt,"a")
 fidParams = open(CheminSAV_Param,"a")
 fidParams.write(f"REwald {REwald}\n")
@@ -94,10 +100,10 @@ for hol in range(0,nb_holo):
         Phase_UBorn = holo.unwrapping(Phase_UBornWrap, pix)
             
         # Amplitude correction
-        Amp_UBornCorr = CAber.ampliCorr(Amp_UBorn,Masque,Poly_US,Poly)
+        Amp_UBorn = CAber.ampliCorr(Amp_UBorn,Masque,Poly_US,Poly)
         
         # Phase correction
-        Phase_UBornCorr = CAber.aberCorr(Phase_UBorn,Masque,Poly_US,Poly) 
+        Phase_UBorn = CAber.aberCorr(Phase_UBorn,Masque,Poly_US,Poly) 
         
         # File opening for field recording
         fidRe = open(CheminSAV_Re,"a")
@@ -105,20 +111,21 @@ for hol in range(0,nb_holo):
         # Field calculation
         if Rytov is True:
             # Rytov
-            Re_UBorn = np.log(np.abs(Amp_UBornCorr))
-            Im_UBorn = Phase_UBornCorr
+            Re_UBorn = np.log(np.abs(Amp_UBorn))
+            Im_UBorn = Phase_UBorn
             Re_UBorn.tofile(fidRe)
             Im_UBorn.tofile(fidIm)
         else:
             # Born
-            Re_UBorn = (Amp_UBornCorr-1)*np.cos(Phase_UBornCorr)
-            Im_UBorn = (Amp_UBornCorr-1)*np.sin(Phase_UBornCorr)
+            Re_UBorn = (Amp_UBorn-1)*np.cos(Phase_UBorn)
+            Im_UBorn = (Amp_UBorn-1)*np.sin(Phase_UBorn)
             Re_UBorn.tofile(fidRe)
             Im_UBorn.tofile(fidIm)
         cpt += 1
         cpt_exist += 1
     else:
         cpt += 1
+print(f"Pre-Processing time for {cpt_exist-1} holograms: {np.round(time.time() - start_time,decimals=2)} seconds")
 # Center recording and file closing 
 fidParams.write(f"nb_angle {cpt_exist-1}\n")
 fidParams.write(f"fmaxHolo {fmaxHolo}\n")
@@ -131,4 +138,3 @@ fidCentrestxt.close()
 fidParams.close()
 fidRe.close()
 fidIm.close()
-print(f"Pre-Processing time for {cpt_exist-1} holograms: {np.round(time.time() - start_time,decimals=2)} seconds")

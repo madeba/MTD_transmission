@@ -10,7 +10,7 @@ import numpy as np
 from scipy.fftpack import fftn,ifftn,fftshift
 import Retropropagation as rp
 
-dimHolo = 110
+dimHolo = 220
 NA_ill = 1.4
 nimm = 1.518
 nbead = 1.55
