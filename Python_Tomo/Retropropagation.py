@@ -2,7 +2,7 @@
 """
 @author: Nicolas Verrier
 """
-
+from scipy import signal
 from linecache import getline
 from scipy.fftpack import fftn,ifftn,fftshift
 import numpy as np
@@ -237,10 +237,13 @@ def retropropagation(holo_pile,nb_holo,SpecCoord,Nmax,R_Ewald,lambda_v,n0,P,P_ho
     TF_vol = np.zeros(shape=(P,P,P),dtype=complex)
     mask_sum = np.zeros(shape=(P,P,P),dtype=np.int32)
     fd_m, sdz_m, dx_m, dy_m = Calc_fd(Nmax,R_Ewald)
+    
+    # Tukey Window
+    TukeyWindow = signal.tukey(P_holo,0.05)
         
     for i in range(nb_holo):
         k_inc = np.array([SpecCoord[1,i], SpecCoord[0,i]])
-        TF_holo_shift_r = fftshift(fftn(holo_pile[:,:,i]))/(Delta_f_Uborn**2*Nmax**2)
+        TF_holo_shift_r = fftshift(fftn(TukeyWindow*holo_pile[:,:,i]))/(Delta_f_Uborn**2*Nmax**2)
         decal = np.array([k_inc[1], k_inc[0]]).astype(int)
         TF_holo_r = decal_TF_holo(TF_holo_shift_r,decal,P_holo)
         TF_vol,mask_sum = calc_tf_calotte(TF_vol,mask_sum,TF_holo_r, fd_m, sdz_m, dx_m, dy_m, P, P_holo, Nmax, k_inc, R_Ewald, lambda_v, n0)

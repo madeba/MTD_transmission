@@ -5,6 +5,7 @@
 
 import matplotlib.pyplot as plt
 from scipy.fftpack import fft2,ifft2,ifftshift
+from scipy import signal
 import numpy as np
 import HoloProcessing as holo
 import CorrectionAberration as CAber
@@ -58,6 +59,9 @@ cpt_exist = 1
 Centres = np.zeros((dimHolo,dimHolo))
 CentreXShift,CentreYShift = holo.CoordToCoordShift(CentreX, CentreY, CamDim, CamDim)
 
+# Tukey Window
+TukeyWindow = signal.tukey(CamDim,0.05)
+
 # Amplitude and phase correction initialisation
 Masque = CAber.InitMasque(CheminMasque,dimHolo)
 nbPtOK = CAber.PixInMask(Masque)
@@ -79,7 +83,7 @@ for hol in range(0,nb_holo):
         Image = plt.imread(filename)
         
         # Hologram spectrum and off-axis filtering
-        FImage = fft2(Image)
+        FImage = fft2(TukeyWindow*Image)
         SpectreFilt=FImage[int(CentreYShift-fmaxHolo):int(CentreYShift+fmaxHolo),int(CentreXShift-fmaxHolo):int(CentreXShift+fmaxHolo)]
         
         # Specular spot coordinates calculation
