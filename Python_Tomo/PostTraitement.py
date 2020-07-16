@@ -28,9 +28,9 @@ CheminRefrac = f"{ProcessingFolder}/Refraction_{2*dimHolo}x{2*dimHolo}x{2*dimHol
 CheminOTF = f"{ProcessingFolder}/OTF_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin"
 
 # Files reading
-Absorption = rp.ReadBornCube(CheminAbsorp, 2*dimHolo, 2*dimHolo, 2*dimHolo, "np.float64")
-Refraction = rp.ReadBornCube(CheminRefrac, 2*dimHolo, 2*dimHolo, 2*dimHolo, "np.float64")
-OTF = rp.ReadBornCube(CheminOTF, 2*dimHolo, 2*dimHolo, 2*dimHolo, "np.int32")
+Absorption = rp.ReadCube(CheminAbsorp, 2*dimHolo, 2*dimHolo, 2*dimHolo, "np.float64")
+Refraction = rp.ReadCube(CheminRefrac, 2*dimHolo, 2*dimHolo, 2*dimHolo, "np.float64")
+OTF = rp.ReadCube(CheminOTF, 2*dimHolo, 2*dimHolo, 2*dimHolo, "np.int32")
 Rec_Object = Refraction + Absorption*1j
 plt.imshow(Refraction[:,:,dimHolo], cmap="gray")
 plt.show()

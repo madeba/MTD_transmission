@@ -10,7 +10,7 @@ import numpy as np
 import numexpr as ne
 import time
 
-def ReadBornCube(Chemin,dimX,dimY,nb_img,dtype):
+def ReadCube(Chemin,dimX,dimY,nb_img,dtype):
     """
     Opening raw values of UBorn files and transforming it as a data cube with (dimX,dimY,nb_img) dimensions
 

@@ -44,8 +44,8 @@ SpecCoordPath = f"{DossierData}Pretraitement/Centres_{dimHolo}.txt"
 fi = rp.Calc_fi(SpecCoordPath, nb_angle, REwald,dimHolo)
 
 # Field files reading
-ReUBorn = rp.ReadBornCube(CheminReUBorn, dimHolo, dimHolo, nb_angle, "np.float64")
-ImUBorn = rp.ReadBornCube(CheminImUBorn, dimHolo, dimHolo, nb_angle, "np.float64")
+ReUBorn = rp.ReadCube(CheminReUBorn, dimHolo, dimHolo, nb_angle, "np.float64")
+ImUBorn = rp.ReadCube(CheminImUBorn, dimHolo, dimHolo, nb_angle, "np.float64")
 UBornCplx = ReUBorn + ImUBorn * 1j
 del ReUBorn, ImUBorn
 
