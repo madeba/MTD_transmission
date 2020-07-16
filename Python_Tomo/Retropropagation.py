@@ -29,8 +29,7 @@ def ReadCube(Chemin,dimX,dimY,nb_img,dtype):
 
     Returns
     -------
-    DataCube : int32 or float64 depending on isint value
-        Raw data rearranged as a datacube.
+    DataCube : Raw data rearranged as a (y,x,z)-datacube.
 
     """
     with open(Chemin,'r') as fid:
