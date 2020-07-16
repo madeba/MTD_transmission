@@ -190,7 +190,8 @@ def compuBackgr(coefficients,polynome_to_fit,PolyBackgr):
             result_mltpn[:,0]=coefficients[:,0] * polynome_to_fit[:,UsCoord1D]
             PolyBackgr[y,x] =np.sum(result_mltpn)
             UsCoord1D += 1
-      
+
+@numba.jit(nopython=False)
 def compuCoefPoly(ImageBrut,Masque,coef_polynomial,polynomeUS_to_fit):
     """
     Least-Square computation of the coefficient of the fitted polynome

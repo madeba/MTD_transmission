@@ -29,7 +29,7 @@ def ReadCube(Chemin,dimX,dimY,nb_img,dtype):
 
     Returns
     -------
-    DataCube : Raw data rearranged as a (y,x,z)-datacube.
+    DataCube : Raw data rearranged as a (y,x,z)- datacube.
 
     """
     with open(Chemin,'r') as fid:
