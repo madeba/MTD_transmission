@@ -2,6 +2,7 @@
 """
 @author: Nicolas Verrier
 """
+
 from scipy import signal
 from linecache import getline
 from scipy.fftpack import fftn,ifftn,fftshift
@@ -9,7 +10,7 @@ import numpy as np
 import numexpr as ne
 import time
 
-def ReadBornCube(Chemin,dimX,dimY,nb_img,isint):
+def ReadBornCube(Chemin,dimX,dimY,nb_img,dtype):
     """
     Opening raw values of UBorn files and transforming it as a data cube with (dimX,dimY,nb_img) dimensions
 
@@ -23,8 +24,8 @@ def ReadBornCube(Chemin,dimX,dimY,nb_img,isint):
         Y dimension of the datacube.
     nb_img : int
         Number of images in the datacube.
-    isint : bool
-        Data type. If True, data to be loaded are int32, if False, data to be loaded are float64
+    dtype : str
+        Data type.
 
     Returns
     -------
@@ -32,14 +33,10 @@ def ReadBornCube(Chemin,dimX,dimY,nb_img,isint):
         Raw data rearranged as a datacube.
 
     """
-    if isint == False:
-        with open(Chemin,'r') as fid:
-            DataCube = np.fromfile(fid, np.float64)
-        DataCube = DataCube.reshape((nb_img,dimX,dimY)).transpose(1,2,0)
-    else:
-        with open(Chemin,'r') as fid:
-            DataCube = np.fromfile(fid, np.int32)
-        DataCube = DataCube.reshape((nb_img,dimX,dimY)).transpose(1,2,0)        
+    with open(Chemin,'r') as fid:
+        DataCube = np.fromfile(fid, eval(dtype))
+    DataCube = DataCube.reshape((nb_img,dimX,dimY)).transpose(1,2,0)
+     
     return DataCube
 
 def Calc_fi(Chemin,nb_angle, REwald, dimHolo):
@@ -239,17 +236,18 @@ def retropropagation(holo_pile,nb_holo,SpecCoord,Nmax,R_Ewald,lambda_v,n0,P,P_ho
     fd_m, sdz_m, dx_m, dy_m = Calc_fd(Nmax,R_Ewald)
     
     # Tukey Window
-    TukeyWindow = signal.tukey(P_holo,0.05)
+    TukeyWindow = np.sqrt(np.outer(signal.tukey(P_holo,0.1),signal.tukey(P_holo,0.1)))
         
     for i in range(nb_holo):
         k_inc = np.array([SpecCoord[1,i], SpecCoord[0,i]])
         TF_holo_shift_r = fftshift(fftn(TukeyWindow*holo_pile[:,:,i]))/(Delta_f_Uborn**2*Nmax**2)
-        decal = np.array([k_inc[1], k_inc[0]]).astype(int)
+        decal = np.array([k_inc[1],k_inc[0]]).astype(int)
         TF_holo_r = decal_TF_holo(TF_holo_shift_r,decal,P_holo)
         TF_vol,mask_sum = calc_tf_calotte(TF_vol,mask_sum,TF_holo_r, fd_m, sdz_m, dx_m, dy_m, P, P_holo, Nmax, k_inc, R_Ewald, lambda_v, n0)
     TF_vol[mask_sum !=0] = TF_vol[mask_sum!=0] / mask_sum[mask_sum!=0]
     f_recon = fftshift(ifftn(TF_vol))/(Tp_Tomo**3)
     mask_sum = fftshift(mask_sum)
+    TF_vol = fftshift(TF_vol)
     f_recon = fftshift(f_recon,[0,1])
     return f_recon, TF_vol, mask_sum
 

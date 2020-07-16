@@ -2,6 +2,7 @@
 """
 @author: Nicolas Verrier
 """
+
 import matplotlib.pyplot as plt
 import numpy as np
 import FileTools as ft
@@ -11,7 +12,7 @@ import os
 
 # Data folders and config files
 DossierAcquis = "/home/nicolas/Acquisitions/BillesCluster/"
-DossierData = f"{DossierAcquis}blanc/"
+DossierData = f"{DossierAcquis}data/"
 # DossierAmplitude = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Amplitude/'
 # DossierPhase = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Phase/'
 FichierConfig = f"{DossierAcquis}config/config_manip.txt"
@@ -40,25 +41,33 @@ CheminImUBorn = f"{DossierData}Pretraitement/ImBorn_{dimHolo}.bin"
 
 # Path to the specular coordinates
 SpecCoordPath = f"{DossierData}Pretraitement/Centres_{dimHolo}.txt"
-fi = rp.Calc_fi(SpecCoordPath, nb_angle, REwald, dimHolo)
+fi = rp.Calc_fi(SpecCoordPath, nb_angle, REwald,dimHolo)
 
 # Field files reading
-ReUBorn = rp.ReadBornCube(CheminReUBorn, dimHolo, dimHolo, nb_angle, False)
-ImUBorn = rp.ReadBornCube(CheminImUBorn, dimHolo, dimHolo, nb_angle, False)
+ReUBorn = rp.ReadBornCube(CheminReUBorn, dimHolo, dimHolo, nb_angle, "np.float64")
+ImUBorn = rp.ReadBornCube(CheminImUBorn, dimHolo, dimHolo, nb_angle, "np.float64")
 UBornCplx = ReUBorn + ImUBorn * 1j
 del ReUBorn, ImUBorn
 
 start_time = time.time()
-f_recon, _, mask_sum = rp.retropropagation(UBornCplx,nb_holo,fi,fmaxHolo,REwald,lambda_0,1.515,2*dimHolo,dimHolo,pixTheo,2*dimHolo,UBornPitch)
+f_recon, TFVol, mask_sum = rp.retropropagation(UBornCplx,nb_holo,fi,fmaxHolo,REwald,lambda_0,1.515,2*dimHolo,dimHolo,pixTheo,2*dimHolo,UBornPitch)
 print(f"Reconstruction time for a {2*dimHolo}x{2*dimHolo}x{2*dimHolo} volume, with {nb_holo} holograms: {np.round(time.time() - start_time,decimals=2)} seconds")
 
 Refraction = f_recon.real
 Absorption = f_recon.imag
 OTF = np.zeros_like(mask_sum)
 OTF[mask_sum != 0] = 1
-plt.imshow(Refraction[:,:,200].real, cmap="gray")
+
+TFVolfilt = np.zeros_like(OTF)
+TFVolfilt[TFVol != 0] = 1
+
+plt.imshow(Refraction[:,:,dimHolo], cmap="gray")
 plt.show()
-plt.imshow(OTF[200,:,:], cmap="gray")
+plt.imshow(OTF[:,:,dimHolo], cmap="gray")
+plt.show()
+plt.imshow(OTF[:,dimHolo,:], cmap="gray")
+plt.show()
+plt.imshow(TFVolfilt[:,dimHolo,:], cmap="gray")
 plt.show()
 
 fidRef = open(f"{ProcessingFolder}/Refraction_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")

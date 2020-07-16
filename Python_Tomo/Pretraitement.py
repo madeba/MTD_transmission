@@ -15,11 +15,11 @@ import time
 
 # Data folders and config files
 DossierAcquis = "/home/nicolas/Acquisitions/BillesCluster/"
-DossierData = f"{DossierAcquis}blanc/"
+DossierData = f"{DossierAcquis}data/"
 # DossierAmplitude = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Amplitude/'
 # DossierPhase = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Phase/'
 FichierConfig = f"{DossierAcquis}config/config_manip.txt"
-CheminMasque = f"{DossierData}Masque.tif"
+
 
 # Creating results Folders
 ProcessingFolder = f"{DossierData}Pretraitement"
@@ -40,6 +40,8 @@ Gtot = f_tube/f_obj/RapFoc
 REwald = CamDim*pix/Gtot*nimm/(Lambda) # Ewald sphere radius (pixel)
 fmaxHolo = round(REwald*NA/nimm) # Max frequency support (pixel)
 dimHolo = int(2*fmaxHolo) # Hologram size
+# dimHolo = int(CamDim/4) # Hologram size
+CheminMasque = f"{DossierData}Masque{dimHolo}.tif"
 CentreX = int(ft.readvalue(FichierConfig,'CIRCLE_CX')) # Pupil center in Fourier space
 CentreY = int(ft.readvalue(FichierConfig,'CIRCLE_CY'))
 nb_holoTot = int(ft.readvalue(FichierConfig,'NB_HOLO'))
@@ -60,7 +62,10 @@ Centres = np.zeros((dimHolo,dimHolo))
 CentreXShift,CentreYShift = holo.CoordToCoordShift(CentreX, CentreY, CamDim, CamDim)
 
 # Tukey Window
-TukeyWindow = signal.tukey(CamDim,0.05)
+TukeyWindow = np.sqrt(np.outer(signal.tukey(CamDim,0.1),signal.tukey(CamDim,0.1)))
+# plt.imshow(TukeyWindow, cmap="gray")
+# plt.show()
+
 
 # Amplitude and phase correction initialisation
 Masque = CAber.InitMasque(CheminMasque,dimHolo)
@@ -84,7 +89,7 @@ for hol in range(0,nb_holo):
         
         # Hologram spectrum and off-axis filtering
         FImage = fft2(TukeyWindow*Image)
-        SpectreFilt=FImage[int(CentreYShift-fmaxHolo):int(CentreYShift+fmaxHolo),int(CentreXShift-fmaxHolo):int(CentreXShift+fmaxHolo)]
+        SpectreFilt=FImage[int(CentreYShift-dimHolo/2):int(CentreYShift+dimHolo/2),int(CentreXShift-dimHolo/2):int(CentreXShift+dimHolo/2)]
         
         # Specular spot coordinates calculation
         ind = np.unravel_index(np.argmax(np.abs(SpectreFilt), axis=None), SpectreFilt.shape)
@@ -101,13 +106,17 @@ for hol in range(0,nb_holo):
         Phase_UBornWrap = np.angle(UBorn)
         
         # Phase unwrapping
-        Phase_UBorn = holo.unwrapping(Phase_UBornWrap, pix)
+        if Rytov is True:
+            Phase_UBorn = holo.unwrapping(Phase_UBornWrap, pix)
+        else:
+            Phase_UBorn = Phase_UBornWrap
             
         # Amplitude correction
         Amp_UBorn = CAber.ampliCorr(Amp_UBorn,Masque,Poly_US,Poly)
         
         # Phase correction
-        Phase_UBorn = CAber.aberCorr(Phase_UBorn,Masque,Poly_US,Poly) 
+        if Rytov is True:
+            Phase_UBorn = CAber.aberCorr(Phase_UBorn,Masque,Poly_US,Poly) 
         
         # File opening for field recording
         fidRe = open(CheminSAV_Re,"a")
