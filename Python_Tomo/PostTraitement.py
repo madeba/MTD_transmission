@@ -11,7 +11,7 @@ import time
 import os
 
 # Path to the parameter file, and parameters reading
-DossierAcquis = "/home/nicolas/Acquisitions/PollenAziz/"
+DossierAcquis = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN18juil/"
 DossierData = f"{DossierAcquis}data/"
 ProcessingFolder = f"{DossierData}Reconstruction"
 CheminParam = f"{DossierData}Pretraitement/Param.txt"
@@ -38,10 +38,10 @@ plt.imshow(Rec_Object.imag[:,:,dimHolo], cmap="gray")
 plt.show()
 
 # Gerchberg parameters
-nbiter = 50    
-nmin = -0.15
-nmax = 0
-kappamin = -0.05
+nbiter = 10    
+nmin = 0
+nmax = 0.15
+kappamin = 0
 kappamax = 0
 
 # Gerchberg reconstruction

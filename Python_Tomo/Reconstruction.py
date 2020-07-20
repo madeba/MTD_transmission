@@ -11,8 +11,8 @@ import time
 import os
 
 # Data folders and config files
-DossierAcquis = "/home/nicolas/Acquisitions/PollenAziz/"
-DossierData = f"{DossierAcquis}data/"
+DossierAcquis = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN18juil/"
+DossierData = f"{DossierAcquis}blanc/"
 # DossierAmplitude = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Amplitude/'
 # DossierPhase = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Phase/'
 FichierConfig = f"{DossierAcquis}config/config_manip.txt"
@@ -63,12 +63,12 @@ TFVolfilt[TFVol != 0] = 1
 
 plt.imshow(Refraction[:,:,dimHolo], cmap="gray")
 plt.show()
-plt.imshow(OTF[:,:,dimHolo], cmap="gray")
-plt.show()
-plt.imshow(OTF[:,dimHolo,:], cmap="gray")
-plt.show()
-plt.imshow(TFVolfilt[:,dimHolo,:], cmap="gray")
-plt.show()
+# plt.imshow(OTF[:,:,dimHolo], cmap="gray")
+# plt.show()
+# plt.imshow(OTF[:,dimHolo,:], cmap="gray")
+# plt.show()
+# plt.imshow(TFVolfilt[:,dimHolo,:], cmap="gray")
+# plt.show()
 
 fidRef = open(f"{ProcessingFolder}/Refraction_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
 fidAbs = open(f"{ProcessingFolder}/Absorption_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
