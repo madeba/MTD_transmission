@@ -9,7 +9,6 @@ from scipy.fftpack import fftn,ifftn,fftshift
 import numpy as np
 import numexpr as ne
 import time
-import numba
 
 def ReadCube(Chemin,dimX,dimY,nb_img,datatype):
     """
@@ -177,13 +176,14 @@ def calc_tf_calotte(TF_vol3D,mask_calotte,TF_holo,fd_m, sdz_m, dx_m, dy_m,P,P_ho
     """
     # print(f"{Nmax}")
     fi = np.array([k_inc[0], k_inc[1], np.round(np.sqrt(R_Ewald**2 - k_inc[0]**2 - k_inc[1]**2))])
+    # print(f"{fi}")
     
     kv = 2*np.pi/lambda_v
     k0 =  kv * n0
     
-    cteInd2Pot = np.complex(-2*kv**2*n0,0)
-    ctePot2UBorn  =  np.complex(0,-np.pi/k0)
-    cteNormalisation = np.complex(-1/(2*np.pi),0)
+    cteInd2Pot = -2*kv**2*n0
+    ctePot2UBorn  =  -1j*np.pi/k0
+    cteNormalisation = -1/(2*np.pi)
 
     fobj_m = (fd_m-(fi[:,np.newaxis])).astype(int)
     TF_vol3D[fobj_m[0,:],fobj_m[1,:],fobj_m[2,:]] += TF_holo[dx_m+Nmax,dy_m+Nmax]*sdz_m/(cteInd2Pot*ctePot2UBorn*cteNormalisation)
@@ -239,15 +239,47 @@ def retropropagation(holo_pile,nb_holo,SpecCoord,Nmax,R_Ewald,lambda_v,n0,P,P_ho
     
     # Tukey Window
     TukeyWindow = np.sqrt(np.outer(signal.tukey(P_holo,0.1),signal.tukey(P_holo,0.1)))
-        
-    for i in range(nb_holo):
-        k_inc = np.array([SpecCoord[1,i], SpecCoord[0,i]])
-        TF_holo_shift_r = fftshift(fftn(TukeyWindow*holo_pile[:,:,i]))/(Delta_f_Uborn**2*Nmax**2)
+    print("")
+    print("-------------------------")
+    print("- Mapping Fourier space -")
+    print("-------------------------")
+    print("")
+    print("-------------------------------------------------------------------------,")
+    print("[] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [")
+    print("-----------------------------------------------------------------------/")
+    print("      \|/ | O -   ^^         |                  |           _   _     |")
+    print("     --O--|/ \        O  ^^  |   ^^   |||||     |     ___  ( ) ( )   _/")
+    print(" /\   /|\ |         --|--    | ^^     |O=O|     |_ __/_|_\,_|___|___/")
+    print("/  \/\    |~~~~~~~~~~~|~~~~~~|        ( - )     | `-O---O-'       |")
+    print("  /\  \/\_|          / \     |       .-~~~-.    | -- -- -- -- -- /")
+    print(" /  /\ \  |         '   `    |      //| o |\\   |______________ |")
+    print("--------------------------------------------------------------_/")
+    print("[] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] ['")
+    print("------------------------------------------------------------'")
+    print("")
+    for cpt in range(nb_holo):
+        if cpt % 50 == 0:
+            print(f"Hologram = {cpt} out of {nb_holo}")
+        k_inc = np.array([SpecCoord[1,cpt], SpecCoord[0,cpt]])
+        TF_holo_shift_r = fftshift(fftn(TukeyWindow*holo_pile[:,:,cpt]))/(Delta_f_Uborn**2*Nmax**2)
         decal = np.array([k_inc[1],k_inc[0]]).astype(int)
         TF_holo_r = decal_TF_holo(TF_holo_shift_r,decal,P_holo)
         TF_vol,mask_sum = calc_tf_calotte(TF_vol,mask_sum,TF_holo_r, fd_m, sdz_m, dx_m, dy_m, P, P_holo, Nmax, k_inc, R_Ewald, lambda_v, n0)
     TF_vol[mask_sum !=0] = TF_vol[mask_sum!=0] / mask_sum[mask_sum!=0]
+    print("")
+    print("----------")
+    print("- FFT 3D -")
+    print("----------")
     f_recon = fftshift(ifftn(TF_vol))/(Tp_Tomo**3)
+    print("       _")
+    print("      / )")
+    print("    .' /")
+    print("---'  (____")
+    print("       ((__)")
+    print("    ._ ((___)")
+    print("     -'((__)")
+    print("---.___((_)")
+    print("")
     mask_sum = fftshift(mask_sum)
     TF_vol = fftshift(TF_vol)
     f_recon = fftshift(f_recon,[0,1])

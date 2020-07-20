@@ -12,7 +12,7 @@ import os
 
 # Data folders and config files
 DossierAcquis = "/home/nicolas/Acquisitions/PollenAziz/"
-DossierData = f"{DossierAcquis}blanc/"
+DossierData = f"{DossierAcquis}data/"
 # DossierAmplitude = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Amplitude/'
 # DossierPhase = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Phase/'
 FichierConfig = f"{DossierAcquis}config/config_manip.txt"
