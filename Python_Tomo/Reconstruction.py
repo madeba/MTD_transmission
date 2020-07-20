@@ -11,8 +11,8 @@ import time
 import os
 
 # Data folders and config files
-DossierAcquis = "/home/nicolas/Acquisitions/BillesCluster/"
-DossierData = f"{DossierAcquis}data/"
+DossierAcquis = "/home/nicolas/Acquisitions/PollenAziz/"
+DossierData = f"{DossierAcquis}blanc/"
 # DossierAmplitude = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Amplitude/'
 # DossierPhase = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Phase/'
 FichierConfig = f"{DossierAcquis}config/config_manip.txt"
@@ -70,20 +70,20 @@ plt.show()
 plt.imshow(TFVolfilt[:,dimHolo,:], cmap="gray")
 plt.show()
 
-# fidRef = open(f"{ProcessingFolder}/Refraction_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
-# fidAbs = open(f"{ProcessingFolder}/Absorption_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
-# fidRedon =  open(f"{ProcessingFolder}/SupRedon_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
-# fidOTF =  open(f"{ProcessingFolder}/OTF_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
-# for cpt in range(Refraction.shape[2]):
-#     Refr = Refraction[:,:,cpt]
-#     Abs = Absorption[:,:,cpt]
-#     Redon = mask_sum[:,:,cpt]
-#     Support = OTF[:,:,cpt]
-#     Refr.tofile(fidRef)
-#     Abs.tofile(fidAbs) 
-#     Redon.tofile(fidRedon)
-#     Support.tofile(fidOTF)
-# fidRef.close()
-# fidAbs.close()
-# fidRedon.close()
-# fidOTF.close()
+fidRef = open(f"{ProcessingFolder}/Refraction_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
+fidAbs = open(f"{ProcessingFolder}/Absorption_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
+fidRedon =  open(f"{ProcessingFolder}/SupRedon_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
+fidOTF =  open(f"{ProcessingFolder}/OTF_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
+for cpt in range(Refraction.shape[2]):
+    Refr = Refraction[:,:,cpt]
+    Abs = Absorption[:,:,cpt]
+    Redon = mask_sum[:,:,cpt]
+    Support = OTF[:,:,cpt]
+    Refr.tofile(fidRef)
+    Abs.tofile(fidAbs) 
+    Redon.tofile(fidRedon)
+    Support.tofile(fidOTF)
+fidRef.close()
+fidAbs.close()
+fidRedon.close()
+fidOTF.close()

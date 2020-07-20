@@ -11,7 +11,7 @@ import time
 import os
 
 # Path to the parameter file, and parameters reading
-DossierAcquis = "/home/nicolas/Acquisitions/BillesCluster/"
+DossierAcquis = "/home/nicolas/Acquisitions/PollenAziz/"
 DossierData = f"{DossierAcquis}data/"
 ProcessingFolder = f"{DossierData}Reconstruction"
 CheminParam = f"{DossierData}Pretraitement/Param.txt"
@@ -23,42 +23,42 @@ if not os.path.exists(GerchbergFolder):
     os.makedirs(GerchbergFolder)
     
 # Paths to the refraction, and absorption of the object
-CheminAbsorp = f"{ProcessingFolder}/Absorption_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin"
-CheminRefrac = f"{ProcessingFolder}/Refraction_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin"
+CheminAbsorp = f"{ProcessingFolder}/AbsorptionDiv_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin"
+CheminRefrac = f"{ProcessingFolder}/RefractionDiv_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin"
 CheminOTF = f"{ProcessingFolder}/OTF_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin"
 
 # Files reading
-Absorption = rp.ReadCube(CheminAbsorp, 2*dimHolo, 2*dimHolo, 2*dimHolo, "np.float64")
-Refraction = rp.ReadCube(CheminRefrac, 2*dimHolo, 2*dimHolo, 2*dimHolo, "np.float64")
+Absorption = rp.ReadCube(CheminAbsorp, 2*dimHolo, 2*dimHolo, 2*dimHolo, "np.float32")
+Refraction = rp.ReadCube(CheminRefrac, 2*dimHolo, 2*dimHolo, 2*dimHolo, "np.float32")
 OTF = rp.ReadCube(CheminOTF, 2*dimHolo, 2*dimHolo, 2*dimHolo, "np.int32")
 Rec_Object = Refraction + Absorption*1j
-plt.imshow(Refraction[:,:,dimHolo], cmap="gray")
+plt.imshow(Rec_Object.real[:,:,dimHolo], cmap="gray")
 plt.show()
-plt.imshow(Absorption[:,:,dimHolo], cmap="gray")
+plt.imshow(Rec_Object.imag[:,:,dimHolo], cmap="gray")
 plt.show()
 
 # Gerchberg parameters
-nbiter = 100    
-nmin = 0.0
-nmax = .11
-kappamin = 0
-kappamax = 0.02
+nbiter = 50    
+nmin = -0.15
+nmax = 0
+kappamin = -0.05
+kappamax = 0
 
 # Gerchberg reconstruction
 del Absorption, Refraction
 start_time = time.time()
 FilteredObj = rp.Gerchberg(Rec_Object,OTF,nmin,nmax,kappamin,kappamax,nbiter)
 print(f"Reconstruction time for {nbiter} iterations: {np.round(time.time() - start_time,decimals=2)} seconds")
-plt.imshow(FilteredObj[:,:,dimHolo].real, cmap="gray")
+plt.imshow(Rec_Object[:,:,dimHolo].real, cmap="gray")
 plt.show()
-plt.imshow(FilteredObj[:,:,dimHolo].imag, cmap="gray")
+plt.imshow(Rec_Object[:,:,dimHolo].imag, cmap="gray")
 plt.show() 
 
 fidRef = open(f"{GerchbergFolder}/RefractionGerch_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
 fidAbs = open(f"{GerchbergFolder}/AbsorptionGerch_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
 for cpt in range(FilteredObj.shape[2]):
-    Refr = FilteredObj[:,:,cpt].real
-    Abs = FilteredObj[:,:,cpt].imag
+    Refr = Rec_Object[:,:,cpt].real
+    Abs = Rec_Object[:,:,cpt].imag
     Refr.tofile(fidRef)
     Abs.tofile(fidAbs) 
 fidRef.close()

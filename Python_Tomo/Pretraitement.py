@@ -14,8 +14,8 @@ import FileTools as ft
 import time
 
 # Data folders and config files
-DossierAcquis = "/home/nicolas/Acquisitions/BillesCluster/"
-DossierData = f"{DossierAcquis}data/"
+DossierAcquis = "/home/nicolas/Acquisitions/PollenAziz/"
+DossierData = f"{DossierAcquis}blanc/"
 # DossierAmplitude = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Amplitude/'
 # DossierPhase = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Phase/'
 FichierConfig = f"{DossierAcquis}config/config_manip.txt"
@@ -121,6 +121,7 @@ for hol in range(0,nb_holo):
         # File opening for field recording
         fidRe = open(CheminSAV_Re,"a")
         fidIm = open(CheminSAV_Im,"a")
+        
         # Field calculation
         if Rytov is True:
             # Rytov

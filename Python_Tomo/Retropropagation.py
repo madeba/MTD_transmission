@@ -9,8 +9,9 @@ from scipy.fftpack import fftn,ifftn,fftshift
 import numpy as np
 import numexpr as ne
 import time
+import numba
 
-def ReadCube(Chemin,dimX,dimY,nb_img,dtype):
+def ReadCube(Chemin,dimX,dimY,nb_img,datatype):
     """
     Opening raw values of UBorn files and transforming it as a data cube with (dimX,dimY,nb_img) dimensions
 
@@ -24,7 +25,7 @@ def ReadCube(Chemin,dimX,dimY,nb_img,dtype):
         Y dimension of the datacube.
     nb_img : int
         Number of images in the datacube.
-    dtype : str
+    datatype : str
         Data type.
 
     Returns
@@ -33,7 +34,7 @@ def ReadCube(Chemin,dimX,dimY,nb_img,dtype):
 
     """
     with open(Chemin,'r') as fid:
-        DataCube = np.fromfile(fid, eval(dtype))
+        DataCube = np.fromfile(fid, eval(datatype))
     DataCube = DataCube.reshape((nb_img,dimX,dimY)).transpose(1,2,0)
      
     return DataCube
@@ -94,6 +95,7 @@ def Calc_fd(Nmax,REwald):
     dy, dx, _ = np.meshgrid(np.arange(-Nmax,Nmax), np.arange(-Nmax,Nmax), np.arange(-Nmax,Nmax))
     Mask = dx**2+dy**2 < Nmax**2
     dxm = dx[Mask]
+    # print(f"{dxm}")
     dym = dy[Mask]
     dzm = np.round(np.sqrt(REwald**2 - dxm**2 - dym**2))
     sdzm = np.sqrt(REwald**2 - dxm**2 - dym**2) / REwald
@@ -173,6 +175,7 @@ def calc_tf_calotte(TF_vol3D,mask_calotte,TF_holo,fd_m, sdz_m, dx_m, dy_m,P,P_ho
         3D Mask corresponding to the OTF.
 
     """
+    # print(f"{Nmax}")
     fi = np.array([k_inc[0], k_inc[1], np.round(np.sqrt(R_Ewald**2 - k_inc[0]**2 - k_inc[1]**2))])
     
     kv = 2*np.pi/lambda_v
