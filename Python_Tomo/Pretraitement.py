@@ -14,10 +14,8 @@ import FileTools as ft
 import time
 
 # Data folders and config files
-DossierAcquis = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN18juil/"
+DossierAcquis = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN/"
 DossierData = f"{DossierAcquis}blanc/"
-# DossierAmplitude = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Amplitude/'
-# DossierPhase = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Phase/'
 FichierConfig = f"{DossierAcquis}config/config_manip.txt"
 
 
@@ -69,9 +67,6 @@ if HoloRef is True:
 
 # Tukey Window
 TukeyWindow = np.sqrt(np.outer(signal.tukey(CamDim,0.1),signal.tukey(CamDim,0.1)))
-# plt.imshow(TukeyWindow, cmap="gray")
-# plt.show()
-
 
 # Amplitude and phase correction initialisation
 Masque = CAber.InitMasque(CheminMasque,dimHolo)
@@ -104,8 +99,10 @@ for hol in range(0,nb_holo):
         ind = np.unravel_index(np.argmax(np.abs(SpectreFilt), axis=None), SpectreFilt.shape)
         kiy = ind[0]
         kix = ind[1]
+        
         # Coordinate writting
         fidCentrestxt.write(f"{kiy} {kix}\n")
+        
         # Position of the center for further monitoring
         Centres[kiy,kix] = 1
         
@@ -149,6 +146,7 @@ for hol in range(0,nb_holo):
     else:
         cpt += 1
 print(f"Pre-Processing time for {cpt_exist-1} holograms: {np.round(time.time() - start_time,decimals=2)} seconds")
+
 # Center recording and file closing 
 fidParams.write(f"nb_angle {cpt_exist-1}\n")
 fidParams.write(f"fmaxHolo {fmaxHolo}\n")

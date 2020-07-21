@@ -11,12 +11,8 @@ import time
 import os
 
 # Data folders and config files
-DossierAcquis = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN18juil/"
+DossierAcquis = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN/"
 DossierData = f"{DossierAcquis}data/"
-# DossierAmplitude = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Amplitude/'
-# DossierPhase = 'C:/Users/p1600109/Documents/Recherche/MatlabTomo/Phase/'
-FichierConfig = f"{DossierAcquis}config/config_manip.txt"
-CheminMasque = f"{DossierData}Masque.tif"
 
 # Creating results Folders
 ProcessingFolder = f"{DossierData}Reconstruction"

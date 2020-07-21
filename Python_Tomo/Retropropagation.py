@@ -270,6 +270,7 @@ def retropropagation(holo_pile,nb_holo,SpecCoord,Nmax,R_Ewald,lambda_v,n0,P,P_ho
     print("----------")
     print("- FFT 3D -")
     print("----------")
+    start_time = time.time()
     f_recon = fftshift(ifftn(TF_vol))/(Tp_Tomo**3)
     print("       _")
     print("      / )")
@@ -280,6 +281,8 @@ def retropropagation(holo_pile,nb_holo,SpecCoord,Nmax,R_Ewald,lambda_v,n0,P,P_ho
     print("     -'((__)")
     print("---.___((_)")
     print("")
+    print(f"3D-FFT calculation: {np.round(time.time() - start_time,decimals=2)} seconds")
+    
     mask_sum = fftshift(mask_sum)
     TF_vol = fftshift(TF_vol)
     f_recon = fftshift(f_recon,[0,1])

@@ -20,7 +20,7 @@ Radius = 30
 
 start_time = time.time()
 if NA_ill/nimm>=1:
-    print(f"Simulation impossible: nimm >= NA_ill")
+    print(f"Simulation impossible: nimm >= {NA_ill}")
 else:
     OTF = st.OTF_Flower(dimHolo, NA_ill, nimm, nbangle)
     print(f"OTF simulation time for {nbangle} angles: {np.round(time.time() - start_time,decimals=2)} seconds")
