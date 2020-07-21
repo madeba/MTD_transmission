@@ -38,9 +38,9 @@ plt.imshow(Rec_Object.imag[:,:,dimHolo], cmap="gray")
 plt.show()
 
 # Gerchberg parameters
-nbiter = 10    
+nbiter = 20    
 nmin = 0
-nmax = 0.15
+nmax = 0.17
 kappamin = 0
 kappamax = 0
 

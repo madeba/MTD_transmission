@@ -27,6 +27,7 @@ if not os.path.exists(ProcessingFolder):
     os.makedirs(ProcessingFolder)
 
 # Acquisition data initialisation
+HoloRef = True
 Rytov = True
 CamDim = 1024
 NA = ft.readvalue(FichierConfig,'NA')
@@ -61,6 +62,11 @@ cpt_exist = 1
 Centres = np.zeros((dimHolo,dimHolo))
 CentreXShift,CentreYShift = holo.CoordToCoordShift(CentreX, CentreY, CamDim, CamDim)
 
+# Loading reference image
+if HoloRef is True:
+    Refname = f"{DossierData}Intensite_ref.pgm"
+    Iref = np.sqrt(plt.imread(Refname))  
+
 # Tukey Window
 TukeyWindow = np.sqrt(np.outer(signal.tukey(CamDim,0.1),signal.tukey(CamDim,0.1)))
 # plt.imshow(TukeyWindow, cmap="gray")
@@ -85,7 +91,10 @@ start_time = time.time()
 for hol in range(0,nb_holo):
     filename = f"{DossierData}i{'%03d' % cpt}.pgm"
     if os.path.isfile(filename):
-        Image = plt.imread(filename)
+        if HoloRef is True:
+            Image = (plt.imread(filename))/Iref
+        else:
+            Image = plt.imread(filename)
         
         # Hologram spectrum and off-axis filtering
         FImage = fft2(TukeyWindow*Image)
