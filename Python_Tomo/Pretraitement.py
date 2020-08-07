@@ -12,10 +12,11 @@ import CorrectionAberration as CAber
 import os
 import FileTools as ft
 import time
+import MultiModalMTD as mmtd
 
 # Data folders and config files
-DossierAcquis = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN/"
-DossierData = f"{DossierAcquis}blanc/"
+DossierAcquis = "C:/Users/p1600109/Documents/Recherche/MatlabTomo/PollenAziz/"
+DossierData = f"{DossierAcquis}data/"
 FichierConfig = f"{DossierAcquis}config/config_manip.txt"
 
 
@@ -25,8 +26,9 @@ if not os.path.exists(ProcessingFolder):
     os.makedirs(ProcessingFolder)
 
 # Acquisition data initialisation
-HoloRef = True
+HoloRef = False
 Rytov = True
+DarkField = True
 CamDim = 1024
 NA = ft.readvalue(FichierConfig,'NA')
 nimm = ft.readvalue(FichierConfig,'N0')
@@ -40,11 +42,12 @@ REwald = CamDim*pix/Gtot*nimm/(Lambda) # Ewald sphere radius (pixel)
 fmaxHolo = round(REwald*NA/nimm) # Max frequency support (pixel)
 dimHolo = int(2*fmaxHolo) # Hologram size
 # dimHolo = int(CamDim/4) # Hologram size
-CheminMasque = f"{DossierData}Mask.tif"
+CheminMasque = f"{DossierData}Masque.tif"
 CentreX = int(ft.readvalue(FichierConfig,'CIRCLE_CX')) # Pupil center in Fourier space
 CentreY = int(ft.readvalue(FichierConfig,'CIRCLE_CY'))
 nb_holoTot = int(ft.readvalue(FichierConfig,'NB_HOLO'))
 nb_holo = nb_holoTot # Number of holograms in the sequence
+# nb_holo = 50 # Number of holograms in the sequence
 CheminSAV_Re = f"{DossierData}Pretraitement/ReBorn_{dimHolo}.bin"
 CheminSAV_Im = f"{DossierData}Pretraitement/ImBorn_{dimHolo}.bin"
 CheminSAV_Centres = f"{DossierData}Pretraitement/Centres_{dimHolo}.bin"
@@ -98,7 +101,11 @@ for hol in range(0,nb_holo):
         # Specular spot coordinates calculation
         ind = np.unravel_index(np.argmax(np.abs(SpectreFilt), axis=None), SpectreFilt.shape)
         kiy = ind[0]
-        kix = ind[1]
+        kix = ind[1]        
+        if DarkField is True:
+            SpectreFilt = mmtd.darkfield(SpectreFilt, 1, [ind[0]-SpectreFilt.shape[0]/2, ind[1]-SpectreFilt.shape[1]/2])
+            # plt.imshow(np.log10(np.abs(SpectreFilt)))
+            # plt.show()
         
         # Coordinate writting
         fidCentrestxt.write(f"{kiy} {kix}\n")
