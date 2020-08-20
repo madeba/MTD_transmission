@@ -19,7 +19,8 @@ manip::manip()
     cout<<"fichier recon="<<fic_cfg_recon<<endl;
     string fic_cfg_manip=repertoire_config+"/config_manip.txt";
     cout<<"chemin config="<<fic_cfg_manip<<endl;
-
+    chemin_config=fic_cfg_manip;
+    chemin_config_defaut=extract_string("CHEMIN_CONFIG_PC_ACQUIS",home+fin_chemin_gui_tomo)+"/";
 
 
         cout<<"##################"<<endl;
@@ -63,7 +64,7 @@ manip::manip()
 
     premier_plan=extract_val("PREMIER_ANGLE",fic_cfg_recon),
     Num_Angle_final=extract_val("NB_HOLO",fic_cfg_manip),//
-    nbThreads=4;//extract_val("NB_THREADS",fic_cfg_recon);
+    nbThreads=extract_val("NB_THREADS",fic_cfg_recon);
     cout<<"\n##################### Options de RECONSTRUCTION ##################\n"<<endl;
     b_CorrAber=extract_val("C_ABER",fic_cfg_recon);///corriger les aberrations?
     b_Deroul=extract_val("DEROUL",fic_cfg_recon);///Dérouler la phase?
@@ -73,7 +74,7 @@ manip::manip()
     else
         cout<<"RYTOV=1"<<endl;
 
-        b_Export_OTF=extract_val("EXPORT_OTF",fic_cfg_recon);///Exporter OTF ?
+    b_Export_OTF=extract_val("EXPORT_OTF",fic_cfg_recon);///Exporter OTF ?
     cout<<"\n##########################################################"<<endl;
 
       rayon=round(NXMAX*n0/NA);//calcul du rayon à partir de la fréquence NXMAX defini pare l'utlisateur

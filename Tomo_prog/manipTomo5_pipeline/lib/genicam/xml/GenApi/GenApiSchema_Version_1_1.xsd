@@ -229,7 +229,7 @@
 	<xs:group name="NodesTemplate">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-        List of all possible node tpyes.
+        List of all possible node types.
       </xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
@@ -263,8 +263,8 @@
 	<xs:complexType name="GroupType">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-        Used for structuring device descripition files. Groups can be nested in any depth.
-        They have no meaning with respect to the device functionaliy and are stripped off the device
+        Used for structuring device description files. Groups can be nested in any depth.
+        They have no meaning with respect to the device functionality and are stripped off the device
         description file in a pre-processing step.
       </xs:documentation>
 		</xs:annotation>
@@ -459,7 +459,7 @@
         <xs:element name="pAddress" type="CName_t"/>
         <xs:element name="pIndex" type="pIndexType"/>
       </xs:choice>
-      <!-- note that the MaskedIntReg does not have a pLenght entry -->
+      <!-- note that the MaskedIntReg does not have a pLength entry -->
       <xs:element name="Length" type="PositiveHexOrDecimal_t"/>
       <xs:element name="AccessMode" type="Access_t" default="RO"/>
       <xs:element name="pPort" type="CName_t"/>
@@ -640,7 +640,7 @@
 	<xs:complexType name="ConverterType">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-        Bi-directional Float swiss knife.
+        Bi-directional Float Swiss-knife.
       </xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
@@ -691,7 +691,7 @@
 	<xs:complexType name="IntConverterType">
 		<xs:annotation>
 			<xs:documentation xml:lang="en">
-        Bi-directional Integer swiss knife.
+        Bi-directional Integer Swiss-knife.
       </xs:documentation>
 		</xs:annotation>
 		<xs:sequence>

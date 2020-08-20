@@ -9,7 +9,6 @@
 			<pFeature>StreamingPacketSize</pFeature>
 			<pFeature>DeviceGenICamXMLAccess</pFeature>
 			<pFeature>Recovery</pFeature>
-			<pFeature>Internal</pFeature>
 		</Category>
 	</Group>
 	<Group Comment="Communication">
@@ -19,6 +18,8 @@
 			<pFeature>CommandRetryCount</pFeature>
 			<pFeature>DefaultMCTT</pFeature>
 			<pFeature>DefaultMCRC</pFeature>
+			<pFeature>ReadMemPacketSize</pFeature>
+			<pFeature>WriteMemPacketSize</pFeature>
 		</Category>
 		<Integer Name="AnswerTimeout">
 			<ToolTip>Time the GigE Vision Device can take for responding to a command from the application.</ToolTip>
@@ -110,12 +111,65 @@
 			<Sign>Unsigned</Sign>
 			<Endianess>BigEndian</Endianess>
 		</IntReg>
+		<Integer Name="ReadMemPacketSize">
+			<ToolTip>Maximum allowed bytes for a READMEM_CMD packet.</ToolTip>
+			<Description>Maximum allowed bytes for a READMEM_CMD packet.</Description>
+			<DisplayName>READMEM_CMD Packet Size</DisplayName>
+			<Visibility>Expert</Visibility>
+			<Streamable>Yes</Streamable>
+			<pValue>ReadMemPacketSizeReg</pValue>
+			<Min>552</Min>
+			<pMax>ReadMemPacketSizeMaxExpr</pMax>
+			<Inc>4</Inc>
+			<Representation>Linear</Representation>
+		</Integer>
+		<IntReg Name="ReadMemPacketSizeReg">
+			<Address>0xEA74</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		<IntSwissKnife Name="ReadMemPacketSizeMaxExpr">
+			<pVariable Name="VAR_READMEMPACKETSIZEMAX">ReadMemPacketSizeMaxReg</pVariable>
+			<Formula>VAR_READMEMPACKETSIZEMAX</Formula>
+		</IntSwissKnife>
+		<Integer Name="WriteMemPacketSize">
+			<ToolTip>Maximum allowed bytes for a WRITEMEM_CMD packet.</ToolTip>
+			<Description>Maximum allowed bytes for a WRITEMEM_CMD packet.</Description>
+			<DisplayName>WRITEMEM_CMD Packet Size</DisplayName>
+			<Visibility>Expert</Visibility>
+			<Streamable>Yes</Streamable>
+			<pValue>WriteMemPacketSizeReg</pValue>
+			<Min>552</Min>
+			<pMax>WriteMemPacketSizeMaxExpr</pMax>
+			<Inc>4</Inc>
+			<Representation>Linear</Representation>
+		</Integer>
+		<IntReg Name="WriteMemPacketSizeReg">
+			<Address>0xEA78</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		<IntSwissKnife Name="WriteMemPacketSizeMaxExpr">
+			<pVariable Name="VAR_WRITEMEMPACKETSIZEMAX">WriteMemPacketSizeMaxReg</pVariable>
+			<Formula>VAR_WRITEMEMPACKETSIZEMAX</Formula>
+		</IntSwissKnife>
 	</Group>
 	<Group Comment="Heartbeat">
 		<Category Name="Heartbeat">
 			<DisplayName>Heartbeat</DisplayName>
 			<pFeature>HeartbeatInterval</pFeature>
 			<pFeature>DefaultHeartbeatTimeout</pFeature>
+			<pFeature>DisconnectOnAnyTimeout</pFeature>
 		</Category> 
 		<Integer Name="HeartbeatInterval">
 			<ToolTip>Time between each heartbeat sent by the software.</ToolTip>
@@ -166,6 +220,24 @@
 			<pVariable Name="VAR_HEARTBEATINTERVAL">HeartbeatIntervalReg</pVariable>
 			<Formula>VAR_HEARTBEATINTERVAL</Formula>
 		</IntSwissKnife>
+		<Boolean Name="DisconnectOnAnyTimeout">
+			<ToolTip>Whether any command or just heartbeat timeouts can trigger a disconnect notification.</ToolTip>
+			<Description>If set to true, any GVCP command timeout triggers a disconnect notification. When false only a heartbeat timeout can trigger a disconnect notification.</Description>
+			<DisplayName>Disconnect On Any Timeout</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<Streamable>Yes</Streamable>
+			<pValue>DisconnectOnAnyTimeoutReg</pValue>
+		</Boolean>
+		<IntReg Name="DisconnectOnAnyTimeoutReg">
+			<Address>0xEA70</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
 	</Group>
 	<Group Comment="Connection">
 		<Category Name="Connection">
@@ -543,6 +615,7 @@
 			<DisplayName>Device GenICam XML Access</DisplayName>
 			<pFeature>DeviceGenICamXMLLocation</pFeature>
 			<pFeature>DeviceGenICamXMLFile</pFeature>
+			<pFeature>DeviceGenICamXMLFileValid</pFeature>
 			<pFeature>UseManifests</pFeature>
 		</Category> 
 		<Enumeration Name="DeviceGenICamXMLLocation">
@@ -637,6 +710,29 @@
 			<pVariable Name="VAR_DEVICEGENICAMXMLLOCATION">DeviceGenICamXMLLocationReg</pVariable>
 			<Formula>VAR_DEVICEGENICAMXMLLOCATION=3</Formula>
 		</IntSwissKnife>
+		<Boolean Name="DeviceGenICamXMLFileValid">
+			<ToolTip>True if the path in DeviceGenICamXMLFile is valid.</ToolTip>
+			<Description>True if the path in DeviceGenICamXMLFile is valid.</Description>
+			<DisplayName>GenICam XML File Valid</DisplayName>
+			<Visibility>Guru</Visibility>
+		<pIsAvailable>DeviceGenICamXMLFileValidAvailExpr</pIsAvailable>
+			<pValue>DeviceGenICamXMLFileValidReg</pValue>
+		</Boolean>
+		<IntReg Name="DeviceGenICamXMLFileValidReg">
+			<Address>0xEA84</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<pInvalidator>DeviceGenICamXMLFile</pInvalidator>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		<IntSwissKnife Name="DeviceGenICamXMLFileValidAvailExpr">
+			<pVariable Name="VAR_DEVICEGENICAMXMLLOCATION">DeviceGenICamXMLLocationReg</pVariable>
+			<Formula>VAR_DEVICEGENICAMXMLLOCATION=3</Formula>
+		</IntSwissKnife>
 		<Boolean Name="UseManifests">
 			<ToolTip>Enables the use of the manifest when retrieving the GenICam XML file from the device.</ToolTip>
 			<Description>Enables the use of the manifest when retrieving the GenICam XML file from the device.</Description>
@@ -706,31 +802,61 @@
 			<Endianess>BigEndian</Endianess>
 		</IntReg>
 	</Group>
-	<Group Comment="Internal">
-		<Category Name="Internal">
-			<DisplayName>Internal</DisplayName>
-			<pFeature>Connected</pFeature>
-		</Category>   
-		<Integer Name="Connected">
-			<ToolTip>ToolTip</ToolTip>
-			<Description>Description</Description>
-			<DisplayName>Connected</DisplayName>
-			<Visibility>Invisible</Visibility>
-			<pValue>ConnectedReg</pValue>
-			<Inc>1</Inc>
-			<Representation>Linear</Representation>
-		</Integer>
-		<IntReg Name="ConnectedReg">
-			<Address>0xEA6C</Address>
-			<Length>4</Length>
-			<AccessMode>RO</AccessMode>
-			<pPort>Device</pPort>
-			<Cachable>NoCache</Cachable>
-			<PollingTime>1000</PollingTime>
-			<Sign>Unsigned</Sign>
-			<Endianess>BigEndian</Endianess>
-		</IntReg>
-	</Group>
+	<Integer Name="Connected">
+		<ToolTip>ToolTip</ToolTip>
+		<Description>Description</Description>
+		<DisplayName>Connected</DisplayName>
+		<Visibility>Invisible</Visibility>
+		<pValue>ConnectedReg</pValue>
+		<Inc>1</Inc>
+		<Representation>Linear</Representation>
+	</Integer>
+	<IntReg Name="ConnectedReg">
+		<Address>0xEA6C</Address>
+		<Length>4</Length>
+		<AccessMode>RO</AccessMode>
+		<pPort>Device</pPort>
+		<Cachable>NoCache</Cachable>
+		<PollingTime>1000</PollingTime>
+		<Sign>Unsigned</Sign>
+		<Endianess>BigEndian</Endianess>
+	</IntReg>
+	<Integer Name="ReadMemPacketSizeMax">
+		<ToolTip>ToolTip</ToolTip>
+		<Description>Description</Description>
+		<Visibility>Invisible</Visibility>
+		<pValue>ReadMemPacketSizeMaxReg</pValue>
+		<Inc>1</Inc>
+		<Representation>Linear</Representation>
+	</Integer>
+	<IntReg Name="ReadMemPacketSizeMaxReg">
+		<Address>0xEA7C</Address>
+		<Length>4</Length>
+		<AccessMode>RO</AccessMode>
+		<pPort>Device</pPort>
+		<Cachable>NoCache</Cachable>
+		<PollingTime>1000</PollingTime>
+		<Sign>Unsigned</Sign>
+		<Endianess>BigEndian</Endianess>
+	</IntReg>
+	<Integer Name="WriteMemPacketSizeMax">
+		<ToolTip>ToolTip</ToolTip>
+		<Description>Description</Description>
+		<Visibility>Invisible</Visibility>
+		<pValue>WriteMemPacketSizeMaxReg</pValue>
+		<Inc>1</Inc>
+		<Representation>Linear</Representation>
+	</Integer>
+	<IntReg Name="WriteMemPacketSizeMaxReg">
+		<Address>0xEA80</Address>
+		<Length>4</Length>
+		<AccessMode>RO</AccessMode>
+		<pPort>Device</pPort>
+		<Cachable>NoCache</Cachable>
+		<PollingTime>1000</PollingTime>
+		<Sign>Unsigned</Sign>
+		<Endianess>BigEndian</Endianess>
+	</IntReg>
 	<Port Name="Device">
 		<ToolTip>Port giving access to the device.</ToolTip>
 	</Port>

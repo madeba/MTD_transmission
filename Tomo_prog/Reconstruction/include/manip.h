@@ -33,6 +33,8 @@ struct manip {
         size_t circle_cx,circle_cy;
         std::string chemin_result;
         std::string chemin_acquis;
+        std::string chemin_config;
+        std::string chemin_config_defaut;
         manip();
        //void init();
 } ;

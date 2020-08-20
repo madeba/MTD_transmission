@@ -26,7 +26,7 @@
 #include <math.h>
 #include "fonctions.h"
 #include <chrono>
-using namespace cv;
+//using namespace cv;
 using namespace std;
 
 
@@ -173,7 +173,7 @@ Mat  ampliCorr2(Mat const & image,  Mat const &polynomeUs_to_fit, Mat const &pol
     //SAV2((double*)resultatpoly.data,image.rows*image.cols,"/ramdisk/poly_aber_ampli.raw",t_float,"a+b");
 
    //result = image/(resultatpoly+0.0001);
-    result = image/resultatpoly;
+    result = image/(resultatpoly);
     return result;
 }
 /// Compute the coef of polynomial (Least Squares method) by SVD,  i.e. solve COEF*POLYNOME_TO_FIT=BACKGROUND (with undersampled variables to speed up the process)

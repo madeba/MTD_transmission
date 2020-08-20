@@ -508,7 +508,7 @@
   </xs:complexType>
   <xs:complexType name="StringRegType">
     <xs:sequence>
-      <!-- TODO should be implemented with RegisterElementTemplate; BUT: pLenght -->
+      <!-- TODO should be implemented with RegisterElementTemplate; BUT: pLength -->
       <xs:group ref="RegisterElementTemplate" />
     </xs:sequence>
     <xs:attributeGroup ref="NodeAttributeTemplate" />

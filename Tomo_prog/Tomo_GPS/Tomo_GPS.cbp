@@ -32,9 +32,10 @@
 			<Add option="-fexceptions  -fopenmp  -lpthread -std=c++11 `pkg-config --cppflags opencv`  -mveclibabi=svml" />
 			<Add directory="/usr/include/opencv" />
 			<Add directory="./include" />
+			<Add directory="/usr/include/opencv4" />
 		</Compiler>
 		<Linker>
-			<Add option="`pkg-config --libs opencv`  -lpthread -lm -lgomp  -lopencv_core -lopencv_imgproc" />
+			<Add option="`pkg-config --libs opencv`  -lpthread -lm -lgomp  -lopencv_core -lopencv_imgproc -lopencv_imgcodecs" />
 			<Add option="-lopencv_highgui -ltiff  -lfftw3 -lfftw3_threads" />
 		</Linker>
 		<Unit filename="include/FFTW_init.h" />
@@ -55,9 +56,6 @@
 		<Unit filename="src/fonctions.cpp" />
 		<Unit filename="src/manip.cpp" />
 		<Extensions>
-			<code_completion />
-			<envvars />
-			<debugger />
 			<lib_finder disable_auto="1" />
 		</Extensions>
 	</Project>

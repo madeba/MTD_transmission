@@ -17,6 +17,7 @@ using namespace cv;
 using namespace std;
 #include <string>
 #include <sstream>
+//pleora lib
 #include <PvSampleUtils.h>
 #include <PvDevice.h>
 #include <PvDeviceGEV.h>
@@ -141,7 +142,7 @@ float2D maj_fleur(float2D Vin, float rho, int nbHolo, float *theta)//tension x,y
     //cout<<endl<<cout<<"theta"<<t<<endl;
     return Vout;
 }
-int efface_acquis(string  rep)
+int efface_acquis(string  rep, string chemin_config_manip,string chemin_recon)
 {
     // These are data types defined in the "dirent" header
     const char * rep_c=rep.c_str();
@@ -153,6 +154,7 @@ int efface_acquis(string  rep)
     {
         // build the path for each file in the folder
         sprintf(filepath, "%s/%s", rep_c, next_file->d_name);
+        if(filepath!=chemin_config_manip && filepath!=chemin_recon)
         remove(filepath);
     }
     closedir(theFolder);
@@ -206,7 +208,7 @@ int main(int argc, char *argv[])
                 argc--;
                 argv++;
     }*/
-
+    cout<<"########################## ACQUISITION ##################################"<<endl;
     ///Initialiser les deux tableaux stockant les valeurs de recon.txt et config_manip.txt en mémoire
     string chemin_config_GUI,chemin_recon, chemin_config_manip,chemin_acquis,chemin_result,repertoire_config;
     string home=getenv("HOME");
@@ -214,7 +216,8 @@ int main(int argc, char *argv[])
     chemin_config_GUI=getenv("HOME")+fin_chemin_gui_tomo;
     cout<<"lecture des chemins dans le fichier "<<chemin_config_GUI<<endl;
 
-    repertoire_config=extract_string("CHEMIN_CONFIG_PC_ACQUIS",home+fin_chemin_gui_tomo);///chemin de config pour la 1ere acquisition, qui va servir à copier recon.txt et
+   // repertoire_config=extract_string("CHEMIN_CONFIG_PC_ACQUIS",home+fin_chemin_gui_tomo);///chemin de config pour la 1ere acquisition, qui va servir à copier recon.txt et
+    repertoire_config=extract_string("CHEMIN_CONFIG",home+fin_chemin_gui_tomo);///chemin de config pour la 1ere acquisition, qui va servir à copier recon.txt et
     ///config_manip.txt dans le repertoire d'acquisition.
     chemin_acquis=extract_string("CHEMIN_ACQUIS",home+fin_chemin_gui_tomo);
     chemin_result=extract_string("CHEMIN_RESULT",home+fin_chemin_gui_tomo);
@@ -225,7 +228,7 @@ int main(int argc, char *argv[])
 
     int dimROI=extract_val("DIM_ROI", chemin_config_manip);
     string repAcquis=chemin_acquis;
-    efface_acquis(repAcquis);
+    efface_acquis(repAcquis,chemin_config_manip,chemin_recon);
 ///!\ attention les fonction labjack de john n'utilisent pas des tensions mais des facteurs "d'attenuation de la tension max". Tout est divisé par 10.
 MAX_IMAGES=extract_val("NB_HOLO",chemin_config_manip);
 NAcondLim=extract_val("NA_COND_LIM",chemin_config_manip);
@@ -248,7 +251,7 @@ cout<<"  ####################################" <<endl;
     ///Copie des fichiers de config (depuis repertoire PC acquis : projet_tomo) dans le repertoire d'acquisition
 
 
-    std::ifstream srce_recon(chemin_recon, std::ios::binary ) ;
+  /*  std::ifstream srce_recon(chemin_recon, std::ios::binary ) ;
     string chemin_recon_dest=chemin_acquis+"/recon.txt";
     cout<<"srce="<<chemin_recon<<endl;
     std::ofstream dest_recon(chemin_recon_dest, std::ios::binary ) ;
@@ -262,7 +265,7 @@ cout<<"  ####################################" <<endl;
     dest_config << srce_config.rdbuf();
     ///-----------------------------------------------------------------
 
-    dest_config.close();
+    dest_config.close();*/
 
     ///initialiser la caméra (détection par PvDeviceFinderWnd, sélection d'un périphérique)
     const PvDeviceInfo *lDeviceInfo = NULL;

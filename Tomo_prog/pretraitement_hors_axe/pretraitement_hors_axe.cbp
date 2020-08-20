@@ -2,12 +2,12 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="pretraitement_hors_axe" />
+		<Option title="pretraitement_hors_axe_2020" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/pretaitement_hors_axe" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Release_opencv3/pretaitement_hors_axe" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -30,17 +30,28 @@
 					<Add option="-O3" />
 				</Compiler>
 			</Target>
+			<Target title="Release_opencv3">
+				<Option output="bin/Release_opencv3/pretraitement_hors_axe" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release_opencv3" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-march=k8" />
+					<Add option="-O3" />
+					<Add directory="/usr/include/opencv2" />
+				</Compiler>
+			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions  -fopenmp  -lpthread -std=c++11 `pkg-config --cppflags opencv`  -mveclibabi=svml" />
-			<Add directory="/usr/include/opencv" />
+			<Add directory="/usr/include/opencv4" />
 			<Add directory="include" />
 			<Add directory="." />
 			<Add directory="src" />
 		</Compiler>
 		<Linker>
-			<Add option="`pkg-config --libs opencv`  -lpthread -lm -lgomp  -lopencv_core -lopencv_imgproc" />
+			<Add option="`pkg-config --libs opencv`  -lpthread -lm -lgomp  -lopencv_core -lopencv_imgproc -lopencv_imgcodecs" />
 			<Add option="-lopencv_highgui -ltiff  -lfftw3 -lfftw3_threads" />
 			<Add library="/usr/lib/x86_64-linux-gnu/libfftw3.so" />
 			<Add library="/usr/lib/x86_64-linux-gnu/libfftw3_threads.so" />
@@ -60,6 +71,7 @@
 		<Unit filename="include/deroulement_volkov2.h" />
 		<Unit filename="include/deroulement_volkov3.h" />
 		<Unit filename="include/struct.h" />
+		<Unit filename="include/vecteur.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="manip.cpp" />
 		<Unit filename="manip.h" />
@@ -70,12 +82,11 @@
 		<Unit filename="src/deroulement_volkov2.cpp" />
 		<Unit filename="src/deroulement_volkov3.cpp" />
 		<Unit filename="src/vecteur.cpp" />
-		<Unit filename="src/vecteur.h" />
 		<Extensions>
+			<lib_finder disable_auto="1" />
 			<envvars />
 			<code_completion />
 			<debugger />
-			<lib_finder disable_auto="1" />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

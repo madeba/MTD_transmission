@@ -26,22 +26,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <cxcore.h>
-#include <highgui.h>
-#include <cv.h>
-using namespace cv;
+//#include <cxcore.h>
+//#include <highgui.h>
+//#include <cv.h>
+//using namespace cv;
 //using namespace std;
 
 
 /// Function header
-void threshCallback(int, void*);
-double poly2DEval(Mat coefficients, int deg,int x, int y);
-int sizePoly2D(int deg);
-int countM(Mat mask);
-void compuBackgr(Mat coefficients, int deg, Mat imageBackgr);
-void compuPoly(Mat imagebrut, Mat mask, Mat& polynomial, int deg, bool method);
-Mat aberCorr(Mat image, Mat mask, double *polyAber, int degpoly);
-Mat  ampliCorr(Mat image, Mat mask, double *polyAber, int degpoly);
+//void threshCallback(int, void*);
+//double poly2DEval(Mat coefficients, int deg,int x, int y);
+//int sizePoly2D(int deg);
+//int countM(Mat mask);
+//void compuBackgr(Mat coefficients, int deg, Mat imageBackgr);
+//void compuPoly(Mat imagebrut, Mat mask, Mat& polynomial, int deg, bool method);
+//Mat aberCorr(Mat image, Mat mask, double *polyAber, int degpoly);
+//Mat  ampliCorr(Mat image, Mat mask, double *polyAber, int degpoly);
 /*class ImgSeuil
 {
 private:

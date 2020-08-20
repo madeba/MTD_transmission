@@ -55,7 +55,7 @@ int main()
      for(cpt=0;cpt<nbPix3D;cpt++){
         if(indiceCplx[cpt].real()>m1.delta_nMax) indiceCplx[cpt].real(m1.delta_nMax);
             else if(indiceCplx[cpt].real()<m1.delta_nMin) indiceCplx[cpt].real(m1.delta_nMin);
-        if(indiceCplx[cpt].imag()<m1.kappa_Min) indiceCplx[cpt].imag(m1.delta_nMin);
+        if(indiceCplx[cpt].imag()<m1.kappa_Min) indiceCplx[cpt].imag(m1.kappa_Min);
             else if(indiceCplx[cpt].imag()>m1.kappa_Max) indiceCplx[cpt].real(m1.kappa_Max);
         }
 

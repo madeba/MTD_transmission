@@ -7,12 +7,13 @@ Point2D::Point2D()
 
 }
 
-Point2D::Point2D(double x, double y,int m_dim2D)
+/*Point2D::Point2D(double x, double y,int m_dim2D)
 {
     this->x=x;
     this->y=y;
     this->dim2D=m_dim2D;
-}
+}*/
+
 
 void Point2D::set_xy(double x, double y)
 {

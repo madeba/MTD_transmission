@@ -39,11 +39,34 @@ FFT_encaps::FFT_encaps(Point3D dim,size_t nbThreads, bool b_inPlace)
     in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
     out=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
     p_forward_OUT=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, out,FFTW_FORWARD, FFTW_ESTIMATE);
+    p_backward_OUT=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, out,FFTW_BACKWARD, FFTW_ESTIMATE);
+    }
+    else{
+
+    in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
+    //out=nullptr;
+    p_forward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_FORWARD, FFTW_ESTIMATE);
+    p_backward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_BACKWARD, FFTW_ESTIMATE);
+    }
+}
+
+
+FFT_encaps::FFT_encaps(Point3D dim,size_t nbThreads, bool b_inPlace,string chemin_wisdom)
+{
+    unsigned int nbPix=dim.x*dim.y*dim.z;
+    m_Nthread=nbThreads;
+
+    fftwThreadInit=fftw_init_threads();
+    fftw_plan_with_nthreads(m_Nthread);
+    if(b_inPlace==0){
+    in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
+    out=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
+    p_forward_OUT=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, out,FFTW_FORWARD, FFTW_ESTIMATE);
     p_backward_OUT=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, out,FFTW_BACKWARD, FFTW_ESTIMATE );
     }
     else{
     //int isWisdomOK=import_wisdom("/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_config/Wisdom/wisdom3D_512_c2c_double_backward_PATIENT_inplace_i5-3550.txt");
-    int isWisdomOK=import_wisdom("/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_config/Wisdom/wisdom3D_512_c2c_double_backward_EXHAUSTIVE_inplace_4Thrd_i5-3550.txt");
+    int isWisdomOK=import_wisdom(chemin_wisdom.c_str());
     cout<<"isWisdomOk="<<isWisdomOK<<endl;
     in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
     //out=nullptr;
@@ -51,6 +74,7 @@ FFT_encaps::FFT_encaps(Point3D dim,size_t nbThreads, bool b_inPlace)
     p_backward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_BACKWARD, FFTW_WISDOM_ONLY);
     }
 }
+
 ///init fftw pour FFT2D
 FFT_encaps::FFT_encaps(Point2D dim)
 {

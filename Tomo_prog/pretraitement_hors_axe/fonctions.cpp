@@ -4,8 +4,8 @@
 #include <complex>
 #include <fftw3.h>
 #include "struct.h"
-#include <cv.h>
-#include <highgui.h>//imread
+//#include <cv.h>
+//#include <highgui.h>//imread
 #include "projet.h"
 #include "FFT_fonctions.h"
 #include "fonctions.h"
@@ -92,7 +92,7 @@ int coordSpec(vector<complex<double>> const &TF_UBorn, vector<double> &TF_champM
 ///crop src2D[0:dim_src,0:dim_src] to dest3D(coin.x:coin.x+dim_dest,coin.y+dim_dest), human
 void coupeCplx(vector<complex<double>> const &src, vector<complex<double>> &dest, Var2D dim_src, Var2D dim_dest, Var2D coin, size_t NumAngle)
 {
-size_t nbPixSrc=src.size();
+//size_t nbPixSrc=src.size();
 //Var2D dim_src={sqrt(nbPixSrc),sqrt(nbPixSrc)};
 size_t X_dest,Y_dest, cpt_dest1D,
 X_src, Y_src, cpt_src1D, cpt_Z_dest;
@@ -177,7 +177,7 @@ for(Y_src=0;Y_src<Nmax.y;Y_src++){
 void coupe2D_I_to_H3D(vector<complex<double>> const &src2D, vector<complex<double>> &dest3D,Var2D dim_dest2D, unsigned short int numAngle)
 {
 size_t nbPixSrc=src2D.size();
-size_t nbPixDest=dest3D.size();
+//size_t nbPixDest=dest3D.size();
 Var2D dim_src={sqrt(nbPixSrc),sqrt(nbPixSrc)};
 //Var2D dim_dest={sqrt(nbPixDest),sqrt(nbPixDest)};
 Var2D Nmax={dim_dest2D.x/2,dim_dest2D.y/2};
@@ -248,13 +248,14 @@ void holo2TF_UBorn2_shift_r2c(vector<double>  &holo1,vector<complex<double>> &TF
       holo1[pixel]=(double)holo1[pixel]*tukeyHolo[pixel];
 
    // TF2D_r2c_symetric(fftshift2D2(holo1),TF_Holo,param_fftw2DHolo);
-     TF2D_r2c_coupeHA_to_stack(fftshift2D2(holo1), TF_UBornTot, dim2DHA, coinHA_shift,  NbAngleOk, param_fftw2D_r2c_Holo);///warning, fftshift for the 14st argument
+     TF2D_r2c_coupeHA_to_stack(fftshift2D2(holo1), TF_UBornTot, dim2DHA, coinHA_shift,  NbAngleOk, param_fftw2D_r2c_Holo);///warning, fftshift for the 1st argument
 
    // SAVCplx(TF_Holo,"Im","/home/mat/tmp/Tfholo_1024x1024.bin",t_float,"a+b");
    // coupeCplx(TF_Holo, TF_UBornTot, dimROI, dim2DHA, coinHA_shift, NbAngleOk);///Découpe à [-Nxmax,+NXmax]dans repère humain-lisible +envoi dans pile3D
  //   SAVCplx(TF,"Im","/home/mat/tmp/Tfholo_220x220x60.bin",t_float,"a+b");
 }
-///r2c symetric. cons : The input hologram must be fftshifted,  then the spectrum must be back-fftshifted. then the image is  cropped and send to the stack of complex fields  by the function "CoupeCplx"
+///r2c but symmetrized.
+///Cons : The input hologram must be fftshifted,  then the spectrum must be back-fftshifted. Finally the image is  cropped and send to the stack of complex fields  by the function "CoupeCplx"
 ///pros : slower but easier to understand, because the fft is complete.
 void holo2TF_UBorn2(vector<double>  &holo1,vector<complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA, size_t NbAngleOk, vector<double> const &tukeyHolo,FFTW_init  &param_fftw2DHolo)
 {
@@ -271,10 +272,87 @@ void holo2TF_UBorn2(vector<double>  &holo1,vector<complex<double>> &TF_UBornTot,
 
  //   SAVCplx(TF,"Im","/home/mat/tmp/Tfholo_220x220x60.bin",t_float,"a+b");
 }
+
+///ancienne fonction, lente, avec plan calculé à l'extérieur
+void holo2TF_UBorn(vector<double> holo1, vector<complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle, vector<double> tukey_holo, fftw_complex *in,fftw_complex *out,fftw_plan p_forward_holo)
+{
+
+            ///--------------Init FFTW-------------------------------------------------
+    size_t NbPix2dROI=holo1.size();
+    size_t dimx=sqrt(NbPix2dROI);
+
+        size_t NbPixROI2d=holo1.size();
+        vector<double> holo_shift(NbPixROI2d);
+        vector<complex<double>> TF_Holo(NbPixROI2d);
+        vector<complex<double>> TFHoloCentre(NbPixROI2d);
+        nbCplx *TF_UBorn_A=new nbCplx[NbPixROI2d];
+
+        for(size_t pixel=0; pixel<NbPixROI2d; pixel++) {
+                holo1[pixel]=(double)holo1[pixel]*tukey_holo[pixel];
+        }
+
+        ///--------Circshift et TF2D HOLOGRAMME------
+        holo_shift=fftshift2D(holo1);
+        //SAV2(holo1, "/home/mat/tomo_test/holo_shift_extract_holo.bin",t_float,"a+b");
+
+        TF2Dcplx_vec(in,out,holo_shift, TF_Holo,p_forward_holo);
+        TFHoloCentre=fftshift2D(TF_Holo);//Décalage  sur fft_reel_tmp, pour recentrer le spectre avant découpe (pas obligatoire mais plus clair)
+      //  SAVCplx(TFHoloCentre,"Re","/home/mat/tomo_test/TFHoloCentre.raw",t_float,"a+b");
+
+        coupeCplx(TFHoloCentre, TF_UBornTot, dimROI, dim2DHA, coinHA, NumAngle);///Découpe à [-Nxmax,+NXmax]
+
+    //SAVCplx(TFHoloCentre,"Re","/home/tomo/TFHoloCentre.raw",t_float,"a+b");
+
+        ///--------Découpe hors axée------------------
+       // coupeCplx(TF_Holo_centre, TF_UBornTot, dimROI, dim2DHA, coinHA);///Découpe à [-Nxmax,+NXmax]
+}
+///ancienne fonction, avec plans calculé dans la fonction, donc autonome.
+void holo2TF_UBorn_old(vector<double> holo1, vector<complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle, vector<double> tukey_holo)
+{
+
+            ///--------------Init FFTW-------------------------------------------------
+    size_t NbPix2dROI=holo1.size();
+    size_t dimx=sqrt(NbPix2dROI);
+    int fftwThreadInit;
+    fftwThreadInit=fftw_init_threads();
+    fftw_plan_with_nthreads(4);
+    ///prepare fftw plan+tableaux-----------------
+    fftw_plan p_forward_holo, p_backward_holo;
+    //fftw_complex *in_out=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * dimROI.x*dimROI.y);//in=out pour transformation "inplace".
+    fftw_complex *in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * NbPix2dROI);//in=out pour transformation "inplace".
+    fftw_complex *out=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * NbPix2dROI);//in=out pour transformation "inplace".
+    p_forward_holo=fftw_plan_dft_2d(dimROI.x, dimROI.y, in, out, FFTW_FORWARD,FFTW_ESTIMATE);
+    p_backward_holo=fftw_plan_dft_2d(dimROI.x, dimROI.y, in, out, FFTW_BACKWARD, FFTW_ESTIMATE);
+
+        size_t NbPixROI2d=holo1.size();
+        vector<double> holo_shift(NbPixROI2d);
+        vector<complex<double>> TF_Holo(NbPixROI2d);
+        vector<complex<double>> TFHoloCentre(NbPixROI2d);
+        nbCplx *TF_UBorn_A=new nbCplx[NbPixROI2d];
+
+        for(size_t pixel=0; pixel<NbPixROI2d; pixel++) {
+                holo1[pixel]=(double)holo1[pixel]*tukey_holo[pixel];
+        }
+
+        ///--------Circshift et TF2D HOLOGRAMME------
+        holo_shift=fftshift2D(holo1);
+        //SAV2(holo1, "/home/mat/tomo_test/holo_shift_extract_holo.bin",t_float,"a+b");
+
+        TF2Dcplx_vec(in,out,holo_shift, TF_Holo,p_forward_holo);
+        TFHoloCentre=fftshift2D(TF_Holo);//Décalage  sur fft_reel_tmp, pour recentrer le spectre avant découpe (pas obligatoire mais plus clair)
+      //  SAVCplx(TFHoloCentre,"Re","/home/mat/tomo_test/TFHoloCentre.raw",t_float,"a+b");
+
+        coupeCplx(TFHoloCentre, TF_UBornTot, dimROI, dim2DHA, coinHA, NumAngle);///Découpe à [-Nxmax,+NXmax]
+
+        //SAVCplx(TFHoloCentre,"Re","/home/mat/tomo_test/TFHoloCentre.raw",t_float,"a+b");
+
+        ///--------Découpe hors axée------------------
+       // coupeCplx(TF_Holo_centre, TF_UBornTot, dimROI, dim2DHA, coinHA);///Découpe à [-Nxmax,+NXmax]
+}
+
 ///@parameters PosSpec : position of the specular beam //surcharge FFTW_init
 void calc_Uborn2(vector<complex<double>> const &TF_UBorn,vector<complex<double>> &UBorn,Var2D dim2DHA,Var2D PosSpec,FFTW_init &param_c2c)
 {
-
     Var2D recalUBorn={-PosSpec.x,-PosSpec.y},DecalU_Born={dim2DHA.x/2,dim2DHA.y/2};
     size_t NbPixUBorn=dim2DHA.x*dim2DHA.y;
 

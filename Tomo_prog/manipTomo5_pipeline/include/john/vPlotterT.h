@@ -162,7 +162,7 @@ class vPlotterT
 
 // =============================================================================
 
-#include "vPlotterT.cc"
+//#include "vPlotterT.cc"
 
 
 #endif // _VECTRA_PLOTTER_

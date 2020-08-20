@@ -27,9 +27,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <cxcore.h>
-#include <highgui.h>
-#include <cv.h>
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+
+//#include <cv.h>
 using namespace cv;
 
 /// Function header

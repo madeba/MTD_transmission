@@ -17,7 +17,14 @@
 #include "deroulement_herraez.h"
 #include "Correction_aberration.h"
 #include <chrono>
-#include <cv.h>
+#include <opencv2/core/utility.hpp>
+//#include "opencv2/video/tracking.hpp"
+#include "opencv2/imgproc.hpp"
+//#include "opencv2/videoio.hpp"
+#include "opencv2/highgui.hpp"
+#include "opencv2/core.hpp"
+
+//#include <cv.h>
 using namespace std;
 
 int main()
@@ -38,6 +45,15 @@ int main()
     fftw_plan_with_nthreads(nb_thread_fftw);
     FFTW_init param_fftw2D_r2c_Holo(holo1,"r2c",nb_thread_fftw);/// /!\ init r2c->surcharge avec image2D en entrée!
     FFTW_init param_fftw2D_c2r_Holo(holo1,nb_thread_fftw);
+
+        ///--------------Init FFTW Holo-------------------------------------------------
+
+        ///prepare fftw plan+tableaux-----------------
+        fftw_plan p_forward_holo;
+        fftw_complex *in_holo=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * NbPixROI2d);//
+        fftw_complex *out_holo=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * NbPixROI2d);//
+        p_forward_holo=fftw_plan_dft_2d(dimROI.x, dimROI.y, in_holo, out_holo, FFTW_FORWARD,FFTW_MEASURE);
+
     vector<double> static const masqueTukeyHolo(tukey2D(dimROI.x,dimROI.y,0.05));
     //masqueTukeyHolo=tukey2D(dimROI.x,dimROI.y,0.05);
     ///--------------------Init Référence Amplitude pour correction plan central-------------------------------------------
@@ -76,12 +92,18 @@ for(cptAngle=0; cptAngle<NbAngle; cptAngle++){
     //  cout<<"cahrger..."<<endl;
       charger_image2D_OCV(holo1,nomFichierHolo, coin, dimROI);
       for(size_t cpt=0;cpt<NbPixROI2d;cpt++){
-        holo1[cpt]=holo1[cpt]/ampli_ref[cpt];
+         //holo1[cpt]=holo1[cpt]/ampli_ref[cpt];
+        holo1[cpt]=holo1[cpt];
       }
-      holo2TF_UBorn2(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF holo+ découpe dans TF symétrisée, repère humain
-   //  holo2TF_UBorn2_shift(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA_shift,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF hologrammes +  découper de dimROI à 2NXMAX dans TF symétrisée, repère informatique
-     // cout<<"Coin_Ha_shift="<<coinHA_shift.x<<","<<coinHA_shift.y<<endl;
-     // holo2TF_UBorn2_shift_r2c(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA_shift,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF hologrammes +  découper de dimROI à 2NXMAX dans TF NON symétrique, repère info
+
+     // SAV2(holo1,chemin_result+"holo1_divise_1024x1024.raw",t_float,"a+b");
+
+     holo2TF_UBorn( holo1, TF_UBornTot,dimROI, dim2DHA, coinHA, NbAngleOk,masqueTukeyHolo, in_holo,out_holo, p_forward_holo);
+
+     ///nouvelles versions
+    //holo2TF_UBorn2(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF holo+ découpe dans TF symétrisée, repère humain
+     //holo2TF_UBorn2_shift(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA_shift,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF hologrammes +  découper de dimROI à 2NXMAX dans TF symétrisée, repère informatique
+    // holo2TF_UBorn2_shift_r2c(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA_shift,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF hologrammes +  découper de dimROI à 2NXMAX dans TF NON symétrique, repère info
       NbAngleOk++;
     }
     else cout<<"fichier "<<cptAngle<<" inexistant\n";
@@ -138,7 +160,7 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
 
   if(m1.b_CorrAber==true){
     calc_Uborn2(TF_UBorn,UBorn,dim2DHA,posSpec,param_fftw2D_c2r_HA);
-    //SAVCplx(UBorn,"Re",chemin_result+"/ampli_UBorn_debut_extract.raw",t_float,"a+b");
+    SAVCplx(UBorn,"Re",chemin_result+"/ampli_UBorn_debut_extract.raw",t_float,"a+b");
     ///----------Calcul phase + deroulement--------------------------------
     calcPhase_mpi_pi_atan2(UBorn,phase_2Pi_vec); ///fonction atan2
     //SAV2(phase_2Pi_vec,chemin_result+"/phasePI_atan2.raw",t_float,"a+b");

@@ -3,7 +3,7 @@
 *  (c) 2004-2008 by Basler Vision Technologies
 *  Section: Vision Components
 *  Project: GenApi
-*    Author:  Fritz Dierks
+*  Author:  Fritz Dierks
 *  $Header$
 *
 *  License: This file is published under the license of the EMVA GenICam  Standard Group.
@@ -182,7 +182,7 @@ namespace <xsl:value-of select="$NameSpace"/>
         
 <xsl:template match="pEnumEntry" mode="InsideDefiningEnums">
     <xsl:variable name="NodeName" select="string()"/>
-    <xsl:variable name="Seperator">
+    <xsl:variable name="Separator">
         <xsl:choose>
             <xsl:when test="position()!=last()">
                 <xsl:text>, </xsl:text>
@@ -192,7 +192,7 @@ namespace <xsl:value-of select="$NameSpace"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:value-of select="../@Name"/>_<xsl:value-of select="../../EnumEntry[@Name=$NodeName]/Symbolic"/><xsl:value-of select="$Seperator"/> //!&lt;<xsl:value-of select="../../EnumEntry[@Name=$NodeName]/ToolTip"/><xsl:text>&#x0d;&#x0a;&#x9;&#x9;</xsl:text>
+    <xsl:value-of select="../@Name"/>_<xsl:value-of select="../../EnumEntry[@Name=$NodeName]/Symbolic"/><xsl:value-of select="$Separator"/> //!&lt;<xsl:value-of select="../../EnumEntry[@Name=$NodeName]/ToolTip"/><xsl:text>&#x0d;&#x0a;&#x9;&#x9;</xsl:text>
 </xsl:template>
 
 <!-- =========================================================================== -->
@@ -228,7 +228,7 @@ namespace <xsl:value-of select="$NameSpace"/>
 	<xsl:if test="/RegisterDescription/*[@Name=$Feature]/pSelecting">
 		\b Selected by : <xsl:for-each select="/RegisterDescription/*[@Name=$Feature]/pSelecting">
 			<xsl:value-of select="node()"/>
-			<xsl:if test="position()!=last()">, </xsl:if>			
+			<xsl:if test="position()!=last()">, </xsl:if>
 		</xsl:for-each>
 		<xsl:text>&#x0d;&#x0a;&#x9;</xsl:text>
 	</xsl:if>
@@ -255,7 +255,7 @@ namespace <xsl:value-of select="$NameSpace"/>
 #   pragma warning(pop)
     </xsl:if>
     //@}
-    
+
 </xsl:template>
 
 
@@ -267,7 +267,7 @@ namespace <xsl:value-of select="$NameSpace"/>
     <xsl:variable name="Feature" select="@Name"/>
     <xsl:variable name="NodeType" select="name()"/>
 
-    <xsl:variable name="Seperator">
+    <xsl:variable name="Separator">
         <xsl:choose>
             <xsl:when test="position()=1">
                 <xsl:text>: </xsl:text>
@@ -283,10 +283,10 @@ namespace <xsl:value-of select="$NameSpace"/>
 		</xsl:if>
     <xsl:choose>
         <xsl:when test="$NodeType = 'Enumeration'">
-            <xsl:value-of select="$Seperator"/><xsl:value-of select="$Feature"/>( *new GenApi::<xsl:value-of select="document('NodeTypes.xml')/NodeTypes/Node/CppReference[../@Name=$NodeType]"/>&lt;<xsl:value-of select="$Feature"/>Enums&gt;() )
+            <xsl:value-of select="$Separator"/><xsl:value-of select="$Feature"/>( *new GenApi::<xsl:value-of select="document('NodeTypes.xml')/NodeTypes/Node/CppReference[../@Name=$NodeType]"/>&lt;<xsl:value-of select="$Feature"/>Enums&gt;() )
         </xsl:when>
         <xsl:otherwise>
-            <xsl:value-of select="$Seperator"/><xsl:value-of select="$Feature"/>( *new GenApi::<xsl:value-of select="document('NodeTypes.xml')/NodeTypes/Node/CppReference[../@Name=$NodeType]"/>() )
+            <xsl:value-of select="$Separator"/><xsl:value-of select="$Feature"/>( *new GenApi::<xsl:value-of select="document('NodeTypes.xml')/NodeTypes/Node/CppReference[../@Name=$NodeType]"/>() )
         </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="./IsDeprecated='Yes'">
@@ -372,6 +372,5 @@ namespace <xsl:value-of select="$NameSpace"/>
   <xsl:param name="NodeType" />
   <xsl:text>static_cast&lt;GenApi::CEnumerationTRef</xsl:text>&lt;<xsl:value-of select="$EnumName"/>Enums&gt; *&gt; (&amp;<xsl:value-of select="$EnumName"/> )<xsl:text>-&gt;SetEnumReference( </xsl:text><xsl:value-of select="$EnumName"/>_<xsl:value-of select="./Symbolic"/>, "<xsl:value-of select="./Symbolic"/>" );<xsl:text>&#x9;&#x9;</xsl:text>
 </xsl:template>
-
 
 </xsl:stylesheet>

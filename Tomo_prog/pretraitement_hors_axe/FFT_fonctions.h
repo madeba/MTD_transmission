@@ -5,7 +5,7 @@
 #include <complex>
 
 #include <fftw3.h>
-#include "src/vecteur.h"
+#include "vecteur.h"
 #include "FFTW_init.h"
 
 

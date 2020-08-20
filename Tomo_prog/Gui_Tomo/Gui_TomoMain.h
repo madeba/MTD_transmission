@@ -18,6 +18,7 @@
 #include <fstream>
 #include <sstream>
 #include <math.h>
+#include <wx/frame.h>
 #include<vector>
 
 class Gui_TomoFrame: public wxFrame
@@ -28,6 +29,8 @@ class Gui_TomoFrame: public wxFrame
         ~Gui_TomoFrame();
          //float extract_val(std::string token,  std::string chemin_fic);
          std::string extract_string(std::string token,  std::string chemin_fic);
+
+         std::string extract_string(std::string token,  std::string chemin_fic,std::string chemin_defaut);
          void sav_val(std::string chemin_fic,std::vector<std::string> &tab_val);
          float extract_val(std::string token,  std::string chemin_fic);
          void init_tab_val(std::string chemin_fic, std::vector<std::string> &tab_val);
@@ -44,6 +47,7 @@ class Gui_TomoFrame: public wxFrame
             wxID_EXIT,
             idMenuAbout,
             idBoutonManip,
+            idBoutonImage,
             idBoutonTraitement,
             idBoutonReconstruction,
             id_boolBorn,
@@ -64,8 +68,8 @@ class Gui_TomoFrame: public wxFrame
 
         double Vxmax,Vymax,Vxmin,Vymin;
         int fx0,fy0,nbHolo;
-        unsigned int  DIM_FINAL, NXMAX;
-        bool b_BORN, b_VOLKOV, b_DEROUL, b_ABER, b_EXPORT_OTF;
+        unsigned int  DIM_FINAL=512, NXMAX=110;
+        bool b_BORN=0, b_VOLKOV=1, b_DEROUL=1, b_ABER=1, b_EXPORT_OTF=0;
        // std::vector<std::string> fichier_tmp;
         std::vector<std::string> tab_val_recon;
         std::vector<std::string> tab_val_manip;
@@ -77,9 +81,9 @@ class Gui_TomoFrame: public wxFrame
 
 
         ///Déclaration des attributs de type Boutons et menus en protected
-        std::string chemin_config_GUI,chemin_recon, chemin_config_manip,chemin_rep_acquis,chemin_result,repertoire_config;
+        std::string chemin_config_GUI,chemin_recon, chemin_config_manip,chemin_rep_acquis,repertoire_config_defaut,chemin_result,repertoire_config;
         //std::string repertoire_config_pc_acquis,chemin_config_manip_pc_acquis;
-        wxButton* BoutonManip;
+        wxButton* BoutonManip,*BoutonImage;
         wxButton* BoutonTraitement;
         wxButton* BoutonRecons;
         wxButton* BoutonOpenDir,*BoutonOpenDirResult,*BoutonOpenMask;
@@ -109,6 +113,7 @@ class Gui_TomoFrame: public wxFrame
         void OnQuit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
         void OnBoutonManip(wxCommandEvent& event);
+        void OnBoutonImage(wxCommandEvent& event);
         void OnBoutonTraitement(wxCommandEvent& event);
         void OnBoutonRecons(wxCommandEvent& event);
         void OnBoutonBorn(wxCommandEvent& event);

@@ -49,11 +49,9 @@ enum PRECISION {t_char, t_uint, t_int, t_float, t_double};
 #include <math.h>
 #include <iostream>
 #include <cstdlib>
-//#include <Magick++.h>
 #include <fftw3.h>
 #include <cstring>
 #include <fstream>
 #include <sstream>
 #include <assert.h>
-using namespace std;
-//using namespace Magick;
+

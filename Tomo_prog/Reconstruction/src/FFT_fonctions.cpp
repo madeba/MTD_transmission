@@ -10,9 +10,9 @@ using namespace std;
     int nbPix=entree.size();
     int dimFinale=round(std::pow(entree.size(), 1.0/3.0));
     int nbPix2D=dimFinale*dimFinale;//taille d'un plan 2D
-    Var3D  decal={round(dimFinale/2),round(dimFinale/2),round(dimFinale/2)}, dim={dimFinale,dimFinale,dimFinale};
+    Var3D  decal={(int)round(dimFinale/2),(int)round(dimFinale/2),(int)round(dimFinale/2)}, dim={dimFinale,dimFinale,dimFinale};
     vector<complex<double>> result(nbPix);
-    register size_t yi=0,xi=0,zi=0;
+    register size_t yi,xi,zi;
     int nbPix_z=0, nbPix_zdecal=0,nbPixy=0;
    #pragma omp parallel for private(zi)
     for(zi=0;zi<dim.z/2;zi++){
@@ -78,13 +78,13 @@ using namespace std;
 void fftshift3D(vector<complex<double>> const &entree, vector<complex<double>> &result)
 {       //si décalage supérieure à dim, on fait plus d'un tour, donc on prend le modulo
 
-    int nbPix=entree.size();
+    //int nbPix=entree.size();
     int dimFinale=round(std::pow(entree.size(), 1.0/3.0));
     int nbPix2D=dimFinale*dimFinale;//taille d'un plan 2D
-    Var3D decal={round(dimFinale/2),round(dimFinale/2),round(dimFinale/2)}, dim={dimFinale,dimFinale,dimFinale};
+    Var3D decal={(int)round(dimFinale/2),(int)round(dimFinale/2),(int)round(dimFinale/2)}, dim={dimFinale,dimFinale,dimFinale};
 //    vector<complex<double>> result(nbPix);
     size_t yi=0,xi=0,zi=0;
-    int nbPix_z=0, nbPix_zdecal=0,nbPixy=0;
+    int nbPix_z=0, nbPix_zdecal=0;//nbPixy=0;
   // #pragma omp parallel for
     for(zi=0;zi<dim.z/2;zi++){
         nbPix_z=zi*nbPix2D;
@@ -154,7 +154,7 @@ void fftshift3D(vector<complex<double>> const &entree, vector<complex<double>> &
 {
     int nbPix=entree.size();
     int dimFinale=round(std::pow(entree.size(), 0.5));
-    Var2D decal={round(dimFinale/2),round(dimFinale/2)}, dim={dimFinale,dimFinale};
+    Var2D decal={(int)round(dimFinale/2),(int)round(dimFinale/2)}, dim={dimFinale,dimFinale};
     vector<complex<double>> result(nbPix);
     int yi=0,xi=0;
         //#pragma omp parallel for private(yi)
@@ -352,18 +352,18 @@ void TF2Dcplx(vector<complex<double>> entree, vector<complex<double> > &sortie, 
 void TF2Dcplx_INV(vector<complex<double> > entree, vector<complex<double> > &sortie, FFT_encaps &tf2D, double delta_f)
 {
     int nbPix=entree.size();
-    int dim=sqrt(nbPix);
+//    int dim=sqrt(nbPix);
     double Coef_norm=pow(delta_f,2);
    // cout<<"delta_f="<<delta_f<<endl;
-    size_t cpt=0;
-    for(int cpt=0; cpt<nbPix; cpt++) {
+
+    for(size_t cpt=0; cpt<nbPix; cpt++) {
         tf2D.in[cpt][0]=entree[cpt].real();
         tf2D.in[cpt][1]=entree[cpt].imag();
     }
 
     fftw_execute(tf2D.p_backward_OUT);
 
-    for(cpt=0; cpt<(nbPix); cpt++) {
+    for(size_t cpt=0; cpt<(nbPix); cpt++) {
         sortie[cpt].real(tf2D.out[cpt][0]*Coef_norm); //division par N (dim*dim) pour normaliser l'énergie
         sortie[cpt].imag(tf2D.out[cpt][1]*Coef_norm);
     }
@@ -376,15 +376,15 @@ void TF3Dcplx(fftw_complex *in, fftw_complex *out, vector<complex<double> > entr
 
    //double Coef_norm=sqrt((double)nbPix);
     double Coef_norm=pow(delta_x,3);
-    size_t cpt=0;
-    for(int cpt=0; cpt<nbPix; cpt++) {
+
+    for(size_t cpt=0; cpt<nbPix; cpt++) {
         in[cpt][0]=entree[cpt].real();
         in[cpt][1]=entree[cpt].imag();
     }
 
     fftw_execute(p3d_forward);
 
-    for(cpt=0; cpt<(nbPix); cpt++) {
+    for(size_t cpt=0; cpt<(nbPix); cpt++) {
         sortie[cpt].real(out[cpt][0]*Coef_norm);
         sortie[cpt].imag(out[cpt][1]*Coef_norm);
     }
@@ -394,18 +394,18 @@ void TF3Dcplx(fftw_complex *in, fftw_complex *out, vector<complex<double> > entr
 void TF3Dcplx_INV(fftw_complex *in, fftw_complex *out, vector<complex<double> > entree, vector<complex<double> > &sortie, fftw_plan p3d_back, double delta_f)
 {
 
-    int nbPix=entree.size();
+    const size_t nbPix=entree.size();
    // double Coef_norm=sqrt((double)nbPix*m1.Tp_Uborn);
     double Coef_norm=pow(delta_f,3);
-    size_t cpt=0;
-    for(int cpt=0; cpt<nbPix; cpt++) {
+
+    for(size_t cpt=0; cpt<nbPix; cpt++) {
         in[cpt][0]=entree[cpt].real();
         in[cpt][1]=entree[cpt].imag();
     }
 
     fftw_execute(p3d_back);
 
-    for(cpt=0; cpt<(nbPix); cpt++) {
+    for(size_t cpt=0; cpt<(nbPix); cpt++) {
         sortie[cpt].real(out[cpt][0]*Coef_norm); //division par N (dim^3) pour normaliser l'énergie (Parseval)
         sortie[cpt].imag(out[cpt][1]*Coef_norm);//division par N (dim^3) pour normaliser l'énergie (Parseval)
     }
@@ -413,17 +413,17 @@ void TF3Dcplx_INV(fftw_complex *in, fftw_complex *out, vector<complex<double> > 
 void TF3Dcplx_Inplace_INV(vector<complex<double>> const & entree, vector<complex<double> > &sortie, FFT_encaps &param_Inplace_c2c, double delta_f)
 {
 
-    int nbPix=entree.size();
+    size_t nbPix=entree.size();
    // double Coef_norm=sqrt((double)nbPix*m1.Tp_Uborn);
     double Coef_norm=pow(delta_f,3);
-    size_t cpt=0;
-    for(int cpt=0; cpt<nbPix; cpt++) {
+
+    for(size_t cpt=0; cpt<nbPix; cpt++) {
         param_Inplace_c2c.in[cpt][0]=entree[cpt].real();
         param_Inplace_c2c.in[cpt][1]=entree[cpt].imag();
     }
 
     fftw_execute(param_Inplace_c2c.p_backward_IN);
-    for(cpt=0; cpt<(nbPix); cpt++) {
+    for(size_t cpt=0; cpt<(nbPix); cpt++) {
         sortie[cpt].real(param_Inplace_c2c.in[cpt][0]*Coef_norm); //division par N (dim^3) pour normaliser l'énergie (Parseval)
         sortie[cpt].imag(param_Inplace_c2c.in[cpt][1]*Coef_norm);//division par N (dim^3) pour normaliser l'énergie (Parseval)
     }

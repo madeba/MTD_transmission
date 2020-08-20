@@ -18,7 +18,7 @@ class Point2D{
         double x,y;
         int dim2D;
         Point2D();
-        Point2D(double x, double y,int dim);
+        Point2D(double a_x, double a_y,int a_dim):x{a_x},y{a_y},dim2D{a_dim}{}; //liste d'init pour éviter l'appel au constructeur par défaut : plus performant.
         virtual ~Point2D();
         size_t cpt2D();
         void decale(int decalx, int decaley);

@@ -15,7 +15,8 @@ public:
 
     FFT_encaps(Point3D dim,size_t nbThread);
     FFT_encaps(Point3D dim,size_t nbThread,bool inplace);
-    FFT_encaps(Point2D dim);
+    FFT_encaps(Point3D dim,size_t nbThreads, bool b_inPlace,std::string chemin_wisdom);
+    explicit FFT_encaps(Point2D dim);//expliocit evite les conversion à l'arrache d'un paramètre d'entree different de Point2D
 
     bool import_wisdom(const char *filename);
     ~FFT_encaps();

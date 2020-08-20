@@ -3,7 +3,7 @@
 *  (c) 2004-2008 by Basler Vision Technologies
 *  Section: Vision Components
 *  Project: GenApi
-*	 Author:  Urs Helmig
+*  Author:  Urs Helmig
 *  $Header$
 *
 *  License: This file is published under the license of the EMVA GenICam  Standard Group. 

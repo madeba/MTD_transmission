@@ -640,7 +640,7 @@
 		</IntSwissKnife>
 		<Integer Name="SICustomPayloadTransferSize">
 			<ToolTip>Custom payload size to use when setting SIPayloadTransferSize.</ToolTip>
-			<Description>Custom payload size to use when setting SIPayloadSize. If 0, the payload transfer size is configured automatically by the device controller. The custom payload size is only used as a starting point and can be adjusted to meet other constraints like payload size alignment.</Description>
+			<Description>Custom payload size to use when setting SIPayloadTransferSize.If 0, the payload transfer size is configured automatically by the device controller. The custom payload size is only used as a starting point and can be adjusted to meet other constraints like payload size alignment.</Description>
 			<DisplayName>Custom Payload Transfer Size</DisplayName>
 			<Visibility>Guru</Visibility>
 		<pIsAvailable>SICustomPayloadTransferSizeAvailExpr</pIsAvailable>
@@ -670,6 +670,7 @@
 			<Description>Description</Description>
 			<pFeature>DeviceGenICamXMLLocation</pFeature>
 			<pFeature>DeviceGenICamXMLFile</pFeature>
+			<pFeature>DeviceGenICamXMLFileValid</pFeature>
 		</Category> 
 		<Enumeration Name="DeviceGenICamXMLLocation">
 			<ToolTip>Selects which GenICaml XML file SDK will use to build the device node map on  the next connect.</ToolTip>
@@ -734,6 +735,7 @@
 			<Description>The location on the hard drive (absolute path) where the local XML file is loaded from when DeviceXMLLocation is set to &quot;File&quot;.</Description>
 			<DisplayName>GenICam XML File</DisplayName>
 			<Visibility>Guru</Visibility>
+		<pIsAvailable>DeviceGenICamXMLFileAvailExpr</pIsAvailable>
 			<Streamable>Yes</Streamable>
 			<Address>0xE8A4</Address>
 			<Length>512</Length>
@@ -742,6 +744,32 @@
 			<Cachable>NoCache</Cachable>
 			<PollingTime>1000</PollingTime>
 		</StringReg>
+		<IntSwissKnife Name="DeviceGenICamXMLFileAvailExpr">
+			<pVariable Name="VAR_DEVICEGENICAMXMLLOCATION">DeviceGenICamXMLLocationReg</pVariable>
+			<Formula>VAR_DEVICEGENICAMXMLLOCATION=3</Formula>
+		</IntSwissKnife>
+		<Boolean Name="DeviceGenICamXMLFileValid">
+			<ToolTip>True if the path in DeviceGenICamXMLFile is valid.</ToolTip>
+			<Description>True if the path in DeviceGenICamXMLFile is valid.</Description>
+			<DisplayName>GenICam XML File Valid</DisplayName>
+			<Visibility>Guru</Visibility>
+		<pIsAvailable>DeviceGenICamXMLFileValidAvailExpr</pIsAvailable>
+			<pValue>DeviceGenICamXMLFileValidReg</pValue>
+		</Boolean>
+		<IntReg Name="DeviceGenICamXMLFileValidReg">
+			<Address>0xEAC0</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<PollingTime>1000</PollingTime>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		<IntSwissKnife Name="DeviceGenICamXMLFileValidAvailExpr">
+			<pVariable Name="VAR_DEVICEGENICAMXMLLOCATION">DeviceGenICamXMLLocationReg</pVariable>
+			<Formula>VAR_DEVICEGENICAMXMLLOCATION=3</Formula>
+		</IntSwissKnife>
 	</Group>
 	<Group Comment="Recovery">
 		<Category Name="Recovery">

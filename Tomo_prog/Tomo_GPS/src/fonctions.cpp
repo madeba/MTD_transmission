@@ -4,8 +4,8 @@
 #include <complex>
 #include <fftw3.h>
 #include "struct.h"
-#include <cv.h>
-#include <highgui.h>//imread
+//#include <cv.h>
+//#include <highgui.h>//imread
 //#include "projet.h"
 #include "FFT_fonctions.h"
 #include "fonctions.h"

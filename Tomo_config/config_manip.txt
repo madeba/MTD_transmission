@@ -33,7 +33,7 @@ NB_HOLO 500
 
 VXMIN -8.50
 VXMAX 8.50
-VYMIN -6.5
+VYMIN -6.50
 VYMAX 6.00
 
 
@@ -107,3 +107,12 @@ AMPLI_REF 0
 
 =========
 >>>>>>>>> Temporary merge branch 2
+
+
+
+
+
+
+
+
+

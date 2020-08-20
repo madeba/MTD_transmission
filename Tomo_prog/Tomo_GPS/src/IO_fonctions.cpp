@@ -538,7 +538,7 @@ void display_vector(vector<double> const &img){
     image.at<float>(y,x)=(float)img[y*width+x];
 
 normalize(image, image, 1,0, NORM_MINMAX);
-namedWindow("Image Tiff", WINDOW_NORMAL | CV_GUI_EXPANDED );
+namedWindow("Image Tiff", WINDOW_NORMAL );
 imshow("Image tiff", image); // show the image
 waitKey(0); // wait for anykey before displaying next
 }
@@ -551,7 +551,7 @@ void display_vector(vector<double> const &img,string title){
     image.at<float>(y,x)=(float)img[y*width+x];
 
 normalize(image, image, 1,0, NORM_MINMAX);
-namedWindow( title, WINDOW_NORMAL | CV_GUI_EXPANDED );
+namedWindow( title, WINDOW_NORMAL );
 imshow(title, image); // show the image
 waitKey(0); // wait for anykey before displaying next
 }

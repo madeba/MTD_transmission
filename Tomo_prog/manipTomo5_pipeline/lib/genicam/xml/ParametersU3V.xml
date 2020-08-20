@@ -5,6 +5,7 @@
 			<pFeature>Connection</pFeature>
 			<pFeature>Statistics</pFeature>
 			<pFeature>Support</pFeature>
+			<pFeature>TLParamsLockedCategory</pFeature>
 		</Category>
 	</Group>
 	<Group Comment="Connection">
@@ -390,6 +391,7 @@
 			<EnumEntry Name="NETWORK_ERROR"><Value>19</Value></EnumEntry>
 			<EnumEntry Name="RESYNC"><Value>40</Value></EnumEntry>
 			<EnumEntry Name="BUSY"><Value>514</Value></EnumEntry>
+			<EnumEntry Name="CORRUPTED_DATA"><Value>771</Value></EnumEntry>
 			<pValue>LastErrorReg</pValue>
 		</Enumeration>
 		<IntReg Name="LastErrorReg">
@@ -518,7 +520,7 @@
 		</IntReg>
 		<Integer Name="PartialLineMissing">
 			<ToolTip>Partial line missing count on the device.</ToolTip>
-			<Description>Count of images that have at least one partial line missing. Only available for devices using a Pleora IP engine. </Description>
+			<Description>Count of images that have at least one partial line missing. Only available for devices using a Pleora Video Interface. </Description>
 			<DisplayName>Partial Line Missing</DisplayName>
 			<Visibility>Beginner</Visibility>
 		<pIsAvailable>PleoraDevice</pIsAvailable>
@@ -538,7 +540,7 @@
 		</IntReg>
 		<Integer Name="FullLineMissing">
 			<ToolTip>Full line missing count on the device.</ToolTip>
-			<Description>Count of images that have at least on full line missing. Only available for devices using a Pleora IP engine.</Description>
+			<Description>Count of images that have at least on full line missing. Only available for devices using a Pleora Video Interface.</Description>
 			<DisplayName>Full Line Missing</DisplayName>
 			<Visibility>Beginner</Visibility>
 		<pIsAvailable>PleoraDevice</pIsAvailable>
@@ -558,7 +560,7 @@
 		</IntReg>
 		<Integer Name="BlocksDropped">
 			<ToolTip>Dropped block count on the device.</ToolTip>
-			<Description>Count of dropped block notifications received from the device. Dropped block notifications are sent when the frame buffer is full and the incoming data cannot be processed. Only available for devices using a Pleora IP engine.</Description>
+			<Description>Count of dropped block notifications received from the device. Dropped block notifications are sent when the frame buffer is full and the incoming data cannot be processed. Only available for devices using a Pleora Video Interface.</Description>
 			<DisplayName>Blocks Dropped</DisplayName>
 			<Visibility>Beginner</Visibility>
 		<pIsAvailable>PleoraDevice</pIsAvailable>
@@ -578,7 +580,7 @@
 		</IntReg>
 		<Integer Name="InterlacedEven">
 			<ToolTip>Count of interlaced even fields from an interlaced image.</ToolTip>
-			<Description>Count of interlaced even fields from an interlaced image. Only for devices using a Pleora IP engine.</Description>
+			<Description>Count of interlaced even fields from an interlaced image. Only for devices using a Pleora Video Interface.</Description>
 			<DisplayName>Interlaced Even</DisplayName>
 			<Visibility>Beginner</Visibility>
 		<pIsAvailable>PleoraDevice</pIsAvailable>
@@ -598,7 +600,7 @@
 		</IntReg>
 		<Integer Name="InterlacedOdd">
 			<ToolTip>Count of interlaced odd fields from an interlaced image.</ToolTip>
-			<Description>Count of interlaced odd fields from an interlaced image. Only for devices using a Pleora IP engine.</Description>
+			<Description>Count of interlaced odd fields from an interlaced image. Only for devices using a Pleora Video Interface.</Description>
 			<DisplayName>Interlaced Odd</DisplayName>
 			<Visibility>Beginner</Visibility>
 		<pIsAvailable>PleoraDevice</pIsAvailable>
@@ -860,6 +862,17 @@
 			<Endianess>BigEndian</Endianess>
 		</IntReg>
 	</Group>
+	<Category Name="TLParamsLockedCategory">
+		<Visibility>Invisible</Visibility>
+		<pFeature>TLParamsLocked</pFeature>
+	</Category>
+	<Integer Name="TLParamsLocked">
+		<ToolTip>Integer parameter: 1 when grabbing, 0 when not</ToolTip>
+		<Visibility>Invisible</Visibility>
+		<Value>0</Value>
+		<Min>0</Min>
+		<Max>1</Max>
+	</Integer>
 	<Port Name="Device">
 		<ToolTip>Port giving access to the device.</ToolTip>
 	</Port>

@@ -15,7 +15,7 @@
 				<Compiler>
 					<Add option="-pg" />
 					<Add option="-g" />
-					<Add option="-no-pie" />
+					<Add option="-no-pie -Wall -Wextra -Wpedantic -Wconversion" />
 				</Compiler>
 				<Linker>
 					<Add option="-pg" />
@@ -34,6 +34,11 @@
 					<Add option="-march=corei7-avx" />
 					<Add option="-fexpensive-optimizations" />
 					<Add option="-O3" />
+					<Add option="-Weffc++" />
+					<Add option="-pedantic-errors" />
+					<Add option="-pedantic" />
+					<Add option="-Wfatal-errors" />
+					<Add option="-Wall" />
 				</Compiler>
 				<Linker>
 					<Add option="`pkg-config --cflags --libs opencv` -lpthread -lm -lopencv_core -lopencv_imgproc" />
@@ -45,25 +50,24 @@
 			<Add option="-march=corei7-avx" />
 			<Add option="-fexpensive-optimizations" />
 			<Add option="-O3" />
+			<Add option="-std=gnu++14" />
 			<Add option="-fexceptions -lpthread -std=c++11 -fopenmp" />
 			<Add directory="/usr/include/opencv" />
 			<Add directory="include" />
 			<Add directory="." />
+			<Add directory="/usr/include/opencv4" />
 		</Compiler>
 		<Linker>
 			<Add option="`pkg-config --cflags --libs opencv` -lpthread -lgomp -ltiff" />
 			<Add library="/usr/lib/x86_64-linux-gnu/libfftw3.so" />
 			<Add library="/usr/lib/x86_64-linux-gnu/libfftw3_threads.so" />
 		</Linker>
-		<Unit filename="deroulement.cpp" />
-		<Unit filename="deroulement.h" />
 		<Unit filename="fonctions.cpp" />
 		<Unit filename="fonctions.h" />
 		<Unit filename="include/FFT_encaps.h" />
 		<Unit filename="include/FFT_fonctions.h" />
 		<Unit filename="include/Point2D.h" />
 		<Unit filename="include/Point3D.h" />
-		<Unit filename="include/fonctions.h" />
 		<Unit filename="include/manip.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="projet.h" />
@@ -73,10 +77,6 @@
 		<Unit filename="src/Point3D.cpp" />
 		<Unit filename="src/manip.cpp" />
 		<Unit filename="struct.h" />
-		<Extensions>
-			<code_completion />
-			<debugger />
-			<envvars />
-		</Extensions>
+		<Extensions />
 	</Project>
 </CodeBlocks_project_file>
