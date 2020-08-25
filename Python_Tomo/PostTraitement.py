@@ -11,7 +11,7 @@ import time
 import os
 
 # Path to the parameter file, and parameters reading
-DossierAcquis = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN/"
+DossierAcquis = "/home/nicolas/Acquisitions/pollen_bouleau_2407220_autre/"
 DossierData = f"{DossierAcquis}data/"
 ProcessingFolder = f"{DossierData}Reconstruction"
 CheminParam = f"{DossierData}Pretraitement/Param.txt"

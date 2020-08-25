@@ -91,7 +91,7 @@ def Calc_fd(Nmax,REwald):
         Ordonnae of the filtered coordinate.
 
     """
-    dy, dx, _ = np.meshgrid(np.arange(-Nmax,Nmax), np.arange(-Nmax,Nmax), np.arange(-Nmax,Nmax))
+    dy, dx = np.meshgrid(np.arange(-Nmax,Nmax), np.arange(-Nmax,Nmax))
     Mask = dx**2+dy**2 < Nmax**2
     dxm = dx[Mask]
     # print(f"{dxm}")
@@ -258,7 +258,7 @@ def retropropagation(holo_pile,nb_holo,SpecCoord,Nmax,R_Ewald,lambda_v,n0,P,P_ho
     print("------------------------------------------------------------'")
     print("")
     for cpt in range(nb_holo):
-        if cpt % 50 == 0:
+        if cpt % 100 == 0:
             print(f"Hologram = {cpt} out of {nb_holo}")
         k_inc = np.array([SpecCoord[1,cpt], SpecCoord[0,cpt]])
         TF_holo_shift_r = fftshift(fftn(TukeyWindow*holo_pile[:,:,cpt]))/(Delta_f_Uborn**2*Nmax**2)

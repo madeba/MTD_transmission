@@ -11,7 +11,7 @@ import time
 import os
 
 # Data folders and config files
-DossierAcquis = "C:/Users/p1600109/Documents/Recherche/MatlabTomo/PollenAziz/"
+DossierAcquis = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN/"
 DossierData = f"{DossierAcquis}data/"
 
 # Creating results Folders
@@ -21,6 +21,7 @@ if not os.path.exists(ProcessingFolder):
 
 # Path to the parameter file, and parameters reading
 DarkField = True
+WideField = False
 CheminParam = f"{DossierData}Pretraitement/Param.txt"
 REwald = ft.readvalue(CheminParam,'REwald')
 nb_angle = int(ft.readvalue(CheminParam,'nb_angle'))
@@ -73,6 +74,8 @@ fidRedon =  open(f"{ProcessingFolder}/SupRedon_{2*dimHolo}x{2*dimHolo}x{2*dimHol
 fidOTF =  open(f"{ProcessingFolder}/OTF_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
 if DarkField is True:
     fidDark =  open(f"{ProcessingFolder}/DarkField_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
+if WideField is True:
+    fidWide =  open(f"{ProcessingFolder}/WideField_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")    
 for cpt in range(Refraction.shape[2]):
     Refr = Refraction[:,:,cpt]
     Abs = Absorption[:,:,cpt]
@@ -85,7 +88,14 @@ for cpt in range(Refraction.shape[2]):
     if DarkField is True:
         DarkF = (Refr + Abs)**2
         DarkF.tofile(fidDark)
+    if WideField is True:
+        WideF = (Refr + Abs)**2
+        WideF.tofile(fidWide)        
 fidRef.close()
 fidAbs.close()
 fidRedon.close()
 fidOTF.close()
+if DarkField is True:
+    fidDark.close()
+if WideField is True:
+    fidWide.close()

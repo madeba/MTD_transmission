@@ -15,7 +15,7 @@ import time
 import MultiModalMTD as mmtd
 
 # Data folders and config files
-DossierAcquis = "C:/Users/p1600109/Documents/Recherche/MatlabTomo/PollenAziz/"
+DossierAcquis = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN/"
 DossierData = f"{DossierAcquis}data/"
 FichierConfig = f"{DossierAcquis}config/config_manip.txt"
 
@@ -26,7 +26,7 @@ if not os.path.exists(ProcessingFolder):
     os.makedirs(ProcessingFolder)
 
 # Acquisition data initialisation
-HoloRef = False
+HoloRef = True
 Rytov = True
 DarkField = True
 CamDim = 1024
@@ -42,7 +42,7 @@ REwald = CamDim*pix/Gtot*nimm/(Lambda) # Ewald sphere radius (pixel)
 fmaxHolo = round(REwald*NA/nimm) # Max frequency support (pixel)
 dimHolo = int(2*fmaxHolo) # Hologram size
 # dimHolo = int(CamDim/4) # Hologram size
-CheminMasque = f"{DossierData}Masque.tif"
+CheminMasque = f"{DossierData}Mask.tif"
 CentreX = int(ft.readvalue(FichierConfig,'CIRCLE_CX')) # Pupil center in Fourier space
 CentreY = int(ft.readvalue(FichierConfig,'CIRCLE_CY'))
 nb_holoTot = int(ft.readvalue(FichierConfig,'NB_HOLO'))
