@@ -28,7 +28,7 @@ if not os.path.exists(ProcessingFolder):
 # Acquisition data initialisation
 HoloRef = True
 Rytov = True
-DarkField = True
+DarkField = False
 CamDim = 1024
 NA = ft.readvalue(FichierConfig,'NA')
 nimm = ft.readvalue(FichierConfig,'N0')
@@ -42,7 +42,7 @@ REwald = CamDim*pix/Gtot*nimm/(Lambda) # Ewald sphere radius (pixel)
 fmaxHolo = round(REwald*NA/nimm) # Max frequency support (pixel)
 dimHolo = int(2*fmaxHolo) # Hologram size
 # dimHolo = int(CamDim/4) # Hologram size
-CheminMasque = f"{DossierData}Mask.tif"
+CheminMasque = f"{DossierData}Maske.tif"
 CentreX = int(ft.readvalue(FichierConfig,'CIRCLE_CX')) # Pupil center in Fourier space
 CentreY = int(ft.readvalue(FichierConfig,'CIRCLE_CY'))
 nb_holoTot = int(ft.readvalue(FichierConfig,'NB_HOLO'))
