@@ -9,7 +9,6 @@ import FileTools as ft
 import Retropropagation as rp
 import time
 import os
-import imageio
 
 # Data folders and config files
 DossierAcquis = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN/"
@@ -63,12 +62,15 @@ plt.imshow(Refraction[:,:,dimHolo], cmap="gray")
 plt.show()
 
 # Writting results
-imageio.volwrite(f"{ProcessingFolder}/Refraction_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff", Refraction.transpose((-1, 0, 1)).astype(np.float32))
-imageio.volwrite(f"{ProcessingFolder}/Absorption_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff", Absorption.transpose((-1, 0, 1)).astype(np.float32))
-imageio.volwrite(f"{ProcessingFolder}/OTF_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff", OTF.transpose((-1, 0, 1)).astype(np.float32))
-imageio.volwrite(f"{ProcessingFolder}/SupRedon_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff", mask_sum.transpose((-1, 0, 1)).astype(np.float32))
+start_time = time.time()
+ft.SAVtiffCube(f"{ProcessingFolder}/Refraction_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff", Refraction)
+ft.SAVtiffCube(f"{ProcessingFolder}/Absorption_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff", Absorption)
+# ft.SAVtiffCube(f"{ProcessingFolder}/OTF_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff", OTF)
+# ft.SAVtiffCube(f"{ProcessingFolder}/SupRedon_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff", mask_sum)
+print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
+
 
 # Darkfield processing  
 if DarkField is True:
     DarkF = (Refraction + Absorption)**2    
-imageio.volwrite(f"{ProcessingFolder}/Darkfield_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff", DarkF.transpose((-1, 0, 1)).astype(np.float32))
+    ft.SAVtiffCube(f"{ProcessingFolder}/Darkfield_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff", DarkF.transpose((-1, 0, 1)).astype(np.float32))

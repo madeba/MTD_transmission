@@ -5,6 +5,8 @@
 
 import os
 from linecache import getline
+import imageio as im
+import numpy as np
 
 def lineinfile(filename):
     """
@@ -66,7 +68,6 @@ def readvalue(filename,keyword):
 
 def SAVbin(image,chemin,dim):
     """
-    
     Binary file saving
 
     Parameters
@@ -87,3 +88,39 @@ def SAVbin(image,chemin,dim):
     fid = open(nom_fichier,"w")
     image.tofile(fid)
     fid.close()
+    
+def SAVtiffCube(Folder,Data):
+    """
+    Saving data as a multipage Tiff file
+
+    Parameters
+    ----------
+    Folder : str
+        Path of the saved file.
+    Data : float64
+        Data to be saved.
+
+    Returns
+    -------
+    None.
+
+    """
+    im.volwrite(Folder, Data.transpose((-1, 0, 1)).astype(np.float32))
+    
+def ReadtiffCube(Folder):
+    """
+    Reading data from a multipage Tiff file
+
+    Parameters
+    ----------
+    Folder : str
+        Path of the saved file.
+
+    Returns
+    -------
+    Data : float32
+        Extracted data cube.
+
+    """
+    Data = im.volread(Folder).transpose(1,2,0)
+    return Data

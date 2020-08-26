@@ -11,7 +11,7 @@ import time
 import os
 
 # Path to the parameter file, and parameters reading
-DossierAcquis = "/home/nicolas/Acquisitions/pollen_bouleau_2407220_autre/"
+DossierAcquis = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN/"
 DossierData = f"{DossierAcquis}data/"
 ProcessingFolder = f"{DossierData}Reconstruction"
 CheminParam = f"{DossierData}Pretraitement/Param.txt"
@@ -23,14 +23,14 @@ if not os.path.exists(GerchbergFolder):
     os.makedirs(GerchbergFolder)
     
 # Paths to the refraction, and absorption of the object
-CheminAbsorp = f"{ProcessingFolder}/AbsorptionDiv_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin"
-CheminRefrac = f"{ProcessingFolder}/RefractionDiv_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin"
-CheminOTF = f"{ProcessingFolder}/OTF_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin"
+CheminAbsorp = f"{ProcessingFolder}/AbsorptionDiv_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff"
+CheminRefrac = f"{ProcessingFolder}/RefractionDiv_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff"
+CheminOTF = f"{ProcessingFolder}/OTF_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff"
 
 # Files reading
-Absorption = rp.ReadCube(CheminAbsorp, 2*dimHolo, 2*dimHolo, 2*dimHolo, "np.float32")
-Refraction = rp.ReadCube(CheminRefrac, 2*dimHolo, 2*dimHolo, 2*dimHolo, "np.float32")
-OTF = rp.ReadCube(CheminOTF, 2*dimHolo, 2*dimHolo, 2*dimHolo, "np.int32")
+Absorption = ft.ReadtiffCube(CheminAbsorp)
+Refraction = ft.ReadtiffCube(CheminRefrac)
+OTF = ft.ReadtiffCube(CheminOTF)
 Rec_Object = Refraction + Absorption*1j
 plt.imshow(Rec_Object.real[:,:,dimHolo], cmap="gray")
 plt.show()
@@ -40,7 +40,7 @@ plt.show()
 # Gerchberg parameters
 nbiter = 20    
 nmin = 0
-nmax = 0.17
+nmax = 0.1
 kappamin = 0
 kappamax = 0
 
@@ -54,12 +54,7 @@ plt.show()
 plt.imshow(Rec_Object[:,:,dimHolo].imag, cmap="gray")
 plt.show() 
 
-fidRef = open(f"{GerchbergFolder}/RefractionGerch_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
-fidAbs = open(f"{GerchbergFolder}/AbsorptionGerch_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
-for cpt in range(FilteredObj.shape[2]):
-    Refr = Rec_Object[:,:,cpt].real
-    Abs = Rec_Object[:,:,cpt].imag
-    Refr.tofile(fidRef)
-    Abs.tofile(fidAbs) 
-fidRef.close()
-fidAbs.close()
+# Data saving
+start_time = time.time()
+ft.SAVtiffCube(f"{GerchbergFolder}/RefractionGerch_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff", Rec_Object.real)
+print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
