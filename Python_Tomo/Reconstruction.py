@@ -9,6 +9,7 @@ import FileTools as ft
 import Retropropagation as rp
 import time
 import os
+import imageio
 
 # Data folders and config files
 DossierAcquis = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN/"
@@ -21,7 +22,6 @@ if not os.path.exists(ProcessingFolder):
 
 # Path to the parameter file, and parameters reading
 DarkField = False
-WideField = False
 CheminParam = f"{DossierData}Pretraitement/Param.txt"
 REwald = ft.readvalue(CheminParam,'REwald')
 nb_angle = int(ft.readvalue(CheminParam,'nb_angle'))
@@ -61,41 +61,14 @@ TFVolfilt[TFVol != 0] = 1
 
 plt.imshow(Refraction[:,:,dimHolo], cmap="gray")
 plt.show()
-# plt.imshow(OTF[:,:,dimHolo], cmap="gray")
-# plt.show()
-# plt.imshow(OTF[:,dimHolo,:], cmap="gray")
-# plt.show()
-# plt.imshow(TFVolfilt[:,dimHolo,:], cmap="gray")
-# plt.show()
 
-fidRef = open(f"{ProcessingFolder}/Refraction_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
-fidAbs = open(f"{ProcessingFolder}/Absorption_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
-fidRedon =  open(f"{ProcessingFolder}/SupRedon_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
-fidOTF =  open(f"{ProcessingFolder}/OTF_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
+# Writting results
+imageio.volwrite(f"{ProcessingFolder}/Refraction_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff", Refraction.transpose((-1, 0, 1)).astype(np.float32))
+imageio.volwrite(f"{ProcessingFolder}/Absorption_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff", Absorption.transpose((-1, 0, 1)).astype(np.float32))
+imageio.volwrite(f"{ProcessingFolder}/OTF_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff", OTF.transpose((-1, 0, 1)).astype(np.float32))
+imageio.volwrite(f"{ProcessingFolder}/SupRedon_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff", mask_sum.transpose((-1, 0, 1)).astype(np.float32))
+
+# Darkfield processing  
 if DarkField is True:
-    fidDark =  open(f"{ProcessingFolder}/DarkField_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")
-if WideField is True:
-    fidWide =  open(f"{ProcessingFolder}/WideField_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.bin","a")    
-for cpt in range(Refraction.shape[2]):
-    Refr = Refraction[:,:,cpt]
-    Abs = Absorption[:,:,cpt]
-    Redon = mask_sum[:,:,cpt]
-    Support = OTF[:,:,cpt]
-    Refr.tofile(fidRef)
-    Abs.tofile(fidAbs) 
-    Redon.tofile(fidRedon)
-    Support.tofile(fidOTF)
-    if DarkField is True:
-        DarkF = (Refr + Abs)**2
-        DarkF.tofile(fidDark)
-    if WideField is True:
-        WideF = (Refr + Abs)**2
-        WideF.tofile(fidWide)        
-fidRef.close()
-fidAbs.close()
-fidRedon.close()
-fidOTF.close()
-if DarkField is True:
-    fidDark.close()
-if WideField is True:
-    fidWide.close()
+    DarkF = (Refraction + Absorption)**2    
+imageio.volwrite(f"{ProcessingFolder}/Darkfield_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff", DarkF.transpose((-1, 0, 1)).astype(np.float32))
