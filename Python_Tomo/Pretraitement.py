@@ -19,7 +19,6 @@ DossierAcquis = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN/"
 DossierData = f"{DossierAcquis}data/"
 FichierConfig = f"{DossierAcquis}config/config_manip.txt"
 
-
 # Creating results Folders
 ProcessingFolder = f"{DossierData}Pretraitement"
 if not os.path.exists(ProcessingFolder):

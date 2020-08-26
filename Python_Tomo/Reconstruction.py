@@ -70,8 +70,7 @@ ft.SAVtiffCube(f"{ProcessingFolder}/Absorption_{2*dimHolo}x{2*dimHolo}x{2*dimHol
 # ft.SAVtiffCube(f"{ProcessingFolder}/SupRedon_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff", mask_sum)
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
 
-
 # Darkfield processing  
 if DarkField is True:
     DarkF = (Refraction + Absorption)**2    
-    ft.SAVtiffCube(f"{ProcessingFolder}/Darkfield_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff", DarkF.transpose((-1, 0, 1)).astype(np.float32))
+    ft.SAVtiffCube(f"{ProcessingFolder}/Darkfield_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff", DarkF)

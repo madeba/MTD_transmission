@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-
 @author: Nicolas Verrier
 """
 import matplotlib.pyplot as plt
