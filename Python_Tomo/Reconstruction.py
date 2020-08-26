@@ -49,6 +49,7 @@ del ReUBorn, ImUBorn
 start_time = time.time()
 f_recon, TFVol, mask_sum = rp.retropropagation(UBornCplx,nb_holo,fi,fmaxHolo,REwald,lambda_0,1.515,2*dimHolo,dimHolo,pixTheo,2*dimHolo,UBornPitch)
 print(f"Reconstruction time for a {2*dimHolo}x{2*dimHolo}x{2*dimHolo} volume (3D-FFT included), with {nb_holo} holograms: {np.round(time.time() - start_time,decimals=2)} seconds")
+print("")
 
 Refraction = f_recon.real
 Absorption = f_recon.imag

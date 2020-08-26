@@ -48,7 +48,9 @@ kappamax = 0
 del Absorption, Refraction
 start_time = time.time()
 FilteredObj = rp.Gerchberg(Rec_Object,OTF,nmin,nmax,kappamin,kappamax,nbiter)
+print("")
 print(f"Reconstruction time for {nbiter} iterations: {np.round(time.time() - start_time,decimals=2)} seconds")
+print("")
 plt.imshow(Rec_Object[:,:,dimHolo].real, cmap="gray")
 plt.show()
 plt.imshow(Rec_Object[:,:,dimHolo].imag, cmap="gray")
