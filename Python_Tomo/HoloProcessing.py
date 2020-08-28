@@ -3,13 +3,9 @@
 @author: Nicolas Verrier
 """
 
-from scipy.fftpack import fft2,ifft2,ifftshift
+from scipy.fftpack import fft2, ifft2, ifftshift
 import numpy as np
 import numba
-
-"""
-Collection of functions helping for hologram processing.
-"""
 
 def filtrage(spectrum, dx, dy, radius):
     """

@@ -15,94 +15,95 @@ import FileTools as ft
 import MultiModalMTD as mmtd
 
 # Data folders and config files
-DossierAcquis = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN/"
-DossierData = f"{DossierAcquis}data/"
-FichierConfig = f"{DossierAcquis}config/config_manip.txt"
+DOSSIERACQUIS = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN/"
+DOSSIERDATA = f"{DOSSIERACQUIS}data/"
+FICHIERCONFIG = f"{DOSSIERACQUIS}config/config_manip.txt"
 
 # Creating results Folders
-ProcessingFolder = f"{DossierData}Pretraitement"
-if not os.path.exists(ProcessingFolder):
-    os.makedirs(ProcessingFolder)
+PROCESSINGFOLDER = f"{DOSSIERDATA}Pretraitement"
+if not os.path.exists(PROCESSINGFOLDER):
+    os.makedirs(PROCESSINGFOLDER)
 
 # Acquisition data initialisation
-HoloRef = True
-Rytov = True
-DarkField = False
-CamDim = 1024
-NA = ft.readvalue(FichierConfig, 'NA')
-nimm = ft.readvalue(FichierConfig, 'N0')
-Lambda = ft.readvalue(FichierConfig, 'LAMBDA')
-f_tube = ft.readvalue(FichierConfig, 'F_TUBE') # Tube lens focal length
-f_obj = ft.readvalue(FichierConfig, 'F_OBJ') # Microscope objective focal length
-pix = ft.readvalue(FichierConfig, 'TPCAM') # Physical pixel pitch
-RapFoc = ft.readvalue(FichierConfig, 'RF') # focal length ratio of the resampling lens dublet
-Gtot = f_tube/f_obj/RapFoc
-REwald = CamDim*pix/Gtot*nimm/(Lambda) # Ewald sphere radius (pixel)
-fmaxHolo = round(REwald*NA/nimm) # Max frequency support (pixel)
+HOLOREF = True
+RYTOV = True
+DARKFIELD = False
+CAMDIM = 1024
+NA = ft.readvalue(FICHIERCONFIG, 'NA')
+NIMM = ft.readvalue(FICHIERCONFIG, 'N0')
+LAMBDA = ft.readvalue(FICHIERCONFIG, 'LAMBDA')
+F_TUBE = ft.readvalue(FICHIERCONFIG, 'F_TUBE') # Tube lens focal length
+F_OBJ = ft.readvalue(FICHIERCONFIG, 'F_OBJ') # Microscope objective focal length
+PIX = ft.readvalue(FICHIERCONFIG, 'TPCAM') # Physical pixel pitch
+RAPFOC = ft.readvalue(FICHIERCONFIG, 'RF') # focal length ratio of the resampling lens dublet
+Gtot = F_TUBE/F_OBJ/RAPFOC
+REwald = CAMDIM*PIX/Gtot*NIMM/(LAMBDA) # Ewald sphere radius (pixel)
+fmaxHolo = round(REwald*NA/NIMM) # Max frequency support (pixel)
 dimHolo = int(2*fmaxHolo) # Hologram size
 # dimHolo = int(CamDim/4) # Hologram size
-CheminMasque = f"{DossierData}Maske.tif"
-CentreX = int(ft.readvalue(FichierConfig, 'CIRCLE_CX')) # Pupil center in Fourier space
-CentreY = int(ft.readvalue(FichierConfig, 'CIRCLE_CY'))
-nb_holoTot = int(ft.readvalue(FichierConfig, 'NB_HOLO'))
-nb_holo = nb_holoTot # Number of holograms in the sequence
-# nb_holo = 50 # Number of holograms in the sequence
-CheminSAV_Re = f"{DossierData}Pretraitement/ReBorn_{dimHolo}.bin"
-CheminSAV_Im = f"{DossierData}Pretraitement/ImBorn_{dimHolo}.bin"
-CheminSAV_Centres = f"{DossierData}Pretraitement/Centres_{dimHolo}.bin"
-CheminSAV_Centrestxt = f"{DossierData}Pretraitement/Centres_{dimHolo}.txt"
-CheminSAV_Param = f"{DossierData}Pretraitement/Param.txt"
-fidCentrestxt = open(CheminSAV_Centrestxt, "a")
-fidParams = open(CheminSAV_Param, "a")
+CHEMINMASQUE = f"{DOSSIERDATA}Mask.tif"
+CENTREX = int(ft.readvalue(FICHIERCONFIG, 'CIRCLE_CX')) # Pupil center in Fourier space
+CENTREY = int(ft.readvalue(FICHIERCONFIG, 'CIRCLE_CY'))
+NB_HOLOTOT = int(ft.readvalue(FICHIERCONFIG, 'NB_HOLO'))
+NB_HOLO = NB_HOLOTOT # Number of holograms in the sequence
+CHEMINSAV_RE = f"{DOSSIERDATA}Pretraitement/ReBorn_{dimHolo}.bin"
+CHEMINSAV_IM = f"{DOSSIERDATA}Pretraitement/ImBorn_{dimHolo}.bin"
+CHEMINSAV_CENTRES = f"{DOSSIERDATA}Pretraitement/Centres_{dimHolo}.bin"
+CHEMINSAV_CENTRESTXT = f"{DOSSIERDATA}Pretraitement/Centres_{dimHolo}.txt"
+CHEMINSAV_PARAM = f"{DOSSIERDATA}Pretraitement/Param.txt"
+fidCentrestxt = open(CHEMINSAV_CENTRESTXT, "a")
+fidParams = open(CHEMINSAV_PARAM, "a")
 fidParams.write(f"REwald {REwald}\n")
 
 # Initialisation
-cpt = 1
-cpt_exist = 1
+CPT = 1
+CPT_EXIST = 1
 Centres = np.zeros((dimHolo, dimHolo))
-CentreXShift, CentreYShift = holo.CoordToCoordShift(CentreX, CentreY, CamDim, CamDim)
+CentreXShift, CentreYShift = holo.CoordToCoordShift(CENTREX, CENTREY, CAMDIM, CAMDIM)
 
 # Loading reference image
-if HoloRef is True:
-    Refname = f"{DossierData}Intensite_ref.pgm"
+if HOLOREF is True:
+    Refname = f"{DOSSIERDATA}Intensite_ref.pgm"
     Iref = np.sqrt(plt.imread(Refname))
 
 # Tukey Window
-TukeyWindow = np.sqrt(np.outer(signal.tukey(CamDim, 0.1), signal.tukey(CamDim, 0.1)))
+TukeyWindow = np.sqrt(np.outer(signal.tukey(CAMDIM, 0.1), signal.tukey(CAMDIM, 0.1)))
 
 # Amplitude and phase correction initialisation
-Masque = CAber.InitMasque(CheminMasque, dimHolo)
-nbPtOK = CAber.PixInMask(Masque)
-degrePoly = 4
-nbCoef = CAber.SizePoly2D(degrePoly)
+Masque = CAber.InitMasque(CHEMINMASQUE, dimHolo)
+NBPTOK = CAber.PixInMask(Masque)
+DEGREPOLY = 4
+NBCOEF = CAber.SizePoly2D(DEGREPOLY)
 
 # Undersampled polynome
-Poly_US = np.zeros((nbCoef, nbPtOK), dtype=np.float64)
-Poly_US = CAber.CalcPolyUS_xy(degrePoly, Masque, Poly_US)
+Poly_US = np.zeros((NBCOEF, NBPTOK), dtype=np.float64)
+Poly_US = CAber.CalcPolyUS_xy(DEGREPOLY, Masque, Poly_US)
 
 # Polynome to be fitted
-Poly = np.zeros((nbCoef, dimHolo*dimHolo), dtype=np.float64)
-Poly = CAber.CalcPoly_xy(degrePoly, Masque, Poly)
+Poly = np.zeros((NBCOEF, dimHolo*dimHolo), dtype=np.float64)
+Poly = CAber.CalcPoly_xy(DEGREPOLY, Masque, Poly)
 
 start_time = time.time()
-for hol in range(0, nb_holo):
-    filename = f"{DossierData}i{'%03d' % cpt}.pgm"
+for hol in range(0, NB_HOLO):
+    filename = f"{DOSSIERDATA}i{'%03d' % CPT}.pgm"
     if os.path.isfile(filename):
-        if HoloRef is True:
+        if HOLOREF is True:
             Image = (plt.imread(filename))/Iref
         else:
             Image = plt.imread(filename)
 
         # Hologram spectrum and off-axis filtering
         FImage = fft2(TukeyWindow*Image)
-        SpectreFilt = FImage[int(CentreYShift-dimHolo/2):int(CentreYShift+dimHolo/2), int(CentreXShift-dimHolo/2):int(CentreXShift+dimHolo/2)]
+        SpectreFilt = FImage[int(CentreYShift-dimHolo/2):int(CentreYShift+dimHolo/2),
+                             int(CentreXShift-dimHolo/2):int(CentreXShift+dimHolo/2)]
 
         # Specular spot coordinates calculation
         ind = np.unravel_index(np.argmax(np.abs(SpectreFilt), axis=None), SpectreFilt.shape)
         kiy = ind[0]
         kix = ind[1]
-        if DarkField is True:
-            SpectreFilt = mmtd.darkfield(SpectreFilt, 1, [ind[0]-SpectreFilt.shape[0]/2, ind[1]-SpectreFilt.shape[1]/2])
+        if DARKFIELD is True:
+            SpectreFilt = mmtd.darkfield(SpectreFilt, 1, [ind[0]-SpectreFilt.shape[0]/2,
+                                                          ind[1]-SpectreFilt.shape[1]/2])
             # plt.imshow(np.log10(np.abs(SpectreFilt)))
             # plt.show()
 
@@ -118,8 +119,8 @@ for hol in range(0, nb_holo):
         Phase_UBornWrap = np.angle(UBorn)
 
         # Phase unwrapping
-        if Rytov is True:
-            Phase_UBorn = holo.unwrapping(Phase_UBornWrap, pix)
+        if RYTOV is True:
+            Phase_UBorn = holo.unwrapping(Phase_UBornWrap, PIX)
         else:
             Phase_UBorn = Phase_UBornWrap
 
@@ -127,15 +128,15 @@ for hol in range(0, nb_holo):
         Amp_UBorn = CAber.ampliCorr(Amp_UBorn, Masque, Poly_US, Poly)
 
         # Phase correction
-        if Rytov is True:
+        if RYTOV is True:
             Phase_UBorn = CAber.aberCorr(Phase_UBorn, Masque, Poly_US, Poly)
 
         # File opening for field recording
-        fidRe = open(CheminSAV_Re, "a")
-        fidIm = open(CheminSAV_Im, "a")
+        fidRe = open(CHEMINSAV_RE, "a")
+        fidIm = open(CHEMINSAV_IM, "a")
 
         # Field calculation
-        if Rytov is True:
+        if RYTOV is True:
             # Rytov
             Re_UBorn = np.log(np.abs(Amp_UBorn))
             Im_UBorn = Phase_UBorn
@@ -147,18 +148,19 @@ for hol in range(0, nb_holo):
             Im_UBorn = (Amp_UBorn-1)*np.sin(Phase_UBorn)
             Re_UBorn.tofile(fidRe)
             Im_UBorn.tofile(fidIm)
-        cpt += 1
-        cpt_exist += 1
+        CPT += 1
+        CPT_EXIST += 1
     else:
-        cpt += 1
-print(f"Pre-Processing time for {cpt_exist-1} holograms: {np.round(time.time() - start_time,decimals=2)} seconds")
+        CPT += 1
+print(f"Pre-Processing time for {CPT_EXIST-1} holograms: "
+      f"{np.round(time.time() - start_time,decimals=2)} seconds")
 
 # Center recording and file closing
-fidParams.write(f"nb_angle {cpt_exist-1}\n")
+fidParams.write(f"nb_angle {CPT_EXIST-1}\n")
 fidParams.write(f"fmaxHolo {fmaxHolo}\n")
 fidParams.write(f"dimHolo {dimHolo}\n")
-fidParams.write(f"pixTheo {pix/Gtot}\n")
-fidCentres = open(CheminSAV_Centres, "w")
+fidParams.write(f"pixTheo {PIX/Gtot}\n")
+fidCentres = open(CHEMINSAV_CENTRES, "w")
 Centres.tofile(fidCentres)
 fidCentres.close()
 fidCentrestxt.close()
