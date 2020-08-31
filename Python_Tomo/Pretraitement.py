@@ -16,7 +16,7 @@ import MultiModalMTD as mmtd
 
 # Data folders and config files
 DOSSIERACQUIS = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN/"
-DOSSIERDATA = f"{DOSSIERACQUIS}data/"
+DOSSIERDATA = f"{DOSSIERACQUIS}blanc/"
 FICHIERCONFIG = f"{DOSSIERACQUIS}config/config_manip.txt"
 
 # Creating results Folders
@@ -29,13 +29,13 @@ HOLOREF = True
 RYTOV = True
 DARKFIELD = False
 CAMDIM = 1024
-NA = ft.readvalue(FICHIERCONFIG, 'NA')
-NIMM = ft.readvalue(FICHIERCONFIG, 'N0')
-LAMBDA = ft.readvalue(FICHIERCONFIG, 'LAMBDA')
-F_TUBE = ft.readvalue(FICHIERCONFIG, 'F_TUBE') # Tube lens focal length
-F_OBJ = ft.readvalue(FICHIERCONFIG, 'F_OBJ') # Microscope objective focal length
-PIX = ft.readvalue(FICHIERCONFIG, 'TPCAM') # Physical pixel pitch
-RAPFOC = ft.readvalue(FICHIERCONFIG, 'RF') # focal length ratio of the resampling lens dublet
+NA = float(ft.readvalue(FICHIERCONFIG, 'NA'))
+NIMM = float(ft.readvalue(FICHIERCONFIG, 'N0'))
+LAMBDA = float(ft.readvalue(FICHIERCONFIG, 'LAMBDA'))
+F_TUBE = float(ft.readvalue(FICHIERCONFIG, 'F_TUBE')) # Tube lens focal length
+F_OBJ = float(ft.readvalue(FICHIERCONFIG, 'F_OBJ')) # Microscope objective focal length
+PIX = float(ft.readvalue(FICHIERCONFIG, 'TPCAM')) # Physical pixel pitch
+RAPFOC = float(ft.readvalue(FICHIERCONFIG, 'RF')) # focal length ratio of the resampling lens dublet
 Gtot = F_TUBE/F_OBJ/RAPFOC
 REwald = CAMDIM*PIX/Gtot*NIMM/(LAMBDA) # Ewald sphere radius (pixel)
 fmaxHolo = round(REwald*NA/NIMM) # Max frequency support (pixel)

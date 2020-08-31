@@ -63,7 +63,7 @@ def readvalue(filename,keyword):
             nbLignesOK += 1
     for cpt in range(0,nbLignesOK):
         if FileContent[cpt][0] == keyword:
-            Value = float(FileContent[cpt][1])
+            Value = (FileContent[cpt][1])
     return Value
 
 def SAVbin(image,chemin,dim):
@@ -88,7 +88,7 @@ def SAVbin(image,chemin,dim):
     fid = open(nom_fichier,"w")
     image.tofile(fid)
     fid.close()
-    
+
 def SAVtiffCube(Folder,Data):
     """
     Saving data as a multipage Tiff file
@@ -106,7 +106,7 @@ def SAVtiffCube(Folder,Data):
 
     """
     im.volwrite(Folder, Data.transpose((-1, 0, 1)).astype(np.float32))
-    
+
 def ReadtiffCube(Folder):
     """
     Reading data from a multipage Tiff file

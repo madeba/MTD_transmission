@@ -22,11 +22,11 @@ if not os.path.exists(PROCESSINGFOLDER):
 # Path to the parameter file, and parameters reading
 DARKFIELD = False
 CHEMINPARAM = f"{DOSSIERDATA}Pretraitement/Param.txt"
-REWALD = ft.readvalue(CHEMINPARAM, 'REwald')
+REWALD = float(ft.readvalue(CHEMINPARAM, 'REwald'))
 NB_ANGLE = int(ft.readvalue(CHEMINPARAM, 'nb_angle'))
 FMAXHOLO = int(ft.readvalue(CHEMINPARAM, 'fmaxHolo'))
 DIMHOLO = int(ft.readvalue(CHEMINPARAM, 'dimHolo'))
-PIXTHEO = ft.readvalue(CHEMINPARAM, 'pixTheo')
+PIXTHEO = float(ft.readvalue(CHEMINPARAM, 'pixTheo'))
 LAMBDA_0 = 632.8e-9
 N_IMM = 1.515
 UBornPitch = 1/(2*FMAXHOLO*PIXTHEO)
