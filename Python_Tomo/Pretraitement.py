@@ -16,7 +16,7 @@ import MultiModalMTD as mmtd
 
 # Data folders and config files
 DOSSIERACQUIS = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN/"
-DOSSIERDATA = f"{DOSSIERACQUIS}blanc/"
+DOSSIERDATA = f"{DOSSIERACQUIS}data/"
 FICHIERCONFIG = f"{DOSSIERACQUIS}config/config_manip.txt"
 
 # Creating results Folders
@@ -28,6 +28,7 @@ if not os.path.exists(PROCESSINGFOLDER):
 HOLOREF = True
 RYTOV = True
 DARKFIELD = False
+PHASECONTRAST = True
 CAMDIM = 1024
 NA = float(ft.readvalue(FICHIERCONFIG, 'NA'))
 NIMM = float(ft.readvalue(FICHIERCONFIG, 'N0'))
@@ -40,7 +41,7 @@ Gtot = F_TUBE/F_OBJ/RAPFOC
 REwald = CAMDIM*PIX/Gtot*NIMM/(LAMBDA) # Ewald sphere radius (pixel)
 fmaxHolo = round(REwald*NA/NIMM) # Max frequency support (pixel)
 dimHolo = int(2*fmaxHolo) # Hologram size
-# dimHolo = int(CamDim/4) # Hologram size
+# dimHolo = int(CAMDIM/4) # Hologram size
 CHEMINMASQUE = f"{DOSSIERDATA}Mask.tif"
 CENTREX = int(ft.readvalue(FICHIERCONFIG, 'CIRCLE_CX')) # Pupil center in Fourier space
 CENTREY = int(ft.readvalue(FICHIERCONFIG, 'CIRCLE_CY'))
@@ -103,6 +104,9 @@ for hol in range(0, NB_HOLO):
         kix = ind[1]
         if DARKFIELD is True:
             SpectreFilt = mmtd.darkfield(SpectreFilt, 1, [ind[0]-SpectreFilt.shape[0]/2,
+                                                          ind[1]-SpectreFilt.shape[1]/2])
+        if PHASECONTRAST is True:
+            SpectreFilt = mmtd.phasecontrast(SpectreFilt, 1, 150, [ind[0]-SpectreFilt.shape[0]/2,
                                                           ind[1]-SpectreFilt.shape[1]/2])
             # plt.imshow(np.log10(np.abs(SpectreFilt)))
             # plt.show()

@@ -5,7 +5,7 @@
 
 from scipy import signal
 from linecache import getline
-from scipy.fftpack import fftn,ifftn,fftshift
+from scipy.fftpack import fftn,ifftn,fftshift, ifftshift
 import numpy as np
 import numexpr as ne
 import time
@@ -35,7 +35,7 @@ def ReadCube(Chemin,dimX,dimY,nb_img,datatype):
     with open(Chemin,'r') as fid:
         DataCube = np.fromfile(fid, eval(datatype))
     DataCube = DataCube.reshape((nb_img,dimX,dimY)).transpose(1,2,0)
-     
+
     return DataCube
 
 def Calc_fi(Chemin,nb_angle, REwald, dimHolo):
@@ -125,7 +125,7 @@ def decal_TF_holo(TF_holo,decal,P_holo):
     decal[1] = decal[1]%P_holo
     if decal[0] < 0 : decal[0] += P_holo
     if decal[1] < 0 : decal[1] += P_holo
-    TF_holo_shift[decal[0]:,decal[1]:] = TF_holo[0:P_holo-decal[0], 0:P_holo-decal[1]]  
+    TF_holo_shift[decal[0]:,decal[1]:] = TF_holo[0:P_holo-decal[0], 0:P_holo-decal[1]]
     TF_holo_shift[:decal[0],:decal[1]] = TF_holo[P_holo-decal[0]:, P_holo-decal[1]:]
     TF_holo_shift[decal[0]:,:decal[1]] = TF_holo[0:P_holo-decal[0], P_holo-decal[1]:]
     TF_holo_shift[:decal[0],decal[1]:] = TF_holo[P_holo-decal[0]:, 0:P_holo-decal[1]]
@@ -140,7 +140,7 @@ def calc_tf_calotte(TF_vol3D,mask_calotte,TF_holo,fd_m, sdz_m, dx_m, dy_m,P,P_ho
     TF_vol3D : complex128
         3D Fourier transform of the object.
     mask_calotte : int32
-        3D Mask corresponding to the OTF.    
+        3D Mask corresponding to the OTF.
     TF_holo : complex128
         2D Fourier transform of the hologram.
     fd_m : int
@@ -177,10 +177,10 @@ def calc_tf_calotte(TF_vol3D,mask_calotte,TF_holo,fd_m, sdz_m, dx_m, dy_m,P,P_ho
     # print(f"{Nmax}")
     fi = np.array([k_inc[0], k_inc[1], np.round(np.sqrt(R_Ewald**2 - k_inc[0]**2 - k_inc[1]**2))])
     # print(f"{fi}")
-    
+
     kv = 2*np.pi/lambda_v
     k0 =  kv * n0
-    
+
     cteInd2Pot = -2*kv**2*n0
     ctePot2UBorn  =  -1j*np.pi/k0
     cteNormalisation = -1/(2*np.pi)
@@ -188,7 +188,7 @@ def calc_tf_calotte(TF_vol3D,mask_calotte,TF_holo,fd_m, sdz_m, dx_m, dy_m,P,P_ho
     fobj_m = (fd_m-(fi[:,np.newaxis])).astype(int)
     TF_vol3D[fobj_m[0,:],fobj_m[1,:],fobj_m[2,:]] += TF_holo[dx_m+Nmax,dy_m+Nmax]*sdz_m/(cteInd2Pot*ctePot2UBorn*cteNormalisation)
     mask_calotte[fobj_m[0,:],fobj_m[1,:],fobj_m[2,:]] += 1
-    
+
     return TF_vol3D,mask_calotte
 
 def retropropagation(holo_pile,nb_holo,SpecCoord,Nmax,R_Ewald,lambda_v,n0,P,P_holo,Tp_Tomo,dim_Uborn,Delta_f_Uborn):
@@ -228,7 +228,7 @@ def retropropagation(holo_pile,nb_holo,SpecCoord,Nmax,R_Ewald,lambda_v,n0,P,P_ho
         3D Fourier transform of the object masked according to experimental parameters.
     mask_sum : int32
         3D OTF.
-        
+
     """
     if nb_holo>holo_pile.shape[2]:
         nb_holo = holo_pile.shape[2]
@@ -236,7 +236,7 @@ def retropropagation(holo_pile,nb_holo,SpecCoord,Nmax,R_Ewald,lambda_v,n0,P,P_ho
     TF_vol = np.zeros(shape=(P,P,P),dtype=complex)
     mask_sum = np.zeros(shape=(P,P,P),dtype=np.int32)
     fd_m, sdz_m, dx_m, dy_m = Calc_fd(Nmax,R_Ewald)
-    
+
     # Tukey Window
     TukeyWindow = np.sqrt(np.outer(signal.tukey(P_holo,0.1),signal.tukey(P_holo,0.1)))
     print("")
@@ -283,7 +283,7 @@ def retropropagation(holo_pile,nb_holo,SpecCoord,Nmax,R_Ewald,lambda_v,n0,P,P_ho
     print("")
     print(f"3D-FFT calculation: {np.round(time.time() - start_time,decimals=2)} seconds")
     print("")
-    
+
     mask_sum = fftshift(mask_sum)
     TF_vol = fftshift(TF_vol)
     f_recon = fftshift(f_recon,[0,1])
@@ -329,16 +329,69 @@ def Gerchberg(ReconsObjOrig,OTF,Delta_nmin,Delta_nmax,Kappa_min,Kappa_max,nbiter
         Refr_index[Refr_index>Delta_nmax]=Delta_nmax
         Absorb_val[Absorb_val<Kappa_min]=Kappa_min
         Absorb_val[Absorb_val>Kappa_max]=Kappa_max
-        
+
         ReconsObjEst = ne.evaluate("Refr_index + Absorb_val*1j")
         ReconsFieldEst = fftn(ReconsObjEst)
-        
+
         if cpt<nbiter/2:
             index = np.nonzero(OTF[0:int(OTF.shape[0]/2-1),:,:])
         if cpt>=nbiter/2:
             index = np.nonzero(OTF)
-            
+
         ReconsFieldEst[index] = ReconsFieldOrig[index]
         ReconsObjEst = ifftn(ReconsFieldEst)
         print(f"Iteration duration: {np.round(time.time() - start_time,decimals=2)} seconds")
     return ReconsObjEst
+
+def DarkField(ComplexField, CutOff):
+    """
+    Processing darkfield images from tomographic acquisitions
+
+    Parameters
+    ----------
+    ComplexField : complex128
+        Reconstructed complex refractive index distribution.
+    CutOff : int
+        Cut-off frequency of the darkfield filter (assumed to be a circulat mask).
+
+    Returns
+    -------
+    Field : complex128
+        Darkfield filtered refractive index distribution.
+
+    """
+    Spectrum = fftshift(fftn(ComplexField))
+    kx, ky, kz = np.meshgrid(np.arange(-int(Spectrum.shape[1]/2),int(Spectrum.shape[1]/2)),
+                             np.arange(-int(Spectrum.shape[0]/2),int(Spectrum.shape[0]/2)),
+                             np.arange(-int(Spectrum.shape[2]/2),int(Spectrum.shape[2]/2)))
+    Spectrum[kx**2+ky**2+kz**2<CutOff**2] = 0
+    Field = ifftn(ifftshift(Spectrum))
+    return Field
+
+def PhaseContrast(ComplexField, CutOff1, CutOff2):
+    """
+    Processing phase-contrast images from tomographic acquisitions
+
+    Parameters
+    ----------
+    ComplexField : complex128
+        Reconstructed complex refractive index distribution.
+    CutOff : int
+        Cut-off frequency of the phase-contrast filter (assumed to be a circulat mask).
+
+    Returns
+    -------
+    Field : complex128
+        Phase-contrast filtered refractive index distribution.
+
+    """
+    Spectrum = fftshift(fftn(ComplexField))
+    kx, ky, kz = np.meshgrid(np.arange(-int(Spectrum.shape[1]/2),int(Spectrum.shape[1]/2)),
+                             np.arange(-int(Spectrum.shape[0]/2),int(Spectrum.shape[0]/2)),
+                             np.arange(-int(Spectrum.shape[2]/2),int(Spectrum.shape[2]/2)))
+    Mask = np.zeros((Spectrum.shape[1], Spectrum.shape[0], Spectrum.shape[2]), dtype=complex)
+    Mask[kx**2+ky**2+kz**2<CutOff2**2] = np.exp(-1j*np.pi/2)
+    Mask[kx**2+ky**2+kz**2<CutOff1**2] = 0 + 0j
+    Spectrum = Spectrum * Mask
+    Field = ifftn(ifftshift(Spectrum))
+    return Field

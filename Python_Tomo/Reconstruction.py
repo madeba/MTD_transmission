@@ -21,6 +21,7 @@ if not os.path.exists(PROCESSINGFOLDER):
 
 # Path to the parameter file, and parameters reading
 DARKFIELD = False
+PHASECONTRAST = True
 CHEMINPARAM = f"{DOSSIERDATA}Pretraitement/Param.txt"
 REWALD = float(ft.readvalue(CHEMINPARAM, 'REwald'))
 NB_ANGLE = int(ft.readvalue(CHEMINPARAM, 'nb_angle'))
@@ -77,5 +78,8 @@ print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
 
 # Darkfield processing
 if DARKFIELD is True:
-    DarkF = (Refraction + Absorption)**2
+    DarkF = abs(Refraction + Absorption)**2
     ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Darkfield_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff", DarkF)
+if PHASECONTRAST is True:
+    PhaseC = abs(Refraction + Absorption)**2
+    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Phasecontrast_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff", PhaseC)

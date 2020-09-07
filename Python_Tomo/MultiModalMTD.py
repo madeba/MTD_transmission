@@ -20,9 +20,37 @@ def darkfield(Spectrum, FiltRadius, SpecCoord):
     Returns
     -------
     Spectrum : complex128
-        Processed filter.
+        Processed spectrum.
 
     """
     kx, ky = np.meshgrid(np.arange(-int(Spectrum.shape[1]/2),int(Spectrum.shape[1]/2)), np.arange(-int(Spectrum.shape[0]/2),int(Spectrum.shape[0]/2)))
     Spectrum[(kx-SpecCoord[1])**2+(ky-SpecCoord[0])**2<FiltRadius**2] = 0
+    return Spectrum
+
+def phasecontrast(Spectrum, FiltRadius1, FiltRadius2, SpecCoord):
+    """
+    Emulation of phase contrast measurement from holographic acquisitions
+
+    Parameters
+    ----------
+    Spectrum : complex128
+        Spectrum of the field to be processed.
+    FiltRadius1 : int
+        Radius of the inner filter.
+    FiltRadius2 : int
+        Radius of the outer filter.
+    SpecCoord : int32
+        Coordinates of the specular spot.
+
+    Returns
+    -------
+    Spectrum : complex128
+        Processed spectrum.
+
+    """
+    kx, ky = np.meshgrid(np.arange(-int(Spectrum.shape[1]/2),int(Spectrum.shape[1]/2)), np.arange(-int(Spectrum.shape[0]/2),int(Spectrum.shape[0]/2)))
+    Mask = np.zeros((Spectrum.shape[1], Spectrum.shape[0]), dtype=complex)
+    Mask[kx**2+ky**2<FiltRadius2**2] = np.exp(-1j*np.pi/2)
+    Mask[kx**2+ky**2<FiltRadius1**2] = 0.5 + 0j
+    Spectrum = Spectrum * Mask
     return Spectrum
