@@ -39,7 +39,7 @@ CHEMIN_IM_UBORN = f"{DOSSIERDATA}Pretraitement/ImBorn_{DIMHOLO}.bin"
 
 # Path to the specular coordinates
 SpecCoordPath = f"{DOSSIERDATA}Pretraitement/Centres_{DIMHOLO}.txt"
-fi = rp.Calc_fi(SpecCoordPath, NB_ANGLE, REWALD, DIMHOLO)
+fi = rp.Calc_fi(SpecCoordPath, NB_ANGLE, DIMHOLO)
 
 # Field files reading
 ReUBorn = rp.ReadCube(CHEMIN_RE_UBORN, DIMHOLO, DIMHOLO, NB_ANGLE, "np.float64")
@@ -49,8 +49,7 @@ del ReUBorn, ImUBorn
 
 start_time = time.time()
 f_recon, TFVol, mask_sum = rp.retropropagation(UBornCplx, NB_HOLO, fi, FMAXHOLO,
-                                               REWALD, LAMBDA_0, 1.515, 2*DIMHOLO, DIMHOLO,
-                                               PIXTHEO, 2*DIMHOLO, UBornPitch)
+                                               REWALD, LAMBDA_0, 1.515, PIXTHEO, UBornPitch)
 print(f"Reconstruction time for a {2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO} volume (3D-FFT included), "
       f"with {NB_HOLO} holograms: {np.round(time.time() - start_time,decimals=2)} seconds")
 print("")
