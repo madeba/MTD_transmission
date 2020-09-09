@@ -216,7 +216,7 @@ def retropropagation(holo_pile, nb_holo, SpecCoord, Nmax, R_Ewald, lambda_v, n0,
     TF_vol : complex128
         3D Fourier transform of the object masked according to experimental parameters.
     mask_sum : int32
-        3D OTF.
+        3D OTF.0.5
 
     """
     if nb_holo > holo_pile.shape[2]:

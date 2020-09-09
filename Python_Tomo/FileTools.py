@@ -25,7 +25,7 @@ def lineinfile(filename):
     """
     if os.path.isfile(filename):
         File = open(filename, 'r')
-        text=File.readlines()
+        text = File.readlines()
         NumberOfLines = len(text)
         File.seek(0)
         File.close()
@@ -35,7 +35,7 @@ def lineinfile(filename):
         File.close()
     return NumberOfLines
 
-def readvalue(filename,keyword):
+def readvalue(filename, keyword):
     """
     Extraction of parameters values
 
@@ -56,17 +56,17 @@ def readvalue(filename,keyword):
     nbLignes = lineinfile(filename)
     nbLignesOK = 0
     Value = 0.
-    for cpt in range(1,nbLignes+1):
-        Ligne = getline(filename,cpt).split()
+    for cpt in range(1, nbLignes+1):
+        Ligne = getline(filename, cpt).split()
         if len(Ligne) != 0:
             FileContent.append(Ligne)
             nbLignesOK += 1
-    for cpt in range(0,nbLignesOK):
+    for cpt in range(0, nbLignesOK):
         if FileContent[cpt][0] == keyword:
             Value = (FileContent[cpt][1])
     return Value
 
-def SAVbin(image,chemin,dim):
+def SAVbin(image, chemin, dim):
     """
     Binary file saving
 
@@ -85,11 +85,11 @@ def SAVbin(image,chemin,dim):
 
     """
     nom_fichier = chemin + "_" + dim + ".bin"
-    fid = open(nom_fichier,"w")
+    fid = open(nom_fichier, "w")
     image.tofile(fid)
     fid.close()
 
-def SAVtiffCube(Folder,Data):
+def SAVtiffCube(Folder, Data):
     """
     Saving data as a multipage Tiff file
 
@@ -122,5 +122,5 @@ def ReadtiffCube(Folder):
         Extracted data cube.
 
     """
-    Data = im.volread(Folder).transpose(1,-1,0)
+    Data = im.volread(Folder).transpose(1, -1, 0)
     return Data

@@ -9,10 +9,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 import FileTools as ft
 import Retropropagation as rp
+import manip
 
 # Data folders and config files
 DOSSIERACQUIS = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN/"
-DOSSIERDATA = f"{DOSSIERACQUIS}data/"
+DATA = True # True for data preprocessing, False for white image processing
+M = manip.Manip(DOSSIERACQUIS, DATA)
+if DATA is True:
+    DOSSIERDATA = M.dossier_data
+else:
+    DOSSIERDATA = M.dossier_blanc
 
 # Creating results Folders
 PROCESSINGFOLDER = f"{DOSSIERDATA}Reconstruction"
@@ -21,15 +27,13 @@ if not os.path.exists(PROCESSINGFOLDER):
 
 # Path to the parameter file, and parameters reading
 DARKFIELD = False
-PHASECONTRAST = True
+PHASECONTRAST = False
 CHEMINPARAM = f"{DOSSIERDATA}Pretraitement/Param.txt"
 REWALD = float(ft.readvalue(CHEMINPARAM, 'REwald'))
 NB_ANGLE = int(ft.readvalue(CHEMINPARAM, 'nb_angle'))
 FMAXHOLO = int(ft.readvalue(CHEMINPARAM, 'fmaxHolo'))
 DIMHOLO = int(ft.readvalue(CHEMINPARAM, 'dimHolo'))
 PIXTHEO = float(ft.readvalue(CHEMINPARAM, 'pixTheo'))
-LAMBDA_0 = 632.8e-9
-N_IMM = 1.515
 UBornPitch = 1/(2*FMAXHOLO*PIXTHEO)
 NB_HOLO = NB_ANGLE
 
@@ -49,7 +53,7 @@ del ReUBorn, ImUBorn
 
 start_time = time.time()
 f_recon, TFVol, mask_sum = rp.retropropagation(UBornCplx, NB_HOLO, fi, FMAXHOLO,
-                                               REWALD, LAMBDA_0, 1.515, PIXTHEO, UBornPitch)
+                                               REWALD, M.LAMBDA, M.NIMM, PIXTHEO, UBornPitch)
 print(f"Reconstruction time for a {2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO} volume (3D-FFT included), "
       f"with {NB_HOLO} holograms: {np.round(time.time() - start_time,decimals=2)} seconds")
 print("")
@@ -71,8 +75,8 @@ ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Refraction_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOL
                Refraction)
 ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Absorption_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
                Absorption)
-# ft.SAVtiffCube(f"{ProcessingFolder}/OTF_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff", OTF)
-# ft.SAVtiffCube(f"{ProcessingFolder}/SupRedon_{2*dimHolo}x{2*dimHolo}x{2*dimHolo}.tiff", mask_sum)
+ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTF_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff", OTF)
+# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/SupRedon_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff", mask_sum)
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
 
 # Darkfield processing

@@ -2,22 +2,26 @@
 """
 @author: Nicolas Verrier
 """
+
 import time
 import os
 import matplotlib.pyplot as plt
 import numpy as np
 import FileTools as ft
 import Retropropagation as rp
+import manip
 
 # Path to the parameter file, and parameters reading
 DOSSIERACQUIS = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN/"
-DOSSIERDATA = f"{DOSSIERACQUIS}data/"
+DATA = True # True for data preprocessing, False for white image processing
+M = manip.Manip(DOSSIERACQUIS, DATA)
+DOSSIERDATA = M.dossier_data
 PROCESSINGFOLDER = f"{DOSSIERDATA}Reconstruction"
 CHEMINPARAM = f"{DOSSIERDATA}Pretraitement/Param.txt"
 DIMHOLO = int(ft.readvalue(CHEMINPARAM, 'dimHolo'))
 
 # Creation of results folder
-GERCHBERGFOLDER = f"{DOSSIERDATA}Gerchberg"
+GERCHBERGFOLDER = M.dossier_gerchberg
 if not os.path.exists(GERCHBERGFOLDER):
     os.makedirs(GERCHBERGFOLDER)
 
