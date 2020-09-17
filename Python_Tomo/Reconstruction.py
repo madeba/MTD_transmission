@@ -5,7 +5,7 @@
 
 import time
 import os
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import numpy as np
 import FileTools as ft
 import Retropropagation as rp
@@ -27,7 +27,7 @@ if not os.path.exists(PROCESSINGFOLDER):
 
 # Path to the parameter file, and parameters reading
 DARKFIELD = False
-PHASECONTRAST = True
+PHASECONTRAST = False
 CHEMINPARAM = f"{DOSSIERDATA}Pretraitement/Param.txt"
 REWALD = float(ft.readvalue(CHEMINPARAM, 'REwald'))
 NB_ANGLE = int(ft.readvalue(CHEMINPARAM, 'nb_angle'))
@@ -38,18 +38,16 @@ UBornPitch = 1/(2*FMAXHOLO*PIXTHEO)
 NB_HOLO = NB_ANGLE
 
 # Paths to the real, and imaginary parts of the field
-CHEMIN_RE_UBORN = f"{DOSSIERDATA}Pretraitement/ReBorn_{DIMHOLO}.bin"
-CHEMIN_IM_UBORN = f"{DOSSIERDATA}Pretraitement/ImBorn_{DIMHOLO}.bin"
+CHEMIN_RE_UBORN = f"{DOSSIERDATA}Pretraitement/ReBorn_{DIMHOLO}.tiff"
+CHEMIN_IM_UBORN = f"{DOSSIERDATA}Pretraitement/ImBorn_{DIMHOLO}.tiff"
 
 # Path to the specular coordinates
 SpecCoordPath = f"{DOSSIERDATA}Pretraitement/Centres_{DIMHOLO}.txt"
 fi = rp.Calc_fi(SpecCoordPath, NB_ANGLE, DIMHOLO)
 
 # Field files reading
-ReUBorn = rp.ReadCube(CHEMIN_RE_UBORN, DIMHOLO, DIMHOLO, NB_ANGLE, "np.float64")
-ImUBorn = rp.ReadCube(CHEMIN_IM_UBORN, DIMHOLO, DIMHOLO, NB_ANGLE, "np.float64")
-plt.imshow(ImUBorn[:,:,0], cmap="gray")
-plt.show()
+ReUBorn = ft.ReadtiffCube(CHEMIN_RE_UBORN)
+ImUBorn = ft.ReadtiffCube(CHEMIN_IM_UBORN)
 UBornCplx = ReUBorn + ImUBorn * 1j
 del ReUBorn, ImUBorn
 
@@ -68,9 +66,6 @@ OTF[mask_sum != 0] = 1
 TFVolfilt = np.zeros_like(OTF)
 TFVolfilt[TFVol != 0] = 1
 
-plt.imshow(Refraction[:, :, DIMHOLO], cmap="gray")
-plt.show()
-
 # Writting results
 start_time = time.time()
 ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Refraction_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
@@ -78,7 +73,6 @@ ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Refraction_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOL
 ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Absorption_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
                Absorption)
 ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTF_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff", OTF)
-# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/SupRedon_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff", mask_sum)
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
 
 # Darkfield processing

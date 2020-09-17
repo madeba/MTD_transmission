@@ -12,6 +12,7 @@ import numpy as np
 import HoloProcessing as holo
 import CorrectionAberration as CAber
 import MultiModalMTD as mmtd
+import imageio as im
 import manip
 
 # Data folders and config files
@@ -39,11 +40,10 @@ Gtot = M.F_TUBE/M.F_OBJ/M.RAPFOC
 REwald = CAMDIM*M.PIX/Gtot*M.NIMM/(M.LAMBDA) # Ewald sphere radius (pixel)
 fmaxHolo = round(REwald*M.NA/M.NIMM) # Max frequency support (pixel)
 dimHolo = int(2*fmaxHolo) # Hologram size
-# dimHolo = int(CAMDIM/4) # Hologram size
 NB_HOLO = M.NB_HOLOTOT # Number of holograms in the sequence
-CHEMINSAV_RE = f"{DOSSIERDATA}Pretraitement/ReBorn_{dimHolo}.bin"
-CHEMINSAV_IM = f"{DOSSIERDATA}Pretraitement/ImBorn_{dimHolo}.bin"
-CHEMINSAV_CENTRES = f"{DOSSIERDATA}Pretraitement/Centres_{dimHolo}.bin"
+CHEMINSAV_RE = f"{DOSSIERDATA}Pretraitement/ReBorn_{dimHolo}.tiff"
+CHEMINSAV_IM = f"{DOSSIERDATA}Pretraitement/ImBorn_{dimHolo}.tiff"
+CHEMINSAV_CENTRES = f"{DOSSIERDATA}Pretraitement/Centres_{dimHolo}.tiff"
 CHEMINSAV_CENTRESTXT = f"{DOSSIERDATA}Pretraitement/Centres_{dimHolo}.txt"
 CHEMINSAV_PARAM = f"{DOSSIERDATA}Pretraitement/Param.txt"
 fidCentrestxt = open(CHEMINSAV_CENTRESTXT, "a")
@@ -78,6 +78,10 @@ Poly_US = CAber.CalcPolyUS_xy(DEGREPOLY, Masque, Poly_US)
 # Polynome to be fitted
 Poly = np.zeros((NBCOEF, dimHolo*dimHolo), dtype=np.float64)
 Poly = CAber.CalcPoly_xy(DEGREPOLY, Masque, Poly)
+
+# File opening for field recording
+wreal = im.get_writer(CHEMINSAV_RE)
+wimag = im.get_writer(CHEMINSAV_IM)
 
 start_time = time.time()
 for hol in range(0, NB_HOLO):
@@ -131,23 +135,19 @@ for hol in range(0, NB_HOLO):
         if RYTOV is True:
             Phase_UBorn = CAber.aberCorr(Phase_UBorn, Masque, Poly_US, Poly)
 
-        # File opening for field recording
-        fidRe = open(CHEMINSAV_RE, "a")
-        fidIm = open(CHEMINSAV_IM, "a")
-
         # Field calculation
         if RYTOV is True:
             # Rytov
             Re_UBorn = np.log(np.abs(Amp_UBorn))
             Im_UBorn = Phase_UBorn
-            Re_UBorn.tofile(fidRe)
-            Im_UBorn.tofile(fidIm)
+            wreal.append_data(np.float32(Re_UBorn))
+            wimag.append_data(np.float32(Im_UBorn))
         else:
             # Born
             Re_UBorn = (Amp_UBorn-1)*np.cos(Phase_UBorn)
             Im_UBorn = (Amp_UBorn-1)*np.sin(Phase_UBorn)
-            Re_UBorn.tofile(fidRe)
-            Im_UBorn.tofile(fidIm)
+            wreal.append_data(np.float32(Re_UBorn))
+            wimag.append_data(np.float32(Im_UBorn))
         CPT += 1
         CPT_EXIST += 1
     else:
@@ -160,10 +160,10 @@ fidParams.write(f"nb_angle {CPT_EXIST-1}\n")
 fidParams.write(f"fmaxHolo {fmaxHolo}\n")
 fidParams.write(f"dimHolo {dimHolo}\n")
 fidParams.write(f"pixTheo {M.PIX/Gtot}\n")
-fidCentres = open(CHEMINSAV_CENTRES, "w")
-Centres.tofile(fidCentres)
+fidCentres = im.get_writer(CHEMINSAV_CENTRES)
+fidCentres.append_data(np.int32(Centres))
 fidCentres.close()
 fidCentrestxt.close()
 fidParams.close()
-fidRe.close()
-fidIm.close()
+wreal.close()
+wimag.close()
