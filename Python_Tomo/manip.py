@@ -9,7 +9,25 @@ import os
 import FileTools as ft
 
 class Manip:
+    """
+    Class for data processing parametrization
+    """
     def __init__(self, dossier_acquis, isdata):
+        """
+        Definition of the data acquisition parameters
+
+        Parameters
+        ----------
+        dossier_acquis : str
+            Path to the data.
+        isdata : bool
+            If isdata is True, data are processed, if isdata is False, white images are processed.
+
+        Returns
+        -------
+        None.
+
+        """
         self.dossier_acquis = dossier_acquis
         self.dossier_data = f"{dossier_acquis}data/"
         self.dossier_blanc = f"{dossier_acquis}blanc/"
@@ -34,6 +52,24 @@ class Manip:
         self.NB_HOLOTOT = int(ft.readvalue(self.fichier_config, 'NB_HOLO'))
 
     def createresultfolder(self, dossier_acquis, foldername, isdata):
+        """
+        Creation of the result folders
+
+        Parameters
+        ----------
+        dossier_acquis : str
+            Path to the data.
+        foldername : str
+            Name of the folder to be created.
+        isdata : bool
+            If isdata is True, folder is created in the data tree, if isdata is False, folder is created in the white tree.
+
+        Returns
+        -------
+        dossier : str
+            Path to the created folder.
+
+        """
         dossier_data = f"{dossier_acquis}data/"
         dossier_blanc = f"{dossier_acquis}blanc/"
         if isdata is True:

@@ -105,7 +105,7 @@ def SAVtiffCube(Folder, Data):
     None.
 
     """
-    im.volwrite(Folder, Data.transpose((-1, 0, 1)).astype(np.float32))
+    im.volwrite(Folder, Data.transpose((-1, 1, 0)).astype(np.float32))
 
 def ReadtiffCube(Folder):
     """

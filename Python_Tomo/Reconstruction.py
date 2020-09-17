@@ -27,7 +27,7 @@ if not os.path.exists(PROCESSINGFOLDER):
 
 # Path to the parameter file, and parameters reading
 DARKFIELD = False
-PHASECONTRAST = False
+PHASECONTRAST = True
 CHEMINPARAM = f"{DOSSIERDATA}Pretraitement/Param.txt"
 REWALD = float(ft.readvalue(CHEMINPARAM, 'REwald'))
 NB_ANGLE = int(ft.readvalue(CHEMINPARAM, 'nb_angle'))
@@ -48,6 +48,8 @@ fi = rp.Calc_fi(SpecCoordPath, NB_ANGLE, DIMHOLO)
 # Field files reading
 ReUBorn = rp.ReadCube(CHEMIN_RE_UBORN, DIMHOLO, DIMHOLO, NB_ANGLE, "np.float64")
 ImUBorn = rp.ReadCube(CHEMIN_IM_UBORN, DIMHOLO, DIMHOLO, NB_ANGLE, "np.float64")
+plt.imshow(ImUBorn[:,:,0], cmap="gray")
+plt.show()
 UBornCplx = ReUBorn + ImUBorn * 1j
 del ReUBorn, ImUBorn
 

@@ -33,7 +33,7 @@ def ReadCube(Chemin, dimX, dimY, nb_img, datatype):
     """
     with open(Chemin, 'r') as fid:
         DataCube = np.fromfile(fid, eval(datatype))
-    DataCube = DataCube.reshape((nb_img, dimX, dimY)).transpose(1, 2, 0)
+    DataCube = DataCube.reshape((nb_img, dimX, dimY)).transpose(1, -1, 0)
 
     return DataCube
 

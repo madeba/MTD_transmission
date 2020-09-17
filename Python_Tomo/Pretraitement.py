@@ -39,6 +39,7 @@ Gtot = M.F_TUBE/M.F_OBJ/M.RAPFOC
 REwald = CAMDIM*M.PIX/Gtot*M.NIMM/(M.LAMBDA) # Ewald sphere radius (pixel)
 fmaxHolo = round(REwald*M.NA/M.NIMM) # Max frequency support (pixel)
 dimHolo = int(2*fmaxHolo) # Hologram size
+# dimHolo = int(CAMDIM/4) # Hologram size
 NB_HOLO = M.NB_HOLOTOT # Number of holograms in the sequence
 CHEMINSAV_RE = f"{DOSSIERDATA}Pretraitement/ReBorn_{dimHolo}.bin"
 CHEMINSAV_IM = f"{DOSSIERDATA}Pretraitement/ImBorn_{dimHolo}.bin"
@@ -80,6 +81,8 @@ Poly = CAber.CalcPoly_xy(DEGREPOLY, Masque, Poly)
 
 start_time = time.time()
 for hol in range(0, NB_HOLO):
+    if CPT % 100 == 0:
+        print(f"Hologram = {CPT} out of {NB_HOLO}")
     filename = f"{DOSSIERDATA}i{'%03d' % CPT}.pgm"
     if os.path.isfile(filename):
         if HOLOREF is True:
@@ -100,11 +103,9 @@ for hol in range(0, NB_HOLO):
             SpectreFilt = mmtd.darkfield(SpectreFilt, 1, [ind[0]-SpectreFilt.shape[0]/2,
                                                           ind[1]-SpectreFilt.shape[1]/2])
         if PHASECONTRAST is True:
-            SpectreFilt = mmtd.phasecontrast(SpectreFilt, 10, int(dimHolo/2),
+            SpectreFilt = mmtd.phasecontrast(SpectreFilt, 20, int(dimHolo/2),
                                              [ind[0]-SpectreFilt.shape[0]/2,
                                               ind[1]-SpectreFilt.shape[1]/2])
-            # plt.imshow(np.log10(np.abs(SpectreFilt)))
-            # plt.show()
 
         # Coordinate writting
         fidCentrestxt.write(f"{kiy} {kix}\n")
