@@ -1,5 +1,6 @@
 #include "fonctions.h"
 #include <tiffio.h>
+#include <dirent.h>
 //#include <cxcore.h>
 #include <chrono>
 //#include <highgui.h>
@@ -7,8 +8,51 @@
 #define PI 3.14159
 //using namespace cv;
 
+/*
+int _kbhit(void)//fction attente clavier->openCV?
+{
+  struct termios oldt, newt;
+  int ch;
+  int oldf;
 
+  tcgetattr(STDIN_FILENO, &oldt);
+  newt = oldt;
+  newt.c_lflag &= ~(ICANON | ECHO);
+  tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+  oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
+  fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
 
+  ch = getchar();
+
+  tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+  fcntl(STDIN_FILENO, F_SETFL, oldf);
+
+  if(ch != EOF)
+  {
+    ungetc(ch, stdin);
+    return 1;
+  }
+
+  return 0;
+}*/
+int efface_acquis(string  rep, string chemin_config_manip,string chemin_recon)
+{
+    // These are data types defined in the "dirent" header
+    const char * rep_c=rep.c_str();
+    DIR *theFolder = opendir(rep_c);
+    struct dirent *next_file;
+    char filepath[256];
+
+    while ( (next_file = readdir(theFolder)) != NULL )
+    {
+        // build the path for each file in the folder
+        sprintf(filepath, "%s/%s", rep_c, next_file->d_name);
+        if(filepath!=chemin_config_manip && filepath!=chemin_recon)
+        remove(filepath);
+    }
+    closedir(theFolder);
+    return 0;
+}
  //extrait la valeur (entier) de la chaine "token" du fichier "chemin_fic"
 
 string extract_string(std::string token,  std::string chemin_fic)

@@ -4,7 +4,7 @@
 /* --------------------------------------------------------------------------- */
 // incl
 /* --------------------------------------------------------------------------- */
-#include "struct.h"
+
 #include <time.h>
 #include <math.h>
 #include <iostream>
@@ -21,6 +21,7 @@
 using namespace std;
 
 #include "projet.h"
+
 typedef struct{
 clock_t init, fin;
 float   total;
@@ -33,6 +34,7 @@ float   total;
 float extract_val(string token,  string chemin_fic);
 float ecrire_val(string token, float valeur_token, string chemin_fic);
 string extract_string(string token,  string chemin_fic);
-
+//int _kbhit(void)//fction attente clavier->openCV?
+int efface_acquis(string  rep, string chemin_config_manip,string chemin_recon);
 #endif
 

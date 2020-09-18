@@ -54,7 +54,9 @@
 		</Linker>
 		<Unit filename="fonctions.cpp" />
 		<Unit filename="fonctions.h" />
+		<Unit filename="include/scan_functions.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/scan_functions.cpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />

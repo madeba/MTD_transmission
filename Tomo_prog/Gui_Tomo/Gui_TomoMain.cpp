@@ -7,7 +7,7 @@
  * License:
  **************************************************************/
 #include "Gui_TomoApp.h"
-
+#include "fonctions.h"
 #ifdef WX_PRECOMP
 #include "wx_pch.h"
 #endif
@@ -73,6 +73,7 @@ BEGIN_EVENT_TABLE(Gui_TomoFrame, wxFrame)
     //EVT_BUTTON(idBoutonRecalc, Gui_TomoFrame::OnBoutonRecalc)
     EVT_BUTTON(idBoutonSAV, Gui_TomoFrame::OnBoutonSAV)
     EVT_MENU(idMenuSAV, Gui_TomoFrame::OnBoutonSAV)
+    EVT_COMBOBOX(idComboScan, Gui_TomoFrame::OnComboScan)//evenement pour la combo box
 END_EVENT_TABLE()
 
 
@@ -126,7 +127,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     chemin_recon=repertoire_config+"/recon.txt";
     cout<<"fichier recon.txt : "<<chemin_recon<<endl;
 
-    ///tester l'existenc du fichiers de config recon.txt dans le chemin indiqué par l'utilisateur
+    ///tester l'existence du fichiers de config:  config_manip.txt dans le chemin indiqué par l'utilisateur
     ifstream fichier_config_manip(chemin_config_manip.c_str(), ios::in);
     if(!fichier_config_manip)
     {
@@ -141,7 +142,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
         cout<<"Utilisation du fichier par defaut : "<<repertoire_config_defaut+chemin_config_manip<<endl;
     }
 
-
+    ///tester l'existence du fichiers de config : recon.txt dans le chemin indiqué par l'utilisateur
     ifstream fichier_recon(chemin_recon.c_str(), ios::in);
     if(!fichier_recon)
     {
@@ -185,7 +186,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
 
     ///##########TAB 1 ################################################
     wxBoxSizer *sizer_horizontal = new wxBoxSizer(wxHORIZONTAL);
-    sizer_horizontal->SetMinSize(250, 100);
+    sizer_horizontal->SetMinSize(270, 100);
     panel_tab1->SetSizer(sizer_horizontal);//affecter l'organiseur (sizer) horizontal à l'onglet  1.
     ///#################### Partie Gauche #############################
     ///Le panneau gauche a pour parent le page onglet 1
@@ -206,7 +207,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     zone10->SetBackgroundColour(*wxLIGHT_GREY);
     ///Titre
     // titre_Acquis=new wxStaticText(zone10,0,"Acquisition",wxPoint(2,2),wxSize(100,40));
-    titre_Acquis=new wxStaticText(zone10,0,"Acquisition");
+    titre_Acquis=new wxStaticText(zone10,0,"Acquisition",wxPoint(2,2),wxSize(100,40));
     titre_Acquis->SetFont( wxFont(12, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL) );
 
     // Set up the sizer for the panel
@@ -226,27 +227,64 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     wxPanel *zone11 = new wxPanel(panel_gauche);
     // sizer->Add(leftPanel, true, wxEXPAND | wxTOP | wxBOTTOM | wxLEFT, 20);
     sizer_vertical0->Add(zone11, 1, wxALL | wxEXPAND | wxALIGN_BOTTOM, 1);// Ajout de cette zone au sizer vertical    //
-    zone11->SetBackgroundColour(*wxLIGHT_GREY);
+    zone11->SetBackgroundColour(*wxLIGHT_GREY);//fond gris clair
     zone11->SetSize(180,50);
     textNbHolo=new wxStaticText(zone11,1,"Nombre d'hologrammes  : ",wxPoint(2,2),wxSize(98,50));
 
     //édition du champ
-    editNbHolo=new wxTextCtrl(zone11,1,"",wxPoint(120,4),wxSize(40,25));
+    editNbHolo=new wxTextCtrl(zone11,1,"",wxPoint(120,4),wxSize(45,25));
     editNbHolo->SetToolTip(wxT("Nombre d'hologrammes à acquérir"));
-    //int Nb_Holo=extract_val("NB_HOLO",chemin_config_manip);
-    //récupérer la valeur dans fichier de config, convertir en string, puis l'afficher dans la case
+
+    //récupérer la valeur NB_HOLO dans fichier de config, convertir en string, puis l'afficher dans la case
+
     int Nb_Holo=stof(extract_string("NB_HOLO",chemin_config_manip));//stof=string to float
 
     wxString string_NbHolo = wxString::Format(wxT("%i"),Nb_Holo);
     editNbHolo->SetValue(string_NbHolo);
-    ///--------------------------
-    ///--------------------BALAYAGE------------------
+    ///------------BALAYAGE
+    ///--------------------------SCHEMA BALAYAGE
+        wxPanel *zone11b = new wxPanel(panel_gauche);
+        zone11b->SetSize(200,50);
+        sizer_vertical0->Add(zone11b, 1, wxALL | wxEXPAND | wxALIGN_BOTTOM, 1);// Ajout de cette zone au sizer vertical    //
+        zone11b->SetBackgroundColour(*wxLIGHT_GREY);
+
+        textScanPattern=new wxStaticText(zone11b,1,wxT("&Schéma"),wxPoint(2,10),wxSize(98,50));
+       // string str_scanPattern=stof(extract_string("SCAN_PATTERN",chemin_config_manip));//stof=string to float
+
+        ComboBox_Scan = new wxComboBox(zone11b, idComboScan, _T(""), wxPoint(120,10), wxSize(140,26),
+        0, NULL, wxTE_PROCESS_ENTER | wxTE_PROCESS_TAB);//Constructor, creating and showing a combobox.
+
+        ComboBox_Scan->Append ( wxT("ANNULAR") );
+        ComboBox_Scan->Append ( wxT("ARCHIMEDE") );
+        ComboBox_Scan->Append ( wxT("FERMAT") );
+        ComboBox_Scan->Append ( wxT("RANDOM_POLAR") );
+        ComboBox_Scan->Append ( wxT("ROSACE") );
+        ComboBox_Scan->Append ( wxT("UNIFORM3D") );
+
+        wxArrayString  listeScanPattern(5);
+        listeScanPattern=ComboBox_Scan->GetStrings();//récupérer les label de pattern dans un tableau
+        wxString defaultPattern=extract_string("SCAN_PATTERN",chemin_config_manip);//lire le pattern du fichier de config
+        ComboBox_Scan->SetSelection(listeScanPattern.Index(defaultPattern));//par defaut, mettre le pattern du fichier de config
+
+
+            //édition du champ cercles concentriques
+    int Nb_circles_annular=stof(extract_string("NB_CIRCLES_ANNULAR",chemin_config_manip));//stof=string to float
+    editnbCirclesAnnular=new wxTextCtrl(zone11b,1,"",wxPoint(120,40),wxSize(20,20));
+    editnbCirclesAnnular->SetToolTip(wxT("Nombre de cercles concentriques"));
+
+    //récupérer la valeur NB_HOLO dans fichier de config, convertir en string, puis l'afficher dans la case
+
+
+    wxString string_NbCirclesAnnular = wxString::Format(wxT("%i"),Nb_circles_annular);
+    editnbCirclesAnnular->SetValue(string_NbCirclesAnnular);
+
+    ///--------------------INTERVALLE de BALAYAGE------------------
     wxPanel *zone12 = new wxPanel(panel_gauche);
     sizer_vertical0->Add(zone12, 0, wxALL | wxEXPAND | wxALIGN_CENTER, 1);// Ajout de cette zone au sizer vertical    //
     zone12->SetBackgroundColour(*wxLIGHT_GREY);
 
-    titre_Balayage=new wxStaticText(zone12,-1," Balayage",wxPoint(0,0),wxSize(100,40));
-    titre_Balayage->SetFont(wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD) );
+    titre_Interval_Balayage=new wxStaticText(zone12,-1," Intervalle de Balayage",wxPoint(0,0),wxSize(100,40));
+    titre_Interval_Balayage->SetFont(wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD) );
 
     textVxmin=new wxStaticText(zone12,-1,"Vxm ",wxPoint(10,30),wxSize(30,40));
     editVxmin=new wxTextCtrl(zone12,-1,"",wxPoint(50,28),wxSize(50,25));
@@ -285,20 +323,20 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     editNAcondLim->SetValue(string_LimNACond);
 
     ////-------------------------
-    ///--------------------ACQUISITION------------------
-    wxPanel *zone13 = new wxPanel(panel_gauche);
-    sizer_vertical0->Add(zone13, 1, wxALL | wxEXPAND | wxALIGN_CENTER, 1);// Ajout de cette zone au sizer vertical    //
-    zone13->SetBackgroundColour(*wxLIGHT_GREY);
-    /// Dialog fichier de données;
-    BoutonOpenDir=new wxButton(zone13, idBoutonOpenDir, wxT("&Données"), wxPoint(5,10), wxDefaultSize, 0);
-    editDirAcquis=new wxTextCtrl(zone13,-1,chemin_rep_acquis,wxPoint(105,14), wxSize(175,26));
-    editDirAcquis->SetToolTip(wxT("Répertoire des acquisitions"));
-    // textFicManip=new wxTextCtrl(zone10,-1,"",wxPoint(160,195),wxSize(100,20));
-    ///bouton Acquisition
-    BoutonManip= new wxButton(zone13, idBoutonManip, wxT("&Acquisition"), wxPoint(194,60), wxDefaultSize, 0);
-    //Bouton image
-    BoutonImage= new wxButton(zone13, idBoutonImage, wxT("&Image"), wxPoint(4,60), wxSize(40,26), 0);
-    BoutonImage->SetToolTip(wxT("Acquisition + Pretraitement + Reconstruction"));
+    ///--------------------LANCER ACQUISITION------------------
+        wxPanel *zone13 = new wxPanel(panel_gauche);
+        sizer_vertical0->Add(zone13, 1, wxALL | wxEXPAND | wxALIGN_CENTER, 1);// Ajout de cette zone au sizer vertical    //
+        zone13->SetBackgroundColour(*wxLIGHT_GREY);
+        /// Dialog fichier de données;
+        BoutonOpenDir=new wxButton(zone13, idBoutonOpenDir, wxT("&Données"), wxPoint(5,10), wxDefaultSize, 0);
+        editDirAcquis=new wxTextCtrl(zone13,-1,chemin_rep_acquis,wxPoint(105,14), wxSize(175,26));
+        editDirAcquis->SetToolTip(wxT("Répertoire des acquisitions"));
+        // textFicManip=new wxTextCtrl(zone10,-1,"",wxPoint(160,195),wxSize(100,20));
+        ///bouton Acquisition
+        BoutonManip= new wxButton(zone13, idBoutonManip, wxT("&Acquisition"), wxPoint(194,60), wxDefaultSize, 0);
+        //Bouton image
+       // BoutonImage= new wxButton(zone13, idBoutonImage, wxT("&Image"), wxPoint(4,60), wxSize(40,26), 0);
+        //BoutonImage->SetToolTip(wxT("Acquisition + Pretraitement + Reconstruction"));
 
     ///-----------------------------
     ///--------------------------
@@ -312,10 +350,10 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     //*************Création du wxBoxSizer vertical pour la partie centrale**********
     ///Le panneau central a pour parent le page onglet 1
     wxPanel *panel_centre = new wxPanel(panel_tab1,wxID_ANY);
-    //le panneau gauche sera géré par le siezer horizontal global
+    //le panneau gauche sera géré par le sizer horizontal global
     sizer_horizontal->Add(panel_centre, 1, wxALL | wxEXPAND, 2);
     wxBoxSizer *sizer_vertical1 = new wxBoxSizer(wxVERTICAL);
-
+    panel_centre->SetBackgroundColour(wxColor(240, 240, 240));
     //-------------zone du haut -------------------------------------------------------------------------------------
     wxPanel *zone20 = new wxPanel(panel_centre);
     zone20->SetBackgroundColour(*wxLIGHT_GREY);                                  //
@@ -965,6 +1003,8 @@ void Gui_TomoFrame::sav_all()
     modif_tab_val("DIM_FINAL",editDimFinal->GetValue().ToStdString(),tab_val_recon);
 
     //tableau de config  manip
+    modif_tab_val("SCAN_PATTERN",ComboBox_Scan->GetString(ComboBox_Scan->GetSelection()).ToStdString(),tab_val_manip);
+    modif_tab_val("NB_CIRCLES_ANNULAR",editnbCirclesAnnular->GetValue().ToStdString(),tab_val_manip);
     modif_tab_val("NXMAX",editNXMAX->GetValue().ToStdString(),tab_val_manip);
     modif_tab_val("VXMIN",editVxmin->GetValue().ToStdString(),tab_val_manip);
     modif_tab_val("VYMIN",editVymin->GetValue().ToStdString(),tab_val_manip);
@@ -1027,4 +1067,23 @@ float Gui_TomoFrame::extract_val(std::string token,  std::string chemin_fic)
     }
     fichier.close();
     return valeur;
+}
+//superflu car déjà géré sav_all ?
+void Gui_TomoFrame::OnComboScan(wxCommandEvent &even)
+{
+    modif_tab_val("SCAN_PATTERN", ComboBox_Scan->GetString(ComboBox_Scan->GetSelection()).ToStdString(),tab_val_manip);
+    cout<<"Schéma: "<<ComboBox_Scan->GetString(ComboBox_Scan->GetSelection())<<endl;
+        if(ComboBox_Scan->GetString(ComboBox_Scan->GetSelection())==wxT("ANNULAR")){
+
+    cout<<"schema ANNULAR!"<<endl;
+    editnbCirclesAnnular->Enable(true);}
+    else{
+    editnbCirclesAnnular->Enable(false);
+    }
+//wxArrayString  liste_scan(4);
+//liste_scan=ComboBox_Scan->GetStrings();
+//cout<<"liste_scan[2]"<<liste_scan[2]<<endl;
+//cout<<"Indice  : "<<ComboBox_Scan->GetCurrentSelection ()<<endl;
+//cout<<"GetStringSelection() : "<<ComboBox_Scan->GetStringSelection()<<endl;
+//cout<<"GetValue() : "<<ComboBox_Scan->GetValue()<<endl;
 }

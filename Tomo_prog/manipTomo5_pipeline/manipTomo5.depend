@@ -1517,13 +1517,13 @@
 	"opencv2/highgui/highgui_c.h"
 	"opencv2/highgui/highgui.hpp"
 
-1497273317 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/fonctions.cpp
+1599748419 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/fonctions.cpp
 	"fonctions.h"
 	<tiffio.h>
+	<dirent.h>
 	<chrono>
 
-1497273350 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/fonctions.h
-	"struct.h"
+1599748333 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/fonctions.h
 	<time.h>
 	<math.h>
 	<iostream>
@@ -1536,9 +1536,9 @@
 	<vector>
 	"projet.h"
 
-1493388756 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/struct.h
+1593697759 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/struct.h
 
-1497263415 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/projet.h
+1593697759 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/projet.h
 	"fonctions.h"
 	<config.h>
 	<time.h>
@@ -1550,7 +1550,7 @@
 	<sstream>
 	<assert.h>
 
-1583155891 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/main.cpp
+1600442084 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/main.cpp
 	<opencv2/core/core.hpp>
 	<opencv2/highgui/highgui.hpp>
 	<iostream>
@@ -1583,8 +1583,8 @@
 	<termios.h>
 	<unistd.h>
 	<fcntl.h>
-	<dirent.h>
 	"fonctions.h"
+	"scan_functions.h"
 	<PvDeviceFinderWnd.h>
 	<list>
 
@@ -1835,27 +1835,27 @@
 1493388756 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/pleora/PvPipelineEventSink.h
 	<PvStreamLib.h>
 
-1493388756 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/LabJack/Ljack.h
+1593697758 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/LabJack/Ljack.h
 	"u3.h"
 	<iostream>
 
-1493388756 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/LabJack/u3.h
+1593697758 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/LabJack/u3.h
 	<sys/time.h>
 	<stdio.h>
 	<math.h>
 	<stdlib.h>
 	"labjackusb.h"
 
-1493388756 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/LabJack/labjackusb.h
+1592604079 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/LabJack/labjackusb.h
 	<stdbool.h>
 
-1493388756 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/LabJack/Ljack_DAC.h
+1593697758 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/LabJack/Ljack_DAC.h
 	"macros.h"
 	"msleep.h"
 	"Ljack.h"
 	"Ljack_DAC_plugin.h"
 
-1493388756 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/john/macros.h
+1593697758 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/john/macros.h
 	<time.h>
 	<stdlib.h>
 	"vChrono.h"
@@ -1866,27 +1866,27 @@
 	<assert.h>
 	"legacy_macros.h"
 
-1493388756 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/john/vChrono.h
+1593697758 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/john/vChrono.h
 	<boost/chrono.hpp>
 
-1493388756 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/john/legacy_macros.h
+1593697758 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/john/legacy_macros.h
 
-1493388756 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/john/msleep.h
+1593697758 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/john/msleep.h
 	<time.h>
 
-1493388756 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/LabJack/Ljack_DAC_plugin.h
+1593697758 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/LabJack/Ljack_DAC_plugin.h
 	"u3.h"
 	"U3_manage.h"
 
-1493388756 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/john/U3_manage.h
+1593697758 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/john/U3_manage.h
 	"u3.h"
 	<unistd.h>
 
-1493388756 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/john/vectra.h
+1593697758 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/john/vectra.h
 	<sys/stat.h>
 	<stdio.h>
 
-1493388756 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/john/vChronos.h
+1593697758 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/john/vChronos.h
 	"vChrono.h"
 	"macros.h"
 	<string.h>
@@ -1894,12 +1894,11 @@
 	<iostream>
 	"vChronos.h"
 
-1493388756 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/john/vPlotterT.h
+1594581792 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/john/vPlotterT.h
 	<iostream>
 	<string>
 	<math.h>
 	"macros.h"
-	"vPlotterT.cc"
 
 1493388756 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/vPlotterT.cc
 
@@ -2622,4 +2621,16 @@
 
 1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvWnd.h
 	<PvGUILib.h>
+
+1600442268 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/scan_functions.h
+	<vector>
+
+1599667151 /home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/include/struct.h
+
+1600441750 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/manipTomo5_pipeline/src/scan_functions.cpp
+	"scan_functions.h"
+	"math.h"
+	<vector>
+	<numeric>
+	<iostream>
 
