@@ -5,6 +5,8 @@
 
 import os
 from linecache import getline
+import imageio as im
+import numpy as np
 
 def lineinfile(filename):
     """
@@ -23,7 +25,7 @@ def lineinfile(filename):
     """
     if os.path.isfile(filename):
         File = open(filename, 'r')
-        text=File.readlines()
+        text = File.readlines()
         NumberOfLines = len(text)
         File.seek(0)
         File.close()
@@ -33,7 +35,7 @@ def lineinfile(filename):
         File.close()
     return NumberOfLines
 
-def readvalue(filename,keyword):
+def readvalue(filename, keyword):
     """
     Extraction of parameters values
 
@@ -54,19 +56,18 @@ def readvalue(filename,keyword):
     nbLignes = lineinfile(filename)
     nbLignesOK = 0
     Value = 0.
-    for cpt in range(1,nbLignes+1):
-        Ligne = getline(filename,cpt).split()
+    for cpt in range(1, nbLignes+1):
+        Ligne = getline(filename, cpt).split()
         if len(Ligne) != 0:
             FileContent.append(Ligne)
             nbLignesOK += 1
-    for cpt in range(0,nbLignesOK):
+    for cpt in range(0, nbLignesOK):
         if FileContent[cpt][0] == keyword:
-            Value = float(FileContent[cpt][1])
+            Value = (FileContent[cpt][1])
     return Value
 
-def SAVbin(image,chemin,dim):
+def SAVbin(image, chemin, dim):
     """
-    
     Binary file saving
 
     Parameters
@@ -84,6 +85,42 @@ def SAVbin(image,chemin,dim):
 
     """
     nom_fichier = chemin + "_" + dim + ".bin"
-    fid = open(nom_fichier,"w")
+    fid = open(nom_fichier, "w")
     image.tofile(fid)
     fid.close()
+
+def SAVtiffCube(Folder, Data):
+    """
+    Saving data as a multipage Tiff file
+
+    Parameters
+    ----------
+    Folder : str
+        Path of the saved file.
+    Data : float64
+        Data to be saved.
+
+    Returns
+    -------
+    None.
+
+    """
+    im.volwrite(Folder, Data.transpose((-1, 1, 0)).astype(np.float32))
+
+def ReadtiffCube(Folder):
+    """
+    Reading data from a multipage Tiff file
+
+    Parameters
+    ----------
+    Folder : str
+        Path of the saved file.
+
+    Returns
+    -------
+    Data : float32
+        Extracted data cube.
+
+    """
+    Data = im.volread(Folder).transpose(1, -1, 0)
+    return Data

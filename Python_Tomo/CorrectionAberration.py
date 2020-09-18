@@ -33,7 +33,7 @@ def InitMasque(Chemin,dimMasque):
         Masque = np.uint8(255 * np.ones((dimMasque,dimMasque)))
         print("Invalid path ... generating unitary mask")
     return Masque
-    
+
 @numba.jit(nopython=True)
 def SizePoly2D(deg):
     """
@@ -71,7 +71,7 @@ def PixInMask(Masque):
     Returns
     -------
     nbPtRand : int
-        Number of pixels used for the background estimation. The background is undersampled by a factor \" step \".   
+        Number of pixels used for the background estimation. The background is undersampled by a factor \" step \".
 
     """
     step = 5
@@ -110,19 +110,19 @@ def CalcPolyUS_xy(degre_poly, Masque, polynomeUS_to_fit):
 
     """
     nbCoef,nbPtPolyUS = np.shape(polynomeUS_to_fit)
-    dimMasqueX, dimMasqueY = np.shape(Masque) 
+    dimMasqueX, dimMasqueY = np.shape(Masque)
     if nbPtPolyUS > nbCoef:
-        num_coef = Coord1D = 0  
+        num_coef = Coord1D = 0
         for y in range(0,dimMasqueY):
             for x in range(0,dimMasqueX):
                 num_coef=0
-                if Masque[y,x] == 220:                    
+                if Masque[y,x] == 220:
                     for powX in range(0,degre_poly-1):
                         powY = 0
-                        while powX + powY <= degre_poly:                            
+                        while powX + powY <= degre_poly:
                             polynomeUS_to_fit[num_coef,Coord1D] = pow(x,powX)*pow(y,powY)
                             num_coef += 1
-                            powY += 1                             
+                            powY += 1
                     Coord1D += 1
     return polynomeUS_to_fit
 
@@ -146,7 +146,7 @@ def CalcPoly_xy(degre_poly, Masque, polynome_to_fit):
         Calculated polynome.
 
     """
-    nbCoef,nbPtPoly = np.shape(polynome_to_fit)   
+    nbCoef,nbPtPoly = np.shape(polynome_to_fit)
     dimMasqueX, dimMasqueY = np.shape(Masque)
     if nbPtPoly > nbCoef:
         num_coef = Coord1D = 0
@@ -223,7 +223,7 @@ def compuCoefPoly(ImageBrut,Masque,coef_polynomial,polynomeUS_to_fit):
                 if Masque[y,x] == 220:
                     undersampled_background[UsCoord] = np.float64(ImageBrut[y,x])
                     UsCoord += 1
-        tabCoef = np.zeros((nbCoef,1),dtype=np.float64)                
+        tabCoef = np.zeros((nbCoef,1),dtype=np.float64)
         cv2.solve(np.transpose(polynomeUS_to_fit), undersampled_background, tabCoef, cv2.DECOMP_NORMAL)
         np.copyto(coef_polynomial,tabCoef)
     else:
