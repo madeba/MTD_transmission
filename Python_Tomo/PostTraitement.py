@@ -12,7 +12,7 @@ import Retropropagation as rp
 import manip
 
 # Path to the parameter file, and parameters reading
-DOSSIERACQUIS = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN/"
+DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 DOSSIERDATA = M.dossier_data
@@ -26,8 +26,8 @@ if not os.path.exists(GERCHBERGFOLDER):
     os.makedirs(GERCHBERGFOLDER)
 
 # Paths to the refraction, and absorption of the object
-CHEMINABSORP = f"{PROCESSINGFOLDER}/AbsorptionDiv_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff"
-CHEMINREFRAC = f"{PROCESSINGFOLDER}/RefractionDiv_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff"
+CHEMINABSORP = f"{PROCESSINGFOLDER}/Absorption_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff"
+CHEMINREFRAC = f"{PROCESSINGFOLDER}/Refraction_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff"
 CHEMINOTF = f"{PROCESSINGFOLDER}/OTF_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff"
 
 # Files reading
@@ -41,9 +41,9 @@ plt.imshow(Rec_Object.imag[:, :, DIMHOLO], cmap="gray")
 plt.show()
 
 # Gerchberg parameters
-NBITER = 20
+NBITER = 10
 NMIN = 0
-NMAX = 0.17
+NMAX = 0.15
 KAPPAMIN = 0
 KAPPAMAX = 0
 
@@ -63,5 +63,5 @@ plt.show()
 # Data saving
 start_time = time.time()
 ft.SAVtiffCube(f"{GERCHBERGFOLDER}/RefractionGerch_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-               Rec_Object.real)
+               Rec_Object.real.transpose(1,0,2))
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")

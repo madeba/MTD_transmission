@@ -16,7 +16,7 @@ import imageio as im
 import manip
 
 # Data folders and config files
-DOSSIERACQUIS = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN/"
+DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 if DATA is True:
@@ -107,7 +107,7 @@ for hol in range(0, NB_HOLO):
             SpectreFilt = mmtd.darkfield(SpectreFilt, 1, [ind[0]-SpectreFilt.shape[0]/2,
                                                           ind[1]-SpectreFilt.shape[1]/2])
         if PHASECONTRAST is True:
-            SpectreFilt = mmtd.phasecontrast(SpectreFilt, 20, int(dimHolo/2),
+            SpectreFilt = mmtd.phasecontrast(SpectreFilt, 20, 50,
                                              [ind[0]-SpectreFilt.shape[0]/2,
                                               ind[1]-SpectreFilt.shape[1]/2])
 

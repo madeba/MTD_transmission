@@ -12,7 +12,7 @@ import Retropropagation as rp
 import manip
 
 # Data folders and config files
-DOSSIERACQUIS = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN/"
+DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 if DATA is True:

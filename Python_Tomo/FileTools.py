@@ -122,5 +122,5 @@ def ReadtiffCube(Folder):
         Extracted data cube.
 
     """
-    Data = im.volread(Folder).transpose(1, -1, 0)
+    Data = im.volread(Folder).transpose((1, -1, 0))
     return Data
