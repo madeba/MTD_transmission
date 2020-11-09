@@ -123,17 +123,13 @@ for hol in range(0, NB_HOLO):
         Phase_UBornWrap = np.angle(UBorn)
 
         # Phase unwrapping
-        if RYTOV is True:
-            Phase_UBorn = holo.unwrapping(Phase_UBornWrap, M.PIX)
-        else:
-            Phase_UBorn = Phase_UBornWrap
+        Phase_UBorn = holo.unwrapping(Phase_UBornWrap, M.PIX)
 
         # Amplitude correction
         Amp_UBorn = CAber.ampliCorr(Amp_UBorn, Masque, Poly_US, Poly)
 
         # Phase correction
-        if RYTOV is True:
-            Phase_UBorn = CAber.aberCorr(Phase_UBorn, Masque, Poly_US, Poly)
+        Phase_UBorn = CAber.aberCorr(Phase_UBorn, Masque, Poly_US, Poly)
 
         # Field calculation
         if RYTOV is True:
