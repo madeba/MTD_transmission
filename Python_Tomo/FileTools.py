@@ -105,7 +105,7 @@ def SAVtiffCube(Folder, Data):
     None.
 
     """
-    im.volwrite(Folder, Data.transpose((-1, 1, 0)).astype(np.float32))
+    im.volwrite(Folder, Data.transpose(-1, 1, 0).astype(np.float32))
 
 def ReadtiffCube(Folder):
     """
@@ -122,5 +122,6 @@ def ReadtiffCube(Folder):
         Extracted data cube.
 
     """
-    Data = im.volread(Folder).transpose((1, -1, 0))
+    Data = im.volread(Folder).transpose(1, -1, 0)
+    # print(f"y={Data.shape[0]}, x={Data.shape[1]}, z={Data.shape[2]}")
     return Data

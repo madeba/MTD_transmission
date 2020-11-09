@@ -12,7 +12,7 @@ import Retropropagation as rp
 import manip
 
 # Path to the parameter file, and parameters reading
-DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi/"
+DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 DOSSIERDATA = M.dossier_data
