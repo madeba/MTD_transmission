@@ -80,8 +80,6 @@ Poly = np.zeros((NBCOEF, dimHolo*dimHolo), dtype=np.float64)
 Poly = CAber.CalcPoly_xy(DEGREPOLY, Masque, Poly)
 
 # File opening for field recording
-# wreal = im.get_writer(CHEMINSAV_RE)
-# wimag = im.get_writer(CHEMINSAV_IM)
 wreal = tf.TiffWriter(CHEMINSAV_RE)
 wimag = tf.TiffWriter(CHEMINSAV_IM)
 
@@ -142,16 +140,12 @@ for hol in range(0, NB_HOLO):
             Im_UBorn = Phase_UBornC
             wreal.write(np.float32(Re_UBorn), contiguous=True)
             wimag.write(np.float32(Im_UBorn), contiguous=True)
-            # wreal.append_data(np.float32(Re_UBorn))
-            # wimag.append_data(np.float32(Im_UBorn))
         else:
             # Born
             Re_UBorn = (Amp_UBornC-1)*np.cos(Phase_UBornC)
             Im_UBorn = (Amp_UBornC-1)*np.sin(Phase_UBornC)
             wreal.write(np.float32(Re_UBorn), contiguous=True)
             wimag.write(np.float32(Im_UBorn), contiguous=True)            
-            # wreal.append_data(np.float32(Re_UBorn))
-            # wimag.append_data(np.float32(Im_UBorn))
         CPT += 1
         CPT_EXIST += 1
     else:
@@ -167,8 +161,5 @@ fidParams.write(f"fmaxHolo {fmaxHolo}\n")
 fidParams.write(f"dimHolo {dimHolo}\n")
 fidParams.write(f"pixTheo {M.PIX/Gtot}\n")
 tf.imwrite(CHEMINSAV_CENTRES, np.float32(np.int32(Centres)))
-# fidCentres = im.get_writer(CHEMINSAV_CENTRES)
-# fidCentres.append_data(np.int32(Centres))
-# fidCentres.close()
 fidCentrestxt.close()
 fidParams.close()

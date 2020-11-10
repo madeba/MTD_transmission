@@ -7,7 +7,6 @@ import os
 from linecache import getline
 import numpy as np
 import tifffile as tf
-import manip
 
 def lineinfile(filename):
     """
@@ -101,7 +100,7 @@ def SAVtiffCube(Folder, Data, pix):
     Data : float64
         Data to be saved.
     pix : float
-        sampling for metadata
+        sampling in micrometer for metadata
 
     Returns
     -------
