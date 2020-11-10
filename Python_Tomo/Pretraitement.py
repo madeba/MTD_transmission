@@ -142,8 +142,8 @@ for hol in range(0, NB_HOLO):
             wimag.write(np.float32(Im_UBorn), contiguous=True)
         else:
             # Born
-            Re_UBorn = (Amp_UBornC-1)*np.cos(Phase_UBornC)
-            Im_UBorn = (Amp_UBornC-1)*np.sin(Phase_UBornC)
+            Re_UBorn = Amp_UBornC*np.cos(Phase_UBornC)-1
+            Im_UBorn = Amp_UBornC*np.sin(Phase_UBornC)-1
             wreal.write(np.float32(Re_UBorn), contiguous=True)
             wimag.write(np.float32(Im_UBorn), contiguous=True)            
         CPT += 1

@@ -64,5 +64,5 @@ plt.show()
 # Data saving
 start_time = time.time()
 ft.SAVtiffCube(f"{GERCHBERGFOLDER}/RefractionGerch_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-               Rec_Object.real.transpose(1,0,2), 2*PIXTHEO*1e6)
+               Rec_Object.real.transpose(1,0,-1), 2*PIXTHEO*1e6)
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
