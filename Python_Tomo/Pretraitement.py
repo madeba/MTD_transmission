@@ -129,24 +129,26 @@ for hol in range(0, NB_HOLO):
         Phase_UBorn = holo.unwrapping(Phase_UBornWrap, M.PIX)
 
         # Amplitude correction
-        Amp_UBorn = CAber.ampliCorr(Amp_UBorn, Masque, Poly_US, Poly)
+        Amp_UBornC = CAber.ampliCorr(Amp_UBorn, Masque, Poly_US, Poly)
+        Amp_UBornC[Amp_UBornC <= -5] = 1
+        Amp_UBornC[Amp_UBornC >= 5] = 1
 
         # Phase correction
-        Phase_UBorn = CAber.aberCorr(Phase_UBorn, Masque, Poly_US, Poly)
+        Phase_UBornC = CAber.aberCorr(Phase_UBorn, Masque, Poly_US, Poly)
 
         # Field calculation
         if RYTOV is True:
             # Rytov
-            Re_UBorn = np.log(np.abs(Amp_UBorn))
-            Im_UBorn = Phase_UBorn
+            Re_UBorn = np.log(np.abs(Amp_UBornC))
+            Im_UBorn = Phase_UBornC
             wreal.write(np.float32(Re_UBorn), contiguous=True)
             wimag.write(np.float32(Im_UBorn), contiguous=True)
             # wreal.append_data(np.float32(Re_UBorn))
             # wimag.append_data(np.float32(Im_UBorn))
         else:
             # Born
-            Re_UBorn = (Amp_UBorn-1)*np.cos(Phase_UBorn)
-            Im_UBorn = (Amp_UBorn-1)*np.sin(Phase_UBorn)
+            Re_UBorn = (Amp_UBornC-1)*np.cos(Phase_UBornC)
+            Im_UBorn = (Amp_UBornC-1)*np.sin(Phase_UBornC)
             wreal.write(np.float32(Re_UBorn), contiguous=True)
             wimag.write(np.float32(Im_UBorn), contiguous=True)            
             # wreal.append_data(np.float32(Re_UBorn))
