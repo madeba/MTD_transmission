@@ -69,16 +69,19 @@ TFVolfilt[TFVol != 0] = 1
 # Writting results
 start_time = time.time()
 ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Refraction_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-               Refraction)
+               Refraction, 2*PIXTHEO*1e6)
 ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Absorption_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-               Absorption)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTF_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff", OTF)
+               Absorption, 2*PIXTHEO*1e6)
+ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTF_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff", 
+               OTF, 1./(Refraction.shape[0]*2*PIXTHEO*1e6))
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
 
 # Darkfield processing
 if DARKFIELD is True:
     DarkF = abs(Refraction + Absorption)**2
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Darkfield_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff", DarkF)
+    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Darkfield_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+                   DarkF, 2*PIXTHEO*1e6)
 if PHASECONTRAST is True:
     PhaseC = abs(Refraction + Absorption)**2
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Phasecontrast_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff", PhaseC)
+    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Phasecontrast_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+                   PhaseC, 2*PIXTHEO*1e6)

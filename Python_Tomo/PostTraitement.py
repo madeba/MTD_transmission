@@ -12,13 +12,14 @@ import Retropropagation as rp
 import manip
 
 # Path to the parameter file, and parameters reading
-DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi/"
+DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/ACQUIS_pollen_PN/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 DOSSIERDATA = M.dossier_data
 PROCESSINGFOLDER = f"{DOSSIERDATA}Reconstruction"
 CHEMINPARAM = f"{DOSSIERDATA}Pretraitement/Param.txt"
 DIMHOLO = int(ft.readvalue(CHEMINPARAM, 'dimHolo'))
+PIXTHEO = float(ft.readvalue(CHEMINPARAM, 'pixTheo'))
 
 # Creation of results folder
 GERCHBERGFOLDER = M.dossier_gerchberg
@@ -63,5 +64,5 @@ plt.show()
 # Data saving
 start_time = time.time()
 ft.SAVtiffCube(f"{GERCHBERGFOLDER}/RefractionGerch_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-               Rec_Object.real.transpose(1,0,2))
+               Rec_Object.real.transpose(1,0,2), 2*PIXTHEO*1e6)
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
