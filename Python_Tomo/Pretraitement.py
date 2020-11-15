@@ -12,11 +12,11 @@ import numpy as np
 import HoloProcessing as holo
 import CorrectionAberration as CAber
 import MultiModalMTD as mmtd
-import imageio as im
+import tifffile as tf
 import manip
 
 # Data folders and config files
-DOSSIERACQUIS = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN/"
+DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/ACQUIS_pollen_PN/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 if DATA is True:
@@ -80,8 +80,8 @@ Poly = np.zeros((NBCOEF, dimHolo*dimHolo), dtype=np.float64)
 Poly = CAber.CalcPoly_xy(DEGREPOLY, Masque, Poly)
 
 # File opening for field recording
-wreal = im.get_writer(CHEMINSAV_RE)
-wimag = im.get_writer(CHEMINSAV_IM)
+wreal = tf.TiffWriter(CHEMINSAV_RE)
+wimag = tf.TiffWriter(CHEMINSAV_IM)
 
 start_time = time.time()
 for hol in range(0, NB_HOLO):
@@ -107,7 +107,7 @@ for hol in range(0, NB_HOLO):
             SpectreFilt = mmtd.darkfield(SpectreFilt, 1, [ind[0]-SpectreFilt.shape[0]/2,
                                                           ind[1]-SpectreFilt.shape[1]/2])
         if PHASECONTRAST is True:
-            SpectreFilt = mmtd.phasecontrast(SpectreFilt, 20, int(dimHolo/2),
+            SpectreFilt = mmtd.phasecontrast(SpectreFilt, 20, 50,
                                              [ind[0]-SpectreFilt.shape[0]/2,
                                               ind[1]-SpectreFilt.shape[1]/2])
 
@@ -123,47 +123,43 @@ for hol in range(0, NB_HOLO):
         Phase_UBornWrap = np.angle(UBorn)
 
         # Phase unwrapping
-        if RYTOV is True:
-            Phase_UBorn = holo.unwrapping(Phase_UBornWrap, M.PIX)
-        else:
-            Phase_UBorn = Phase_UBornWrap
+        Phase_UBorn = holo.unwrapping(Phase_UBornWrap, M.PIX)
 
         # Amplitude correction
-        Amp_UBorn = CAber.ampliCorr(Amp_UBorn, Masque, Poly_US, Poly)
+        Amp_UBornC = CAber.ampliCorr(Amp_UBorn, Masque, Poly_US, Poly)
+        Amp_UBornC[Amp_UBornC <= -5] = 1
+        Amp_UBornC[Amp_UBornC >= 5] = 1
 
         # Phase correction
-        if RYTOV is True:
-            Phase_UBorn = CAber.aberCorr(Phase_UBorn, Masque, Poly_US, Poly)
+        Phase_UBornC = CAber.aberCorr(Phase_UBorn, Masque, Poly_US, Poly)
 
         # Field calculation
         if RYTOV is True:
             # Rytov
-            Re_UBorn = np.log(np.abs(Amp_UBorn))
-            Im_UBorn = Phase_UBorn
-            wreal.append_data(np.float32(Re_UBorn))
-            wimag.append_data(np.float32(Im_UBorn))
+            Re_UBorn = np.log(np.abs(Amp_UBornC))
+            Im_UBorn = Phase_UBornC
+            wreal.write(np.float32(Re_UBorn), contiguous=True)
+            wimag.write(np.float32(Im_UBorn), contiguous=True)
         else:
             # Born
-            Re_UBorn = (Amp_UBorn-1)*np.cos(Phase_UBorn)
-            Im_UBorn = (Amp_UBorn-1)*np.sin(Phase_UBorn)
-            wreal.append_data(np.float32(Re_UBorn))
-            wimag.append_data(np.float32(Im_UBorn))
+            Re_UBorn = Amp_UBornC*np.cos(Phase_UBornC)-1
+            Im_UBorn = Amp_UBornC*np.sin(Phase_UBornC)-1
+            wreal.write(np.float32(Re_UBorn), contiguous=True)
+            wimag.write(np.float32(Im_UBorn), contiguous=True)            
         CPT += 1
         CPT_EXIST += 1
     else:
         CPT += 1
 print(f"Pre-Processing time for {CPT_EXIST-1} holograms: "
       f"{np.round(time.time() - start_time,decimals=2)} seconds")
+wreal.close()
+wimag.close()
 
 # Center recording and file closing
 fidParams.write(f"nb_angle {CPT_EXIST-1}\n")
 fidParams.write(f"fmaxHolo {fmaxHolo}\n")
 fidParams.write(f"dimHolo {dimHolo}\n")
 fidParams.write(f"pixTheo {M.PIX/Gtot}\n")
-fidCentres = im.get_writer(CHEMINSAV_CENTRES)
-fidCentres.append_data(np.int32(Centres))
-fidCentres.close()
+tf.imwrite(CHEMINSAV_CENTRES, np.float32(np.int32(Centres)))
 fidCentrestxt.close()
 fidParams.close()
-wreal.close()
-wimag.close()

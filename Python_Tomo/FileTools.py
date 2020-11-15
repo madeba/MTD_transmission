@@ -5,8 +5,8 @@
 
 import os
 from linecache import getline
-import imageio as im
 import numpy as np
+import tifffile as tf
 
 def lineinfile(filename):
     """
@@ -89,7 +89,7 @@ def SAVbin(image, chemin, dim):
     image.tofile(fid)
     fid.close()
 
-def SAVtiffCube(Folder, Data):
+def SAVtiffCube(Folder, Data, pix):
     """
     Saving data as a multipage Tiff file
 
@@ -99,13 +99,16 @@ def SAVtiffCube(Folder, Data):
         Path of the saved file.
     Data : float64
         Data to be saved.
+    pix : float
+        sampling in micrometer for metadata
 
     Returns
     -------
     None.
 
     """
-    im.volwrite(Folder, Data.transpose((-1, 1, 0)).astype(np.float32))
+    tf.imwrite(Folder, Data.transpose(-1, 1, 0).astype(np.float32), imagej = True, 
+               resolution=(1./pix, 1./pix), metadata={'spacing': pix, 'unit': 'um'})
 
 def ReadtiffCube(Folder):
     """
@@ -122,5 +125,5 @@ def ReadtiffCube(Folder):
         Extracted data cube.
 
     """
-    Data = im.volread(Folder).transpose(1, -1, 0)
+    Data = tf.imread(Folder).transpose(1, -1, 0)
     return Data
