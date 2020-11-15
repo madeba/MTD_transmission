@@ -36,7 +36,7 @@ FFTW_init::FFTW_init(Point3D dim,size_t nbThread,bool b_inplace, unsigned int pl
 
     fftwThreadInit=fftw_init_threads();
     fftw_plan_with_nthreads(m_Nthread);
-    if(b_inplace=1){
+    if(b_inplace==1){
     in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
 
     p_forward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in, FFTW_FORWARD, plan_type );

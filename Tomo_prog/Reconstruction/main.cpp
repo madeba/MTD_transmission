@@ -194,7 +194,7 @@ int main()
     }
 
     vector<double>().swap(sup_redon);//forcer la libération mémoire de sup_redon
-
+    //interp_lin3D(TF3D_PotObj);
     temps_final = clock ();
     temps_cpu = (temps_final - temps_initial) * 1e-6;
     printf("temps apres normalisation : %lf\n",temps_cpu);

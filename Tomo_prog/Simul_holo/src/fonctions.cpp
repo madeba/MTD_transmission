@@ -1,10 +1,12 @@
 
 #include "fonctions.h"
 #include <tiffio.h>
-#include <opencv/cxcore.h>
+//#include <opencv/cxcore.h>
 #include <chrono>
 //#include <highgui.h>
-#include <opencv/cv.h>
+//#include <opencv/cv.h>
+
+
 #define PI 3.14159
 #include "projet.h"
 #include "OTF.h"

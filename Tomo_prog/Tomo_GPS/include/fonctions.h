@@ -31,9 +31,12 @@
 #include <complex>
 #include <tiffio.h>
 //*calculate the wrapped phase from -pi to pi*/
+
+
 Var2D coord_to_coordShift(Var2D coord2D, Var2D dimROI);
 void calcPhase_mpi_pi_atan2(std::vector<std::complex<double>> const& cplx_field, std::vector<double> &phaseMod2pi);
-void  decal2DCplxGen2(std::vector<std::complex<double>> const &entree,std::vector<std::complex<double>>  &result, Var2D &decalGen);
+double calc_quad_err(std::vector <std::complex <double> > &indice_actual_iter, std::vector< std::complex <double> > &indice_prev_iter);
+void  decal2DCplxGen2(std::vector<std::complex<double> > const &entree,std::vector <std::complex<double> >  &result, Var2D &decalGen);
 std::vector<double> initRef(std::string chemin_ref,Var2D coin, Var2D dimROI);
 void calc_Uborn2(std::vector<std::complex<double>> const &TF_UBorn,std::vector<std::complex<double>> &UBorn,Var2D dim2DHA,Var2D PosSpec,FFTW_init &param_c2c);
 int coordSpec(std::vector<std::complex<double>> const &TF_UBorn, std::vector<double> &TF_champMod,Var2D NMAX);

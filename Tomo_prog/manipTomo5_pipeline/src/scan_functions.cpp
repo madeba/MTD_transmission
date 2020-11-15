@@ -91,16 +91,42 @@ void scan_annular(float Vmax, float nb_circle, int nbHolo, std::vector<float2D> 
         }
 }
 //spirale Fermat avec angle d'or
-void scan_fermat(double Vmax, int nbHolo, std::vector<float2D> &Vout_table)
+void scan_fermat(double Vmax, int nbHolo, std::vector<float2D> &Vout_table, Var2D dim)
 {
     double theta=0,theta_max=nbHolo;//number of holograms = theta max in radian !!
     double angle_dor=(3*sqrt(5))*M_PI;
     double delta_theta=theta_max/nbHolo;
     cout<<"delta_theta="<<delta_theta<<endl;
+    vector<double> centre(dim.x*dim.y);
+    double nbPixVolt=(dim.x/(2*Vmax));
+    Var2D spec={0,0},specI={0,0};
+
     for(int numHolo=0;numHolo<nbHolo;numHolo++){
     Vout_table[numHolo].x=sqrt((theta)/theta_max)*Vmax*cos((theta)*angle_dor);
     Vout_table[numHolo].y=sqrt((theta)/theta_max)*Vmax*sin((theta)*angle_dor);
+
+     spec.x=round(Vout_table[numHolo].x*nbPixVolt);
+    spec.y=round(Vout_table[numHolo].y*nbPixVolt);
+    specI.x=spec.x+dim.x/2;
+    specI.y=spec.y+dim.y/2;
+    centre[specI.y*dim.x+specI.x]=numHolo;
+
     theta=theta+delta_theta;
+    }
+    //redistribuer les points dans un tableau de taille nbHolo
+    //en limitant les mouvements brusques du miroir
+    int numHolo=0;
+    int x=0,y=0;
+    for(int cpt=0; cpt<dim.x*dim.y; cpt++){///2) balayage du pattern pour trier à y croissant (et x en zig zag)
+        y=cpt/dim.x;
+        if(y%2==0) x=dim.x-cpt%dim.x;//si y paire, balayer à x décroissant
+        else x=cpt%dim.x;//si y impaire, balayer à x croissant
+        ///y'a t-il un point dans le pattern ?
+        if(centre[y*dim.x+x]!=0){
+            Vout_table[numHolo].x=x/nbPixVolt-Vmax;//tension recalculée à partir de la position du point
+            Vout_table[numHolo].y=y/nbPixVolt-Vmax;
+            numHolo++;
+        }
     }
 }
 ///generate a random cartesian coordinate between [-vmax, +vmax], return the values in Vout_table
@@ -174,7 +200,6 @@ void scan_random_polar3D(double Vmax, int nbHolo, std::vector<float2D> &Vout_tab
         if(centre[y*dim.x+x]!=1)//test if the random point is unique
         {
         centre[y*dim.x+x]=1;
-        cout<<"hello";
         numHolo++;
         }
     }
@@ -302,4 +327,33 @@ void scan_uniform3D(double Vmax, int nbHolo, std::vector<float2D> &Vout_table)
             numHolo++;
         }
     }
+}
+
+void scan_etoile(double Vmax, int nbHolo, int nbAxe, vector<float2D> &Vout_table)
+{
+double delta_theta=M_PI/nbAxe;
+int nbPtAxe=floor((double)nbHolo/(double)nbAxe);//integer division, rounded to the closest lesser value
+vector<double> kiz(nbHolo);
+vector<int> nbPointAxe(nbAxe);
+int numHolo=0;
+int nbPtLeft=nbHolo-(nbPtAxe*nbAxe);//nb pt left if non integer
+vector<double> theta(nbAxe);
+for(int cpt=0;cpt<nbAxe;cpt++){
+theta[cpt]=cpt*delta_theta;
+if(cpt>=(nbAxe-nbPtLeft))//if the remainder of the integer division is not zero, put the N remaining points on the  N last  axes
+    nbPointAxe[cpt]=nbPtAxe+1;
+else nbPointAxe[cpt]=nbPtAxe;
+}
+for(int cpt=0;cpt<nbAxe;cpt++){
+    double delta_rho=2*Vmax/nbPointAxe[cpt];
+    double rho=0;
+    for(int numPt=0; numPt<nbPointAxe[cpt];numPt++){
+        rho=-Vmax+numPt*delta_rho;//parcours rayon à theta fixé
+        Vout_table[numHolo].x=rho*cos(theta[cpt]);
+        Vout_table[numHolo].y=rho*sin(theta[cpt]);
+        kiz[numHolo]=sqrt(Vmax*Vmax-pow(Vout_table[numHolo].x,2)-pow(Vout_table[numHolo].y,2));
+        numHolo++;
+    }
+}
+cout<<"nb point placés="<<numHolo<<endl;
 }

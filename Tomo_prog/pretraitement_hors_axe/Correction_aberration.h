@@ -34,7 +34,7 @@
 using namespace cv;
 
 /// Function header
-Mat init_mask_aber(std::string Chemin_mask, Var2D dim2DHA);
+Mat init_mask_aber(std::string Chemin_mask, std::string Chemin_acquis, Var2D dim2DHA);
 int sizePoly2D(int deg);
 int countM(Mat mask);
 void compuBackgr2(Mat const &coefficients, Mat const & polynome_to_fit, Mat &PolyBackgr);

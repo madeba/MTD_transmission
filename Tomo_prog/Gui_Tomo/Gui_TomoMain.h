@@ -30,11 +30,12 @@ class Gui_TomoFrame: public wxFrame
          //float extract_val(std::string token,  std::string chemin_fic);
          std::string extract_string(std::string token,  std::string chemin_fic);
 
-         std::string extract_string(std::string token,  std::string chemin_fic,std::string chemin_defaut);
+         std::string extract_string(std::string token,  std::string chemin_fic,std::string string_defaut);
          void sav_val(std::string chemin_fic,std::vector<std::string> &tab_val);
          float extract_val(std::string token,  std::string chemin_fic);
          void init_tab_val(std::string chemin_fic, std::vector<std::string> &tab_val);
          void modif_tab_val(std::string token,std::string string_valeur_token,std::vector<std::string> &tab_val);
+         void refreshValue(std::string chemin_fic, std::string chemin_recon);
          void sav_all();
          void sav_all_pc_acquis();
          void sav_all_pc_recon();

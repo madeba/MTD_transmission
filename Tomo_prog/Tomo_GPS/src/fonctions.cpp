@@ -17,7 +17,16 @@ using namespace cv;
 ///translate normal coordinate to shifted coordinate
 ///allows to work with shifted version of the spectrum (to avoir fftshift and speedup spectrum crop)
 
+double calc_quad_err(vector<complex<double>> &indice_actual_iter, vector<complex<double>> &indice_prev_iter)
+{
+    double quad_err=0;
+    for(int cpt=0;cpt<indice_actual_iter.size();cpt++)
+    {
+        quad_err=pow(indice_actual_iter[cpt].real()-indice_prev_iter[cpt].real(),2);
 
+    }
+    return quad_err;
+}
 Var2D coord_to_coordShift(Var2D coord2D, Var2D dimROI)
 {
 Var2D coord2D_shift;

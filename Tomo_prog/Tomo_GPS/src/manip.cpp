@@ -50,6 +50,7 @@ manip::manip()
     dim_final=extract_val("DIM_FINAL",fic_cfg_recon);
     tailleTheoPixelUborn=tailleTheoPixelHolo*dimROI.x/(2*NXMAX);
     tailleTheoPixelTomo=tailleTheoPixelUborn*(2*NXMAX)/dim_final;
+   cout<<"taille_theo_pixeltomo :"<<tailleTheoPixelTomo<<endl;
     Delta_fUborn=1/(tailleTheoPixelUborn*2*NXMAX);
     premier_plan=extract_val("PREMIER_ANGLE",fic_cfg_recon),
     Num_Angle_final=extract_val("NB_HOLO",fic_cfg_manip),//
@@ -75,22 +76,6 @@ manip::manip()
 
     cout<<"\n##########################################################"<<endl;
 
-        ///Effacer précédent résultatscar fonction d'enregistrement cumulative ("a+b")
-
-        Var2D dim2DHA={2*NXMAX,2*NXMAX};
-        dimImg=to_string(dim2DHA.x)+"x"+to_string(dim2DHA.y)+"x"+to_string(NbAngle);
-
-        //string tampon="/UBornfinal_Im.raw";
-        string tampon="/UBornfinal_Im"+dimImg+".raw";
-        string result=chemin_result+tampon;
-        cout<<"Effacement Uborn : "<<result<<endl;
-        if( remove(result.c_str())== 0 )
-        perror( "Fichier Ubornfinal_Im impossible à effacer" );
-       // tampon="/UBornfinal_Re.raw";
-        tampon="/UBornfinal_Re"+dimImg+".raw";
-        result=chemin_result+tampon;
-        if( remove(result.c_str()) == 0 )
-        perror( "Fichier UBornfinal_Re impossible à effacer" );
 
       rayon=round(NXMAX*n0/NA);//calcul du rayon à partir de la fréquence NXMAX defini pare l'utlisateur
       double R_Ewald=IMAGE_DIMX*tailleTheoPixelHolo*n0/(lambda0*pow(10,9)); //vraie valeur de R_Ewald.

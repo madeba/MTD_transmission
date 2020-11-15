@@ -32,19 +32,31 @@ using namespace std;
 
 /// Function header
 #include "Correction_aberration.h"
+#include "FFT_fonctions.h"
 void initCorrAber(std::string Chemin_mask, Mat const & mask_aber, size_t degre_poly, Var2D dim2DHA, Mat &polynome_to_fit, Mat &polynomeUs_to_fit)
 {
+
 CalcPolyUs_xy(degre_poly, mask_aber, dim2DHA, polynomeUs_to_fit);
 CalcPoly_xy(degre_poly, dim2DHA, polynome_to_fit);
 }
 ///load object mask
-Mat init_mask_aber(string Chemin_mask, Var2D dim2DHA)
+Mat init_mask_aber(string Chemin_mask, string Chemin_acquis, Var2D dim2DHA)
 {
-    ///Charger masque aberration
+
     Mat mask = imread(Chemin_mask, 0);
+    ///Charger masque aberration
+
     if(! mask.data ){
-        cout <<  "Masque : "<<Chemin_mask <<" non trouvé création masque unité" << std::endl ;
+        cout <<  "Masque : "<<Chemin_mask <<" non ---trouvé création masque unité" << std::endl ;
         mask=255*Mat::ones(dim2DHA.x,dim2DHA.y, CV_8UC1);
+      /*  vector<double> masqueTukeyHA(tukey2D(dim2DHA.x,dim2DHA.y,0.05));//on utilise alpha/2 sinon bord du masque un peu épais
+        for(int x=0; x<dim2DHA.x; x++)
+            for(int y=0; y<dim2DHA.y; y++){
+                int cpt=x+y*dim2DHA.x;
+                if(mask.at<uchar>(y,x)*masqueTukeyHA[cpt]<255)//appliquer le masque de tukey puis binariser
+                    mask.at<uchar>(y,x)=0;
+        }
+     imwrite(Chemin_acquis+"/Image_mask.pgm",mask);*/
     }
     else{
         cout<<"chargement du masque"<<Chemin_mask<<endl;
@@ -52,6 +64,7 @@ Mat init_mask_aber(string Chemin_mask, Var2D dim2DHA)
     if(mask.rows!=dim2DHA.x){
         cout<<"Problème aberrations : masque "<<Chemin_mask<< " de largeur "<<mask.rows<<", mais image de largeur "<<dim2DHA.x<<endl;
     }
+
     mask.convertTo(mask, CV_8U);  ///Chargement du masque pour correction aberration/ampli
 
     return mask;
@@ -170,10 +183,9 @@ Mat  ampliCorr2(Mat const & image,  Mat const &polynomeUs_to_fit, Mat const &pol
     compuCoefPoly2(image, mask, coefsolve, polynomeUs_to_fit, true); /// Compute the coef of polynomial (Least Squares method)
     Mat resultatpoly(image.rows, image.cols, CV_64F), result(image.rows, image.cols, CV_64F);
     compuBackgr2(coefsolve, polynome_to_fit,  resultatpoly);/// Compute the background image with the coef of polynomial
-    //SAV2((double*)resultatpoly.data,image.rows*image.cols,"/ramdisk/poly_aber_ampli.raw",t_float,"a+b");
+   // SAV2((double*)resultatpoly.data,image.rows*image.cols,"/home/mat/tmp/poly_aber_ampli.raw",t_float,"a+b");
 
-   //result = image/(resultatpoly+0.0001);
-    result = image/(resultatpoly);
+   result = image/(resultatpoly+0.00000001);
     return result;
 }
 /// Compute the coef of polynomial (Least Squares method) by SVD,  i.e. solve COEF*POLYNOME_TO_FIT=BACKGROUND (with undersampled variables to speed up the process)

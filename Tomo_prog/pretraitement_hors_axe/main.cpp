@@ -125,10 +125,13 @@ FFTW_init param_fftw2D_c2r_HA(TF_UBorn,m1.nbThreads);//OUTPLACE
 FFTW_init param_fftw2D_r2c_HA(phase_2Pi_vec,"r2c",m1.nbThreads);
 
 ///variable pour correction aberration
-Mat src=Mat(1, ampli_ref.size(), CV_64F, ampli_ref.data()), mask_aber=init_mask_aber(Chemin_mask,dim2DHA);
-size_t NbPtOk=countM(mask_aber),  degre_poly=4, nbCoef = sizePoly2D(degre_poly);//Nb coef poly
+Mat src=Mat(1, ampli_ref.size(), CV_64F, ampli_ref.data()), mask_aber=init_mask_aber(Chemin_mask,chemin_acquis,dim2DHA);
+
+
+size_t NbPtOk=countM(mask_aber),  degre_poly=3, nbCoef = sizePoly2D(degre_poly);//Nb coef poly
 Mat polynomeUs_to_fit(Size(nbCoef,NbPtOk), CV_64F);///(undersampled) Polynome to fit= function to fit (We use a polynome). we have to generate a table containing polynome_to_fit=[1,x,x^2,xy,y^2] for each coordinate (x,y)
 Mat polynome_to_fit(Size(nbCoef,dim2DHA.x*dim2DHA.y), CV_64F);
+
 initCorrAber(Chemin_mask, mask_aber, degre_poly,dim2DHA,polynome_to_fit,polynomeUs_to_fit);
 
 
@@ -195,19 +198,28 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
     ///---------------Correction amplitude----------------------------------------
     for(size_t cpt=0; cpt<(NbPixUBorn); cpt++)
       UBornAmp[cpt]=abs(UBorn[cpt]);
+
+
  //SAV2(UBornAmp,chemin_result+"/UBornAmp.raw",t_float,"a+b");
     Mat srcAmp=Mat(dim2DHA.x, dim2DHA.y, CV_64F, UBornAmp.data());///image source
     Mat UBornAmp_corr(ampliCorr2(srcAmp, polynomeUs_to_fit, polynome_to_fit, mask_aber));///résultat amplitude
     ///Fin Correction amplitude----------------------------------------*/
-
+int flag=0;
     for(size_t y=0; y<dim2DHA.y; y++){ // reconstruire l'onde complexe/Recalculate the complex field
       for(size_t x=0; x<dim2DHA.x; x++){
         size_t cpt=x+y*dim2DHA.x;
         PhaseFinal[cpt]=Phase_corr.at<double>(y,x);//copie opencV->Tableau
         UBornAmpFinal[cpt]=UBornAmp_corr.at<double>(y,x);
+        if(UBornAmpFinal[cpt]>10) UBornAmpFinal[cpt]=1;
+     if(UBornAmpFinal[cpt]<-10)  UBornAmpFinal[cpt]=1;
+       // if(UBornAmpFinal[cpt]<-1 && flag==0) { cout<<"Holo numero"<<cpt_angle<<endl;flag=1;}
+
         if(m1.b_Born==true){ //UBORN=U_tot-U_inc=u_tot_norm-1
-          UBornFinal[cpt].real((UBornAmpFinal[cpt]-1)*cos(PhaseFinal[cpt]));///correction amplitude
-          UBornFinal[cpt].imag((UBornAmpFinal[cpt]-1)*sin(PhaseFinal[cpt]));
+         // UBornFinal[cpt].real( (sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt])- 1 )*cos(PhaseFinal[cpt]) );//*masqueTukeyHolo[cpt]);///correction amplitude
+         // UBornFinal[cpt].imag( (sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt]) - 1)*sin(PhaseFinal[cpt]) );//*masqueTukeyHolo[cpt]);
+
+          UBornFinal[cpt].real( (sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt]))*cos(PhaseFinal[cpt]) -1);//*masqueTukeyHolo[cpt]);///correction amplitude
+          UBornFinal[cpt].imag( (sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt]))*sin(PhaseFinal[cpt]) -1);//*masqueTukeyHolo[cpt]);
         }
         else{ //RYTOV URytov = log a_t/a_i (=log a_t après correction AmpliCorr)
           UBornFinal[cpt].real(log(sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt])));///racine(U^2) pour éliminer les éventuelles amplitudes négatives
@@ -216,7 +228,7 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
       }
     }
     //SAV2(PhaseFinal,chemin_result+"/phase_finale.raw",t_float,"a+b");
-   // SAV2(UBornAmpFinal,chemin_result+"/UBornAmpFinal.raw",t_float,"a+b");
+ //SAV2(UBornAmpFinal,chemin_result+"/UBornAmpFinal.raw",t_float,"a+b");
     ///Recalculer la TF décalée pour le programme principal.
     Var2D recal= {kxmi,kymi};
     decal2DCplxGen2(UBornFinal,UBornFinalDecal, decal2DHA);
@@ -235,10 +247,13 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
     }
     //SAVCplx(TF_UBorn,"Re", chemin_result+"/TF_Uborn_Re.raw", t_double, "a+b");
     calc_Uborn2(TF_UBorn_norm,UBorn,dim2DHA,posSpec,param_fftw2D_c2r_HA);
+
     SAVCplx(UBorn,"Re", chemin_result+"/UBornfinal_Re"+m1.dimImg+".raw", t_double, "a+b");
     SAVCplx(UBorn,"Im", chemin_result+"/UBornfinal_Im"+m1.dimImg+".raw", t_double, "a+b");
+
   }
 }//fin de boucle for sur tous les angles
+SAV2(UBornAmpFinal,chemin_result+"/UBornAmpFinal.raw",t_float,"a+b");
 auto end_part2= std::chrono::system_clock::now();
 auto elapsed_part2 = end_part2 - start_part2;
 std::cout <<"Temps pour part2= "<< elapsed_part2.count()/(pow(10,9)) << '\n';

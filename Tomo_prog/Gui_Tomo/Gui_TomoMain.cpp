@@ -17,6 +17,7 @@
 #endif //__BORLANDC__
 
 #include "Gui_TomoMain.h"
+#include<algorithm>//fonction remove() sur string
 #include <wx/notebook.h>///gestion des onglets
 using namespace std;
 
@@ -122,6 +123,10 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     repertoire_config=extract_string("CHEMIN_CONFIG",home+fin_chemin_gui_tomo);///repertoire config_manip.txt
     //cout<<"Repertoire_config="<<repertoire_config<<endl;
     chemin_result=extract_string("CHEMIN_RESULT",home+fin_chemin_gui_tomo);///repertoire des résultats
+
+
+   std::remove(chemin_result.begin(), chemin_result.end(), ' ');
+
     chemin_config_manip=repertoire_config+"/config_manip.txt";
     cout<<"fichier config_manip.txt: "<<chemin_config_manip<<endl;
     chemin_recon=repertoire_config+"/recon.txt";
@@ -131,7 +136,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     ifstream fichier_config_manip(chemin_config_manip.c_str(), ios::in);
     if(!fichier_config_manip)
     {
-        cout<<endl<<"fichier "<<chemin_config_manip<<" inexistant"<<endl;
+        cout<<endl<<"fichier ::::::::::::::: "<<chemin_config_manip<<" inexistant"<<endl;
         ///on copie le fichier defaut dans le repertoire de config...
         ifstream src(repertoire_config_defaut+"config_manip.txt",ios::binary);
         ofstream dst(chemin_config_manip,ios::binary);
@@ -232,7 +237,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     textNbHolo=new wxStaticText(zone11,1,"Nombre d'hologrammes  : ",wxPoint(2,2),wxSize(98,50));
 
     //édition du champ
-    editNbHolo=new wxTextCtrl(zone11,1,"",wxPoint(120,4),wxSize(45,25));
+    editNbHolo=new wxTextCtrl(zone11,1,"",wxPoint(120,4),wxSize(50,25));
     editNbHolo->SetToolTip(wxT("Nombre d'hologrammes à acquérir"));
 
     //récupérer la valeur NB_HOLO dans fichier de config, convertir en string, puis l'afficher dans la case
@@ -253,30 +258,31 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
 
         ComboBox_Scan = new wxComboBox(zone11b, idComboScan, _T(""), wxPoint(120,10), wxSize(140,26),
         0, NULL, wxTE_PROCESS_ENTER | wxTE_PROCESS_TAB);//Constructor, creating and showing a combobox.
-
+        ComboBox_Scan->SetToolTip(wxT("Schéma de balayage"));
         ComboBox_Scan->Append ( wxT("ANNULAR") );
         ComboBox_Scan->Append ( wxT("ARCHIMEDE") );
         ComboBox_Scan->Append ( wxT("FERMAT") );
         ComboBox_Scan->Append ( wxT("RANDOM_POLAR") );
         ComboBox_Scan->Append ( wxT("ROSACE") );
         ComboBox_Scan->Append ( wxT("UNIFORM3D") );
-
-        wxArrayString  listeScanPattern(5);
+        ComboBox_Scan->Append ( wxT("STAR") );
+        wxArrayString  listeScanPattern(6);
         listeScanPattern=ComboBox_Scan->GetStrings();//récupérer les label de pattern dans un tableau
-        wxString defaultPattern=extract_string("SCAN_PATTERN",chemin_config_manip);//lire le pattern du fichier de config
+        wxString defaultPattern=extract_string("SCAN_PATTERN",chemin_config_manip,"ROSACE");//lire le pattern du fichier de config
         ComboBox_Scan->SetSelection(listeScanPattern.Index(defaultPattern));//par defaut, mettre le pattern du fichier de config
 
 
             //édition du champ cercles concentriques
-    int Nb_circles_annular=stof(extract_string("NB_CIRCLES_ANNULAR",chemin_config_manip));//stof=string to float
-    editnbCirclesAnnular=new wxTextCtrl(zone11b,1,"",wxPoint(120,40),wxSize(20,20));
+
+    int Nb_circles_annular=stof(  extract_string("NB_CIRCLES_ANNULAR", chemin_config_manip, "8")  );//stof=string to float
+    editnbCirclesAnnular=new wxTextCtrl(zone11b,1,"",wxPoint(120,40),wxSize(36,24));
     editnbCirclesAnnular->SetToolTip(wxT("Nombre de cercles concentriques"));
-
-    //récupérer la valeur NB_HOLO dans fichier de config, convertir en string, puis l'afficher dans la case
-
+    if(ComboBox_Scan->GetString(ComboBox_Scan->GetSelection())==wxT("ANNULAR")) editnbCirclesAnnular->Enable(true);
+    else    editnbCirclesAnnular->Enable(false);
 
     wxString string_NbCirclesAnnular = wxString::Format(wxT("%i"),Nb_circles_annular);
     editnbCirclesAnnular->SetValue(string_NbCirclesAnnular);
+
 
     ///--------------------INTERVALLE de BALAYAGE------------------
     wxPanel *zone12 = new wxPanel(panel_gauche);
@@ -329,8 +335,8 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
         zone13->SetBackgroundColour(*wxLIGHT_GREY);
         /// Dialog fichier de données;
         BoutonOpenDir=new wxButton(zone13, idBoutonOpenDir, wxT("&Données"), wxPoint(5,10), wxDefaultSize, 0);
-        editDirAcquis=new wxTextCtrl(zone13,-1,chemin_rep_acquis,wxPoint(105,14), wxSize(175,26));
-        editDirAcquis->SetToolTip(wxT("Répertoire des acquisitions"));
+        editDirAcquis=new wxTextCtrl(zone13,-1,chemin_rep_acquis,wxPoint(105,14), wxSize(180,26));
+        editDirAcquis->SetToolTip(wxT("Répertoire des acquisitions : "+chemin_rep_acquis));
         // textFicManip=new wxTextCtrl(zone10,-1,"",wxPoint(160,195),wxSize(100,20));
         ///bouton Acquisition
         BoutonManip= new wxButton(zone13, idBoutonManip, wxT("&Acquisition"), wxPoint(194,60), wxDefaultSize, 0);
@@ -404,6 +410,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
 
     ///Le panneau droit a pour parent le page onglet 1
     wxPanel *panel_droit = new wxPanel(panel_tab1,wxID_ANY);
+    panel_droit->SetBackgroundColour(wxColor(240, 240, 240));
     sizer_horizontal->Add(panel_droit, 1, wxALL | wxEXPAND, 2); //le panneau gauche sera géré par le sizer horizontal global
 
     wxBoxSizer *sizer_vertical2 = new wxBoxSizer(wxVERTICAL);
@@ -451,7 +458,6 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     editDimFinal->SetValue(string_DimFinal);
     editDimFinal->SetToolTip(wxT("Dimension du volume final"));
 
-
     //-------------zone du bas -------------------------------------------------------------------------------------
     wxPanel *zone32 = new wxPanel(panel_droit);
     zone32->SetBackgroundColour(*wxLIGHT_GREY);
@@ -464,7 +470,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     m_export_OTF->SetValue(stof(extract_string("EXPORT_OTF",chemin_recon)));
 
     BoutonOpenDirResult=new wxButton(zone32, idBoutonOpenDirResult, wxT("& Résultats "), wxPoint(5,10), wxDefaultSize, 0);
-    editDirResultAcquis=new wxTextCtrl(zone32,-1,chemin_result,wxPoint(105,16),wxSize(170,20));
+    editDirResultAcquis=new wxTextCtrl(zone32,-1,chemin_result,wxPoint(105,12),wxSize(170,30));
     editDirResultAcquis->SetToolTip(wxT("Répertoire résultats"));
     // textFicManip=new wxTextCtrl(zone10,-1,"",wxPoint(160,195),wxSize(100,20));
     BoutonRecons= new wxButton(zone32, idBoutonRecons, wxT("&Reconstruction"), wxPoint(174,214), wxDefaultSize, 0);
@@ -476,12 +482,10 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     panel_droit->SetSizer(sizer_vertical2);//affecter l'organiseur (sizer) horizontal à l'onglet  1.
 
 
-
     ///##########TAB 2 ################################################
     wxPanel* panel_tab2 = new wxPanel(notebook, wxID_ANY,wxPoint(1,1),wxSize(100,40));//céer un panel dont la fenetre parent est le wxNotebook
     notebook->AddPage(panel_tab2,wxT("Avancé"));
     panel_tab2->SetBackgroundColour(wxColor(240, 240, 240));
-
 
     wxBoxSizer *sizer_horizontalB = new wxBoxSizer(wxHORIZONTAL);
     sizer_horizontalB->SetMinSize(200, 100);
@@ -578,7 +582,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
 
     panel_gauche_tabB->SetSizer(sizer_vertical_tabB_0);
 }
-
+///########################################functions linked to widgets ###############"
 Gui_TomoFrame::~Gui_TomoFrame()
 {
 
@@ -729,15 +733,22 @@ void Gui_TomoFrame::OnBoutonAmpliRef(wxCommandEvent& WXUNUSED(event))
 
 void Gui_TomoFrame::OnBoutonOpenDir(wxCommandEvent& WXUNUSED(event))
 {
-    wxString defaultPath = chemin_rep_acquis;//wxT("/ramdisk/Acquis/");
-    wxDirDialog* OpenDirDial = new wxDirDialog(this, _("Choisir un répertoire"),defaultPath);
+   // wxString defaultPath = chemin_rep_acquis;//wxT("/ramdisk/Acquis/");
+    wxDirDialog* OpenDirDial = new wxDirDialog(this, _("Choisir un répertoire"),editDirAcquis->GetValue());
 
-    if ( OpenDirDial->ShowModal() == wxID_OK )
-    {
+    if ( OpenDirDial->ShowModal() == wxID_OK ){
         wxString path = OpenDirDial->GetPath();
         editDirAcquis->SetValue(path);
     }
+  //récupérer le nouveau chemin
+  string dir_config(editDirAcquis->GetValue().ToStdString());//ToStdString =wxwidget 3.0. Non compatible wxWidget 2.8
+
+  chemin_config_manip=dir_config+"/config_manip.txt";
+  chemin_recon=dir_config+"/recon.txt";
+  refreshValue(chemin_config_manip, chemin_recon);
+
 }
+
 
 void Gui_TomoFrame::OnBoutonOpenDirResult(wxCommandEvent& WXUNUSED(event))
 {
@@ -769,6 +780,49 @@ void Gui_TomoFrame::OnBoutonSAV(wxCommandEvent& WXUNUSED(event))
 
 
 
+
+///######################################## General functions ###############"
+//rafraichit toutes les valeurs de l'interface (avec setvalue) avec les valeurs du fichier "chemin_fic", "chemin_recon"
+void Gui_TomoFrame::refreshValue(string chemin_fic, string chemin_recon)
+{
+    cout<<endl;
+    cout<<"####-- Maj des données avec le fichier : "<<chemin_fic<<" --####"<<endl;
+    ///-------------MAJ paramètres manip----------------------------------
+    editNbHolo->SetValue(wxString::Format(wxT("%i"),stoi(extract_string("NB_HOLO",chemin_fic,"400"))));
+    editVymin->SetValue(wxString::Format( wxT("%.2f"),extract_val("VYMIN",chemin_fic) ));
+    editVxmin->SetValue(wxString::Format(wxT("%.2f"),extract_val("VXMIN",chemin_fic) ));
+    editVxmax->SetValue(wxString::Format(wxT("%.2f"), extract_val("VXMAX",chemin_fic)));
+    editVymax->SetValue(wxString::Format(wxT("%.2f"),extract_val("VYMAX",chemin_fic)));
+    editNAcondLim->SetValue(wxString::Format(wxT("%.2f"),  extract_val("NA_COND_LIM",  chemin_fic)));
+
+    wxArrayString  listeScanPattern(6);
+    listeScanPattern=ComboBox_Scan->GetStrings();//récupérer les label de pattern dans un tableau
+   // wxString defaultPattern=extract_string("SCAN_PATTERN",chemin_fic);//lire le pattern du fichier de config
+    ComboBox_Scan->SetSelection(listeScanPattern.Index(extract_string("SCAN_PATTERN",chemin_fic,"ROSACE")));//
+
+    editNXMAX->SetValue(wxString::Format(wxT("%i"),stoi(extract_string("NXMAX",chemin_fic,"0"))));
+    editCX->SetValue(wxString::Format(wxT("%i"),stoi(extract_string("CIRCLE_CX",chemin_fic,"0"))));
+    editCY->SetValue(wxString::Format(wxT("%i"), stoi(extract_string("CIRCLE_CY",chemin_fic,"0"))));
+    editnbCirclesAnnular->SetValue(wxString::Format( wxT("%i"), stoi(extract_string("NB_CIRCLES_ANNULAR",chemin_fic,"8")) ));
+
+    ///-------------MAJ paramètres recon----------------------------------
+    m_born->SetValue(stof(extract_string("BORN",chemin_recon,"0")));
+    m_volkov->SetValue(stof(extract_string("VOLKOV",chemin_recon,"1")));
+    m_Deroul->SetValue(stof(extract_string("DEROUL",chemin_recon,"1")));
+    m_Aber->SetValue(stof(extract_string("C_ABER",chemin_recon)));
+    m_AmpliRef->SetValue(stof(extract_string("AMPLI_REF",chemin_recon,"1")));
+    editDimFinal->SetValue(wxString::Format(wxT("%i"),stoi(extract_string("DIM_FINAL",chemin_recon,"512"))));
+    m_export_OTF->SetValue(stof(extract_string("EXPORT_OTF",chemin_recon)));
+    editDnMin->SetValue(wxString::Format(wxT("%.2f"), extract_val("DELTA_NMIN",chemin_recon)));
+    editDnMax->SetValue(wxString::Format(wxT("%.2f"),extract_val("DELTA_NMAX",chemin_recon)));
+    editKappaMin->SetValue(wxString::Format(wxT("%.2f"),extract_val("KAPPA_MIN", chemin_recon)));
+    editKappaMax->SetValue(wxString::Format(wxT("%.2f"), extract_val("KAPPA_MAX",chemin_recon)));
+    editIteration->SetValue(wxString::Format(wxT("%.i"),(int)extract_val("NB_ITER_GPS",chemin_recon)));
+    sav_all();
+}
+
+
+//extract a string from the file whose path is  "chemin_fic",
 string Gui_TomoFrame::extract_string(string token,  string chemin_fic)
 {
     ifstream fichier(chemin_fic.c_str(), ios::in);  // on ouvre en lecture
@@ -800,15 +854,21 @@ string Gui_TomoFrame::extract_string(string token,  string chemin_fic)
             if(motcle==token)
             {
                 valeurMot=ligne.substr(pos_separ+long_separ,ligne.size()-(motcle.size()+long_separ));
+                ///remove spaces possibly inserted at the beginning (position=0) of the keyword.
+                pos_separ=valeurMot.find(separ);//find space inside the keyword
+                while(valeurMot[pos_separ]==separ){//is the current character equal to "space" ? then remove it
+                    valeurMot=valeurMot.substr(pos_separ+1,valeurMot.length()-1);//on raccourci la chaine de caractère de l'espace
+                    pos_separ++;
+                }
                 cout<<motcle<<"="<<valeurMot<<endl;
+
                 valeur=valeurMot.c_str();
             }
         }
     }
-    if(valeur.empty())
-    {
-        cout<<"mot_clé "<<token<<" inexistant dans le fichier "<<chemin_fic<<endl;
-//    valeur=0;
+    if(valeur.empty())    {
+        cout<<"mot_clé truc"<<token<<" inexistant dans le fichier "<<chemin_fic<<endl;
+    //valeur="";
     }
     fichier.close();
     return valeur;
@@ -817,9 +877,10 @@ string Gui_TomoFrame::extract_string(string token,  string chemin_fic)
 
 
 
-
+//extract a string from the file whose path is  "chemin_fic", but in addition can specify a default value
 string Gui_TomoFrame::extract_string(string token,  string chemin_fic,string defaut)
 {
+    cout<<"coucou"<<endl;
     ifstream fichier(chemin_fic.c_str(), ios::in);  // on ouvre en lecture
     string ligne,motcle,valeurMot,separ=" ";
     string valeur;
@@ -836,19 +897,28 @@ string Gui_TomoFrame::extract_string(string token,  string chemin_fic,string def
     }
     else
         cerr << "Impossible d'ouvrir le fichier : "<< chemin_fic<< endl;
-
+    ///ligne trouvée, on passe au mot clé
     int nb_tok=tokens.size();
     for(int cpt=0; cpt<nb_tok; cpt++)
     {
         ligne=tokens[cpt];
         if(ligne!="")
         {
-            int pos_separ=ligne.find(separ);
-            int long_separ=separ.length();
-            motcle = ligne.substr(0, pos_separ);//sbstr(pos_debut,pos_fin)
+            int pos_separ=ligne.find(separ);//find cherche la string "separ" et retourne sa position
+            int long_separ=separ.length();//retourne la longueur du séparateur, ici 1 car séparateur=espace
+            //retourne le mot-clé
+            motcle = ligne.substr(0, pos_separ);//sbstr(pos_debut,longuieur) : copie une string depuis 'pos_debut' sur une longueur
+
             if(motcle==token)
             {
                 valeurMot=ligne.substr(pos_separ+long_separ,ligne.size()-(motcle.size()+long_separ));
+
+                ///remove spaces possibly inserted by mistake at the beginning (position=0) of the keyword.
+                pos_separ=valeurMot.find(separ);//find space inside the keyword
+                while(valeurMot[pos_separ]==separ){//is the current character equal to "space" ? then remove it
+                    valeurMot=valeurMot.substr(pos_separ+1,valeurMot.length()-1);//on raccourci la chaine de caractère de l'espace
+                    pos_separ++;
+                }
                 cout<<motcle<<"="<<valeurMot<<endl;
                 valeur=valeurMot.c_str();
             }
@@ -856,7 +926,7 @@ string Gui_TomoFrame::extract_string(string token,  string chemin_fic,string def
     }
     if(valeur.empty())
     {
-        cout<<"mot_clé "<<token<<" inexistant dans le fichier "<<chemin_fic<<endl;
+        cout<<"mot_clé  bidule "<<token<<" inexistant dans le fichier "<<chemin_fic<<endl;
         cout<<"Utlisation valeur par défaut: "<<defaut<<endl;
         valeur=defaut;
     }
@@ -1073,7 +1143,7 @@ void Gui_TomoFrame::OnComboScan(wxCommandEvent &even)
 {
     modif_tab_val("SCAN_PATTERN", ComboBox_Scan->GetString(ComboBox_Scan->GetSelection()).ToStdString(),tab_val_manip);
     cout<<"Schéma: "<<ComboBox_Scan->GetString(ComboBox_Scan->GetSelection())<<endl;
-        if(ComboBox_Scan->GetString(ComboBox_Scan->GetSelection())==wxT("ANNULAR")){
+    if(ComboBox_Scan->GetString(ComboBox_Scan->GetSelection())==wxT("ANNULAR")){
 
     cout<<"schema ANNULAR!"<<endl;
     editnbCirclesAnnular->Enable(true);}

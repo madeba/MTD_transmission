@@ -212,11 +212,12 @@ int main(int argc, char *argv[])
     int const nbHolo=MAX_IMAGES;
     vector<float2D> Vout_table(nbHolo);
     if(scan_pattern_str=="ROSACE") scan_fleur(rho, nbHolo, Vout_table);
-    if(scan_pattern_str=="FERMAT") scan_fermat(rho, nbHolo, Vout_table);
+    if(scan_pattern_str=="FERMAT") scan_fermat(rho, nbHolo, Vout_table,dimHolo);
     if(scan_pattern_str=="ARCHIMEDE") scan_spiralOS(rho, nbHolo, Vout_table,4);
     if(scan_pattern_str=="ANNULAR") scan_annular(rho, NbCirclesAnnular, nbHolo, Vout_table);
     if(scan_pattern_str=="UNIFORM3D") scan_uniform3D(rho, nbHolo, Vout_table);
     if(scan_pattern_str=="RANDOM_POLAR") scan_random_polar3D(rho, nbHolo, Vout_table,dimHolo);
+    if(scan_pattern_str=="STAR") scan_etoile(rho, nbHolo,  3, Vout_table);
     //-------------------------
 ///-----
     cout << "PvStreamSample:" << endl << endl;
@@ -327,7 +328,10 @@ int main(int argc, char *argv[])
 
     ljDAC_flower.set_A_output(0.0);
     ljDAC_flower.set_B_output(0.0);
-
+  ofstream file;
+  file.open ("codebind.txt");
+  file << "Please writr this text to a file.\n this text is written using C++\n";
+  file.close();
     return 0;
 }
 
@@ -496,9 +500,9 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
     // synchro instrumentale:
     size_t cpt_img=0;
 
-    boost::posix_time::milliseconds delay_jack( 1 ); //1.2 + 1.2 +1 );
-    boost::posix_time::milliseconds delay_tilt( 1);//attention bug : boost 1.67 n'accepte pas de flottant !
-    boost::posix_time::milliseconds delay_cam( 5 );
+    boost::posix_time::milliseconds delay_jack( 0 ); //1.2 + 1.2 +1 );
+    boost::posix_time::milliseconds delay_tilt( 0);//attention bug : boost 1.67 n'accepte pas de flottant !
+    boost::posix_time::milliseconds delay_cam( 0 );
 
     vChronos vTime("prise d'images--");
     vTime.clear();

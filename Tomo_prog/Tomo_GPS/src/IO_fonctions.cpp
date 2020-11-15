@@ -454,6 +454,9 @@ bool is_readable( const std::string & file )
     std::ifstream fichier( file.c_str() );
     return !fichier.fail();
 }
+
+
+///read tiff3D
 vector<float> readTiff3D(string chemin_img)
 {
 
@@ -462,17 +465,37 @@ vector<float> readTiff3D(string chemin_img)
     cerr << "Failed to open image "<<chemin_img << endl;
     exit(1);
   }
+  else{
+    cout<<"Chargement "<<chemin_img<<endl;
+  }
   uint32 width, height;
+  float resolution;
+  uint16 resunit;
   uint16 pagenumber[2],*nbarg=NULL;
 
   if (TIFFGetField(tiff,TIFFTAG_IMAGEWIDTH,&width) != 1) {
     cerr << "Failed to read width" << endl;
     exit(1);
   }
+  cout<<"image width="<<width<<endl;
+
   if (TIFFGetField(tiff,TIFFTAG_IMAGELENGTH, &height) != 1) {
     cerr << "Failed to read height" << endl;
     exit(1);
   }
+    cout<<"image height="<<width<<endl;
+
+    if (TIFFGetField(tiff,TIFFTAG_XRESOLUTION, &resolution) != 1) {
+    cerr << "Failed to read resolution" << endl;
+    exit(1);
+  }
+  cout<<"image taille pixel X="<<0.01/resolution<<endl;
+
+   if (TIFFGetField(tiff,TIFFTAG_RESOLUTIONUNIT, &resunit) != 1) {
+    cerr << "Failed to read resolution" << endl;
+    exit(1);
+  }
+  cout<<"Resolution unit (1 NONE, 2 INCH, 3 CM)="<<resunit<<endl;
 
   TIFFGetField(tiff,TIFFTAG_PAGENUMBER, &nbarg,&pagenumber);
   cout<<"pagenumber="<<pagenumber[0]<<endl;

@@ -36,14 +36,15 @@ FFTW_init::FFTW_init(Point3D dim,size_t nbThreads, bool b_inPlace)
     p_backward_OUT=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, out,FFTW_BACKWARD, FFTW_ESTIMATE );
     }
     else{
-    int isWisdomOK=import_wisdom("/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_config/Wisdom/wisdom3D_512_c2c_double_backward_EXHAUSTIVE_inplace_4Thrd_i5-3550.txt");
-   // int isWisdomOK=import_wisdom("wisdom3D_512_c2c_double_backward_EXHAUSTIVE_inplace_4Thrd_i5-3550.txt");
+  //  int isWisdomOK=import_wisdom("/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_config/Wisdom/wisdom3D_512_c2c_double_backward_EXHAUSTIVE_inplace_4Thrd_i5-3550.txt");
+   int isWisdomOK=import_wisdom("wisdom3d_512_c2c_dbl_back_EXHAUSTIVE_inplace_6Thrd_Ryzen3600x.txt");
     cout<<"isWisdomOk="<<isWisdomOK<<endl;
+    cout<<"chemin wisdom="<<"wisdom3d_512_c2c_dbl_back_EXHAUSTIVE_inplace_6Thrd_Ryzen3600x.txt"<<endl;
     in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
     out=nullptr;
     p_forward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_FORWARD, FFTW_MEASURE);///problème, wisdom calculée en backward !!->MEASURE! possiblité d'avoir 2 wisdom ?
-    p_backward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_BACKWARD, FFTW_MEASURE);
-    //p_backward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_BACKWARD, FFTW_WISDOM_ONLY);
+    //p_backward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_BACKWARD, FFTW_MEASURE);
+    p_backward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_BACKWARD, FFTW_WISDOM_ONLY);
    // p_forward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_FORWARD, FFTW_ESTIMATE);///problème, wisdom calculée en backward !!
    // p_backward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_BACKWARD, FFTW_ESTIMATE);
     }

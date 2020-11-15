@@ -31,7 +31,7 @@ string extract_string(std::string token,  std::string chemin_fic)
     ifstream fichier(chemin_fic.c_str(), ios::in);  // on ouvre en lecture
     string ligne,motcle,valeurMot,separ=" ";
     string valeur;
-    vector<std::string> tokens;
+    vector<std::string> tokens;//tableau de lignes contenant les tokens
 
     if(fichier)  // si l'ouverture a fonctionné
     {
@@ -48,7 +48,7 @@ string extract_string(std::string token,  std::string chemin_fic)
     for(int cpt=0;cpt<nb_tok;cpt++){
         ligne=tokens[cpt];
         if(ligne!=""){
-            int pos_separ=ligne.find(separ);
+            int pos_separ=ligne.find(separ);//trouver la positon du séparateur
             int long_separ=separ.length();
             motcle = ligne.substr(0, pos_separ);//sbstr(pos_debut,pos_fin)
             if(motcle==token){

@@ -45,9 +45,6 @@
 		<Unit filename="Gui_TomoMain.cpp" />
 		<Unit filename="Gui_TomoMain.h" />
 		<Extensions>
-			<envvars />
-			<code_completion />
-			<debugger />
 			<lib_finder disable_auto="1" />
 		</Extensions>
 	</Project>

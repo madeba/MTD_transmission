@@ -124,6 +124,8 @@ Sur un Pc de reconstruction uniquement, ce fichier \code{config\_manip.txt} ne d
 Le fichier \code{gui\_tomo.conf} est toujours sauvegardé dans \code{\$HOME/.config/} quelle que soit la machine. 
 \end{enumerate}
 
+\section{Gestion des modifications}
+Les modifications sont enregistrés dans les fichiers correspondants, mais aussi en mémoire dans les tableaux  \code{tab\_val\_gui}, \code{tab\_val\_recon}, \code{tab\_val\_manip} grâce à la méthode \code{modif\_tab\_val}
 
-
+Les paramètres wxWidget sont modifiés grâce à la méthode \code{SetValue()} qui affiche instantanément les changements.
 \end{document}
