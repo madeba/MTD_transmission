@@ -188,7 +188,7 @@ def Calc_TF_Holo(TF_vol3D, TF_Holo, fd_m, sdz_m, dx_m, dy_m, Nmax, k_inc, R_Ewal
     ctePot2UBorn = -1j*np.pi/k0
     cteNormalisation = -1/(2*np.pi)
 
-    fobj_m = (fd_m-np.round(fi[:, np.newaxis])/2).astype(int)
+    fobj_m = (fd_m-np.round(fi[:, np.newaxis])).astype(int)
     
     TF_Holo[dx_m+Nmax,dy_m+Nmax] = (cteInd2Pot * ctePot2UBorn * cteNormalisation)/sdz_m * TF_vol3D[fobj_m[0,:], fobj_m[1,:], fobj_m[2,:]]
     return TF_Holo

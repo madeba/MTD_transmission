@@ -98,7 +98,7 @@ def Calc_fd(Nmax, REwald):
     fdm = np.array([dym, dxm, dzm])
     return fdm, sdzm, dxm, dym
 
-def decal_TF_holo(TF_holo, decal, P_holo):
+def decal_TF_holo(TF_holo, decal, P_holo, roll=False):
     """
     Shifting the holograms according to illumination frequency
 
@@ -110,6 +110,8 @@ def decal_TF_holo(TF_holo, decal, P_holo):
         Amount of shift in pixels.
     P_holo : int
         Lateral dimension of the holograms.
+    roll : bool
+        Using np.roll to perform registration. Default is False
 
     Returns
     -------
@@ -124,10 +126,14 @@ def decal_TF_holo(TF_holo, decal, P_holo):
         decal[0] += P_holo
     if decal[1] < 0:
         decal[1] += P_holo
-    TF_holo_shift[decal[0]:, decal[1]:] = TF_holo[0:P_holo-decal[0], 0:P_holo-decal[1]]
-    TF_holo_shift[:decal[0], :decal[1]] = TF_holo[P_holo-decal[0]:, P_holo-decal[1]:]
-    TF_holo_shift[decal[0]:, :decal[1]] = TF_holo[0:P_holo-decal[0], P_holo-decal[1]:]
-    TF_holo_shift[:decal[0], decal[1]:] = TF_holo[P_holo-decal[0]:, 0:P_holo-decal[1]]
+    if roll is True:
+            TF_holo_shift = np.roll(TF_holo, decal[1], axis=1)
+            TF_holo_shift = np.roll(TF_holo_shift, decal[0], axis=0)
+    else:
+        TF_holo_shift[decal[0]:, decal[1]:] = TF_holo[0:P_holo-decal[0], 0:P_holo-decal[1]]
+        TF_holo_shift[:decal[0], :decal[1]] = TF_holo[P_holo-decal[0]:, P_holo-decal[1]:]
+        TF_holo_shift[decal[0]:, :decal[1]] = TF_holo[0:P_holo-decal[0], P_holo-decal[1]:]
+        TF_holo_shift[:decal[0], decal[1]:] = TF_holo[P_holo-decal[0]:, 0:P_holo-decal[1]]
     return TF_holo_shift
 
 def calc_tf_calotte(TF_vol3D, mask_calotte, TF_holo, fd_m, sdz_m, dx_m, dy_m, Nmax, k_inc, R_Ewald, lambda_v, n0):
@@ -243,7 +249,7 @@ def retropropagation(holo_pile, nb_holo, SpecCoord, Nmax, R_Ewald, lambda_v, n0,
         k_inc = np.array([SpecCoord[1, cpt], SpecCoord[0, cpt]])
         TF_holo_shift_r = fftshift(fftn(TukeyWindow*holo_pile[:, :, cpt]))/(Delta_f_Uborn**2*Nmax**2)
         decal = np.array([k_inc[1], k_inc[0]]).astype(int)
-        TF_holo_r = decal_TF_holo(TF_holo_shift_r, decal, holo_pile.shape[0])
+        TF_holo_r = decal_TF_holo(TF_holo_shift_r, decal, holo_pile.shape[0], roll=True)
         TF_vol, mask_sum = calc_tf_calotte(TF_vol, mask_sum, TF_holo_r, fd_m, sdz_m,
                                            dx_m, dy_m, Nmax, k_inc, R_Ewald, lambda_v, n0)
     TF_vol[mask_sum != 0] = TF_vol[mask_sum != 0] / mask_sum[mask_sum != 0]

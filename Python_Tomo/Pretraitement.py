@@ -17,7 +17,7 @@ import manip
 
 # Data folders and config files
 DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/ACQUIS_pollen_PN/"
-DATA = True # True for data preprocessing, False for white image processing
+DATA = False # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 if DATA is True:
     DOSSIERDATA = M.dossier_data
