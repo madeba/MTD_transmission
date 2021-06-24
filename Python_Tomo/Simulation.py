@@ -41,7 +41,7 @@ else:
     plt.show()
     
     # Gerchberg parameters
-    nbiter = 100    
+    nbiter = 10    
     nmin = 1.518
     nmax = 1.55
     kappamin = 0

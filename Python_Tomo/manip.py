@@ -46,7 +46,7 @@ class Manip:
         self.F_OBJ = float(ft.readvalue(self.fichier_config, 'F_OBJ')) # Microscope objective focal length
         self.PIX = float(ft.readvalue(self.fichier_config, 'TPCAM')) # Physical pixel pitch
         self.RAPFOC = float(ft.readvalue(self.fichier_config, 'RF')) # focal length ratio of the resampling lens dublet
-        self.CHEMINMASQUE = f"{self.dossier_data}Image_maask.pgm"
+        self.CHEMINMASQUE = f"{self.dossier_data}Image_mask.pgm"
         self.CENTREX = int(ft.readvalue(self.fichier_config, 'CIRCLE_CX')) # Pupil center in Fourier space
         self.CENTREY = int(ft.readvalue(self.fichier_config, 'CIRCLE_CY'))
         self.NB_HOLOTOT = int(ft.readvalue(self.fichier_config, 'NB_HOLO'))
