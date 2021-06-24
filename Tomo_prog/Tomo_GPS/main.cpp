@@ -30,7 +30,7 @@ int main()
    vector<float> indice_blanc(readTiff3D(chemin_blanc_indice.c_str()));//init complex refractive index
    for(size_t cpt=0;cpt<indice.size();cpt++) indice[cpt]=indice[cpt]-indice_blanc[cpt];
    }
-   else       cout<<"Pas de  blanc pour l'indice : ";
+   else       cout<<"Pas de  blanc pour l'indice. ";
   }
 
 
@@ -98,8 +98,8 @@ int main()
      std::cout <<"Temps pour 1 iter= "<< elapsed_part2.count()/(pow(10,9)) << '\n';
   }
 cout<<"m1.tailleTheopixelTomo"<<m1.tailleTheoPixelTomo<<endl;
-SAV3D_Tiff(SpectreIndiceCplx_estim,"Re",m1.chemin_result+"spectre_RE_GPS.tif",m1.tailleTheoPixelTomo*pow(10,-6));
-SAV3D_Tiff(indiceCplx,"Re",m1.chemin_result+"indiceGPS.tif",m1.tailleTheoPixelTomo*pow(10,-6));
-SAV3D_Tiff(indiceCplx,"Im",m1.chemin_result+"absorptionGPS.tif",m1.tailleTheoPixelTomo*pow(10,-6));
+SAV3D_Tiff(SpectreIndiceCplx_estim,"Re",m1.chemin_result+"spectre_RE_GPS.tif",m1.tailleTheoPixelTomo*pow(10,-5));
+SAV3D_Tiff(indiceCplx,"Re",m1.chemin_result+"indiceGPS.tif",m1.tailleTheoPixelTomo*pow(10,-5));
+SAV3D_Tiff(indiceCplx,"Im",m1.chemin_result+"absorptionGPS.tif",m1.tailleTheoPixelTomo*pow(10,-5));
 
 }

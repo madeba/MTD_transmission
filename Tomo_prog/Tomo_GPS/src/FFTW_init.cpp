@@ -29,7 +29,7 @@ FFTW_init::FFTW_init(Point3D dim,size_t nbThreads, bool b_inPlace)
 
     fftwThreadInit=fftw_init_threads();
     fftw_plan_with_nthreads(m_Nthread);
-    if(b_inPlace==0){
+    if(b_inPlace==0){//si pas inpolace, alors estimate
     in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
     out=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
     p_forward_OUT=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, out,FFTW_FORWARD, FFTW_ESTIMATE);
@@ -37,6 +37,7 @@ FFTW_init::FFTW_init(Point3D dim,size_t nbThreads, bool b_inPlace)
     }
     else{
   //  int isWisdomOK=import_wisdom("/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_config/Wisdom/wisdom3D_512_c2c_double_backward_EXHAUSTIVE_inplace_4Thrd_i5-3550.txt");
+   cout<<"### Attention : wisdom calculée en 512^3###"<<endl;
    int isWisdomOK=import_wisdom("wisdom3d_512_c2c_dbl_back_EXHAUSTIVE_inplace_6Thrd_Ryzen3600x.txt");
     cout<<"isWisdomOk="<<isWisdomOK<<endl;
     cout<<"chemin wisdom="<<"wisdom3d_512_c2c_dbl_back_EXHAUSTIVE_inplace_6Thrd_Ryzen3600x.txt"<<endl;

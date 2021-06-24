@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['pixel',['PIXEL',['../struct_p_i_x_e_l.html',1,'']]],
-  ['point2d',['Point2D',['../class_point2_d.html',1,'']]]
+  ['var2d_6',['Var2D',['../struct_var2_d.html',1,'']]],
+  ['var3d_7',['Var3D',['../struct_var3_d.html',1,'']]]
 ];

@@ -186,9 +186,6 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     notebook->AddPage(panel_tab1,wxT("Général"));
     panel_tab1->SetBackgroundColour(*wxLIGHT_GREY);
 
-
-
-
     ///##########TAB 1 ################################################
     wxBoxSizer *sizer_horizontal = new wxBoxSizer(wxHORIZONTAL);
     sizer_horizontal->SetMinSize(270, 100);
@@ -198,54 +195,48 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     wxPanel *panel_gauche = new wxPanel(panel_tab1,wxID_ANY);
 
     panel_gauche->SetBackgroundColour(wxColor(240, 240, 240));
+
     //le panneau gauche sera géré par le sizer horizontal global
     sizer_horizontal->Add(panel_gauche, 1, wxALL | wxEXPAND, 2);
     //->Add(parent, etirable horizontablement,bordure=2 pixels )
     //sans l'option d'étirement, la pnneau gauche se limite à la partie affichée
     ///sizer vertical partie gauche
-    wxBoxSizer *sizer_vertical0 = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer *sizer_vertical0 = new wxBoxSizer(wxVERTICAL);//les widgets seront organisés verticalement dans ce sizer
     //  sizer_horizontal->Add(sizer_vertical0, 1, wxALL | wxEXPAND, 10);
     //wxPanel *zone10 = new wxPanel(panel_gauche,wxID_ANY, wxPoint(1,1),wxSize(200,40),wxSIMPLE_BORDER );
     wxPanel *zone10 = new wxPanel(panel_gauche,wxID_ANY );
     //wxPanel *zone10 = new wxPanel(panel_gauche);
     sizer_vertical0->Add(zone10, 1, wxALL | wxEXPAND, 1);
     zone10->SetBackgroundColour(*wxLIGHT_GREY);
+    zone10->SetSize(180,10);//ne fonctionne pas en hauteur?
     ///Titre
     // titre_Acquis=new wxStaticText(zone10,0,"Acquisition",wxPoint(2,2),wxSize(100,40));
     titre_Acquis=new wxStaticText(zone10,0,"Acquisition",wxPoint(2,2),wxSize(100,40));
     titre_Acquis->SetFont( wxFont(12, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL) );
+    ///--------------------NB HOLO+N0
+        wxPanel *zone11 = new wxPanel(panel_gauche);
+        // sizer->Add(leftPanel, true, wxEXPAND | wxTOP | wxBOTTOM | wxLEFT, 20);
+        sizer_vertical0->Add(zone11, 0, wxALL | wxEXPAND | wxALIGN_CENTER, 1);// Ajout de cette zone au sizer vertical    //
+        zone11->SetBackgroundColour(*wxLIGHT_GREY);//fond gris clair
+        zone11->SetSize(180,40);
+        ///NB_HOLO-----
+            textNbHolo=new wxStaticText(zone11,1,"Nombre d'hologrammes  : ",wxPoint(2,2),wxSize(98,50));
+            //édition du champ
+            editNbHolo=new wxTextCtrl(zone11,1,"",wxPoint(120,4),wxSize(50,25));
+            editNbHolo->SetToolTip(wxT("Nombre d'hologrammes à acquérir"));
+            //récupérer la valeur NB_HOLO dans fichier de config, convertir en string, puis l'afficher dans la case
+            int Nb_Holo=stof(extract_string("NB_HOLO",chemin_config_manip));//stof=string to float
+            wxString string_NbHolo = wxString::Format(wxT("%i"),Nb_Holo);
+            editNbHolo->SetValue(string_NbHolo);
 
-    // Set up the sizer for the panel
-    /*  wxBoxSizer* panelSizer = new wxBoxSizer(wxHORIZONTAL);
-      panelSizer->Add(notebook, 1, wxEXPAND);
-      panel1->SetSizer(panelSizer);
-      panel1->SetBackgroundColour(wxColor(0, 0, 255));
-      // Set up the sizer for the frame and resize the frame
-      // according to its contents
-      wxBoxSizer* topSizer = new wxBoxSizer(wxHORIZONTAL);
-      topSizer->SetMinSize(250, 100);
-      topSizer->Add(panel1, 1, wxEXPAND);
-      SetSizerAndFit(topSizer);*/
-    // SPACER
-    //  sizer_vertical0->Add(0, 0, 1, wxEXPAND, 5);
-    ///--------------------NB HOLO
-    wxPanel *zone11 = new wxPanel(panel_gauche);
-    // sizer->Add(leftPanel, true, wxEXPAND | wxTOP | wxBOTTOM | wxLEFT, 20);
-    sizer_vertical0->Add(zone11, 1, wxALL | wxEXPAND | wxALIGN_BOTTOM, 1);// Ajout de cette zone au sizer vertical    //
-    zone11->SetBackgroundColour(*wxLIGHT_GREY);//fond gris clair
-    zone11->SetSize(180,50);
-    textNbHolo=new wxStaticText(zone11,1,"Nombre d'hologrammes  : ",wxPoint(2,2),wxSize(98,50));
+        ///indice milieu montage
+            textN0=new wxStaticText(zone11,1,"Indice n0 ",wxPoint(2,40),wxSize(98,50));
+            editN0=new wxTextCtrl(zone11,1,"",wxPoint(120,40),wxSize(52,25));
+            float edit_N0=stof(extract_string("N0",chemin_config_manip));//stof=string to float
+            wxString string_N0 = wxString::Format(wxT("%.3f"),edit_N0); //%.3f=3chiffres apres virgule
+            editN0->SetValue(string_N0);
+            editN0->SetToolTip(wxT("Indice milieu de montage"));
 
-    //édition du champ
-    editNbHolo=new wxTextCtrl(zone11,1,"",wxPoint(120,4),wxSize(50,25));
-    editNbHolo->SetToolTip(wxT("Nombre d'hologrammes à acquérir"));
-
-    //récupérer la valeur NB_HOLO dans fichier de config, convertir en string, puis l'afficher dans la case
-
-    int Nb_Holo=stof(extract_string("NB_HOLO",chemin_config_manip));//stof=string to float
-
-    wxString string_NbHolo = wxString::Format(wxT("%i"),Nb_Holo);
-    editNbHolo->SetValue(string_NbHolo);
     ///------------BALAYAGE
     ///--------------------------SCHEMA BALAYAGE
         wxPanel *zone11b = new wxPanel(panel_gauche);
@@ -271,17 +262,15 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
         wxString defaultPattern=extract_string("SCAN_PATTERN",chemin_config_manip,"ROSACE");//lire le pattern du fichier de config
         ComboBox_Scan->SetSelection(listeScanPattern.Index(defaultPattern));//par defaut, mettre le pattern du fichier de config
 
-
             //édition du champ cercles concentriques
+        int Nb_circles_annular=stof(  extract_string("NB_CIRCLES_ANNULAR", chemin_config_manip, "8")  );//stof=string to float
+        editnbCirclesAnnular=new wxTextCtrl(zone11b,1,"",wxPoint(120,40),wxSize(36,24));
+        editnbCirclesAnnular->SetToolTip(wxT("Nombre de cercles concentriques"));
+        if(ComboBox_Scan->GetString(ComboBox_Scan->GetSelection())==wxT("ANNULAR")) editnbCirclesAnnular->Enable(true);
+        else    editnbCirclesAnnular->Enable(false);
 
-    int Nb_circles_annular=stof(  extract_string("NB_CIRCLES_ANNULAR", chemin_config_manip, "8")  );//stof=string to float
-    editnbCirclesAnnular=new wxTextCtrl(zone11b,1,"",wxPoint(120,40),wxSize(36,24));
-    editnbCirclesAnnular->SetToolTip(wxT("Nombre de cercles concentriques"));
-    if(ComboBox_Scan->GetString(ComboBox_Scan->GetSelection())==wxT("ANNULAR")) editnbCirclesAnnular->Enable(true);
-    else    editnbCirclesAnnular->Enable(false);
-
-    wxString string_NbCirclesAnnular = wxString::Format(wxT("%i"),Nb_circles_annular);
-    editnbCirclesAnnular->SetValue(string_NbCirclesAnnular);
+        wxString string_NbCirclesAnnular = wxString::Format(wxT("%i"),Nb_circles_annular);
+        editnbCirclesAnnular->SetValue(string_NbCirclesAnnular);
 
 
     ///--------------------INTERVALLE de BALAYAGE------------------
@@ -292,41 +281,40 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     titre_Interval_Balayage=new wxStaticText(zone12,-1," Intervalle de Balayage",wxPoint(0,0),wxSize(100,40));
     titre_Interval_Balayage->SetFont(wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD) );
 
-    textVxmin=new wxStaticText(zone12,-1,"Vxm ",wxPoint(10,30),wxSize(30,40));
-    editVxmin=new wxTextCtrl(zone12,-1,"",wxPoint(50,28),wxSize(50,25));
-    editVxmin->SetToolTip(wxT("tension mini en volt selon l'axe x"));
-    float Vxmin=extract_val("VXMIN",chemin_config_manip);
-    wxString string_Vxmin = wxString::Format(wxT("%.2f"),Vxmin);
-    editVxmin->SetValue(string_Vxmin);
+        textVxmin=new wxStaticText(zone12,-1,"Vxm ",wxPoint(10,30),wxSize(30,40));
+        editVxmin=new wxTextCtrl(zone12,-1,"",wxPoint(50,28),wxSize(50,25));
+        editVxmin->SetToolTip(wxT("tension mini en volt selon l'axe x"));
+        float Vxmin=extract_val("VXMIN",chemin_config_manip);
+        wxString string_Vxmin = wxString::Format(wxT("%.2f"),Vxmin);
+        editVxmin->SetValue(string_Vxmin);
 
-    textVymin=new wxStaticText(zone12,-1,"Vym ",wxPoint(110,30),wxSize(30,40));
-    editVymin=new wxTextCtrl(zone12,-1,"",wxPoint(140,28),wxSize(50,25));
-    editVymin->SetToolTip(wxT("tension mini en volt selon l'axe y"));
-    float Vymin=extract_val("VYMIN",chemin_config_manip);
-    wxString string_Vymin = wxString::Format(wxT("%.2f"),Vymin);
-    editVymin->SetValue(string_Vymin);
+        textVymin=new wxStaticText(zone12,-1,"Vym ",wxPoint(110,30),wxSize(30,40));
+        editVymin=new wxTextCtrl(zone12,-1,"",wxPoint(140,28),wxSize(50,25));
+        editVymin->SetToolTip(wxT("tension mini en volt selon l'axe y"));
+        float Vymin=extract_val("VYMIN",chemin_config_manip);
+        wxString string_Vymin = wxString::Format(wxT("%.2f"),Vymin);
+        editVymin->SetValue(string_Vymin);
 
-    textVxmax=new wxStaticText(zone12,-1,"VxM ",wxPoint(10,70),wxSize(30,40));
-    editVxmax=new wxTextCtrl(zone12,-1,"",wxPoint(50,68),wxSize(50,25));
-    editVxmax->SetToolTip(wxT("tension maxi en volt selon l'axe x"));
-    float Vxmax=extract_val("VXMAX",chemin_config_manip);
-    wxString string_Vxmax = wxString::Format(wxT("%.2f"),Vxmax);
-    editVxmax->SetValue(string_Vxmax);
+        textVxmax=new wxStaticText(zone12,-1,"VxM ",wxPoint(10,70),wxSize(30,40));
+        editVxmax=new wxTextCtrl(zone12,-1,"",wxPoint(50,68),wxSize(50,25));
+        editVxmax->SetToolTip(wxT("tension maxi en volt selon l'axe x"));
+        float Vxmax=extract_val("VXMAX",chemin_config_manip);
+        wxString string_Vxmax = wxString::Format(wxT("%.2f"),Vxmax);
+        editVxmax->SetValue(string_Vxmax);
 
+        textVymax=new wxStaticText(zone12,-1,"VyM ",wxPoint(110,70),wxSize(30,40));
+        editVymax=new wxTextCtrl(zone12,-1,"",wxPoint(140,68),wxSize(50,25));
+        editVymax->SetToolTip(wxT("tension maxi en volt selon l'axe y"));
+        float Vymax=extract_val("VYMAX",chemin_config_manip);
+        wxString string_Vymax = wxString::Format(wxT("%.2f"),Vymax);
+        editVymax->SetValue(string_Vymax);
 
-    textVymax=new wxStaticText(zone12,-1,"VyM ",wxPoint(110,70),wxSize(30,40));
-    editVymax=new wxTextCtrl(zone12,-1,"",wxPoint(140,68),wxSize(50,25));
-    editVymax->SetToolTip(wxT("tension maxi en volt selon l'axe y"));
-    float Vymax=extract_val("VYMAX",chemin_config_manip);
-    wxString string_Vymax = wxString::Format(wxT("%.2f"),Vymax);
-    editVymax->SetValue(string_Vymax);
-
-    textNAcondLim=new wxStaticText(zone12,-1,"NAlim",wxPoint(10,110),wxSize(50,40));
-    editNAcondLim=new wxTextCtrl(zone12,-1,"",wxPoint(50,110),wxSize(50,25));
-    editNAcondLim->SetToolTip(wxT("coefficient limitant NA balayage, valeur=[0,1]"));
-    float NACondLim=extract_val("NA_COND_LIM",chemin_config_manip);
-    wxString string_LimNACond = wxString::Format(wxT("%.2f"),NACondLim);
-    editNAcondLim->SetValue(string_LimNACond);
+        textNAcondLim=new wxStaticText(zone12,-1,"NAlim",wxPoint(10,110),wxSize(50,40));
+        editNAcondLim=new wxTextCtrl(zone12,-1,"",wxPoint(50,110),wxSize(50,25));
+        editNAcondLim->SetToolTip(wxT("coefficient limitant NA balayage, valeur=[0,1]"));
+        float NACondLim=extract_val("NA_COND_LIM",chemin_config_manip);
+        wxString string_LimNACond = wxString::Format(wxT("%.2f"),NACondLim);
+        editNAcondLim->SetValue(string_LimNACond);
 
     ////-------------------------
     ///--------------------LANCER ACQUISITION------------------
@@ -789,6 +777,7 @@ void Gui_TomoFrame::refreshValue(string chemin_fic, string chemin_recon)
     cout<<"####-- Maj des données avec le fichier : "<<chemin_fic<<" --####"<<endl;
     ///-------------MAJ paramètres manip----------------------------------
     editNbHolo->SetValue(wxString::Format(wxT("%i"),stoi(extract_string("NB_HOLO",chemin_fic,"400"))));
+    editN0->SetValue(wxString::Format(wxT("%i"),stoi(extract_string("N0",chemin_fic))));
     editVymin->SetValue(wxString::Format( wxT("%.2f"),extract_val("VYMIN",chemin_fic) ));
     editVxmin->SetValue(wxString::Format(wxT("%.2f"),extract_val("VXMIN",chemin_fic) ));
     editVxmax->SetValue(wxString::Format(wxT("%.2f"), extract_val("VXMAX",chemin_fic)));
@@ -796,7 +785,7 @@ void Gui_TomoFrame::refreshValue(string chemin_fic, string chemin_recon)
     editNAcondLim->SetValue(wxString::Format(wxT("%.2f"),  extract_val("NA_COND_LIM",  chemin_fic)));
 
     wxArrayString  listeScanPattern(6);
-    listeScanPattern=ComboBox_Scan->GetStrings();//récupérer les label de pattern dans un tableau
+    listeScanPattern=ComboBox_Scan->GetStrings();//récupérer les label de pattern dans un tableau des tring
    // wxString defaultPattern=extract_string("SCAN_PATTERN",chemin_fic);//lire le pattern du fichier de config
     ComboBox_Scan->SetSelection(listeScanPattern.Index(extract_string("SCAN_PATTERN",chemin_fic,"ROSACE")));//
 
@@ -828,7 +817,7 @@ string Gui_TomoFrame::extract_string(string token,  string chemin_fic)
     ifstream fichier(chemin_fic.c_str(), ios::in);  // on ouvre en lecture
     string ligne,motcle,valeurMot,separ=" ";
     string valeur;
-    vector<std::string> tokens;
+    vector<std::string> tokens;//tableau contenant les lignes != token !!
 
     if(fichier)  // si l'ouverture a fonctionné
     {
@@ -842,26 +831,23 @@ string Gui_TomoFrame::extract_string(string token,  string chemin_fic)
     else
         cerr << "Impossible d'ouvrir le fichier : "<< chemin_fic<< endl;
 
-    int nb_tok=tokens.size();
-    for(int cpt=0; cpt<nb_tok; cpt++)
-    {
-        ligne=tokens[cpt];
-        if(ligne!="")
-        {
-            int pos_separ=ligne.find(separ);
+    int nb_tok=tokens.size();//length of thetable
+    for(int cpt=0; cpt<nb_tok; cpt++){//parcourir le tableau
+        ligne=tokens[cpt];//récupérer une ligne
+        if(ligne!=""){//si elle n'est aps vide
+            int pos_separ=ligne.find(separ);//trouver la position du séparateur (délime mot-clé et valeur)
             int long_separ=separ.length();
-            motcle = ligne.substr(0, pos_separ);//sbstr(pos_debut,pos_fin)
-            if(motcle==token)
-            {
+            motcle = ligne.substr(0, pos_separ);//sbstr(pos_debut,pos_fin) : le mot clé est entre la position 0 et la position du séparateur
+            if(motcle==token){
                 valeurMot=ligne.substr(pos_separ+long_separ,ligne.size()-(motcle.size()+long_separ));
                 ///remove spaces possibly inserted at the beginning (position=0) of the keyword.
                 pos_separ=valeurMot.find(separ);//find space inside the keyword
+               // char current_character=valeurMot[pos_separ];
                 while(valeurMot[pos_separ]==separ){//is the current character equal to "space" ? then remove it
                     valeurMot=valeurMot.substr(pos_separ+1,valeurMot.length()-1);//on raccourci la chaine de caractère de l'espace
                     pos_separ++;
                 }
                 cout<<motcle<<"="<<valeurMot<<endl;
-
                 valeur=valeurMot.c_str();
             }
         }
@@ -933,7 +919,7 @@ string Gui_TomoFrame::extract_string(string token,  string chemin_fic,string def
     fichier.close();
     return valeur;
 }
-///charger en mémoire le tableau de mot-clés à partir d'un fichier de config.
+///charger en mémoire le tableau de mot-clés à partir d'un fichier de config situé à chemin_fic.
 void Gui_TomoFrame::init_tab_val(string chemin_fic, vector<string> &tab_val)
 {
     //effacer l'ancienne version->il faudrait initialiser dans le corps du programme!
@@ -957,7 +943,7 @@ void Gui_TomoFrame::init_tab_val(string chemin_fic, vector<string> &tab_val)
 }
 
 
-//modifier en mémoire la valeur des token
+//modifier en mémoire la valeur des tokens (mots-clés)
 void Gui_TomoFrame::modif_tab_val(string token,string string_valeur_token,vector<string> &tab_val)
 {
     std::vector<std::string> fichier_new;
@@ -1066,6 +1052,7 @@ void Gui_TomoFrame::sav_all()
     modif_tab_val("CHEMIN_ACQUIS",editDirAcquis->GetValue().ToStdString(),tab_val_gui_conf);
 
     modif_tab_val("CHEMIN_MASK",editFicMask->GetValue().ToStdString(),tab_val_gui_conf);
+    modif_tab_val("N0",editN0->GetValue().ToStdString(),tab_val_manip);
     modif_tab_val("NB_HOLO",editNbHolo->GetValue().ToStdString(),tab_val_manip);
     //tableau de config  reconstruction
     modif_tab_val("FINAL_ANGLE",editNbHolo->GetValue().ToStdString(),tab_val_recon);

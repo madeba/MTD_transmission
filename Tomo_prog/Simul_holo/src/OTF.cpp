@@ -3,11 +3,12 @@
 #include <fstream>
 
 using namespace std;
+///class OTF : use to generate different OTF, corresponding to different scanning pattern : rosace, spiral, Annular etc.
 
 //OTF::OTF(manip m1):manipOTF(m1.dim_final),Obj3D::Obj3D(m1.dim_final)
+//constructor : init 3D OTF.
 OTF::OTF(manip m1):manipOTF(m1.dimROI_Cam),Valeur(pow(m1.dim_final,3))
 {
-
     int nbPix=pow(m1.dim_final,3);
     cout<<"OTf dimfinal="<<m1.dim_final<<endl;
     cout<<"nbpix="<<nbPix<<endl;
@@ -18,15 +19,11 @@ OTF::OTF(manip m1):manipOTF(m1.dimROI_Cam),Valeur(pow(m1.dim_final,3))
     }
 }
 
-
-
-
 OTF::~OTF()
 {
     //dtor
 }
-
-
+///Fill the 3D  OTF values. Need 2D spec values from a 2D scanning.
 void OTF::retropropag(Point2D spec)
 {
     int Nmax=manipOTF.NXMAX;
@@ -96,6 +93,26 @@ void OTF::symetrize_xoy()
     SAV3D_Tiff(Valeur,"Re","/home/mat/tomo_test/otf_sym__Re.tif",1);
 }
 
+
+void OTF::bFermat(int nbHolo)
+{
+    double theta=0,theta_max=nbHolo;//number of holograms = theta max in radian !!
+    double angle_dor=(3-sqrt(5))*M_PI;//nombre d'or
+    double delta_theta=theta_max/nbHolo;
+    int Nmax_cond=manipOTF.NXMAX_cond, dim_Uborn=manipOTF.dim_Uborn;///set-up paramaters
+    vector<double> centre(dim_Uborn*dim_Uborn,0);///save the 2D pattern
+    Point2D spec(0,0,dim_Uborn);
+
+    for(int numHolo=1; numHolo<=nbHolo; numHolo++)      ///1) génération de l'image du pattern dans centre[]
+    {//on démarre à 1 pour distinguer le point zéro du fond égal à 0
+        spec.x=sqrt((theta)/theta_max)*round(dim_Uborn/2)*cos((theta+0.5)*angle_dor);
+        spec.y=sqrt((theta)/theta_max)*round(dim_Uborn/2)*sin((theta+0.5)*angle_dor);
+        centre[spec.coordI().cpt2D()]=1;
+        retropropag(spec);
+        theta=theta+delta_theta;
+    }
+}
+///Annular scanning with multiple circles
 void OTF::bMultiCercleUNI(int nb_cercle)
 {
     int Nmax_cond=manipOTF.NXMAX_cond;
@@ -107,37 +124,39 @@ void OTF::bMultiCercleUNI(int nb_cercle)
     int nbSpec=0;
 
     //calculer la longueur totale des périmètres des cercles
-    for(double R_cercle=0; R_cercle<Nmax_cond+1;R_cercle=R_cercle+Nmax_cond/nb_cercle){
-    cout<<"R_cercle="<<R_cercle<<endl;
-    longTot=longTot+2*M_PI*R_cercle;
+    for(double R_cercle=0; R_cercle<Nmax_cond+1; R_cercle=R_cercle+Nmax_cond/nb_cercle)
+    {
+        cout<<"R_cercle="<<R_cercle<<endl;
+        longTot=longTot+2*M_PI*R_cercle;
     }
     cout<<"longueur totale="<<longTot<<endl;
     cout<<"Nmax_cond="<<Nmax_cond<<endl;
     for(double R_cercle=Nmax_cond-5; R_cercle>0; R_cercle=R_cercle-Nmax_cond/nb_cercle)
     {
-    double perimetre=2*M_PI*R_cercle;
+        double perimetre=2*M_PI*R_cercle;
 
-     int nb_ki=round(manipOTF.nbHolo*perimetre/longTot);
-     cout<<"nb_ki=="<<nb_ki<<endl;
-    for(double theta=0;theta<=2*M_PI;theta=theta+2*M_PI/nb_ki)
-       {
-        spec.x=round(R_cercle*cos(theta));
-        spec.y=round((R_cercle*sin(theta)));
-        if(spec.x*spec.x+spec.y*spec.y<rcarre){
-        centre[spec.coordI().cpt2D()]=1;
-        retropropag(spec);
-        nbSpec++;
+        int nb_ki=round(manipOTF.nbHolo*perimetre/longTot);
+        cout<<"nb_ki=="<<nb_ki<<endl;
+        for(double theta=0; theta<=2*M_PI; theta=theta+2*M_PI/nb_ki)
+        {
+            spec.x=round(R_cercle*cos(theta));
+            spec.y=round((R_cercle*sin(theta)));
+            if(spec.x*spec.x+spec.y*spec.y<rcarre)
+            {
+                centre[spec.coordI().cpt2D()]=1;
+                retropropag(spec);
+                nbSpec++;
+            }
         }
-       }
     }
     spec.x=0,spec.y=0;
     centre[spec.coordI().cpt2D()]=1;
     retropropag(spec);
 
 //SAVCplx(Valeur,"Re","/home/mat/tomo_test/otf_Re.bin",t_float,"wb");
-SAV2(centre,"/home/mat/tomo_test/centre.bin",t_float,"wb");
+    SAV2(centre,"/home/mat/tomo_test/centre.bin",t_float,"wb");
 }
-
+///annular scanning with one circle and one paramter to limit the scanning NA (100=100%=max NA)
 void OTF::bCercle(int pourcentage_NA)
 {
     int Nmax=manipOTF.NXMAX;
@@ -165,7 +184,7 @@ SAV3D_Tiff(Valeur,"Re","/home/mat/tomo_test/otf.tif",1);
 SAV2(centre,"/home/mat/tomo_test/centre.bin",t_float,"wb");
 }
 
-
+///double spiral
 void OTF::bDblSpiral()
 {
     int Nmax=manipOTF.NXMAX;
@@ -201,7 +220,7 @@ int nbSpec=0;
 SAVCplx(Valeur,"Re","/home/mat/tomo_test/otf_Re.bin",t_float,"wb");
 SAV2(centre,"/home/mat/tomo_test/centre.bin",t_float,"wb");
 }
-
+///simple archimede spiral; point are uniformly distributed in curvilinear abscissa
 void OTF::bSpiral(){
     int Nmax=manipOTF.NXMAX;
     int dim_Uborn=manipOTF.dim_Uborn;
@@ -236,7 +255,7 @@ SAVCplx(Valeur,"Re","/home/mat/tomo_test/otf_Re.bin",t_float,"wb");
 SAV2(centre,"/home/mat/tomo_test/centre.bin",t_float,"wb");
 }
 
-
+//spirale uniforme en angle, donc non uniforme en chemin curviligne
 void OTF::bSpiralNU(){
 int Nmax=manipOTF.NXMAX;
     int dim_Uborn=manipOTF.dim_Uborn;
@@ -246,9 +265,9 @@ int Nmax=manipOTF.NXMAX;
  double rcarre=Nmax*Nmax;
  int nbSpec=0;
 
- double L=a/2*(log(theta_m+sqrt(theta_m*theta_m+1))+theta_m*sqrt(theta_m*theta_m+1));
+// double L=a/2*(log(theta_m+sqrt(theta_m*theta_m+1))+theta_m*sqrt(theta_m*theta_m+1));
   //for(double theta=0;theta<rayon/a;theta=theta+Nmax/(a*nbHolo)){
-cout<<"Longueur spirale="<<L<<endl;
+//cout<<"Longueur spirale="<<L<<endl;
 cout<<"nombre de spires="<<Nmax/(2*a*M_PI)<<endl;
   ofstream myfile;
   myfile.open ("spiral_uni_400.txt");

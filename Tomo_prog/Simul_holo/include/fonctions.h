@@ -34,6 +34,10 @@
 #include "OTF.h"
 #include "manip.h"
 //void SAV_Tiff2D2(vector<double> v, std::string chemin, unsigned int dim);
+
+void delete_file(std::string file_path);
+std::vector<double> wrap_phase(std::vector<double> &unwrapped_phase);
+void interp_lin3D(std::vector <std::complex<double>> &volume_interp_3D);
 Point2D maj_fleur(Point2D Vin, float rho, int nbHolo, double *theta, manip m1);
 void calcHolo(Point2D spec,std::vector<std::complex<double>> const& TF_vol3D,std::vector<std::complex<double>> &TF_hologramme,manip const &m1);
 void Conv_Ewald(Point2D spec,std::vector<std::complex<double>> TF_vol3D,std::vector<std::complex<double>> &TF_conv3D, manip m1);
@@ -54,7 +58,9 @@ cv::Mat vector2mat(std::vector<double> &src, unsigned short dim);
 void sobel_filtre2D(cv::Mat src, std::vector<double> &grad, string direction);
 void lire_bin_vector(string chemin, vector<double> &dst, unsigned short int dim,  unsigned int NbPix);
 vector<complex<double> > fftshift2D(vector<complex<double> > &entree);
-void genere_bille(vector <complex<double>> &vol_bille, Point3D centre, size_t rayon,complex<double> indiceObj,complex<double> indice_fond,size_t dim_espace);
+void genere_bille(std::vector <std::complex<double>> &vol_bille, Point3D centre, size_t rayon,std::complex<double> delta_indice,size_t dim_espace);
+
+void genere_barre(std::vector<std::complex<double>> &vol_obj,  Point3D coordMin, Point3D coordMax, std::complex<double> delta_indice, manip m1);
 float extract_val(string token,  string chemin_fic);
 string extract_string(std::string token,  std::string chemin_fic);
 #endif

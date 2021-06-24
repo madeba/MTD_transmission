@@ -1,8 +1,12 @@
 var class_f_f_t_w__init =
 [
     [ "FFTW_init", "class_f_f_t_w__init.html#a707031d03f86812e98777591e5af1ca2", null ],
-    [ "FFTW_init", "class_f_f_t_w__init.html#a406aad878ff7c05218811614615000f5", null ],
-    [ "FFTW_init", "class_f_f_t_w__init.html#a2580fcfe4aaf951a26fd92e627b7dabf", null ],
+    [ "FFTW_init", "class_f_f_t_w__init.html#a14a7fb8d5128d063809b070f1a2b3ee4", null ],
+    [ "FFTW_init", "class_f_f_t_w__init.html#adc245e53431625c4f3b92e87082970db", null ],
+    [ "FFTW_init", "class_f_f_t_w__init.html#ad50563ef20ab2a8e0f3563789fe982fe", null ],
+    [ "FFTW_init", "class_f_f_t_w__init.html#a670b5914f0c96361da282d214cd115e1", null ],
+    [ "FFTW_init", "class_f_f_t_w__init.html#a7be137711fcd3e728e3d45f88ee77723", null ],
+    [ "FFTW_init", "class_f_f_t_w__init.html#a1217cbc3fa5cb6d1d35412630fc6045f", null ],
     [ "~FFTW_init", "class_f_f_t_w__init.html#a341b456c8bfc9a01c60326502e002b0a", null ],
     [ "prepare_wisdom2D", "class_f_f_t_w__init.html#a8891e5bc34efb4efaeefe84e8bb9ca07", null ],
     [ "fftwThreadInit", "class_f_f_t_w__init.html#a5f67d21330fe65cd528d850fff8e6aea", null ],

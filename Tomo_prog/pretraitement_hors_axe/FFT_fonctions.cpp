@@ -17,14 +17,10 @@ size_t xi=0;
                 for(xi=0; xi<decal; xi++)
                 {
                       int pixel=num_ligne+xi;
-                      //  cout<<"pixel="<<pixel<<endl;
-                      // cout<<"result[pixel]="<<result[pixel];
                       int pixel_shift=(yi+decal)*dim+xi+decal;
-                      //  cout<<"pixel_shift="<<pixel_shift<<endl;
                       //1er quadrant vers 4 eme
                       result[pixel_shift].setx(entree[pixel].getx());
                       result[pixel_shift].sety(entree[pixel].gety());
-
                       //4 eme quadrant vers 1er
                       result[pixel].setx(entree[pixel_shift].getx());
                       result[pixel].sety(entree[pixel_shift].gety());
@@ -38,13 +34,13 @@ size_t xi=0;
         }
         return result;
 }
+///calculate 2D Tukey window whose width is controled by alpha (to be applied before fft)
 vector<double> tukey2D(int dimx,int dimy, float alpha)
 {
         int N=dimx;
         vector<double> tuk2D(dimx*dimy);
         vector<double> tuk1Dx(dimx*dimy);
         vector<double> tuk1Dy(dimx*dimy);
-
 
         int borne1=round(alpha*(N-1)/2);
         int borne2=round((N-1)*(1-alpha/2));
@@ -77,19 +73,13 @@ size_t yi=0;
                 for(xi=0; xi<decal; xi++)
                 {
                       int pixel=num_ligne+xi;
-                      //  cout<<"pixel="<<pixel<<endl;
-                      // cout<<"result[pixel]="<<result[pixel];
                       int pixel_shift=(yi+decal)*dim+xi+decal;
-                      //  cout<<"pixel_shift="<<pixel_shift<<endl;
                       //1er quadrant vers 4 eme
                       result[pixel_shift]=entree[pixel];
-
                       //4 eme quadrant vers 1er
                       result[pixel]=entree[pixel_shift];
-
                       //2eme vers 3eme
                       result[(yi+decal)*dim+xi]=entree[pixel+decal];
-
                       //3eme vers 2eme
                       result[pixel+decal]=entree[(yi+decal)*dim+xi];
                 }
@@ -101,7 +91,6 @@ size_t yi=0;
 void  fftshift2D(vector<complex<double>> const &entree,vector<complex<double>>  &result)
 {
 unsigned int dim=sqrt(entree.size());
-//vector<complex<double> > result(dim*dim);
 size_t decal=dim/2;
 size_t yi=0;
        size_t xi=0;
@@ -111,10 +100,7 @@ size_t yi=0;
                 for(xi=0; xi<decal; xi++)
                 {
                       int pixel=num_ligne+xi;
-                      //  cout<<"pixel="<<pixel<<endl;
-                      // cout<<"result[pixel]="<<result[pixel];
                       int pixel_shift=(yi+decal)*dim+xi+decal;
-                      //  cout<<"pixel_shift="<<pixel_shift<<endl;
                       //1er quadrant vers 4 eme
                       result[pixel_shift]=entree[pixel];                      //4 eme quadrant vers 1er
                       result[pixel]=entree[pixel_shift];
@@ -124,13 +110,11 @@ size_t yi=0;
                       result[pixel+decal]=entree[(yi+decal)*dim+xi];
                 }
         }
-     //   return result;
 }
 //surcharge avec passage par paramètre
 void  fftshift2D(vector<double> const &entree,vector<double>  &result)
 {
 unsigned int dim=sqrt(entree.size());
-//vector<complex<double> > result(dim*dim);
 size_t decal=dim/2;
 size_t yi=0;
        size_t xi=0;
@@ -140,10 +124,7 @@ size_t yi=0;
                 for(xi=0; xi<decal; xi++)
                 {
                       int pixel=num_ligne+xi;
-                      //  cout<<"pixel="<<pixel<<endl;
-                      // cout<<"result[pixel]="<<result[pixel];
                       int pixel_shift=num_lgn_decal+xi+decal;
-                      //  cout<<"pixel_shift="<<pixel_shift<<endl;
                       //1er quadrant vers 4 eme
                       result[pixel_shift]=entree[pixel];                      //4 eme quadrant vers 1er
                       result[pixel]=entree[pixel_shift];
@@ -161,11 +142,6 @@ unsigned int dim=sqrt(entree.size());
 vector<complex<double>> result(dim*dim);
 int decal=dim/2;
 size_t yi=0;
-     //  size_t xi=0;
-     //  size_t pixel=0;
-     //  size_t pixel_shift=0;
-     //   #pragma omp parallel for private(yi)
-       // #pragma omp parallel for private (xi,yi,pixel,pixel_shift)
        for(yi=0; yi<decal; yi++) {
           size_t num_ligne=yi*dim;
             //1er quadrant vers 4 eme
@@ -187,39 +163,22 @@ unsigned int dim=sqrt(entree.size());
 vector<double> result(dim*dim);
 int decal=dim/2;
 short unsigned int  yi=0,xi=0;
-      // size_t pixel=0;
-      // size_t pixel_shift=0;
-     //   #pragma omp parallel for private(yi)
        // #pragma omp parallel for private (xi,yi,pixel,pixel_shift)
        for(yi=0; yi<decal; yi++) {
           size_t num_ligne=yi*dim;
-
-               // for(xi=0; xi<decal; xi++)
-                //{
-                    //  pixel=num_ligne+xi;
-                      //  cout<<"pixel="<<pixel<<endl;
-                      // cout<<"result[pixel]="<<result[pixel];
-                    //  pixel_shift=(yi+decal)*dim+xi+decal;
-                      //  cout<<"pixel_shift="<<pixel_shift<<endl;
-                      //1er quadrant vers 4 eme
-                      //result[pixel_shift]=entree[pixel];
                      copy(entree.begin()+num_ligne,    entree.begin()+num_ligne+decal,    result.begin()+(yi+decal)*dim+decal);
                       //4 eme quadrant vers 1er
-                     // result[pixel]=entree[pixel_shift];
                       copy(entree.begin()+(yi+decal)*dim+decal,   entree.begin()+(yi+decal)*dim+2*decal,   result.begin()+num_ligne);
-                      //4 eme quadrant vers 1er
                       //2eme vers 3eme
-                     // result[(yi+decal)*dim+xi]=entree[pixel+decal];
                       copy(entree.begin()+num_ligne+decal,   entree.begin()+num_ligne+2*decal,   result.begin()+(yi+decal)*dim);
-
                       //3eme vers 2eme
-                    //  result[pixel+decal]=entree[(yi+decal)*dim+xi];
+                      //result[pixel+decal]=entree[(yi+decal)*dim+xi];
                       copy(entree.begin()+(yi+decal)*dim,   entree.begin()+(yi+decal)*dim+decal,   result.begin()+num_ligne+decal);
-
         }
         return result;
 }
-vector<double>  fftshift2D(vector<double> const &entree)
+
+vector<double>  fftshift2D(vector<double> const &entree)///à récrire en template
 {
 unsigned int dim=sqrt(entree.size());
 vector<double> result(dim*dim);
@@ -232,8 +191,6 @@ size_t yi=0;
                 for(xi=0; xi<decal; xi++)
                 {
                       int pixel=num_ligne+xi;
-                      //  cout<<"pixel="<<pixel<<endl;
-                      // cout<<"result[pixel]="<<result[pixel];
                       int pixel_shift=(yi+decal)*dim+xi+decal;
                       //  cout<<"pixel_shift="<<pixel_shift<<endl;
                       //1er quadrant vers 4 eme
@@ -252,7 +209,6 @@ size_t yi=0;
 void TF2D_vec(fftw_complex *in,fftw_complex *out, vector<double> entree, vector<complex<double> > &sortie, fftw_plan p){
 
     int nbPix=entree.size();
-//    int dim=sqrt(nbPix);
     for(int cpt=0; cpt<nbPix; cpt++){
             in[cpt][0]=entree[cpt];
             in[cpt][1]=0;
@@ -273,7 +229,7 @@ void TF2Dcplx_vec(fftw_complex *in, fftw_complex *out, vector<complex<double> > 
         in[cpt][0]=entree[cpt].real();
         in[cpt][1]=entree[cpt].imag();
     }
-//in = reinterpret_cast<fftw_complex*>(&entree);
+    //in = reinterpret_cast<fftw_complex*>(&entree);
     fftw_execute(p);
 
     for(size_t cpt=0; cpt<(nbPix); cpt++) {
@@ -283,9 +239,6 @@ void TF2Dcplx_vec(fftw_complex *in, fftw_complex *out, vector<complex<double> > 
 }
 
 ///FFT2D entree=vector complex
-
-
-
 void TF2Dcplx_vec_INV(fftw_complex *in,fftw_complex *out, vector<complex<double> > entree, vector<complex<double> > &sortie, fftw_plan p_backward)
 {
     size_t nbPix=entree.size();
@@ -322,18 +275,13 @@ void TF2Dcplx_vec(fftw_complex *in,fftw_complex *out, vector<double> entree, vec
 
 ///FFT2D entree=TF2D vector double+inplace
 void TF2Dcplx_vec_INPLACE(fftw_complex *in_out,vector<double> entree, vector<complex<double> > &sortie, fftw_plan p){
-
     size_t nbPix=entree.size();
-//    int dim=sqrt(nbPix);
-
     for(size_t cpt=0; cpt<nbPix; cpt++)
         {
             in_out[cpt][0]=entree[cpt];
             in_out[cpt][1]=0;
         }
-    // in = reinterpret_cast<fftw_complex*>(&entree);
-// SAV2_vec(entree,nbPix,"/home/mat/tomo_test/entree_dans_tf2D.bin",t_float,"a+b");
-
+    //in = reinterpret_cast<fftw_complex*>(&entree);
     fftw_execute(p);
 
     for(size_t cpt=0; cpt<(nbPix); cpt++)
@@ -341,7 +289,7 @@ void TF2Dcplx_vec_INPLACE(fftw_complex *in_out,vector<double> entree, vector<com
             sortie[cpt].real(in_out[cpt][0]/nbPix); //division par N (dim*dim) si FORWARD pour normaliser la fftw qui n'est pas normalisée
             sortie[cpt].imag(in_out[cpt][1]/nbPix);
         }
-    //  SAVCplx(sortie,"Im",nbPix,"/home/mat/tomo_test/spectre_dans_tf2D.bin",t_float,"a+b");
+    //SAVCplx(sortie,"Im",nbPix,"/home/mat/tomo_test/spectre_dans_tf2D.bin",t_float,"a+b");
 }
 
 void TF2Dcplx_vec_INV(fftw_complex *in, fftw_complex *out, vector<double> entree, vector<complex<double> > &sortie, fftw_plan p_backward){
@@ -350,17 +298,12 @@ void TF2Dcplx_vec_INV(fftw_complex *in, fftw_complex *out, vector<double> entree
         in[cpt][0]=entree[cpt];
         in[cpt][1]=0;
     }
-
     fftw_execute(p_backward);
-
         for(size_t cpt=0; cpt<(nbPix); cpt++){//BACKWARD : no normalization
             sortie[cpt].real(out[cpt][0]);
             sortie[cpt].imag(out[cpt][1]);
         }
 }
-
-
-
 
 /////////----------------------------TF FFTW_INIT-------------------------------------------------------------------------
 // surcharge fftw_init+entree <double>+calcul fft
@@ -371,7 +314,7 @@ void TF2Dcplx(vector<double> const &entree, vector<complex<double>> &sortie, FFT
         tf2D_c2r.in[cpt][0]=entree[cpt];
         tf2D_c2r.in[cpt][1]=0;//
     }
-//in = reinterpret_cast<fftw_complex*>(&entree);
+    //in = reinterpret_cast<fftw_complex*>(&entree);
     fftw_execute(tf2D_c2r.p_forward_OUT);
 
     for(size_t cpt=0; cpt<(nbPix); cpt++) {
@@ -469,10 +412,8 @@ void TF2D_r2c(vector<double> const &entree, vector<complex<double> > &sortie, FF
   // double Coef_norm=dim*m1.Tp_Uborn;
   double Coef_norm=nbPixCplx;//ow(delta_x,2);
   // #pragma omp parallel
-  for(size_t  cpt=0; cpt<nbPix; cpt++){
-    tf2D_Re.in_double[cpt]=entree[cpt];
-  }
-    std::copy (entree.begin(),entree.end(), tf2D_Re.in_double );
+  for(size_t  cpt=0; cpt<nbPix; cpt++){tf2D_Re.in_double[cpt]=entree[cpt];}
+  std::copy (entree.begin(),entree.end(), tf2D_Re.in_double );
   fftw_execute(tf2D_Re.p_forward_OUT);
   size_t cpt=0;
   for( cpt=0; cpt<(nbPixCplx); cpt++){
@@ -482,13 +423,13 @@ void TF2D_r2c(vector<double> const &entree, vector<complex<double> > &sortie, FF
 }
 
 ///fft2D avec entrée purement réelle, utilise r2c et exporte le demi-espace.
-///crop the hologramm spectrum to scomplex field pectrum and add it to a stack ccontaining all the fields.
+///crop the hologramm spectrum to complex field spectrum and add it to a stack containing all the fields.
 void TF2D_r2c_coupeHA_to_stack(vector<double> const &src2D, vector<complex<double>> &dest3D, Var2D dim2DHA, Var2D coinHA_r2c,  unsigned short int numAngle, FFTW_init tf2D_r2c){
 
   size_t nbPix=src2D.size();
   Var2D  dim_entree={sqrt(nbPix),sqrt(nbPix)};//inpout of the function
   Var2D  dim_src={dim_entree.x,dim_entree.y/2+1};//src copy, after fft calculation
- // Var2D dimROI{dim,dim};
+  // Var2D dimROI{dim,dim};
   Var2D dim_dest={dim2DHA.x, dim2DHA.y};
   size_t nbPixCplx=dim_entree.x*(dim_entree.y/2+1);
   double Coef_norm=1.0/nbPixCplx;
@@ -496,7 +437,7 @@ void TF2D_r2c_coupeHA_to_stack(vector<double> const &src2D, vector<complex<doubl
   for(size_t  cpt=0; cpt<nbPix; cpt++){
     tf2D_r2c.in_double[cpt]=src2D[cpt];
   }
-   // std::copy (entree.begin(),entree.end(), tf2D_Re.in_double );
+  // std::copy (entree.begin(),entree.end(), tf2D_Re.in_double );
   fftw_execute(tf2D_r2c.p_forward_OUT);
   size_t cpt=0;
 
@@ -510,57 +451,26 @@ cpt_Z_dest=(dim_dest.x*dim_dest.y)*numAngle;
           size_t num_lgn= Y_dest*dim_dest.x;
           for(X_dest=0; X_dest<dim_dest.x; X_dest++){
             cpt_dest1D=cpt_Z_dest+X_dest+num_lgn;///coord 1D destination
-
             //coordonnées de découpe dans la source
             X_src=coinHA_r2c.x+X_dest;///coord X src
             Y_src=coinHA_r2c.y+Y_dest;///coord Y src
             cpt_src1D=X_src+Y_src*dim_src.y;///coord 1D source
-
-          //  dest3D[cpt_dest1D].real(tf2D_r2c.out[cpt_src1D][0]*Coef_norm);
-         //   dest3D[cpt_dest1D].imag(tf2D_r2c.out[cpt_src1D][1]*Coef_norm);
-
-        dest3D[cpt_dest1D].real(tf2D_r2c.out[cpt_src1D][0]*Coef_norm);
+            //dest3D[cpt_dest1D].real(tf2D_r2c.out[cpt_src1D][0]*Coef_norm);
+            //dest3D[cpt_dest1D].imag(tf2D_r2c.out[cpt_src1D][1]*Coef_norm);
+            dest3D[cpt_dest1D].real(tf2D_r2c.out[cpt_src1D][0]*Coef_norm);
             dest3D[cpt_dest1D].imag(tf2D_r2c.out[cpt_src1D][1]*Coef_norm);
         }
     }
 }
-/* JE NE SAIS PAS CEQUE FAIS CETTE FONCTION? ELLE ne symétrise pas.
-///TF2D avec entrée purement réelle, utlise r2c, mais resymétrise la sortie
-void TF2D_r2c_symetric(vector<double> const &entree, vector<complex<double> > &sortie, FFTW_init  &tf2D_Re){
-  size_t dim=sqrt(entree.size());
-  Var2D dimROI{dim,dim};
-  double nbPix=entree.size();
 
-  double Coef_norm=1.0/(nbPix);
- // cout<<"Coef_norm"<<Coef_norm<<endl;
-
-  for(int cpt=0; cpt<nbPix; cpt++){
-    tf2D_Re.in_double[cpt]=entree[cpt];
-  }
-
-  fftw_execute(tf2D_Re.p_forward_OUT);
-
-  //#pragma omp parallel for num_threads(2)
-  for(int yA=0;yA<dimROI.y;yA++){///copie de A vers  la partie gauche (B), avec l'axe de symétrie (donc jusque dim.x/2+1)
-    size_t num_lgnA=yA*(dimROI.x/2+1);
-    size_t num_lgnB=yA*(dimROI.x);
-    for(int xA=0;xA<dimROI.x/2+1;xA++){
-      int cptA=xA+num_lgnA;
-      int cptB=xA+num_lgnB;
-      sortie[cptB].real(tf2D_Re.out[cptA][0]*Coef_norm);
-      sortie[cptB].imag(tf2D_Re.out[cptA][1]*Coef_norm);
-    }
-  }
-
-}*/
 
 void TF2D_r2c_symetric(vector<double> const &entree, vector<complex<double> > &sortie, FFTW_init  &tf2D_Re){
   size_t dim=sqrt(entree.size()),  nbPix=entree.size();
   Var2D dimROI{dim,dim};
- // double Coef_norm=pow(delta_x,2);
+  // double Coef_norm=pow(delta_x,2);
   double Coef_norm=1;///nbPix; //car durant le hors, il ya un aller retour avec le même nombre de dimension (mails il ya découpe ?)
   // #pragma omp parallel
- // SAV2(entree,"/home/mat/tmp/Holo_shift.raw",t_float,"a+b");
+  // SAV2(entree,"/home/mat/tmp/Holo_shift.raw",t_float,"a+b");
   for(size_t cpt=0; cpt<nbPix; cpt++){
     tf2D_Re.in_double[cpt]=entree[cpt];
   }
@@ -596,7 +506,6 @@ void TF2D_r2c_symetric(vector<double> const &entree, vector<complex<double> > &s
     sortie[cptD].real(tf2D_Re.out[cptA][0]*Coef_norm);
     sortie[cptD].imag(-tf2D_Re.out[cptA][1]*Coef_norm);
   }
-
 }
 
 

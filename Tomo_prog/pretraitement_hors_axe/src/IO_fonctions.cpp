@@ -5,11 +5,12 @@
 
 using namespace std;
 using namespace cv;
+
+///load picture into a vector C++ thanks to opencv
 void charger_image2D_OCV(std::vector<double> &imgTab, string imgFile, Var2D coin, Var2D dimROI)
 {
         Mat img=imread(imgFile, 0);//0=grayscale
-        if(! img.data )  // Check for invalid input
-       {
+        if(! img.data ){  // Check for invalid input
               cout <<  "##################### /!\\ ##############################"<<endl;
               cout <<  "Impossible d'ouvrir" <<imgFile<< endl ;
               cout <<  "#########################################################"<<endl;
@@ -25,7 +26,7 @@ void charger_image2D_OCV(std::vector<double> &imgTab, string imgFile, Var2D coin
 }
 
 
-
+///extract string matching a given token (ex : token ="SCAN_PATERN", string="ROSACE")
 string extract_string(std::string token,  std::string chemin_fic)
 {
     ifstream fichier(chemin_fic.c_str(), ios::in);  // on ouvre en lecture
@@ -33,8 +34,7 @@ string extract_string(std::string token,  std::string chemin_fic)
     string valeur;
     vector<std::string> tokens;//tableau de lignes contenant les tokens
 
-    if(fichier)  // si l'ouverture a fonctionné
-    {
+    if(fichier){  // si l'ouverture a fonctionné
         while(!fichier.eof()){
             getline(fichier,ligne,'\n');//extrait chaque ligne du fichier (séparateur=retour chariot)
             if(ligne[0]!='#')//si pas ligne de commentaire
@@ -63,7 +63,7 @@ string extract_string(std::string token,  std::string chemin_fic)
     fichier.close();
     return valeur;
 }
-
+///extract a number from a given token (ex : token="NB_HOLO", number=600)
 float extract_val(string token,  string chemin_fic)
 {
     ifstream fichier(chemin_fic.c_str(), ios::in);  // on ouvre en lecture
@@ -102,7 +102,7 @@ float extract_val(string token,  string chemin_fic)
 
     return valeur;
 }
-
+///save a vector<complex double> into a binary file. partie : "Re"=real or "im"=imaginary. PRECISON=64 (double), 32 (float) etc.
 void SAVCplx(std::vector<complex<double>> const &var_sav, string partie, std::string chemin, enum PRECISION2 precision, char options[])
 {        //double* var_sav = &v[0];
 
@@ -151,7 +151,7 @@ void SAVCplx(std::vector<complex<double>> const &var_sav, string partie, std::st
         fclose(fichier_ID);
 }
 
-
+///save a vector double into a binary file. partie : PRECISON=64 (double), 32 (float) etc.
 void SAV2(vector<double> &v, std::string chemin, enum PRECISION2 precision, char options[])
 {
         size_t NbPix2D=v.size();
@@ -189,7 +189,6 @@ void SAV2(vector<double> &v, std::string chemin, enum PRECISION2 precision, char
                 for(unsigned int cpt=0; cpt<NbPix2D; cpt++) {
                         unsigned int tampon=var_sav[cpt];
                         fwrite(&tampon,sizeof(tampon),1,fichier_ID);
-
                 }
                 break;
         case t_char: //8 bits
@@ -205,7 +204,7 @@ void SAV2(vector<double> &v, std::string chemin, enum PRECISION2 precision, char
 
         fclose(fichier_ID);
 }
-
+///save a C-type array (double) into a binary file. partie : PRECISON=64 (double), 32 (float) etc.
 void SAV2(double *var_sav,int NbPix2D, std::string chemin, enum PRECISION2 precision, char options[])
 {
 
@@ -242,7 +241,6 @@ void SAV2(double *var_sav,int NbPix2D, std::string chemin, enum PRECISION2 preci
                 for(unsigned int cpt=0; cpt<NbPix2D; cpt++) {
                         unsigned int tampon=var_sav[cpt];
                         fwrite(&tampon,sizeof(tampon),1,fichier_ID);
-
                 }
                 break;
         case t_char: //8 bits
@@ -259,8 +257,7 @@ void SAV2(double *var_sav,int NbPix2D, std::string chemin, enum PRECISION2 preci
         fclose(fichier_ID);
 }
 
-
-
+///save a C-type array (double) into a TIFF.
 void SAV_Tiff2D(double *var_sav, string chemin, int dim)
 {
     TIFF *tif= TIFFOpen(chemin.c_str(), "a");
@@ -293,6 +290,7 @@ void SAV_Tiff2D(double *var_sav, string chemin, int dim)
     TIFFClose(tif);
 }
 
+///save a C++ vector array (double) into a TIFF.
 void SAV_Tiff2D(std::vector<double> const &var_sav, string chemin, double taille_pixel)
 {   int dim=pow(var_sav.size(),0.5);
     float xres, yres;
@@ -310,10 +308,10 @@ void SAV_Tiff2D(std::vector<double> const &var_sav, string chemin, double taille
     TIFFSetField (tif_out, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
     //fixer la résolution
     xres = yres = 0.01/taille_pixel; //nbpixel par resunit (par centimetre)=0.01m/taille_pixel en metre
-        res_unit = RESUNIT_CENTIMETER;
-        TIFFSetField(tif_out, TIFFTAG_XRESOLUTION, xres);
-        TIFFSetField(tif_out, TIFFTAG_YRESOLUTION, yres);
-        TIFFSetField(tif_out, TIFFTAG_RESOLUTIONUNIT, res_unit);
+    res_unit = RESUNIT_CENTIMETER;
+    TIFFSetField(tif_out, TIFFTAG_XRESOLUTION, xres);
+    TIFFSetField(tif_out, TIFFTAG_YRESOLUTION, yres);
+    TIFFSetField(tif_out, TIFFTAG_RESOLUTIONUNIT, res_unit);
 
     tsize_t strip_size = TIFFStripSize (tif_out);
     tstrip_t strips_num = TIFFNumberOfStrips (tif_out);
@@ -325,8 +323,6 @@ void SAV_Tiff2D(std::vector<double> const &var_sav, string chemin, double taille
         {
             unsigned int cpt=col+dim*s;
             strip_buf[col]=(float)var_sav[cpt];
-
-
         }
         TIFFWriteEncodedStrip (tif_out, s, strip_buf, strip_size);
     }
@@ -335,7 +331,7 @@ void SAV_Tiff2D(std::vector<double> const &var_sav, string chemin, double taille
     TIFFClose(tif_out);
 }
 
-
+///save a C++ vector array ( complex double) into a TIFF. partie = "Re" (real) or "im" (imaginary)
 void SAV_Tiff2D(std::vector<complex<double>> const & var_sav, string partie, string chemin, double taille_pixel)
 {   int dim=pow(var_sav.size(),0.5);
     float xres, yres;
@@ -353,10 +349,10 @@ void SAV_Tiff2D(std::vector<complex<double>> const & var_sav, string partie, str
     TIFFSetField (tif_out, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
     //fixer la résolution
     xres = yres = 0.01/taille_pixel; //nbpixel par resunit (par centimetre)=0.01m/taille_pixel en metre
-        res_unit = RESUNIT_CENTIMETER;
-        TIFFSetField(tif_out, TIFFTAG_XRESOLUTION, xres);
-        TIFFSetField(tif_out, TIFFTAG_YRESOLUTION, yres);
-        TIFFSetField(tif_out, TIFFTAG_RESOLUTIONUNIT, res_unit);
+    res_unit = RESUNIT_CENTIMETER;
+    TIFFSetField(tif_out, TIFFTAG_XRESOLUTION, xres);
+    TIFFSetField(tif_out, TIFFTAG_YRESOLUTION, yres);
+    TIFFSetField(tif_out, TIFFTAG_RESOLUTIONUNIT, res_unit);
 
     tsize_t strip_size = TIFFStripSize (tif_out);
     tstrip_t strips_num = TIFFNumberOfStrips (tif_out);
@@ -384,6 +380,9 @@ void SAV_Tiff2D(std::vector<complex<double>> const & var_sav, string partie, str
     TIFFClose(tif_out);
 }
 
+                ///------------3D functions-----------------------
+
+///sav 3D, cubic volume c++ vector complex into a tiff file
 void SAV3D_Tiff(vector<complex <double>> const &var_sav, string partie, string chemin, double taille_pixel)
 {
     int dim=round(std::pow(var_sav.size(), 1.0/3.0));
@@ -404,8 +403,7 @@ void SAV3D_Tiff(vector<complex <double>> const &var_sav, string partie, string c
     bpp = 32; /* Bits per sample */
    // photo = PHOTOMETRIC_MINISBLACK;
 
-    for (int num_page = 0; num_page < dim; num_page++)//z=page
-    {
+    for (int num_page = 0; num_page < dim; num_page++){//z=page
         for (y = 0; y < dim; y++)
             for(x = 0; x < dim; x++){
                     if(partie=="Re" || partie=="re"){
@@ -415,13 +413,10 @@ void SAV3D_Tiff(vector<complex <double>> const &var_sav, string partie, string c
                         if(partie=="Im" || partie=="im"){
                         buffer2D[y * dim + x] = (float)var_sav[y * dim + x+num_page*dim*dim].imag();
                         }
-
                         else
                             cout<<"Partie non identifiée : Re, re, Im ou im"<<endl;
                     }
-
             }
-
 
         TIFFSetField(out, TIFFTAG_IMAGEWIDTH, image_width / spp);
         TIFFSetField(out, TIFFTAG_IMAGELENGTH, image_height);
@@ -442,14 +437,14 @@ void SAV3D_Tiff(vector<complex <double>> const &var_sav, string partie, string c
         /* Set the page number */
         TIFFSetField(out, TIFFTAG_PAGENUMBER, num_page, dimz);
 
-        for (y = 0; y < image_height; y++)
-            TIFFWriteScanline(out, &buffer2D[y * image_width], y, 0);
+        for (y = 0; y < image_height; y++) TIFFWriteScanline(out, &buffer2D[y * image_width], y, 0);
 
         TIFFWriteDirectory(out);
     }
 
     TIFFClose(out);
 }
+///test whether a file is readable or not
 bool is_readable( const std::string & file )
 {
     std::ifstream fichier( file.c_str() );

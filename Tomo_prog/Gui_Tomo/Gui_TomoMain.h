@@ -98,7 +98,7 @@ class Gui_TomoFrame: public wxFrame
 
         wxStaticText* t;
         wxTextCtrl *editX,*editY,*editResult,*editDirAcquis,*editFicMask,*editFicManip,*editDirResultAcquis;//champ de texte editable
-        wxTextCtrl *editNbHolo,*editnbCirclesAnnular,*editDimFinal;
+        wxTextCtrl *editN0,*editNbHolo,*editnbCirclesAnnular,*editDimFinal;
         wxTextCtrl *editCX,*editCY,*editNXMAX,*editVxmin,*editVymin,*editVxmax,*editVymax,*editDeltaVx,*editDeltaVy,*editNAcondLim;
         wxTextCtrl *editDnMin,*editDnMax, *editIteration;
         wxTextCtrl *editKappaMin,*editKappaMax, *editKappa;
@@ -107,7 +107,7 @@ class Gui_TomoFrame: public wxFrame
         wxStaticText *textDnMin,*textDnMax;
         wxStaticText *textKappaMin,*textKappaMax;
         wxStaticText *titre_Acquis,*titre_Pretraitement, *titre_Recons,*titre_HorsAxe,*titre_Balayage,*titre_Interval_Balayage;//texte des champs
-        wxStaticText *textNbHolo,*textNbCirclesAnnular,*textScanPattern, *textDimFinal,*textCX,*textCY,*textNXMAX,*textVxmin,*textVymin,*textVxmax,*textVymax,*textDeltaVy,*textNAcondLim,*textDeltaVx,*textOffx,*textOffy;//texte des champs
+        wxStaticText *textN0,*textNbHolo,*textNbCirclesAnnular,*textScanPattern, *textDimFinal,*textCX,*textCY,*textNXMAX,*textVxmin,*textVymin,*textVxmax,*textVymax,*textDeltaVy,*textNAcondLim,*textDeltaVx,*textOffx,*textOffy;//texte des champs
         wxStaticText *titre_GPS,*titre_interval_indice,*titre_iterationGPS,*textIteration;
         wxStaticText  *titre_interval_kappa;
 

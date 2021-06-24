@@ -7,6 +7,5 @@ var annotated_dup =
     [ "PIXEL", "struct_p_i_x_e_l.html", "struct_p_i_x_e_l" ],
     [ "Point2D", "class_point2_d.html", "class_point2_d" ],
     [ "Var2D", "struct_var2_d.html", "struct_var2_d" ],
-    [ "Var3D", "struct_var3_d.html", "struct_var3_d" ],
-    [ "vecteur", "classvecteur.html", "classvecteur" ]
+    [ "Var3D", "struct_var3_d.html", "struct_var3_d" ]
 ];

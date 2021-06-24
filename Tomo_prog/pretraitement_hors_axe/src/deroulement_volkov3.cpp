@@ -9,7 +9,7 @@
 #define M_2PI 2*M_PI
 using namespace std;
 
-
+///main function
 void deroul_volkov3(vector<double> const &phase_enroul,vector<double> &phase_deroul,vector<vecteur>  &kvect_shift,  FFTW_init &param_c2c)
 {
   complex<double> I(0,1);
@@ -109,6 +109,7 @@ void integ_grad3(vector<double> const &gradx, vector<double> const& grady, vecto
   tampon[0]=0;//(tampon[nbPix]+tampon[1])*0.5;//moyennage de la fréquence zéro pour éviter NAN
   TF2Dcplx_INV(tampon,sortie,param_c2c);
 }
+///calculate the kvector field (array whose value a simply  kx and ky)
 std::vector<vecteur> init_kvect_shift(Var2D dim2DHA)
 {
   size_t nbPix=dim2DHA.x*dim2DHA.y;
@@ -120,7 +121,7 @@ std::vector<vecteur> init_kvect_shift(Var2D dim2DHA)
   kvect_shift=fftshift2D(kvect);
   return kvect_shift;
 }
-
+///calculate the kvector square modulus field (array whose value a simply  kx^2+ky^2)
 std::vector<double> init_kvect_mod2Shift(vector<vecteur>  &kvect_shift)
 {
   size_t nbPix=kvect_shift.size();

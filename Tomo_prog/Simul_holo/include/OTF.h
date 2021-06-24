@@ -17,10 +17,7 @@ class OTF{
         //const std::vector<std::complex<double>>& GetV() const{return valeur;}
 
         virtual ~OTF();
-
         manip manipOTF;
-
-
         std::vector<std::complex<double>> Valeur;
        // std::complex<double> n0;
 
@@ -42,7 +39,7 @@ class OTF{
         void bCercle(int pourcentage_NA);
         void bGrille();
         void bMultiCercleUNI(int nb_cercle);
-
+        void bFermat(int nbHolo);
         void symetrize_xoy();
 
     protected:

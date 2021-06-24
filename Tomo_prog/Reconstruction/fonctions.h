@@ -35,7 +35,7 @@ float   total;
 /* --------------------------------------------------------------------------- */
 // Prototypes
 /* --------------------------------------------------------------------------- */
-
+std::vector<std::complex<double>> extractSliceZ(std::vector<std::complex<double>> &index3D,std::string axis, size_t z_height);
 float extract_val(std::string token,  std::string chemin_fic);
 void interp_lin3D(std::vector <std::complex <double> > &volume_interp_3D);
 //void divCplx(nbCplx* imageA,nbCplx* imageB,nbCplx* resultat, int NbPix);
@@ -94,6 +94,7 @@ void SAV3D_Tiff(std::vector<double> var_sav, std::string chemin, double taille_p
 void SAV_Tiff2D(double *var_sav, std::string chemin, const size_t dim);
 
 void SAV_Tiff2D(std::vector<double> var_sav, std::string chemin, double taille_pixel);
+void SAV_Tiff2DCplx(std::vector<std::complex<double>> var_sav, std::string partie, std::string chemin, double taille_pixel);
 
 double max(double* entree, int dim);
 void phase2pi(nbCplx* obj, Var2D taille,double* WrappedImage);

@@ -29,11 +29,11 @@ using namespace std;
 #include <PvPipeline.h>
 #include <PvBuffer.h>
 ///labjack
-#include "Ljack.h"
-#include "Ljack_DAC.h"
+//#include "Ljack.h"
+//#include "Ljack_DAC.h"
 ///-----------------
-#include "macros.h"
-#include "vectra.h"
+//#include "macros.h"
+//#include "vectra.h"
 #include "string.h"
 #include "vChronos.h"
 #include <boost/thread.hpp>

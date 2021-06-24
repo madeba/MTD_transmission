@@ -29,20 +29,20 @@
 //using namespace cv;
 using namespace std;
 
-
 /// Function header
 #include "Correction_aberration.h"
 #include "FFT_fonctions.h"
+
 void initCorrAber(std::string Chemin_mask, Mat const & mask_aber, size_t degre_poly, Var2D dim2DHA, Mat &polynome_to_fit, Mat &polynomeUs_to_fit)
 {
 
 CalcPolyUs_xy(degre_poly, mask_aber, dim2DHA, polynomeUs_to_fit);
 CalcPoly_xy(degre_poly, dim2DHA, polynome_to_fit);
 }
+
 ///load object mask
 Mat init_mask_aber(string Chemin_mask, string Chemin_acquis, Var2D dim2DHA)
 {
-
     Mat mask = imread(Chemin_mask, 0);
     ///Charger masque aberration
 
@@ -105,12 +105,10 @@ int countM(Mat mask){
     }
     return NbPtRand;
 }
-///Generate the numerical value of the vector [1,x,x^2,xy,y,y^2] for each (x,y) outside the  mask area, undersampled
+///Generate the numerical value of the vector [1,x,x^2,xy,y,y^2] for each (x,y) outside the  mask area, undersampled (US=undersampled)
 void CalcPolyUs_xy(int degre_poly, Mat const & mask, Var2D dimImg, Mat &polynomeUs_to_fit)
 {
-   //int nbRows=polynomeUs_to_fit.rows;
    size_t nbPtUs=polynomeUs_to_fit.rows;
-  // cout<<"nbPtUs==="<<polynomeUs_to_fit.rows<<endl;
    if(nbPtUs>9){//you need at least 9 points for a deg 3 polynome
      int num_coef, Coord1D = 0;// coordinate (1D)
      for (int y = 0; y < dimImg.y; y ++){//largeur de 262
@@ -150,8 +148,8 @@ void CalcPoly_xy(int degre_poly,Var2D dimImg, Mat &polynome_to_fit)
         }
     }
 }
-
-void compuBackgr2(Mat const &coefficients, Mat const & polynome_to_fit, Mat &PolyBackgr)///calculate the numerical value of the poly for *all*  (x,y)
+///calculate the numerical value of the poly for *all*  (x,y)
+void compuBackgr2(Mat const &coefficients, Mat const & polynome_to_fit, Mat &PolyBackgr)
 {   size_t Coord1D=0;
     int poly_size=polynome_to_fit.cols;//sizePoly2D(deg);
     for (int y = 0; y < PolyBackgr.rows; y ++)///scan all the (x,y) coord.
@@ -165,15 +163,13 @@ void compuBackgr2(Mat const &coefficients, Mat const & polynome_to_fit, Mat &Pol
             Coord1D++;
         }
 }
-///--------------------//Top functions containing the algorithm for phase and amplitude------------------------------------------------------------------------------
+///--------------------//Top functions used in main containing the algorithm for phase and amplitude------------------------------------------------------------------------------
 Mat  aberCorr2(Mat const &image, Mat const &mask,  Mat const &polynomeUs_to_fit, Mat const &polynome_to_fit)
 {
     Mat coefsolve;
     compuCoefPoly2(image, mask, coefsolve, polynomeUs_to_fit, true); /// Compute the coef of polynomial (Least Squares method)
     Mat resultatpolyBG(image.rows, image.cols, CV_64F), result_final(image.rows, image.cols, CV_64F);
     compuBackgr2(coefsolve, polynome_to_fit, resultatpolyBG);/// Compute the background image with the coef of polynomial
-    //SAV2((double*)resultatpoly.data,image.rows*image.cols,"/home/mat/tmp/poly_aber_phase.raw",t_float,"a+b");
-
     result_final = image-resultatpolyBG;
     return result_final;
 }
@@ -183,9 +179,7 @@ Mat  ampliCorr2(Mat const & image,  Mat const &polynomeUs_to_fit, Mat const &pol
     compuCoefPoly2(image, mask, coefsolve, polynomeUs_to_fit, true); /// Compute the coef of polynomial (Least Squares method)
     Mat resultatpoly(image.rows, image.cols, CV_64F), result(image.rows, image.cols, CV_64F);
     compuBackgr2(coefsolve, polynome_to_fit,  resultatpoly);/// Compute the background image with the coef of polynomial
-   // SAV2((double*)resultatpoly.data,image.rows*image.cols,"/home/mat/tmp/poly_aber_ampli.raw",t_float,"a+b");
-
-   result = image/(resultatpoly+0.00000001);
+    result = image/(resultatpoly+0.00000001);
     return result;
 }
 /// Compute the coef of polynomial (Least Squares method) by SVD,  i.e. solve COEF*POLYNOME_TO_FIT=BACKGROUND (with undersampled variables to speed up the process)

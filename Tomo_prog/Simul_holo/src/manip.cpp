@@ -43,7 +43,7 @@ manip::manip(unsigned short int dimROI)
     NXMAX_cond=NACond/(lambda_v*Delta_f_holo);
     dim_final=4*NXMAX;
     dim_Uborn=2*NXMAX;
-
+    Var2D dim2DHA={2*NXMAX,2*NXMAX};
     cout<<"Rayon Ewald calcule via lambda="<<n0/(lambda_v*Delta_f_holo)<<endl;
 
     //double tailleTheoPixelUborn=Tp_holo*dimROI/(2*NXMAX);
@@ -55,85 +55,78 @@ manip::manip(unsigned short int dimROI)
     Delta_f_Uborn=1/(2*NXMAX*Tp_Uborn);//sampling size of complex field spectrum
 
     cout<<"Rayon Ewald classique="<<dim_Uborn*Tp_Uborn*n0/(lambda_v)<<endl;
-    Tp_Tomo=Tp_Uborn*(2*NXMAX)/dim_final;
-    Delta_f_tomo=1/(Tp_Tomo*dim_final);
+    Tp_Tomo=Tp_Uborn*(2*NXMAX)/dim_final;//pixel size in tomo space
+    Delta_f_tomo=1/(Tp_Tomo*dim_final);//pixel size in tomo-spectrum space
+
+    ///Effacer précédent résultats car fonction d'enregistrement cumulative ("a+b")
+
     dimImg=to_string(dim_Uborn)+"x"+to_string(dim_Uborn)+"x"+to_string(nbHolo);
-      ///Effacer précédent résultatscar fonction d'enregistrement cumulative ("a+b")
-    Var2D dim2DHA={2*NXMAX,2*NXMAX};
-    //string tampon="/UBornfinal_Im.raw";
-    string tampon="/UBornfinal_Im"+dimImg+".raw";
-    string result=chemin_result+tampon;
-    cout<<"Effacement Uborn : "<<result<<endl;
-    if( remove(result.c_str())== 0 )
-        perror( "Fichier Ubornfinal_Im déjà effacé" );
-    // tampon="/UBornfinal_Re.raw";
-    tampon="/UBornfinal_Re"+dimImg+".raw";
-    result=chemin_result+tampon;
-     cout<<"Effacement Uborn : "<<result<<endl;
-    if( remove(result.c_str()) == 0 )
-        perror( "Fichier UBornfinal_Re déjà éffacé" );
+    delete_file(chemin_result+"/UBornfinal_Im"+dimImg+".raw");
+    delete_file(chemin_result+"/UBornfinal_Re"+dimImg+".raw");
+    delete_file(chemin_result+"/wrapped_phase_rytov"+dimImg+".raw");
 
-    string sav_param=chemin_result+"/SAV_param_manip.txt";
-    cout<<sav_param<<endl;
-    ofstream fichier_sav_parametre(sav_param);
+    ///save a log file
+        string sav_param=chemin_result+"/SAV_param_manip.txt";
+        cout<<sav_param<<endl;
+        ofstream fichier_sav_parametre(sav_param);
 
-    cout<<"\n##################### INFO Reconstruction ##################\n"<<endl;
-    cout<<"+----------------+------------------+"<<endl;
-    cout<<"|    Grandeur    |    Valeur        |"<<endl;
-    cout<<"|-----------------------------------|"<<endl;
-    cout<<"|      Gt        |     x"<<Gt<<"         |"<<endl;
-    cout<<"|      λ_v       |     "<<lambda_v*pow(10,9)<<" nm       |"<<endl;
-    cout<<"|-----------------------------------|"<<endl;
-    cout<<"|Tp Caméra       |"<<TpCam*pow(10,6)<<"µm             |"<<endl;
-    cout<<"|Tp_holo         |     "<<Tp_holo*pow(10,9)<<"nm    |"<<endl;
-    cout<<"|-----------------------------------|"<<endl;
-    cout<<"|champ holo pixel|     "<<dimROI_Cam          <<" pix      |"<<endl;
-    cout<<"|Champ holo metre|     "<<dimROI_Cam*Tp_holo*pow(10,6)<<" µm   |"<<endl;
-    cout<<"|-----------------------------------|"<<endl;
-    cout<<"|    Tp UBorn    |     "<<Tp_Uborn*pow(10,9)<<" nm    |"<<endl;
-    cout<<"|-----------------------------------|"<<endl;
-    cout<<"|    Delta_f_holo|     "<<round(Delta_f_holo)<<" µm-1   |"<<endl;
-    cout<<"|-----------------------------------|"<<endl;
-    cout<<"|    Delta_f_tomo|     "<<round(Delta_f_tomo)<<" µm-1   |"<<endl;
-    cout<<"|-----------------------------------|"<<endl;
-    cout<<"|     R_Ewald    |     "<<R_EwaldPix<<" pixels    |"<<endl;
-    cout<<"|     R_Ewald m  |    "<< setprecision (2) <<round(R_EwaldMet)<<" µm-1  |"<<setprecision (4)<<endl;
-    cout<<"|-----------------------------------|"<<endl;
-    cout<<"|     NXMAX      |     "<<round(NXMAX)<<" pix       |"<<endl;
-    cout<<"|-----------------------------------|"<<endl;
-    cout<<"| chp cplx mini  |     "<<2*round(R_EwaldPix*NAObj/n0)<<" pix      |"<<endl;
-    cout<<"|-----------------------------------|"<<endl;
-    cout<<"|     Dim_finale |     "<<dim_final<<" pixels   |"<<endl;
-    cout<<"|-----------------------------------|"<<endl;
-    cout<<"|    Tp Tomo theo|     "<<Tp_Tomo*pow(10,9)<<" nm     |"<<endl;
-    cout<<"+-----------------------------------+"<<endl;
-    cout<<"\n#######################################\n"<<endl;
+        cout<<"\n##################### INFO Reconstruction ##################\n"<<endl;
+        cout<<"+----------------+------------------+"<<endl;
+        cout<<"|    Grandeur    |    Valeur        |"<<endl;
+        cout<<"|-----------------------------------|"<<endl;
+        cout<<"|      Gt        |     x"<<Gt<<"         |"<<endl;
+        cout<<"|      λ_v       |     "<<lambda_v*pow(10,9)<<" nm       |"<<endl;
+        cout<<"|-----------------------------------|"<<endl;
+        cout<<"|Tp Caméra       |"<<TpCam*pow(10,6)<<"µm             |"<<endl;
+        cout<<"|Tp_holo         |     "<<Tp_holo*pow(10,9)<<"nm    |"<<endl;
+        cout<<"|-----------------------------------|"<<endl;
+        cout<<"|champ holo pixel|     "<<dimROI_Cam          <<" pix      |"<<endl;
+        cout<<"|Champ holo metre|     "<<dimROI_Cam*Tp_holo*pow(10,6)<<" µm   |"<<endl;
+        cout<<"|-----------------------------------|"<<endl;
+        cout<<"|    Tp UBorn    |     "<<Tp_Uborn*pow(10,9)<<" nm    |"<<endl;
+        cout<<"|-----------------------------------|"<<endl;
+        cout<<"|    Delta_f_holo|     "<<round(Delta_f_holo)<<" µm-1   |"<<endl;
+        cout<<"|-----------------------------------|"<<endl;
+        cout<<"|    Delta_f_tomo|     "<<round(Delta_f_tomo)<<" µm-1   |"<<endl;
+        cout<<"|-----------------------------------|"<<endl;
+        cout<<"|     R_Ewald    |     "<<R_EwaldPix<<" pixels    |"<<endl;
+        cout<<"|     R_Ewald m  |    "<< setprecision (2) <<round(R_EwaldMet)<<" µm-1  |"<<setprecision (4)<<endl;
+        cout<<"|-----------------------------------|"<<endl;
+        cout<<"|     NXMAX      |     "<<round(NXMAX)<<" pix       |"<<endl;
+        cout<<"|-----------------------------------|"<<endl;
+        cout<<"| chp cplx mini  |     "<<2*round(R_EwaldPix*NAObj/n0)<<" pix      |"<<endl;
+        cout<<"|-----------------------------------|"<<endl;
+        cout<<"|     Dim_finale |     "<<dim_final<<" pixels   |"<<endl;
+        cout<<"|-----------------------------------|"<<endl;
+        cout<<"|    Tp Tomo theo|     "<<Tp_Tomo*pow(10,9)<<" nm     |"<<endl;
+        cout<<"+-----------------------------------+"<<endl;
+        cout<<"\n#######################################\n"<<endl;
 
-    fichier_sav_parametre<<"Fichiers d'acquisition : "<<chemin_acquis<<endl;
-    fichier_sav_parametre<<"\n##################### INFO Reconstruction ##################\n"<<endl;
-    fichier_sav_parametre<<"+----------------+-------------------+"<<endl;
-    fichier_sav_parametre<<"|    Grandeur    |    Valeur         |"<<endl;
-    fichier_sav_parametre<<"|------------------------------------|"<<endl;
-    fichier_sav_parametre<<"| champ en pixel |     "<<dimROI_Cam         <<" pix       |"<<endl;
-    fichier_sav_parametre<<"|    Tp Holo     |     "<<Tp_Uborn<<" nm |"<<endl;
-    fichier_sav_parametre<<"|    Delta_f     |     "<<Delta_f_tomo<<" µm-1  |"<<endl;
-    fichier_sav_parametre<<"|------------------------------------|"<<endl;
-    fichier_sav_parametre<<"|     Champ      |     "<<dimROI_Cam*Tp_Uborn<<" µm|"<<endl;
-    fichier_sav_parametre<<"|------------------------------------|"<<endl;
-    fichier_sav_parametre<<"|     R_Ewald    |     "<<R_EwaldPix<<" pixels     |"<<endl;
-    fichier_sav_parametre<<"|     R_Ewald m  |     "<<R_EwaldMet<<" µm-1|"<<endl;
-    fichier_sav_parametre<<"|------------------------------------|"<<endl;
-    fichier_sav_parametre<<"|     NXMAX_theo |     "<<round(R_EwaldPix*NAObj/n0)<<" pixels     |"<<endl;
-    fichier_sav_parametre<<"|------------------------------------|"<<endl;
-    fichier_sav_parametre<<"| Taille chp cplx|     "<<2*round(R_EwaldPix*NAObj/n0)<<" pixels    |"<<endl;
-    fichier_sav_parametre<<"|------------------------------------|"<<endl;
-    fichier_sav_parametre<<"|    Tp Chp cplx |     "<<2*round(R_EwaldPix*NAObj/n0)*Tp_Uborn<<" nm|"<<endl;
-    fichier_sav_parametre<<"|------------------------------------|"<<endl;
-    fichier_sav_parametre<<"|    Tp Tomo theo|     "<<Tp_Tomo*pow(10,9)<<" nm    |"<<endl;
-    fichier_sav_parametre<<"+------------------------------------+"<<endl;
-    fichier_sav_parametre<<"\n##################### FIN INFO Reconstruction ##################\n"<<endl;
+        fichier_sav_parametre<<"Fichiers d'acquisition : "<<chemin_acquis<<endl;
+        fichier_sav_parametre<<"\n##################### INFO Reconstruction ##################\n"<<endl;
+        fichier_sav_parametre<<"+----------------+-------------------+"<<endl;
+        fichier_sav_parametre<<"|    Grandeur    |    Valeur         |"<<endl;
+        fichier_sav_parametre<<"|------------------------------------|"<<endl;
+        fichier_sav_parametre<<"| champ en pixel |     "<<dimROI_Cam         <<" pix       |"<<endl;
+        fichier_sav_parametre<<"|    Tp Holo     |     "<<Tp_Uborn<<" nm |"<<endl;
+        fichier_sav_parametre<<"|    Delta_f     |     "<<Delta_f_tomo<<" µm-1  |"<<endl;
+        fichier_sav_parametre<<"|------------------------------------|"<<endl;
+        fichier_sav_parametre<<"|     Champ      |     "<<dimROI_Cam*Tp_Uborn<<" µm|"<<endl;
+        fichier_sav_parametre<<"|------------------------------------|"<<endl;
+        fichier_sav_parametre<<"|     R_Ewald    |     "<<R_EwaldPix<<" pixels     |"<<endl;
+        fichier_sav_parametre<<"|     R_Ewald m  |     "<<R_EwaldMet<<" µm-1|"<<endl;
+        fichier_sav_parametre<<"|------------------------------------|"<<endl;
+        fichier_sav_parametre<<"|     NXMAX_theo |     "<<round(R_EwaldPix*NAObj/n0)<<" pixels     |"<<endl;
+        fichier_sav_parametre<<"|------------------------------------|"<<endl;
+        fichier_sav_parametre<<"| Taille chp cplx|     "<<2*round(R_EwaldPix*NAObj/n0)<<" pixels    |"<<endl;
+        fichier_sav_parametre<<"|------------------------------------|"<<endl;
+        fichier_sav_parametre<<"|    Tp Chp cplx |     "<<2*round(R_EwaldPix*NAObj/n0)*Tp_Uborn<<" nm|"<<endl;
+        fichier_sav_parametre<<"|------------------------------------|"<<endl;
+        fichier_sav_parametre<<"|    Tp Tomo theo|     "<<Tp_Tomo*pow(10,9)<<" nm    |"<<endl;
+        fichier_sav_parametre<<"+------------------------------------+"<<endl;
+        fichier_sav_parametre<<"\n##################### FIN INFO Reconstruction ##################\n"<<endl;
 
-    fichier_sav_parametre.close();
+        fichier_sav_parametre.close();
 
 
 }

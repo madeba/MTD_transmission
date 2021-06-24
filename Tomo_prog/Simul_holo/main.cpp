@@ -42,13 +42,27 @@ int main( int argc, char** argv )
 
 
     ///Génération de l'objet (bille polystyrène, n=1.5983, absorption=?)
-    double Rboule_metrique=2.5*pow(10,-6);///rayon bille en m
+    double Rboule_metrique=5*pow(10,-6);///rayon bille en m
     int rayon_boule_pix=round(Rboule_metrique/m1.Tp_Tomo);///rayon bille en pixel
     Point3D centre_boule(dim3D.x/2,dim3D.x/2,dim3D.x/2,dim3D.x);//bille centrée dans l'image
-    double indice=1.49,kappa=0.000;//indice + coef d'extinction
+    double indice=1.330,kappa=0.000;//indice + coef d'extinction
     complex<double> nObj= {indice,kappa},n0= {m1.n0,0.0},Delta_n=nObj-n0;///init propriété bille
-    genere_bille(vol_bille,centre_boule, rayon_boule_pix,nObj-n0,n0-n0,dim3D.x);
-    SAV3D_Tiff((vol_bille),"Re",m1.chemin_result+"bille_Re.tif",m1.Tp_Tomo);
+    genere_bille(vol_bille,centre_boule, rayon_boule_pix,nObj-n0,dim3D.x);
+   /* Point3D coordMin(-25*pow(10,-6),-10*pow(10,-6),-0.31*pow(10,-6),dim3D.x),
+            coordMax(25*pow(10,-6),10*pow(10,-6),0.31*pow(10,-6),dim3D.x);*/
+
+   /* genere_barre(vol_bille,coordMin,coordMax,nObj-n0, m1);
+
+    coordMin.set_coord3D(-25*pow(10,-6),-10*pow(10,-6),2.31*pow(10,-6));
+        coordMax.set_coord3D(25*pow(10,-6),10*pow(10,-6),2.61*pow(10,-6));
+    genere_barre(vol_bille,coordMin,coordMax,-0.02, m1);
+
+    coordMin.set_coord3D(-25*pow(10,-6),-10*pow(10,-6),3.31*pow(10,-6));
+    coordMax.set_coord3D(25*pow(10,-6),10*pow(10,-6),3.61*pow(10,-6));
+    genere_barre(vol_bille,coordMin,coordMax,-0.06, m1);*/
+
+
+    SAV3D_Tiff((vol_bille),"Re",m1.chemin_result+"barre_Re.tif",m1.Tp_Tomo);
   //  SAV3D_Tiff((vol_bille),"im",m1.chemin_result+"bille_im.tif",m1.Tp_Tomo);
 
     ///--------------- Données physiques (en µm)----------------------------
@@ -83,9 +97,12 @@ int main( int argc, char** argv )
     cout<<"------------------------Calcul OTF et objet convolué"<<endl;
     OTF mon_OTF(m1);//init OTF
     mon_OTF.bFleur(CoordSpec_H, nbAxes);//retrieve tabular of specular beam from class OTF & create 3D OTF;
+    //mon_OTF.bMultiCercleUNI(10);
+   // mon_OTF.bFermat(nbAngle);
     //CoordSpec2=mon_OTF.bFleur(nbAxes);//retrieve tabular of specular beam from class OTF & create 3D OTF;
-    SAV3D_Tiff(mon_OTF.Valeur,"Re",m1.chemin_result+"OTF_simule_Re.tif",m1.Tp_Tomo);
 
+   // interp_lin3D(mon_OTF.Valeur);
+    SAV3D_Tiff(mon_OTF.Valeur,"Re",m1.chemin_result+"OTF_simule_Re.tif",m1.Tp_Tomo);
     ///calcul objet convolué
     for(int cpt=0; cpt<pow(m1.dim_final,3); cpt++){
      //SpectreObjConv[cpt]=mon_OTF.Valeur[cpt]*TF_bille[cpt];
@@ -99,6 +116,10 @@ int main( int argc, char** argv )
     SAV3D_Tiff(fftshift3D(obj_conv),"Im",m1.chemin_result+"obj_conv_Im.tif",m1.Tp_Tomo);
     vector<complex<double>>().swap(obj_conv);
 
+    vector<double> wrappedPhase(nbPix2D);
+    vector<double> unwrappedPhase(nbPix2D);
+    vector<double> amplitudeRytov(nbPix2D);
+    vector<double> amplitudeBorn(nbPix2D);
 
     cout<<"extraction hologramme"<<endl;
     ///extract complex field from 3D spectrum
@@ -113,19 +134,33 @@ int main( int argc, char** argv )
         ///Calcul des TF2D  des hologrammes à partir du spectre 3D de l'objet.
         calcHolo(spec_H,TF_bille,TF_holo,m1);//extract Ewald spheres + projection on a 2D plane
         // SAV2D_Tiff(TF_holo,"Im",dir_sav+"Tf_holo_Im.tif",m1.Tp_Uborn);
-        SAVCplx(TF_holo,"Re",m1.chemin_result+"TF_holo_H_Re_208x208x600.raw",t_float,"a+b");
-        Var2D decal2centreI= {-spec_H.x+m1.dim_Uborn/2,spec_H.y+m1.dim_Uborn/2};///centering all the spectrum in computer axes
+        //SAVCplx(TF_holo,"Re",m1.chemin_result+"TF_holo_H_Re_208x208x600.raw",t_float,"a+b");
+        Var2D decal2centreI= {-spec_H.x+m1.dim_Uborn/2,spec_H.y+m1.dim_Uborn/2};///centering all the spectrum in "computer axes"
        // SAVCplx(TF_holo,"Re",m1.chemin_result+"TF_holo_I_Re_208x208x600.raw",t_float,"a+b");
         decal2DCplxGen(TF_holo,TF_holo_shift,decal2centreI);
         ///calcul des hologrammes après recalage (hologrammes centrés)//calculation of hologramms, after shifting
         TF2Dcplx_INV(TF_holo_shift,holo,tf2D,m1.Delta_f_Uborn);
         SAVCplx(fftshift2D(holo),"Im",m1.chemin_result+"/UBornfinal_Im"+m1.dimImg+".raw",t_double,"a+b");
         SAVCplx(fftshift2D(holo),"Re",m1.chemin_result+"/UBornfinal_Re"+m1.dimImg+".raw",t_double,"a+b");
+
+        //calcPhase_mpi_pi_atan2(fftshift2D(holo),phase);
+        for(int cpt=0;cpt<nbPix2D;cpt++){
+            amplitudeRytov[cpt]=exp(sqrt(holo[cpt].imag()*holo[cpt].imag()+holo[cpt].real()*holo[cpt].real()));
+            amplitudeBorn[cpt]=(sqrt(holo[cpt].imag()*holo[cpt].imag()+holo[cpt].real()*holo[cpt].real()));
+            unwrappedPhase[cpt]=holo[cpt].imag();
+          //  phaseWrap[cpt]=wrapPhase(holo[cpt].imag());
+        }
+        wrappedPhase=wrap_phase(unwrappedPhase);
+        SAV2(fftshift2D(wrappedPhase),m1.chemin_result+"/wrapped_phase_rytov"+m1.dimImg+".raw",t_double,"a+b");
+        SAV2(fftshift2D(unwrappedPhase),m1.chemin_result+"/phase_rytov"+m1.dimImg+".raw",t_double,"a+b");
+        SAV2(fftshift2D(amplitudeRytov),m1.chemin_result+"/amplitude_rytov"+m1.dimImg+".raw",t_double,"a+b");
+        SAV2(fftshift2D(amplitudeBorn),m1.chemin_result+"/amplitude_born"+m1.dimImg+".raw",t_double,"a+b");
     }
+
     //sauver les centres sous forme d'image, pour contrôle
     SAV_Tiff2D(centres,m1.chemin_result+"centres_simul.tif",m1.Tp_holo);
-    //repasser les spéculaires en coordonnées informatique (attendu par tomo_reconstruction)
-    vector<double> tabPosSpec_I(m1.nbHolo*2);  ///nbhoo*2 coordonnées. stockage des speculaires pour exportation vers reconstruction
+    //repasser les spéculaires en coordonnées informatique (car attendu par tomo_reconstruction)
+    vector<double> tabPosSpec_I(m1.nbHolo*2);  ///nbHolo*2 coordonnées. stockage des speculaires pour exportation vers reconstruction
     for(int holo_numero=0;holo_numero<m1.nbHolo;holo_numero++){
         tabPosSpec_I[holo_numero]=CoordSpec_H[holo_numero].x+m1.dim_Uborn/2; //save tab_posSpec to a format readable by Tomo_reconstruction (computer )
         tabPosSpec_I[holo_numero+m1.nbHolo]=-CoordSpec_H[holo_numero].y+m1.dim_Uborn/2;

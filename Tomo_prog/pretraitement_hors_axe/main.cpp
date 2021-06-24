@@ -190,19 +190,17 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
       src=Mat(dim2DHA.x,dim2DHA.y,CV_64F, UnwrappedPhase.data());
       // auto start_calcAber = std::chrono::system_clock::now();
       Mat Phase_corr(aberCorr2(src, mask_aber,polynomeUs_to_fit,polynome_to_fit));
-    //  auto end_calcAber = std::chrono::system_clock::now();
-//auto elapsed = end_calcAber - start_calcAber;
-//std::cout <<"Temps pour FFT holo+découpe Spectre= "<< elapsed.count()/(pow(10,9)) << '\n';
+        //  auto end_calcAber = std::chrono::system_clock::now();
+        //auto elapsed = end_calcAber - start_calcAber;
+        //std::cout <<"Temps pour FFT holo+découpe Spectre= "<< elapsed.count()/(pow(10,9)) << '\n';
 
-      // SAV2((double*)Phase_corr.data,Phase_corr.rows*Phase_corr.cols,"/home/mat/tmp/phaseCorr_main.raw",t_float,"a+b");
-    ///---------------Correction amplitude----------------------------------------
-    for(size_t cpt=0; cpt<(NbPixUBorn); cpt++)
-      UBornAmp[cpt]=abs(UBorn[cpt]);
-
-
- //SAV2(UBornAmp,chemin_result+"/UBornAmp.raw",t_float,"a+b");
-    Mat srcAmp=Mat(dim2DHA.x, dim2DHA.y, CV_64F, UBornAmp.data());///image source
-    Mat UBornAmp_corr(ampliCorr2(srcAmp, polynomeUs_to_fit, polynome_to_fit, mask_aber));///résultat amplitude
+            // SAV2((double*)Phase_corr.data,Phase_corr.rows*Phase_corr.cols,"/home/mat/tmp/phaseCorr_main.raw",t_float,"a+b");
+            ///---------------Correction amplitude----------------------------------------
+            for(size_t cpt=0; cpt<(NbPixUBorn); cpt++)
+                UBornAmp[cpt]=abs(UBorn[cpt]);
+            //SAV2(UBornAmp,chemin_result+"/UBornAmp.raw",t_float,"a+b");
+            Mat srcAmp=Mat(dim2DHA.x, dim2DHA.y, CV_64F, UBornAmp.data());///image source
+            Mat UBornAmp_corr(ampliCorr2(srcAmp, polynomeUs_to_fit, polynome_to_fit, mask_aber));///résultat amplitude
     ///Fin Correction amplitude----------------------------------------*/
 int flag=0;
     for(size_t y=0; y<dim2DHA.y; y++){ // reconstruire l'onde complexe/Recalculate the complex field
@@ -210,10 +208,9 @@ int flag=0;
         size_t cpt=x+y*dim2DHA.x;
         PhaseFinal[cpt]=Phase_corr.at<double>(y,x);//copie opencV->Tableau
         UBornAmpFinal[cpt]=UBornAmp_corr.at<double>(y,x);
-        if(UBornAmpFinal[cpt]>10) UBornAmpFinal[cpt]=1;
-     if(UBornAmpFinal[cpt]<-10)  UBornAmpFinal[cpt]=1;
+        if(UBornAmpFinal[cpt]>10) UBornAmpFinal[cpt]=1;//Amplitude should always be around 1 after correction
+        if(UBornAmpFinal[cpt]<-10)  UBornAmpFinal[cpt]=1;
        // if(UBornAmpFinal[cpt]<-1 && flag==0) { cout<<"Holo numero"<<cpt_angle<<endl;flag=1;}
-
         if(m1.b_Born==true){ //UBORN=U_tot-U_inc=u_tot_norm-1
          // UBornFinal[cpt].real( (sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt])- 1 )*cos(PhaseFinal[cpt]) );//*masqueTukeyHolo[cpt]);///correction amplitude
          // UBornFinal[cpt].imag( (sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt]) - 1)*sin(PhaseFinal[cpt]) );//*masqueTukeyHolo[cpt]);
@@ -263,6 +260,10 @@ delete[] UnwrappedPhase_herraez;
 cout<<"NXMAX sauve="<<m1.NXMAX<<endl;
 vector<double> param{m1.NXMAX,NbAngle,m1.rayon,dimROI.x,m1.tailleTheoPixelHolo};
 SAV2(param,m1.chemin_result+"/parametres.raw", t_double, "wb");
+/*for(int cpt=0;cpt<NbAngle;cpt++)
+{
+    cout<<"tabPosSpec.y="<<tabPosSpec[cpt]<<","<<"tabPosSpec.y="<<tabPosSpec[cpt+NbAngle]<<endl;
+}*/
 SAV2(tabPosSpec,m1.chemin_result+"/tab_posSpec.raw",t_double,"wb");///sav speculaire en copord informatique [0->2NXMAX-1]
 SAV_Tiff2D(centre,m1.chemin_result+"/centres.tif",m1.NA/m1.NXMAX); //exportation des spéculaires en "unité NA"
 cout<<"Fin prétraitement"<<endl;

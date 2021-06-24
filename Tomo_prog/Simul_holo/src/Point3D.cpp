@@ -40,7 +40,11 @@ int Point3D::get_dim3D()
 {
 return this->dim3D;
 }
-
+void Point3D::set_coord3D(double x, double y, double z){
+this->x=x;
+this->y=y;
+this->z=z;
+}
 size_t Point3D::cpt3D()
 {
     size_t cpt=0;

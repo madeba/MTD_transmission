@@ -13,6 +13,74 @@
 
 using namespace cv;
 using namespace std;
+
+void delete_file(string file_path){
+    if( remove(file_path.c_str()) == 0 ){
+            string message="fichier"+file_path+" déjà effacé";
+        perror(message.c_str());
+    }
+    }
+
+std::vector<double> wrap_phase(std::vector<double> &unwrapped_phase){
+    vector<double> wrapped_phase(unwrapped_phase.size());
+    for(size_t cpt=0;cpt<unwrapped_phase.size();cpt++){
+            if(unwrapped_phase[cpt]<2*M_PI){
+                wrapped_phase[cpt]=unwrapped_phase[cpt];
+            }
+            else{
+                int k=floor(unwrapped_phase[cpt]/(2*M_PI));
+                wrapped_phase[cpt]=unwrapped_phase[cpt]-k*2*M_PI;
+            }
+    }
+    return wrapped_phase;
+}
+
+///Interpolation3D : attend un volume "troué" et les dimensions en x,y,et z
+void interp_lin3D(vector <complex<double>> &volume_interp_3D)
+{
+    vector <complex<double>> zmin_max(volume_interp_3D.size());
+    int dim=round(pow(volume_interp_3D.size(),1.0/3));
+    cout<<"dim="<<dim<<endl;
+    int dim_x=dim,dim_y=dim, dim_z=dim;
+    int z=0;
+    int z_min=0;//dim_z;
+    int z_max=0;//zmin et zmax sont les 2 points définissant la droite d'interpolation
+
+    for (int x=0; x < dim_x; x++){    //on balaye l'image, référentiel avec centre informatique
+        for (int y=0; y<dim_y; y++){   //on balaye l'image,
+            z=0;
+            z_min=0,z_max=0;
+            while(z<dim_z){  // pas de boucle for car l'indice est variable
+                double valeur_test=volume_interp_3D[x+y*dim_x+z*dim_y*dim_x].real();
+                if(volume_interp_3D[x+y*dim_x+z*dim_y*dim_x].real() !=0){   //si valeur !=0, alors borne inférieure
+                    z_min=z; //on a trouvé z_min
+                    z_max=z_min+1; //initialiser z_max au point suivant (sinon volume_interp_3D!=0 ->while jamais verifie)
+                    ///find zmax=next point containing a data and !=dimZ
+                    while( z_max<dim_z && volume_interp_3D[x+y*dim_x+z_max*dim_y*dim_x].real()==0){    //soit trouver prochain z_max, soit fin de colonne. Indifférent real() ou imag(), donc on prend arbitrairement real()
+                        z_max=z_max+1;
+                        z=z_max;
+                    }
+                    //cout<<"zmax="<<z_max<<endl;
+                    ///zmin and zmax found, , if there is a "hole", we can interpolate : LINEAR INTERPOLATION
+                    if(z_max<=dim_z && (z_max-z_min)>=2 && volume_interp_3D[x+y*dim_x+z_max*dim_y*dim_x].real() !=0){   //il faut au moins un trou pour interpoler
+                       //y=ax+b-> interpolation linéaire
+                        double a_real=(volume_interp_3D[x+y*dim_x+z_max*dim_y*dim_x].real()-volume_interp_3D[x+y*dim_x+z_min*dim_y*dim_x].real())/(z_max-z_min);
+                        double b_real=volume_interp_3D[x+y*dim_x+z_max*dim_y*dim_x].real()-a_real*z_max;
+                        double a_imag=(volume_interp_3D[x+y*dim_x+z_max*dim_y*dim_x].imag()-volume_interp_3D[x+y*dim_x+z_min*dim_y*dim_x].imag())/(z_max-z_min);
+                        double b_imag=volume_interp_3D[x+y*dim_x+z_max*dim_y*dim_x].imag()-a_imag*z_max;
+
+                        for(int cpt_z=z_min+1; cpt_z<z_max; cpt_z++){
+                             volume_interp_3D[x+y*dim_x+cpt_z*dim_y*dim_x].real(a_real*cpt_z+b_real);
+                             volume_interp_3D[x+y*dim_x+cpt_z*dim_y*dim_x].imag(a_imag*cpt_z+b_imag);
+                        }
+                    z=z_max-1; // nouveau compteur=ancienne borne sup (-1 car z++)
+                    }
+                }
+                z++;
+            }//fin z
+        }//fin y
+    } //fin x
+}
 //calcule le spectre d'hologramme à partir d'une sphere d'ewald de centre (Point2D spec) et du spectre de l'objet.
 void calcPhase_mpi_pi_atan2(vector<complex<double>> obj, vector<double> &phaseMod2pi)///calcul phase -PI-PI
 {
@@ -215,7 +283,7 @@ void SAV3D_Tiff(vector<complex <double>> var_sav, string partie, string chemin, 
         TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_BOTLEFT);
         TIFFSetField (out, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP); //image en Floating point
         /* It is good to set resolutions too (but it is not nesessary) */
-        xres = yres = 0.01/taille_pixel; //nbpixel par resunit (par centimetre)
+        xres = yres = 0.01/taille_pixel; //nbpixel par resunit (par centimetre, 0.01 m)
         res_unit = RESUNIT_CENTIMETER;
         TIFFSetField(out, TIFFTAG_XRESOLUTION, xres);
         TIFFSetField(out, TIFFTAG_YRESOLUTION, yres);
@@ -288,7 +356,7 @@ void circshift3DCplx(vector<complex<double>> volume3D, vector<complex<double>> v
 }
 
 //#############################################################"
-void genere_bille(vector<complex<double>> &vol_bille,  Point3D centre, size_t rayon_bille, complex<double> indiceObj, complex<double> indiceImmersion, size_t dim_espace)
+void genere_bille(vector<complex<double>> &vol_bille,  Point3D centre, size_t rayon_bille, complex<double> delta_indice,  size_t dim_espace)
 {
 double zmax=centre.z+rayon_bille;
 double zmin=centre.z-rayon_bille;
@@ -297,10 +365,10 @@ double xmin=centre.x-rayon_bille;
 double ymax=centre.y+rayon_bille;
 double ymin=centre.y-rayon_bille;
 int nbPixBille=0;
-for(size_t cpt=0;cpt<vol_bille.size();cpt++){
+/*for(size_t cpt=0;cpt<vol_bille.size();cpt++){
      vol_bille[cpt].real(indiceImmersion.real());
      vol_bille[cpt].imag(indiceImmersion.imag());
-}
+}*/
 
 int rayon_carre=pow(rayon_bille,2);
 
@@ -311,8 +379,8 @@ for(double z=zmin;z<zmax;z++)
             int cpt=z*dim_espace*dim_espace+y*dim_espace+x;
 
             if((x-centre.x)*(x-centre.x)+(y-centre.y)*(y-centre.y)+(z-centre.z)*(z-centre.z)<rayon_carre){
-                vol_bille[cpt].real(indiceObj.real());
-                vol_bille[cpt].imag(indiceObj.imag());
+                vol_bille[cpt].real(delta_indice.real());
+                vol_bille[cpt].imag(delta_indice.imag());
                 nbPixBille++;
             }
          }
@@ -321,8 +389,37 @@ for(double z=zmin;z<zmax;z++)
 
 }
 
+void genere_barre(vector<complex<double>> &vol_obj,  Point3D coordMin, Point3D coordMax, complex<double> delta_indice, manip m1)
+{
 
+    //n0=immersion
+/*for(size_t cpt=0;cpt<vol_obj.size();cpt++){
+    if(vol_obj[cpt].real(indiceImmersion.real())!=0)  vol_obj[cpt].real(indiceImmersion.real()) ;
+    if(vol_obj[cpt].real(indiceImmersion.imag())!=0)  vol_obj[cpt].imag(indiceImmersion.imag());
+}*/
+int dim=round( pow(vol_obj.size(),1.0/3.0));
+//convertir coordonnées de microns en pixel
 
+Point3D coordMinPix( round(coordMin.x/m1.Tp_Tomo),round(coordMin.y/m1.Tp_Tomo),round(coordMin.z/m1.Tp_Tomo), dim ),
+coordMaxPix( round(coordMax.x/m1.Tp_Tomo),round(coordMax.y/m1.Tp_Tomo),round(coordMax.z/m1.Tp_Tomo), dim );
+
+cout<<"dim="<<dim<<endl;
+cout<<"génération bloc rectangulaire, coordMin=("<<coordMin.x<<","<<coordMin.y<<","<<coordMin.z<<")"<<endl;
+cout<<"coordMax="<<coordMax.x<<","<<coordMax.y<<","<<coordMax.z<<")"<<endl;
+cout<<"taille pixel="<<m1.Tp_Tomo<<endl;
+cout<<"génération bloc rectangulaire, coordMinPix=("<<coordMinPix.x<<","<<coordMinPix.y<<","<<coordMinPix.z<<")"<<endl;
+cout<<"coordMaxPix="<<coordMaxPix.x<<","<<coordMaxPix.y<<","<<coordMaxPix.z<<")"<<endl;
+if(coordMax.y>dim/2) cout<<"problem coordonnées"<<endl;
+    for(int x=coordMinPix.x+round(dim/2);x<coordMaxPix.x+round(dim/2);x++){
+        for(int y=coordMinPix.y+round(dim/2);y<coordMaxPix.y+round(dim/2);y++){
+            for(int z=coordMinPix.z+round(dim/2);z<coordMaxPix.z+round(dim/2);z++){
+            int cpt=z*dim*dim+y*dim+x;
+            if(vol_obj[cpt].real()==0) vol_obj[cpt].real(delta_indice.real());
+              if(vol_obj[cpt].imag()==0) vol_obj[cpt].imag(delta_indice.imag());
+            }
+        }
+    }
+}
 
 
 void circshift3DCplx(vector<complex<double>> volume3D, vector<complex<double> > &volume3D_shift, Var3D decal3D)//(entrée, sortie_decalee, dim, decalage)

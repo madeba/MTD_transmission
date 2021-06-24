@@ -13,6 +13,41 @@
  */
 using namespace std::chrono;
 using namespace std;
+
+
+vector<complex<double>> extractSliceZ(vector<complex<double>> &index3D, string axis, size_t height)
+{
+    int dim=cbrt(index3D.size());///cbrt calculate cube root
+    size_t cpt2D,cpt3D;
+    vector<complex<double>> slice2D(dim*dim);
+    if(axis=="z"){
+        for(int y=0;y<dim;y++)
+        for(int x=0;x<dim;x++){
+                cpt2D=x+y*dim;
+                cpt3D=x+y*dim+height*dim*dim;
+                slice2D[cpt2D]=index3D[cpt3D];
+        }
+    }
+    if(axis=="y"){
+        for(int z=0;z<dim;z++)
+        for(int x=0;x<dim;x++){
+                cpt2D=x+z*dim;
+                cpt3D=x+height*dim+z*dim*dim;
+                slice2D[cpt2D]=index3D[cpt3D];
+        }
+    }
+    if(axis=="x"){
+        for(int z=0;z<dim;z++)
+        for(int y=0;y<dim;y++){
+                cpt2D=y+z*dim;
+                cpt3D=height+y*dim+z*dim*dim;
+                slice2D[cpt2D]=index3D[cpt3D];
+        }
+    }
+
+    return slice2D;
+}
+
 string extract_string(std::string const &token,  std::string chemin_fic)
 {
     ifstream fichier(chemin_fic.c_str(), ios::in);  // on ouvre en lecture
@@ -903,153 +938,52 @@ void changeDim2DCplx(nbCplx *tab, nbCplx* tabFinal, Var2D dimInit, Var2D dimFin)
 
 
 
-//Interpolation3D : attend un volume "troué" et les dimensions en x,y,et z
-
-void interp3D(double *volume_interp_3D, int taille_x,int taille_y,int taille_z)
-{
-    int z=0;
-    // int cpt=x+y*dv0rf+z*taille_y*dv0rf;
-    int z_min=taille_z;
-    int z_max=0;
-
-    // cout<< "valeur papillon : "<< volume_interp_3D[cpt] << endl;
-    for (int x=0; x < taille_x; x++)   //on balaye l'image, référentiel avec centre informatique
-    {
-        for (int y=0; y<taille_y; y++)   //on balaye l'image,
-        {
-
-            z=0;
-            //printf("cpt : %i, sup redon : %d\n",x+y*taille_x+z*taille_y*taille_x,volume_interp_3D[x+y*taille_x+z*taille_y*taille_x]);
-            while(z<taille_z)   // pas de boucle for car l'indice est variable
-            {
-                float valeur_test=volume_interp_3D[x+y*taille_x+z*taille_y*taille_x];
-                if(valeur_test!=0 && z<taille_z)   //si valeur !=0, alors borne inférieure mais z_min ne peut valoir 19.
-                {
-                    //printf("coucou1 sup_redon : %f,x,y,z : %i,%i,%i\n",volume_interp_3D[x+y*taille_x+z*taille_y*taille_x],x,y,z);
-                    z_min=z; //on a trouvé z_min
-                    //printf("x,y: %i,%i z : %i, sup_redon : %f\n",x,y,z, volume_interp_3D[x+y*taille_x+z*taille_y*taille_x]);
-                    z_max=z_min+1; //initialiser z_max au point suivant (sinon while jamais verifie)
-
-                    while( z_max<taille_z && volume_interp_3D[x+y*taille_x+z_max*taille_y*taille_x]==0)   //soit trouver prochain z_max, soit fin de colonne
-                    {
-                        //printf("coucou2\n,%i,%i,%i,sup_redon : %f\n",x,y,z_max,volume_interp_3D[x+y*taille_x+z_max*taille_y*taille_x]);
-                        z_max=z_max+1;
-                        z=z_max;
-
-                        if(z_max==taille_z-1)
-                        {
-                            //printf("fin de colonne\n");
-                        }
-                    }
-                    if(z_max!=taille_z && z_max-z_min>1 && volume_interp_3D[x+y*taille_x+z_max*taille_y*taille_x]!=0)   //il faut au moins un trou pour interpoler
-                    {
-                        //printf("interpolation x,y,zmin, z_max: %i,%i,%i, %i\n", x,y,z_min,z_max);
-
-                        //y=ax+b-> interpolation linéaire
-                        double a=(volume_interp_3D[x+y*taille_x+z_max*taille_y*taille_x]-volume_interp_3D[x+y*taille_x+z_min*taille_y*taille_x])/(z_max-z_min);
-                        double b=volume_interp_3D[x+y*taille_x+z_max*taille_y*taille_x]-a*z_max;
-                        //printf("hello: z_min: %i, zmax:%i\n",z_min,z_max);
-                        for(int cpt_z=z_min+1; cpt_z<z_max; cpt_z++)
-
-                        {
-                            volume_interp_3D[x+y*taille_x+cpt_z*taille_y*taille_x]=a*cpt_z+b;
-                            //printf("interpolaion finie\n");
-                        }
-                        // 						x;
-                        // 						volume_interp_3D[x+y*taille_x+z_min*taille_y*taille_x];
-                        // 						z_min;
-                        // 						volume_interp_3D[x+y*taille_x+z_max*taille_y*taille_x];
-                        // 						z_max;
-
-                        z=z_max-1; // nouveau compteur=ancienne borne sup (-1 car z++)
-                    }
-                    // redémarrer le compteur de ligne à z_max
-                }
-                z++;
-            }
-
-        }
-    }
-}
-
-///linear interpolation in Fourier, only on thez z direction
+///Interpolation3D : attend un volume "troué" et les dimensions en x,y,et z
 void interp_lin3D(vector <complex<double>> &volume_interp_3D)
 {
-vector <complex<double>> zmin_max(volume_interp_3D.size());
-   int dim=round(pow(volume_interp_3D.size(),1.0/3));
-    cout<<"dim="<<dim;
-     int dim_x=dim+1,dim_y=dim+1, dim_z=dim+1;
+    vector <complex<double>> zmin_max(volume_interp_3D.size());
+    int dim=round(pow(volume_interp_3D.size(),1.0/3));
+    cout<<"dim="<<dim<<endl;
+    int dim_x=dim,dim_y=dim, dim_z=dim;
     int z=0;
-
-    // int cpt=x+y*dv0rf+z*dim_y*dv0rf;
     int z_min=0;//dim_z;
     int z_max=0;//zmin et zmax sont les 2 points définissant la droite d'interpolation
 
-    // cout<< "valeur papillon : "<< volume_interp_3D[cpt] << endl;
-    for (int x=0; x < dim_x; x++){   //on balaye l'image, référentiel avec centre informatique
-       for (int y=0; y<dim_y; y++){   //on balaye l'image,
-            z=0;//
+    for (int x=0; x < dim_x; x++){    //on balaye l'image, référentiel avec centre informatique
+        for (int y=0; y<dim_y; y++){   //on balaye l'image,
+            z=0;
             z_min=0,z_max=0;
-            ///real part
-            while(z<dim_z)   // pas de boucle for car l'indice est variable
-            {
-                float valeur_test=volume_interp_3D[x+y*dim_x+z*dim_y*dim_x].real();
-                if(valeur_test!=0 && z<dim_z)   //si valeur !=0, alors borne inférieure mais z_min ne peut valoir 19.
-                {
+            while(z<dim_z){  // pas de boucle for car l'indice est variable
+                double valeur_test=volume_interp_3D[x+y*dim_x+z*dim_y*dim_x].real();
+                if(volume_interp_3D[x+y*dim_x+z*dim_y*dim_x].real() !=0){   //si valeur !=0, alors borne inférieure
                     z_min=z; //on a trouvé z_min
                     z_max=z_min+1; //initialiser z_max au point suivant (sinon volume_interp_3D!=0 ->while jamais verifie)
                     ///find zmax=next point containing a data and !=dimZ
-                    while( z_max<dim_z && volume_interp_3D[x+y*dim_x+z_max*dim_y*dim_x].real()==0){   //soit trouver prochain z_max, soit fin de colonne. Indifférent real() ou imag(), donc on prend arbitrairement real()
+                    while( z_max<dim_z && volume_interp_3D[x+y*dim_x+z_max*dim_y*dim_x].real()==0){    //soit trouver prochain z_max, soit fin de colonne. Indifférent real() ou imag(), donc on prend arbitrairement real()
                         z_max=z_max+1;
                         z=z_max;
-                       /* if(z_max==dim_z-1){
-                            printf("fin de colonne\n");
-                        }*/
                     }
-
+                    //cout<<"zmax="<<z_max<<endl;
                     ///zmin and zmax found, , if there is a "hole", we can interpolate : LINEAR INTERPOLATION
-                    if(z_max<=dim_z && (z_max-z_min)>1 && volume_interp_3D[x+y*dim_x+z_max*dim_y*dim_x].real() !=0)   //il faut au moins un trou pour interpoler
-                    {
-                        //y=ax+b-> interpolation linéaire
-                      /*  double a_real=(volume_interp_3D[x+y*dim_x+z_max*dim_y*dim_x].real()-volume_interp_3D[x+y*dim_x+z_min*dim_y*dim_x].real())/(z_max-z_min);
+                    if(z_max<=dim_z && (z_max-z_min)>=2 && volume_interp_3D[x+y*dim_x+z_max*dim_y*dim_x].real() !=0){   //il faut au moins un trou pour interpoler
+                       //y=ax+b-> interpolation linéaire
+                        double a_real=(volume_interp_3D[x+y*dim_x+z_max*dim_y*dim_x].real()-volume_interp_3D[x+y*dim_x+z_min*dim_y*dim_x].real())/(z_max-z_min);
                         double b_real=volume_interp_3D[x+y*dim_x+z_max*dim_y*dim_x].real()-a_real*z_max;
-
                         double a_imag=(volume_interp_3D[x+y*dim_x+z_max*dim_y*dim_x].imag()-volume_interp_3D[x+y*dim_x+z_min*dim_y*dim_x].imag())/(z_max-z_min);
                         double b_imag=volume_interp_3D[x+y*dim_x+z_max*dim_y*dim_x].imag()-a_imag*z_max;
-*/
-                        //printf("hello: z_min: %i, zmax:%i\n",z_min,z_max);
+
                         for(int cpt_z=z_min+1; cpt_z<z_max; cpt_z++){
-                           // volume_interp_3D[x+y*dim_x+cpt_z*dim_y*dim_x].real(a_real*cpt_z+b_real);
-                           // volume_interp_3D[x+y*dim_x+cpt_z*dim_y*dim_x].imag(a_imag*cpt_z+b_imag);
-                           volume_interp_3D[x+y*dim_x+cpt_z*dim_y*dim_x].real(42);
-                           volume_interp_3D[x+y*dim_x+cpt_z*dim_y*dim_x].imag(43);
-                            //printf("interpolation finie\n");
+                             volume_interp_3D[x+y*dim_x+cpt_z*dim_y*dim_x].real(a_real*cpt_z+b_real);
+                             volume_interp_3D[x+y*dim_x+cpt_z*dim_y*dim_x].imag(a_imag*cpt_z+b_imag);
                         }
-                        z=z_max-1; // nouveau compteur=ancienne borne sup (-1 car z++)
+                    z=z_max-1; // nouveau compteur=ancienne borne sup (-1 car z++)
                     }
-                    // redémarrer le compteur de ligne à z_max
-
-                        }
-
-
-                }//fin z
- z++;
-if(z_max-z_min>1){
-                         zmin_max[x+y*dim_x+z_min*dim_y*dim_x].real(128.0);
-                            zmin_max[x+y*dim_x+z_min*dim_y*dim_x].imag(128.0);
-
-                              zmin_max[x+y*dim_x+z_max*dim_y*dim_x].real(255.0);
-                            zmin_max[x+y*dim_x+z_max*dim_y*dim_x].imag(255.0);
-        }
-
-
-            }//fin y
-
+                }
+                z++;
+            }//fin z
+        }//fin y
     } //fin x
-   SAV3D_Tiff(zmin_max,"Re","/home/mat/tmp/zmin_max.tiff",1);
 }
-
-
 
 //##############§FIN INTERP3D#####################################################
 
@@ -1787,48 +1721,36 @@ int CreerZoneFresnel(double *FresnelRe,double * FresnelIm, Var2D dim, Var2D cent
     return 1;
 }
 
-///#########lecture propre d'un fichire binaire 3D, connaissant sa taille et son type de données
+///#########lecture  d'un fichire binaire 3D, connaissant sa taille et son type de données
+///read a  binary file. (path, 3D table, data format (double=64), Nbpixels to be read). for data format, can use enum PRECISION, cf "projet.h"
 void lire_bin(string chemin, double resultat[], short int precision, const size_t NbPix)
 {
-    size_t lTaille;
-    size_t nb_elmnt_lu;
+    size_t lTaille, nb_elmnt_lu;//size and number of elements
     unsigned short int dimData=precision/8;//taille en octet d'un element.
-
     FILE* pFichier = NULL;
-
     pFichier = fopen(chemin.c_str(), "r");  //ouverture de ce fichier en écriture binaire
-    //cout<<pFichier<<endl;
 
-
-    if(pFichier==NULL)
-    {
+    if(pFichier==NULL){
         fputs("Impossible d'ouvrir le fichier\n",stderr);
         cout<<chemin<<endl;
         exit (1);// obtenir la longueur du fichier, comparer avec donnée entrée.
     }
-    else
-    {
-
+    else{
         fseek(pFichier,0,SEEK_END);//trouver la fin de fichier
-
         lTaille = ftell (pFichier);//retourne la position courante (en octet) du curseur de fichier : ici, position de la fin du fichier
         // printf("taille trouvée en octet par ftell %li, taille estimée : %i\n",lTaille,NbPix*dimData);//
         rewind(pFichier);
-
-
 
         if(NbPix*dimData!=lTaille)
             cout<<"Taille du fichier incompatible avec les dimensions\n"<<endl;
 
         nb_elmnt_lu = fread (resultat,1,lTaille,pFichier);//lecture
+        //nb_elmnt_lu = fread (&resultat_vector[0], 1,lTaille,pFichier);
 
-        if(nb_elmnt_lu!=lTaille)
-        {
+        if(nb_elmnt_lu!=lTaille){
             cout<<"Problème lors de la lecture du fichier "<<chemin<<endl;
-
             cout<<"Nombre d'éléments lus="<<nb_elmnt_lu<<endl;
         }
-
         fclose(pFichier);
     }
 

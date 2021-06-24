@@ -3483,3 +3483,404 @@
 	"u3.h"
 	<unistd.h>
 
+1623420225 source:/home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_holo_PP/main.cpp
+	"opencv2/core/core.hpp"
+	"opencv2/imgproc/imgproc.hpp"
+	"opencv2/highgui/highgui.hpp"
+	<iostream>
+	<string>
+	<sstream>
+	<PvSampleUtils.h>
+	<PvDevice.h>
+	<PvDeviceGEV.h>
+	<PvDeviceU3V.h>
+	<PvStream.h>
+	<PvStreamGEV.h>
+	<PvStreamU3V.h>
+	<PvPipeline.h>
+	<PvBuffer.h>
+	"string.h"
+	"vChronos.h"
+	<boost/thread.hpp>
+	<boost/date_time.hpp>
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+	<unistd.h>
+	<stdio.h>
+	<math.h>
+	<assert.h>
+	<termios.h>
+	<unistd.h>
+	<fcntl.h>
+	<fftw3.h>
+	<tiffio.h>
+	<iostream>
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"fonctions.h"
+	"manip.h"
+	<complex>
+	"Point2D.h"
+	<PvDeviceFinderWnd.h>
+	<list>
+
+1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvSampleUtils.h
+	<afxwin.h>
+	<windows.h>
+	<process.h>
+	<conio.h>
+	<stdio.h>
+	<string>
+	<iostream>
+	<sstream>
+	<iomanip>
+	<vector>
+	<PvTypes.h>
+	<PvDevice.h>
+	<PvSystem.h>
+	<PvDeviceGEV.h>
+	<stdlib.h>
+	<string.h>
+	<termios.h>
+	<unistd.h>
+	<fcntl.h>
+	<signal.h>
+	<sys/time.h>
+	<pthread.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvTypes.h
+	<stdint.h>
+	<stdint.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvDevice.h
+	<PvDeviceLib.h>
+	<PvDeviceInfo.h>
+	<PvGenParameterArray.h>
+	<PvDeviceEnums.h>
+	<PvDeviceEventSink.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvDeviceLib.h
+	<PvLinkLib.h>
+	<PvResult.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvLinkLib.h
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvResult.h
+	<PvString.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvString.h
+	<PvBaseLib.h>
+	<string>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvBaseLib.h
+	<PvLinkLib.h>
+	<PvTypes.h>
+	<vld.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvDeviceInfo.h
+	<PvSystemLib.h>
+	<PvSystemEnums.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvSystemLib.h
+	<PvLinkLib.h>
+	<PvResult.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvSystemEnums.h
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvGenParameterArray.h
+	<PvGenICamLib.h>
+	<PvGenString.h>
+	<PvGenInteger.h>
+	<PvGenEnum.h>
+	<PvGenFloat.h>
+	<PvGenCommand.h>
+	<PvGenBoolean.h>
+	<PvGenRegister.h>
+	<PvGenCategory.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvGenICamLib.h
+	<PvLinkLib.h>
+	<PvResult.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvGenString.h
+	<PvGenParameter.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvGenParameter.h
+	<PvGenICamLib.h>
+	<PvGenParameterList.h>
+	<PvGenTypes.h>
+	<PvGenApi.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvGenParameterList.h
+	<PvGenICamLib.h>
+	<PvGenParameter.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvGenTypes.h
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvGenApi.h
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvGenInteger.h
+	<PvGenParameter.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvGenEnum.h
+	<PvGenParameter.h>
+	<PvGenEnumEntry.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvGenEnumEntry.h
+	<PvGenICamLib.h>
+	<PvGenTypes.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvGenFloat.h
+	<PvGenParameter.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvGenCommand.h
+	<PvGenParameter.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvGenBoolean.h
+	<PvGenParameter.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvGenRegister.h
+	<PvGenParameter.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvGenCategory.h
+	<PvGenICamLib.h>
+	<PvGenTypes.h>
+	<PvGenApi.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvDeviceEnums.h
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvDeviceEventSink.h
+	<PvDevice.h>
+	<PvGenParameterList.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvSystem.h
+	<PvSystemEventSink.h>
+	<PvNetworkAdapter.h>
+	<PvUSBHostController.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvSystemEventSink.h
+	<PvSystemLib.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvNetworkAdapter.h
+	<PvSystemLib.h>
+	<PvInterface.h>
+	<PvDeviceInfoGEV.h>
+	<PvDeviceInfoPleoraProtocol.h>
+	<vector>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvInterface.h
+	<PvSystemLib.h>
+	<PvDeviceInfo.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvDeviceInfoGEV.h
+	<PvDeviceInfo.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvDeviceInfoPleoraProtocol.h
+	<PvDeviceInfo.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvUSBHostController.h
+	<PvInterface.h>
+	<PvDeviceInfoUSB.h>
+	<PvDeviceInfoU3V.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvDeviceInfoUSB.h
+	<PvDeviceInfo.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvDeviceInfoU3V.h
+	<PvDeviceInfoUSB.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvDeviceGEV.h
+	<PvDevice.h>
+
+1521607719 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvDeviceU3V.h
+	<PvDevice.h>
+
+1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvStream.h
+	<PvStreamLib.h>
+	<PvBuffer.h>
+	<PvStreamEventSink.h>
+	<PvGenParameterArray.h>
+
+1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvStreamLib.h
+	<PvLinkLib.h>
+	<PvResult.h>
+
+1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvBuffer.h
+	<PvBufferLib.h>
+	<PvPixelType.h>
+	<PvPayloadType.h>
+	<PvImage.h>
+	<PvRawData.h>
+	<PvChunkData.h>
+
+1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvBufferLib.h
+	<PvLinkLib.h>
+	<PvResult.h>
+
+1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvPixelType.h
+	<PvBufferLib.h>
+
+1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvPayloadType.h
+
+1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvImage.h
+	<PvBufferLib.h>
+	<PvPixelType.h>
+
+1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvRawData.h
+	<PvBufferLib.h>
+	<PvPixelType.h>
+
+1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvChunkData.h
+	<PvBufferLib.h>
+	<PvPixelType.h>
+
+1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvStreamEventSink.h
+	<PvStreamLib.h>
+
+1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvStreamGEV.h
+	<PvStream.h>
+
+1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvStreamU3V.h
+	<PvStream.h>
+
+1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvPipeline.h
+	<PvStreamLib.h>
+	<PvStream.h>
+	<PvPipelineEventSink.h>
+
+1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvPipelineEventSink.h
+	<PvStreamLib.h>
+
+1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvDeviceFinderWnd.h
+	<PvGUILib.h>
+	<PvWnd.h>
+	<PvDeviceInfo.h>
+
+1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvGUILib.h
+	<PvTypes.h>
+	<PvString.h>
+	<PvResult.h>
+	<Windows.h>
+	<PvResult.h>
+
+1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvWnd.h
+	<PvGUILib.h>
+
+1591619510 source:/home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_holo_PP/src/FFT_encaps.cpp
+	"FFT_encaps.h"
+
+1591619510 source:/home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_holo_PP/src/FFT_fonctions.cpp
+	"FFT_fonctions.h"
+	"fonctions.h"
+	"manip.h"
+
+1591619510 source:/home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_holo_PP/src/fonctions.cpp
+	<fstream>
+	<vector>
+	<complex>
+	<fftw3.h>
+	"struct.h"
+	"projet.h"
+	"FFT_fonctions.h"
+	"fonctions.h"
+
+1591619510 source:/home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_holo_PP/src/manip.cpp
+	"manip.h"
+	<iostream>
+	"fonctions.h"
+	"projet.h"
+
+1591619510 source:/home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_holo_PP/src/Point2D.cpp
+	"Point2D.h"
+
+1591619510 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_holo_PP/include/john/vChronos.h
+	"vChrono.h"
+	"macros.h"
+	<string.h>
+	<boost/chrono.hpp>
+	<iostream>
+	"vChronos.h"
+
+1591619510 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_holo_PP/include/john/vChrono.h
+	<boost/chrono.hpp>
+
+1591619510 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_holo_PP/include/john/macros.h
+	<time.h>
+	<stdlib.h>
+	"vChrono.h"
+	<xmmintrin.h>
+	<immintrin.h>
+	<smmintrin.h>
+	<sys/mman.h>
+	<assert.h>
+	"legacy_macros.h"
+
+1591619510 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_holo_PP/include/john/legacy_macros.h
+
+1591619510 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_holo_PP/include/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<fftw3.h>
+	<tiffio.h>
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	"projet.h"
+	<vector>
+	<complex>
+	"FFT_encaps.h"
+	"FFT_fonctions.h"
+
+1591619510 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_holo_PP/include/struct.h
+
+1591619510 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_holo_PP/include/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1591619510 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_holo_PP/include/FFT_encaps.h
+	"Point3D.h"
+	"Point2D.h"
+	<fftw3.h>
+
+1591619510 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_holo_PP/include/Point3D.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	<iostream>
+	"Point2D.h"
+
+1591619510 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_holo_PP/include/Point2D.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	<vector>
+	<complex>
+
+1591619510 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_holo_PP/include/FFT_fonctions.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	"manip.h"
+	"FFT_encaps.h"
+
+1591619510 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_holo_PP/include/manip.h
+	<cstdlib>
+	<iostream>
+

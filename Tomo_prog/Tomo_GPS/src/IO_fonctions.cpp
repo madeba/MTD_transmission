@@ -78,8 +78,10 @@ float extract_val(string token,  string chemin_fic)
             tokens.push_back(ligne);
         }
     }
-    else
+    else{
         cerr << "Impossible d'ouvrir le fichier !"<< chemin_fic<< endl;
+        exit(0);
+        }
 
     unsigned short int nb_tok=tokens.size();
     for(int cpt=0;cpt<nb_tok;cpt++){

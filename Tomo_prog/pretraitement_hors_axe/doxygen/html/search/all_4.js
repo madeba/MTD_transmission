@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['operator_2a',['operator*',['../classvecteur.html#aefedf2fd227a46b95c2c56ba57d06652',1,'vecteur::operator*(vecteur const &amp;vec2)'],['../classvecteur.html#a915cf3f6ee12072c4e6038d40f19978d',1,'vecteur::operator*(double scalaire)']]]
+  ['pixel_4',['PIXEL',['../struct_p_i_x_e_l.html',1,'']]],
+  ['point2d_5',['Point2D',['../class_point2_d.html',1,'']]]
 ];

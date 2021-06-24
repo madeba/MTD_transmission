@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['nbcplx',['nbCplx',['../structnb_cplx.html',1,'']]]
+  ['nbcplx_3',['nbCplx',['../structnb_cplx.html',1,'']]]
 ];

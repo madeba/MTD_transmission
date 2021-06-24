@@ -151,6 +151,7 @@ int main()
     for(int cpt_angle=premier_plan; cpt_angle<NbAngle; cpt_angle++) //boucle sur tous les angles    {
     {
         posSpec= {(int)TabPosSpec[cpt_angle],(int)TabPosSpec[NbAngle+cpt_angle]};  //récupérer spéculaire puis champ cplx depuis sauvegarde prétraitement
+       // cout<<"posSpec.x,posSpec.y"<<posSpec.x<<","<<posSpec.y<<endl;
         for(int cpt=0; cpt<NbPixU_Born; cpt++)//retrieve complex fields in the stack
         {
             UBornFinal2D[cpt].real(UBornFinal3D[cpt+cpt_angle*NbPixU_Born].real()*mask_tukey2D[cpt]);
@@ -194,11 +195,14 @@ int main()
     }
 
     vector<double>().swap(sup_redon);//forcer la libération mémoire de sup_redon
+    ///interpolation 3D selon l'axe z
     //interp_lin3D(TF3D_PotObj);
+
     temps_final = clock ();
     temps_cpu = (temps_final - temps_initial) * 1e-6;
     printf("temps apres normalisation : %lf\n",temps_cpu);
     //SAV(TF3D_PotObj_Re, N_tab, "/home/aziz/Projet_tomo/Tomo_Images/TF2d_apres_masquage/TF3D_PotObj_Re_norm_avant.bin", float,"wb");
+     SAV3D_Tiff(TF3D_PotObj,"Re", m1.chemin_result+"/TF3DPotObjRE.tif",tailleTheoPixelTomo);
 
     //////////////////////////////papillon binarisé
     vector<double> papillon_masque(N_tab,0);
@@ -301,7 +305,9 @@ int main()
     auto end_tiff = std::chrono::system_clock::now();
     auto elapsed_tiff = end_tiff - start_tiff;
     std::cout <<"Temps total ecriture tiff= "<< elapsed_tiff.count()/(pow(10,9)) << '\n';
-
+    cout<<"dim_index="<<pow(indice_cplx.size(),1.0/3)<<endl;
+    vector<complex<double>> slice=extractSliceZ(indice_cplx,"x",236);
+    SAV_Tiff2DCplx(slice,"Re","/ramdisk/slice.tiff",m1.tailleTheoPixelTomo);
     temps_arrivee = clock ();
     temps_cpu = (temps_arrivee-temps_depart )/CLOCKS_PER_SEC;
     printf("temps total: %f\n",temps_cpu);

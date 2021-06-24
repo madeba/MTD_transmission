@@ -36,20 +36,18 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions -std=c++11" />
 			<Add option="-D_UNIX_ -D_LINUX_" />
+			<Add directory="/opt/pleora/ebus_sdk/Ubuntu-x86_64/include" />
 			<Add directory="include" />
-			<Add directory="include/LabJack" />
 			<Add directory="include/john" />
-			<Add directory="include/pleora" />
 		</Compiler>
 		<Linker>
 			<Add option="`pkg-config --cflags --libs opencv` -lpthread -lm -lboost_system -lboost_filesystem -lboost_chrono  -lPvBase -lPvDevice -lPvBuffer -lPvGenICam" />
-			<Add option="-lPvStream -lPvTransmitter -lPvVirtualDevice -lfftw3 -lfftw3_threads" />
+			<Add option="-lPvStream -lPvTransmitter -lPvCameraBridge -lPvVirtualDevice -lfftw3 -lfftw3_threads -lPvSystem" />
 			<Add option="-lPvAppUtils -lPvPersistence -lPvSerial -lPvGUI -lSimpleImagingLib -lboost_thread" />
 			<Add library="/usr/lib/x86_64-linux-gnu/libtiff.so" />
 			<Add library="/usr/lib/x86_64-linux-gnu/libfftw3.so" />
 			<Add library="/usr/lib/x86_64-linux-gnu/libfftw3_threads.so" />
-			<Add directory="lib" />
-			<Add directory="lib/genicam/bin/Linux64_x64" />
+			<Add directory="/opt/pleora/ebus_sdk/Ubuntu-x86_64/lib" />
 		</Linker>
 		<Unit filename="include/FFT_encaps.h" />
 		<Unit filename="include/FFT_fonctions.h" />
