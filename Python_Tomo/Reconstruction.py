@@ -10,9 +10,10 @@ import numpy as np
 import FileTools as ft
 import Retropropagation as rp
 import manip
+import napari
 
 # Data folders and config files
-DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/ACQUIS_pollen_PN/"
+DOSSIERACQUIS = "/home/nicolas/Acquisitions/PETIA/PLA_45678/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 if DATA is True:
@@ -66,22 +67,24 @@ OTF[mask_sum != 0] = 1
 TFVolfilt = np.zeros_like(OTF)
 TFVolfilt[TFVol != 0] = 1
 
+viewer = napari.view_image(Refraction.transpose(-1, 1, 0), colormap='magma')
+
 # Writting results
 start_time = time.time()
 ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Refraction_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-               Refraction, 2*PIXTHEO*1e6)
+                Refraction, 2*PIXTHEO*1e6)
 ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Absorption_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-               Absorption, 2*PIXTHEO*1e6)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTF_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff", 
-               OTF, 1./(Refraction.shape[0]*2*PIXTHEO*1e6))
+                Absorption, 2*PIXTHEO*1e6)
+ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTF_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+                OTF, 1./(Refraction.shape[0]*2*PIXTHEO*1e6))
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
 
 # Darkfield processing
 if DARKFIELD is True:
     DarkF = abs(Refraction + Absorption)**2
     ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Darkfield_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-                   DarkF, 2*PIXTHEO*1e6)
+                    DarkF, 2*PIXTHEO*1e6)
 if PHASECONTRAST is True:
     PhaseC = abs(Refraction + Absorption)**2
     ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Phasecontrast_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-                   PhaseC, 2*PIXTHEO*1e6)
+                    PhaseC, 2*PIXTHEO*1e6)

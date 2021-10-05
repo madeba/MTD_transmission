@@ -16,8 +16,8 @@ import tifffile as tf
 import manip
 
 # Data folders and config files
-DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/ACQUIS_pollen_PN/"
-DATA = False # True for data preprocessing, False for white image processing
+DOSSIERACQUIS = "/home/nicolas/Acquisitions/PETIA/PLA_45678/"
+DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 if DATA is True:
     DOSSIERDATA = M.dossier_data
@@ -31,7 +31,7 @@ if not os.path.exists(PROCESSINGFOLDER):
     os.makedirs(PROCESSINGFOLDER)
 
 # Acquisition data initialisation
-HOLOREF = True
+HOLOREF = False
 RYTOV = True
 DARKFIELD = False
 PHASECONTRAST = False
@@ -46,7 +46,24 @@ CHEMINSAV_IM = f"{DOSSIERDATA}Pretraitement/ImBorn_{dimHolo}.tiff"
 CHEMINSAV_CENTRES = f"{DOSSIERDATA}Pretraitement/Centres_{dimHolo}.tiff"
 CHEMINSAV_CENTRESTXT = f"{DOSSIERDATA}Pretraitement/Centres_{dimHolo}.txt"
 CHEMINSAV_PARAM = f"{DOSSIERDATA}Pretraitement/Param.txt"
+
+print("----------------------------------")
+print("- Creating/Removing config files -")
+print("----------------------------------")
+# Former files suppression
+if os.path.isfile(CHEMINSAV_CENTRESTXT):
+    os.remove(CHEMINSAV_CENTRESTXT)
+else:
+    print(f"File {CHEMINSAV_CENTRESTXT} does not exist")
+if os.path.isfile(CHEMINSAV_PARAM):
+    os.remove(CHEMINSAV_PARAM)
+else:
+    print(f"File {CHEMINSAV_PARAM} does not exist")
+
+# Data files creation
+print(f"Creating {CHEMINSAV_CENTRESTXT}")
 fidCentrestxt = open(CHEMINSAV_CENTRESTXT, "a")
+print(f"Creating {CHEMINSAV_PARAM}")
 fidParams = open(CHEMINSAV_PARAM, "a")
 fidParams.write(f"REwald {REwald}\n")
 
@@ -66,6 +83,10 @@ TukeyWindow = np.sqrt(np.outer(signal.tukey(CAMDIM, 0.1),
                                signal.tukey(CAMDIM, 0.1)))
 
 # Amplitude and phase correction initialisation
+print("")
+print("------------------------")
+print("- Data Mask generation -")
+print("------------------------")
 Masque = CAber.InitMasque(M.CHEMINMASQUE, dimHolo)
 NBPTOK = CAber.PixInMask(Masque)
 DEGREPOLY = 4
@@ -83,6 +104,10 @@ Poly = CAber.CalcPoly_xy(DEGREPOLY, Masque, Poly)
 wreal = tf.TiffWriter(CHEMINSAV_RE)
 wimag = tf.TiffWriter(CHEMINSAV_IM)
 
+print("")
+print("--------------------------")
+print("- Hologram preprocessing -")
+print("--------------------------")
 start_time = time.time()
 for hol in range(0, NB_HOLO):
     if CPT % 100 == 0:
@@ -145,7 +170,7 @@ for hol in range(0, NB_HOLO):
             Re_UBorn = Amp_UBornC*np.cos(Phase_UBornC)-1
             Im_UBorn = Amp_UBornC*np.sin(Phase_UBornC)-1
             wreal.write(np.float32(Re_UBorn), contiguous=True)
-            wimag.write(np.float32(Im_UBorn), contiguous=True)            
+            wimag.write(np.float32(Im_UBorn), contiguous=True)
         CPT += 1
         CPT_EXIST += 1
     else:

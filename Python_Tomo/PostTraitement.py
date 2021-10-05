@@ -12,7 +12,7 @@ import Retropropagation as rp
 import manip
 
 # Path to the parameter file, and parameters reading
-DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/ACQUIS_pollen_PN/"
+DOSSIERACQUIS = "/home/nicolas/Acquisitions/PETIA/PLA_45678/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 DOSSIERDATA = M.dossier_data
@@ -44,7 +44,7 @@ plt.show()
 # Gerchberg parameters
 NBITER = 10
 NMIN = 0
-NMAX = 0.15
+NMAX = 0.25
 KAPPAMIN = 0
 KAPPAMAX = 0
 
