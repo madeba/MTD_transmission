@@ -67,7 +67,8 @@ OTF[mask_sum != 0] = 1
 TFVolfilt = np.zeros_like(OTF)
 TFVolfilt[TFVol != 0] = 1
 
-viewer = napari.view_image(Refraction.transpose(-1, 1, 0), colormap='magma')
+viewer = napari.view_image(Absorption.transpose(-1, 1, 0), name='Absorption', colormap='magma')
+viewer.add_image(Refraction.transpose(-1, 1, 0), name='Refraction',colormap='magma')
 
 # Writting results
 start_time = time.time()

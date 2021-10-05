@@ -16,7 +16,7 @@ import tifffile as tf
 import manip
 
 # Data folders and config files
-DOSSIERACQUIS = "/home/nicolas/Acquisitions/PETIA/PLA_45678/"
+DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 if DATA is True:
@@ -50,19 +50,19 @@ CHEMINSAV_PARAM = f"{DOSSIERDATA}Pretraitement/Param.txt"
 print("----------------------------------")
 print("- Creating/Removing config files -")
 print("----------------------------------")
-# Former files suppression
+# Former files suppression and creation
 if os.path.isfile(CHEMINSAV_CENTRESTXT):
     os.remove(CHEMINSAV_CENTRESTXT)
 else:
     print(f"File {CHEMINSAV_CENTRESTXT} does not exist")
+
+print(f"Creating {CHEMINSAV_CENTRESTXT}")
+fidCentrestxt = open(CHEMINSAV_CENTRESTXT, "a")
+
 if os.path.isfile(CHEMINSAV_PARAM):
     os.remove(CHEMINSAV_PARAM)
 else:
     print(f"File {CHEMINSAV_PARAM} does not exist")
-
-# Data files creation
-print(f"Creating {CHEMINSAV_CENTRESTXT}")
-fidCentrestxt = open(CHEMINSAV_CENTRESTXT, "a")
 print(f"Creating {CHEMINSAV_PARAM}")
 fidParams = open(CHEMINSAV_PARAM, "a")
 fidParams.write(f"REwald {REwald}\n")
