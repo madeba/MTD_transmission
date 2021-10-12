@@ -16,7 +16,7 @@ import tifffile as tf
 import manip
 
 # Data folders and config files
-DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi/"
+DOSSIERACQUIS = "/home/nicolas/Acquisitions/ACQUIS_pollen_PN/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 if DATA is True:

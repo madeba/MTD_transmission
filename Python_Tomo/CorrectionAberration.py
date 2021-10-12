@@ -8,6 +8,12 @@ import matplotlib.pyplot as plt
 import os
 import cv2
 import numba
+from numba.core.errors import NumbaDeprecationWarning, NumbaPendingDeprecationWarning, NumbaWarning
+import warnings
+
+warnings.simplefilter('ignore', category=NumbaDeprecationWarning)
+warnings.simplefilter('ignore', category=NumbaPendingDeprecationWarning)
+warnings.simplefilter('ignore', category=NumbaWarning)
 
 def InitMasque(Chemin,dimMasque):
     """

@@ -10,9 +10,10 @@ import numpy as np
 import FileTools as ft
 import Retropropagation as rp
 import manip
+import napari
 
 # Path to the parameter file, and parameters reading
-DOSSIERACQUIS = "/home/nicolas/Acquisitions/PETIA/PLA_45678/"
+DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi_pollen_600U/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 DOSSIERDATA = M.dossier_data
@@ -66,3 +67,6 @@ start_time = time.time()
 ft.SAVtiffCube(f"{GERCHBERGFOLDER}/RefractionGerch_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
                Rec_Object.real.transpose(1,0,-1), 2*PIXTHEO*1e6)
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
+
+# Visualization
+viewer = napari.view_image(Rec_Object.real.transpose(-1, 1, 0), name='Refraction', colormap='magma')

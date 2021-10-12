@@ -13,7 +13,7 @@ import manip
 import napari
 
 # Data folders and config files
-DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi/"
+DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi_pollen_600U/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 if DATA is True:
@@ -39,7 +39,7 @@ UBornPitch = 1/(2*FMAXHOLO*PIXTHEO)
 NB_HOLO = NB_ANGLE
 
 # Filter Radii
-GreenRadius = 25
+GreenRadius = 20
 RedRadius = 80
 
 # Paths to the real, and imaginary parts of the field
@@ -112,18 +112,19 @@ RefractionG = f_reconG.real
 AbsorptionG = f_reconG.imag
 OTFG = np.zeros_like(mask_sum)
 OTFG[mask_sum != 0] = 1
-
+IntensiteG = np.abs(RefractionG+1j*AbsorptionG)**2
 
 # Writting results
 start_time = time.time()
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/RefractionG_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-                RefractionG, 2*PIXTHEO*1e6)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/AbsorptionG_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-                AbsorptionG, 2*PIXTHEO*1e6)
+# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/RefractionG_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+#                 RefractionG, 2*PIXTHEO*1e6)
+# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/AbsorptionG_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+#                 AbsorptionG, 2*PIXTHEO*1e6)
 ft.SAVtiffCube(f"{PROCESSINGFOLDER}/IntensityG_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-                np.abs(RefractionG+1j*AbsorptionG)**2, 2*PIXTHEO*1e6)
+                IntensiteG, 2*PIXTHEO*1e6)
+# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFG_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+#                 OTFG, 1./(RefractionG.shape[0]*2*PIXTHEO*1e6))
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
-IntensiteG = np.abs(RefractionG+1j*AbsorptionG)**2
 del RefractionG, AbsorptionG
 
 start_time = time.time()
@@ -140,18 +141,19 @@ RefractionR = f_reconR.real
 AbsorptionR = f_reconR.imag
 OTFR = np.zeros_like(mask_sum)
 OTFR[mask_sum != 0] = 1
-
+IntensiteR = np.abs(RefractionR+1j*AbsorptionR)**2
 
 # Writting results
 start_time = time.time()
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/RefractionR_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-                RefractionR, 2*PIXTHEO*1e6)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/AbsorptionR_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-                AbsorptionR, 2*PIXTHEO*1e6)
+# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/RefractionR_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+#                 RefractionR, 2*PIXTHEO*1e6)
+# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/AbsorptionR_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+#                 AbsorptionR, 2*PIXTHEO*1e6)
 ft.SAVtiffCube(f"{PROCESSINGFOLDER}/IntensityR_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-                np.abs(RefractionR+1j*AbsorptionR)**2, 2*PIXTHEO*1e6)
+                IntensiteR, 2*PIXTHEO*1e6)
+# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFR_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+#                 OTFR, 1./(RefractionG.shape[0]*2*PIXTHEO*1e6))
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
-IntensiteR = np.abs(RefractionR+1j*AbsorptionR)**2
 del RefractionR, AbsorptionR
 
 start_time = time.time()
@@ -168,18 +170,19 @@ RefractionB = f_reconB.real
 AbsorptionB = f_reconB.imag
 OTFB = np.zeros_like(mask_sum)
 OTFB[mask_sum != 0] = 1
-
+IntensiteB = np.abs(RefractionB+1j*AbsorptionB)**2
 
 # Writting results
 start_time = time.time()
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/RefractionB_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-                RefractionB, 2*PIXTHEO*1e6)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/AbsorptionB_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-                AbsorptionB, 2*PIXTHEO*1e6)
+# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/RefractionB_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+#                 RefractionB, 2*PIXTHEO*1e6)
+# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/AbsorptionB_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+#                 AbsorptionB, 2*PIXTHEO*1e6)
 ft.SAVtiffCube(f"{PROCESSINGFOLDER}/IntensityB_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-                np.abs(RefractionB+1j*AbsorptionB)**2, 2*PIXTHEO*1e6)
+                IntensiteB, 2*PIXTHEO*1e6)
+# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFB_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+                # OTFB, 1./(RefractionB.shape[0]*2*PIXTHEO*1e6))
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
-IntensiteB = np.abs(RefractionB+1j*AbsorptionB)**2
 del RefractionB, AbsorptionB
 
 viewer = napari.view_image(IntensiteB.transpose(-1, 1, 0), name='Bleu', colormap='blue')

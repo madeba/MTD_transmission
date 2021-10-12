@@ -13,7 +13,7 @@ import manip
 import napari
 
 # Data folders and config files
-DOSSIERACQUIS = "/home/nicolas/Acquisitions/PETIA/PLA_45678/"
+DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi_pollen_600U/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 if DATA is True:
