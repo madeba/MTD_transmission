@@ -13,7 +13,11 @@ import manip
 import napari
 
 # Data folders and config files
-DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi/"
+# Data folders and config files
+if os.name == 'nt': # Windows
+    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi/"
+else:               # Linux
+    DOSSIERACQUIS = "/home/nicolas/Aquisitions/Topi/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 if DATA is True:

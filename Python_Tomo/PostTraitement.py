@@ -13,7 +13,11 @@ import manip
 import napari
 
 # Path to the parameter file, and parameters reading
-DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/PETIA/PLA_1234/"
+# Data folders and config files
+if os.name == 'nt': # Windows
+    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi/"
+else:               # Linux
+    DOSSIERACQUIS = "/home/nicolas/Aquisitions/Topi/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 DOSSIERDATA = M.dossier_data

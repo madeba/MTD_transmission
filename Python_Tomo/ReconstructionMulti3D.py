@@ -16,9 +16,9 @@ import manip
 
 # Data folders and config files
 if os.name == 'nt': # Windows
-    DOSSIERACQUIS = "E:/Stage Master Irimas/ACQUIS_pollen_PN/"
+    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi/"
 else:               # Linux
-    DOSSIERACQUIS = "/media/stagiaire/Seagate Expansion Drive/Stage Master Irimas/ACQUIS_pollen_PN/"
+    DOSSIERACQUIS = "/home/nicolas/Aquisitions/Topi/"
 
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
