@@ -368,8 +368,81 @@ def PhaseContrast(ComplexField, CutOff1, CutOff2):
                              np.arange(-int(Spectrum.shape[0]/2), int(Spectrum.shape[0]/2)),
                              np.arange(-int(Spectrum.shape[2]/2), int(Spectrum.shape[2]/2)))
     Mask = np.zeros((Spectrum.shape[1], Spectrum.shape[0], Spectrum.shape[2]), dtype=complex)
-    Mask[kx**2 + ky**2 + kz**2 < CutOff2**2] = np.exp(-1j*np.pi/2)
-    Mask[kx**2 + ky**2 + kz**2 < CutOff1**2] = 0 + 0j
+    Mask[kx**2 + ky**2 + kz**2 < CutOff2**2] = np.exp(1j*np.pi/2)
+    Mask[kx**2 + ky**2 + kz**2 < CutOff1**2] = 0.5*(1 + 1*1j)
     Spectrum = Spectrum * Mask
     Field = ifftn(ifftshift(Spectrum))
     return Field
+
+def RheinbergIllumination(ComplexField, CutR, CutG, CutB):
+    """
+    Processing Rheinberg illumination images from tomographic acquisitions
+
+    Parameters
+    ----------
+    ComplexField : complex128
+        Reconstructed complex refractive index distribution.
+    CutR : int
+        Cut-off frequency of the Red filter (assumed to be a circulat mask).
+    CutG : int
+        Cut-off frequency of the Green filter (assumed to be a circulat mask).
+    CutB : int
+        Cut-off frequency of the Blue filter (assumed to be a circulat mask).
+
+    Returns
+    -------
+    Field : complex128
+        Phase-contrast filtered refractive index distribution.
+
+    """
+    Spectrum = fftshift(fftn(ComplexField))
+    kx, ky, kz = np.meshgrid(np.arange(-int(Spectrum.shape[1]/2), int(Spectrum.shape[1]/2)),
+                             np.arange(-int(Spectrum.shape[0]/2), int(Spectrum.shape[0]/2)),
+                             np.arange(-int(Spectrum.shape[2]/2), int(Spectrum.shape[2]/2)))
+    FiltR = np.zeros((Spectrum.shape[1], Spectrum.shape[0], Spectrum.shape[2]), dtype=complex)
+    FiltG = np.zeros((Spectrum.shape[1], Spectrum.shape[0], Spectrum.shape[2]), dtype=complex)
+    FiltB = np.zeros((Spectrum.shape[1], Spectrum.shape[0], Spectrum.shape[2]), dtype=complex)
+    
+    FiltR[kx**2 + ky**2 + kz**2 < CutR[1]**2] = 1
+    FiltR[kx**2 + ky**2 + kz**2 < CutR[0]**2] = 0
+    
+    FiltG[kx**2 + ky**2 + kz**2 < CutG**2] = 1
+    
+    FiltB[kx**2 + ky**2 + kz**2 < CutB[1]**2] = 1
+    FiltB[kx**2 + ky**2 + kz**2 < CutB[0]**2] = 0
+    
+    R = Spectrum * FiltR
+    G = Spectrum * FiltG
+    B = Spectrum * FiltB
+    
+    FieldR = ifftn(ifftshift(R))
+    FieldG = ifftn(ifftshift(G))
+    FieldB = ifftn(ifftshift(B))
+    
+    return FieldR, FieldG, FieldB
+
+def dic(ComplexField, DeltaX, DeltaY, Phi):
+    """
+    Processing DIC images from tomographic acquisitions
+
+    Parameters
+    ----------
+    ComplexField : complex128
+        Reconstructed complex refractive index distribution.
+    DeltaX : int
+        Hologram shearing in x-direction
+    DeltaY : int
+        Hologram shearing in y-direction
+    Phi : float64
+        Hologram phase-shift.
+
+    Returns
+    -------
+    Field : complex128
+        Phase-contrast filtered refractive index distribution.
+
+    """    
+    ComplexFieldShift = np.roll(ComplexField, DeltaX, axis=1)
+    ComplexFieldShift = np.roll(ComplexFieldShift, DeltaY, axis=0)
+    IDic = ComplexField - (ComplexFieldShift*np.exp(1j*Phi))
+    return IDic

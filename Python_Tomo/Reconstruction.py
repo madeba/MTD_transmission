@@ -13,7 +13,7 @@ import manip
 import napari
 
 # Data folders and config files
-DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi_pollen_600U/"
+DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 if DATA is True:
@@ -64,8 +64,8 @@ Absorption = f_recon.imag
 OTF = np.zeros_like(mask_sum)
 OTF[mask_sum != 0] = 1
 
-TFVolfilt = np.zeros_like(OTF)
-TFVolfilt[TFVol != 0] = 1
+# TFVolfilt = np.zeros_like(OTF)
+# TFVolfilt[TFVol != 0] = 1
 
 viewer = napari.view_image(Absorption.transpose(-1, 1, 0), name='Absorption', colormap='magma')
 viewer.add_image(Refraction.transpose(-1, 1, 0), name='Refraction',colormap='magma')
@@ -76,8 +76,8 @@ ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Refraction_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOL
                 Refraction, 2*PIXTHEO*1e6)
 ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Absorption_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
                 Absorption, 2*PIXTHEO*1e6)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTF_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-                OTF, 1./(Refraction.shape[0]*2*PIXTHEO*1e6))
+ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Spectrum_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+                np.log10(abs(TFVol*1e17+1e-10)**2), 1./(Refraction.shape[0]*2*PIXTHEO*1e6))
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
 
 # Darkfield processing

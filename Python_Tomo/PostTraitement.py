@@ -13,7 +13,7 @@ import manip
 import napari
 
 # Path to the parameter file, and parameters reading
-DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi_pollen_600U/"
+DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/PETIA/PLA_1234/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 DOSSIERDATA = M.dossier_data
@@ -43,7 +43,7 @@ plt.imshow(Rec_Object.imag[:, :, DIMHOLO], cmap="gray")
 plt.show()
 
 # Gerchberg parameters
-NBITER = 10
+NBITER = 20
 NMIN = 0
 NMAX = 0.25
 KAPPAMIN = 0
@@ -69,4 +69,4 @@ ft.SAVtiffCube(f"{GERCHBERGFOLDER}/RefractionGerch_{2*DIMHOLO}x{2*DIMHOLO}x{2*DI
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
 
 # Visualization
-viewer = napari.view_image(Rec_Object.real.transpose(-1, 1, 0), name='Refraction', colormap='magma')
+viewer = napari.view_image(Rec_Object.real.transpose(-1, 1, 0), name='Refraction', colormap='magma', axis_labels=["z", "y", "x"])

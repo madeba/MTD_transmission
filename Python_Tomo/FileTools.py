@@ -108,7 +108,7 @@ def SAVtiffCube(Folder, Data, pix):
 
     """
     tf.imwrite(Folder, Data.transpose(-1, 1, 0).astype(np.float32), imagej = True,
-               resolution=(1./pix, 1./pix), metadata={'spacing': pix, 'unit': 'um', 'axes': 'XYCZT'})
+               resolution=(1./pix, 1./pix), metadata={'spacing': pix, 'unit': 'um'})
 
 def ReadtiffCube(Folder):
     """
