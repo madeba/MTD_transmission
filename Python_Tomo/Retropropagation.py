@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-@author: Nicolas Verrier
+@author: Nicolas Verrier et Steve Laroche
 """
 
 from linecache import getline
