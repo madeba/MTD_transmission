@@ -16,7 +16,6 @@ import tifffile as tf
 import manip
 
 # Data folders and config files
-# Data folders and config files
 if os.name == 'nt': # Windows
     DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi/"
 else:               # Linux
