@@ -39,7 +39,7 @@ Method = {0 : "BASE",
           3 : "RHEINBERG",
           4 : "DIC"
           }
-MethodUsed = Method[0]
+MethodUsed = Method[4]
 
 # Path to the parameter file, and parameters reading
 CHEMINPARAM = f"{DOSSIERDATA}Pretraitement/Param.txt"
@@ -54,7 +54,7 @@ NB_HOLO = NB_ANGLE
 # Path to the specular coordinates
 SpecCoordPath = f"{DOSSIERDATA}Pretraitement/Centres_{DIMHOLO}.txt"
 fi = rp.Calc_fi(SpecCoordPath, NB_ANGLE, DIMHOLO)
-    
+
 
 # Paths to the real, and imaginary parts of the field
 CHEMIN_RE_UBORN = f"{DOSSIERDATA}Pretraitement/ReBorn_{DIMHOLO}.tiff"
@@ -73,37 +73,37 @@ Refraction = f_recon.real
 Absorption = f_recon.imag
 
 if "DIC" == MethodUsed:
-    UBornCplxDIC = rp.dic(Refraction + 1j*Absorption, 3,3,0.1)
+    UBornCplxDIC = rp.dic(Refraction + 1j*Absorption, 3, 3, 1, 0.1) 
 
 if "DARKFIELD" == MethodUsed:
     UBornCplxDark = rp.DarkField(Refraction + 1j*Absorption, 5)
-    
-    
+
+
 if "PHASECONTRAST" == MethodUsed:
-    UBornCplxPC = rp.PhaseContrast(Refraction + 1j*Absorption, 10,250)
-    
-    
+    UBornCplxPC = rp.PhaseContrast(Refraction + 1j*Absorption, 5, 250)
+
+
 if "RHEINBERG" == MethodUsed:
     UBornCplxR, UBornCplxG, UBornCplxB = rp.RheinbergIllumination(Refraction + 1j*Absorption, [30,120], 60, [70,250])
 
     ft.SAVtiffCube(f"{PROCESSINGFOLDER}/CompoR_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
                     np.abs(UBornCplxR)**2, 2*PIXTHEO*1e6)
-    
 
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFR_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff", 
+
+    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFR_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
                np.abs(fftshift(fftn(UBornCplxR))), 1./(Refraction.shape[0]*2*PIXTHEO*1e6))
 
     ft.SAVtiffCube(f"{PROCESSINGFOLDER}/CompoG_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
                np.abs(UBornCplxG)**2, 2*PIXTHEO*1e6)
-    
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFG_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff", 
+
+    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFG_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
                np.abs(fftshift(fftn(UBornCplxG))), 1./(Refraction.shape[0]*2*PIXTHEO*1e6))
-    
-    
+
+
     ft.SAVtiffCube(f"{PROCESSINGFOLDER}/CompoB_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
                    np.abs(UBornCplxB)**2, 2*PIXTHEO*1e6)
-    
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFB_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff", 
+
+    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFB_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
                np.abs(fftshift(fftn(UBornCplxB))), 1./(Refraction.shape[0]*2*PIXTHEO*1e6))
 
 
@@ -115,10 +115,10 @@ TFVolfilt[TFVol != 0] = 1
 
 # Writting results
 start_time = time.time()
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Refraction2_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Refraction_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
                 Refraction, 2*PIXTHEO*1e6)
 
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/TestDic3D_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTF_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
                 OTF, 2*PIXTHEO*1e6)
 
 ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Absorption_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
@@ -132,19 +132,19 @@ if "DARKFIELD" == MethodUsed:
     DarkF = abs(UBornCplxDark)**2
     ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Darkfield_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
                    DarkF, 2*PIXTHEO*1e6)
-    
-    
+
+
 if "BASE" == MethodUsed:
     Base = np.abs(Refraction + 1j*Absorption)**2
     ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Brightfield_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
                    Base, 2*PIXTHEO*1e6)
-    
-    
+
+
 if "PHASECONTRAST" == MethodUsed:
     PhaseC = abs(UBornCplxPC)**2
     ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Phasecontrast_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
                     PhaseC, 2*PIXTHEO*1e6)
-    
+
 if "DIC" == MethodUsed:
     DIC = UBornCplxDIC
     ft.SAVtiffCube(f"{PROCESSINGFOLDER}/DIC_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",

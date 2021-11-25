@@ -35,7 +35,7 @@ if not os.path.exists(PROCESSINGFOLDER):
 
 # Acquisition data initialisation
 HOLOREF = False
-RYTOV = True
+RYTOV = False
 DARKFIELD = False
 PHASECONTRAST = False
 CAMDIM = 1024

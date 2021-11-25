@@ -13,7 +13,10 @@ import manip
 import napari
 
 # Data folders and config files
-DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi_pollen_600U/"
+if os.name == 'nt': # Windows
+    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi/"
+else:               # Linux
+    DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 if DATA is True:
@@ -122,8 +125,8 @@ start_time = time.time()
 #                 AbsorptionG, 2*PIXTHEO*1e6)
 ft.SAVtiffCube(f"{PROCESSINGFOLDER}/IntensityG_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
                 IntensiteG, 2*PIXTHEO*1e6)
-# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFG_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-#                 OTFG, 1./(RefractionG.shape[0]*2*PIXTHEO*1e6))
+ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFG_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+                OTFG, 1./(IntensiteG.shape[0]*2*PIXTHEO*1e6))
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
 del RefractionG, AbsorptionG
 
@@ -151,8 +154,8 @@ start_time = time.time()
 #                 AbsorptionR, 2*PIXTHEO*1e6)
 ft.SAVtiffCube(f"{PROCESSINGFOLDER}/IntensityR_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
                 IntensiteR, 2*PIXTHEO*1e6)
-# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFR_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-#                 OTFR, 1./(RefractionG.shape[0]*2*PIXTHEO*1e6))
+ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFR_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+                OTFR, 1./(IntensiteR.shape[0]*2*PIXTHEO*1e6))
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
 del RefractionR, AbsorptionR
 
@@ -180,8 +183,8 @@ start_time = time.time()
 #                 AbsorptionB, 2*PIXTHEO*1e6)
 ft.SAVtiffCube(f"{PROCESSINGFOLDER}/IntensityB_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
                 IntensiteB, 2*PIXTHEO*1e6)
-# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFB_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-                # OTFB, 1./(RefractionB.shape[0]*2*PIXTHEO*1e6))
+ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFB_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+                OTFB, 1./(IntensiteB.shape[0]*2*PIXTHEO*1e6))
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
 del RefractionB, AbsorptionB
 
