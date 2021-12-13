@@ -14,9 +14,9 @@ import napari
 
 # Data folders and config files
 if os.name == 'nt': # Windows
-    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi/"
+    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi_pollen_600U/"
 else:               # Linux
-    DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi/"
+    DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi_pollen_600U/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 if DATA is True:
@@ -44,6 +44,11 @@ NB_HOLO = NB_ANGLE
 # Filter Radii
 GreenRadius = 20
 RedRadius = 80
+
+# Rounding tomographic volume dimensions to the next power of 2
+pow2 = ft.NextPow2(2*DIMHOLO)
+DIMTOMO = 2**pow2
+
 
 # Paths to the real, and imaginary parts of the field
 CHEMIN_RE_UBORN = f"{DOSSIERDATA}Pretraitement/ReBorn_{DIMHOLO}.tiff"
@@ -107,7 +112,7 @@ print("- Reconstruction of the Green Channel-")
 print("--------------------------------------")
 f_reconG, TFVolG, mask_sum = rp.retropropagation(UBornGreen, UBornGreen.shape[2], fiG, FMAXHOLO,
                                                 REWALD, M.LAMBDA, M.NIMM, PIXTHEO, UBornPitch)
-print(f"Reconstruction time for a {2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO} volume (3D-FFT included), "
+print(f"Reconstruction time for a {DIMTOMO}x{DIMTOMO}x{DIMTOMO} volume (3D-FFT included), "
       f"with {NB_HOLO} holograms: {np.round(time.time() - start_time,decimals=2)} seconds")
 print("")
 
@@ -119,13 +124,13 @@ IntensiteG = np.abs(RefractionG+1j*AbsorptionG)**2
 
 # Writting results
 start_time = time.time()
-# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/RefractionG_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/RefractionG_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
 #                 RefractionG, 2*PIXTHEO*1e6)
-# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/AbsorptionG_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/AbsorptionG_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
 #                 AbsorptionG, 2*PIXTHEO*1e6)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/IntensityG_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+ft.SAVtiffCube(f"{PROCESSINGFOLDER}/IntensityG_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                 IntensiteG, 2*PIXTHEO*1e6)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFG_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFG_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                 OTFG, 1./(IntensiteG.shape[0]*2*PIXTHEO*1e6))
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
 del RefractionG, AbsorptionG
@@ -136,7 +141,7 @@ print("- Reconstruction of the Red Channel-")
 print("--------------------------------------")
 f_reconR, TFVolR, mask_sum = rp.retropropagation(UBornRed, UBornRed.shape[2], fiR, FMAXHOLO,
                                                 REWALD, M.LAMBDA, M.NIMM, PIXTHEO, UBornPitch)
-print(f"Reconstruction time for a {2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO} volume (3D-FFT included), "
+print(f"Reconstruction time for a {DIMTOMO}x{DIMTOMO}x{DIMTOMO} volume (3D-FFT included), "
       f"with {NB_HOLO} holograms: {np.round(time.time() - start_time,decimals=2)} seconds")
 print("")
 
@@ -148,13 +153,13 @@ IntensiteR = np.abs(RefractionR+1j*AbsorptionR)**2
 
 # Writting results
 start_time = time.time()
-# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/RefractionR_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/RefractionR_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
 #                 RefractionR, 2*PIXTHEO*1e6)
-# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/AbsorptionR_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/AbsorptionR_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
 #                 AbsorptionR, 2*PIXTHEO*1e6)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/IntensityR_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+ft.SAVtiffCube(f"{PROCESSINGFOLDER}/IntensityR_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                 IntensiteR, 2*PIXTHEO*1e6)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFR_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFR_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                 OTFR, 1./(IntensiteR.shape[0]*2*PIXTHEO*1e6))
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
 del RefractionR, AbsorptionR
@@ -165,7 +170,7 @@ print("- Reconstruction of the Blue Channel-")
 print("--------------------------------------")
 f_reconB, TFVolB, mask_sum = rp.retropropagation(UBornBlue, UBornBlue.shape[2], fiB, FMAXHOLO,
                                                 REWALD, M.LAMBDA, M.NIMM, PIXTHEO, UBornPitch)
-print(f"Reconstruction time for a {2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO} volume (3D-FFT included), "
+print(f"Reconstruction time for a {DIMTOMO}x{DIMTOMO}x{DIMTOMO} volume (3D-FFT included), "
       f"with {NB_HOLO} holograms: {np.round(time.time() - start_time,decimals=2)} seconds")
 print("")
 
@@ -177,13 +182,13 @@ IntensiteB = np.abs(RefractionB+1j*AbsorptionB)**2
 
 # Writting results
 start_time = time.time()
-# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/RefractionB_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/RefractionB_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
 #                 RefractionB, 2*PIXTHEO*1e6)
-# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/AbsorptionB_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/AbsorptionB_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
 #                 AbsorptionB, 2*PIXTHEO*1e6)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/IntensityB_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+ft.SAVtiffCube(f"{PROCESSINGFOLDER}/IntensityB_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                 IntensiteB, 2*PIXTHEO*1e6)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFB_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFB_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                 OTFB, 1./(IntensiteB.shape[0]*2*PIXTHEO*1e6))
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
 del RefractionB, AbsorptionB

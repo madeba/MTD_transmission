@@ -128,3 +128,22 @@ def ReadtiffCube(Folder):
     """
     Data = tf.imread(Folder).transpose(1, -1, 0)
     return Data
+
+def NextPow2(x):
+    """
+    returns the smallest power of two that is greater than or equal to the
+    absolute value of x
+
+    Parameters
+    ----------
+    x : int
+        Number to be rounded
+
+    Returns
+    -------
+    PoW2 : int
+        Corresponding power of two
+
+    """
+    PoW2 = np.ceil(np.log2(x)).astype(int)
+    return PoW2

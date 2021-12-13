@@ -5,13 +5,12 @@
 
 import time
 import os
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import numpy as np
 import FileTools as ft
 import Retropropagation as rp
-from scipy.fftpack import fftn, ifftn, fftshift, ifftshift
-import MultiModalMTD as mmtd
-import matplotlib.pyplot as plt
+from scipy.fftpack import fftn, fftshift
+# import MultiModalMTD as mmtd
 import manip
 
 # Data folders and config files
@@ -66,6 +65,11 @@ ImUBorn = ft.ReadtiffCube(CHEMIN_IM_UBORN)
 UBornCplx = ReUBorn + ImUBorn * 1j
 del ReUBorn, ImUBorn
 
+# Rounding tomographic volume dimensions to the next power of 2
+pow2 = ft.NextPow2(2*DIMHOLO)
+DIMTOMO = 2**pow2
+
+
 f_recon, TFVol, mask_sum = rp.retropropagation(UBornCplx, NB_HOLO, fi, FMAXHOLO,
                                                REWALD, M.LAMBDA, M.NIMM, PIXTHEO, UBornPitch)
 
@@ -86,24 +90,24 @@ if "PHASECONTRAST" == MethodUsed:
 if "RHEINBERG" == MethodUsed:
     UBornCplxR, UBornCplxG, UBornCplxB = rp.RheinbergIllumination(Refraction + 1j*Absorption, [30,120], 60, [70,250])
 
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/CompoR_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/CompoR_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                     np.abs(UBornCplxR)**2, 2*PIXTHEO*1e6)
 
 
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFR_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFR_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                np.abs(fftshift(fftn(UBornCplxR))), 1./(Refraction.shape[0]*2*PIXTHEO*1e6))
 
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/CompoG_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/CompoG_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                np.abs(UBornCplxG)**2, 2*PIXTHEO*1e6)
 
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFG_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFG_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                np.abs(fftshift(fftn(UBornCplxG))), 1./(Refraction.shape[0]*2*PIXTHEO*1e6))
 
 
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/CompoB_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/CompoB_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                    np.abs(UBornCplxB)**2, 2*PIXTHEO*1e6)
 
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFB_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFB_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                np.abs(fftshift(fftn(UBornCplxB))), 1./(Refraction.shape[0]*2*PIXTHEO*1e6))
 
 
@@ -115,13 +119,13 @@ TFVolfilt[TFVol != 0] = 1
 
 # Writting results
 start_time = time.time()
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Refraction_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Refraction_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                 Refraction, 2*PIXTHEO*1e6)
 
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTF_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTF_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                 OTF, 2*PIXTHEO*1e6)
 
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Absorption_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Absorption_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                 Absorption, 2*PIXTHEO*1e6)
 
 
@@ -130,22 +134,22 @@ print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
 # Darkfield processing
 if "DARKFIELD" == MethodUsed:
     DarkF = abs(UBornCplxDark)**2
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Darkfield_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Darkfield_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                    DarkF, 2*PIXTHEO*1e6)
 
 
 if "BASE" == MethodUsed:
     Base = np.abs(Refraction + 1j*Absorption)**2
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Brightfield_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Brightfield_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                    Base, 2*PIXTHEO*1e6)
 
 
 if "PHASECONTRAST" == MethodUsed:
     PhaseC = abs(UBornCplxPC)**2
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Phasecontrast_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Phasecontrast_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                     PhaseC, 2*PIXTHEO*1e6)
 
 if "DIC" == MethodUsed:
     DIC = UBornCplxDIC
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/DIC_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/DIC_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                     DIC, 2*PIXTHEO*1e6)

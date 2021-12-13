@@ -10,13 +10,14 @@ import numpy as np
 import FileTools as ft
 import Retropropagation as rp
 import manip
+from scipy.fftpack import fftshift
 import napari
 
 # Data folders and config files
 if os.name == 'nt': # Windows
-    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi/"
+    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi_pollen_600U/"
 else:               # Linux
-    DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi/"
+    DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi_pollen_600U/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 if DATA is True:
@@ -55,10 +56,14 @@ ImUBorn = ft.ReadtiffCube(CHEMIN_IM_UBORN)
 UBornCplx = ReUBorn + ImUBorn * 1j
 del ReUBorn, ImUBorn
 
+# Rounding tomographic volume dimensions to the next power of 2
+pow2 = ft.NextPow2(2*DIMHOLO)
+DIMTOMO = 2**pow2
+
 start_time = time.time()
 f_recon, TFVol, mask_sum = rp.retropropagation(UBornCplx, NB_HOLO, fi, FMAXHOLO,
                                                REWALD, M.LAMBDA, M.NIMM, PIXTHEO, UBornPitch)
-print(f"Reconstruction time for a {2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO} volume (3D-FFT included), "
+print(f"Reconstruction time for a {DIMTOMO}x{DIMTOMO}x{DIMTOMO} volume (3D-FFT included), "
       f"with {NB_HOLO} holograms: {np.round(time.time() - start_time,decimals=2)} seconds")
 print("")
 
@@ -75,20 +80,22 @@ viewer.add_image(Refraction.transpose(-1, 1, 0), name='Refraction',colormap='mag
 
 # Writting results
 start_time = time.time()
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Refraction_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Refraction_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                 Refraction, 2*PIXTHEO*1e6)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Absorption_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Absorption_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                 Absorption, 2*PIXTHEO*1e6)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Spectrum_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
-                np.log10(abs(TFVol*1e17+1e-10)**2), 1./(Refraction.shape[0]*2*PIXTHEO*1e6))
+ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTF_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
+                OTF, 1./(Refraction.shape[0]*2*PIXTHEO*1e6))
+# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Spectrum_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
+#                 fftshift(np.log10(abs(TFVol*1e17+1e-10)**2)), 1./(Refraction.shape[0]*2*PIXTHEO*1e6))
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
 
 # Darkfield processing
 if DARKFIELD is True:
     DarkF = abs(Refraction + Absorption)**2
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Darkfield_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Darkfield_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                     DarkF, 2*PIXTHEO*1e6)
 if PHASECONTRAST is True:
     PhaseC = abs(Refraction + Absorption)**2
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Phasecontrast_{2*DIMHOLO}x{2*DIMHOLO}x{2*DIMHOLO}.tiff",
+    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Phasecontrast_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                     PhaseC, 2*PIXTHEO*1e6)

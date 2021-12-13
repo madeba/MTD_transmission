@@ -17,9 +17,9 @@ import manip
 
 # Data folders and config files
 if os.name == 'nt': # Windows
-    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi/"
+    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi_pollen_600U/"
 else:               # Linux
-    DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi/"
+    DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi_pollen_600U/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 if DATA is True:
@@ -35,7 +35,7 @@ if not os.path.exists(PROCESSINGFOLDER):
 
 # Acquisition data initialisation
 HOLOREF = False
-RYTOV = False
+RYTOV = True
 DARKFIELD = False
 PHASECONTRAST = False
 CAMDIM = 1024
@@ -128,7 +128,8 @@ for hol in range(0, NB_HOLO):
                              int(CentreXShift-dimHolo/2):int(CentreXShift+dimHolo/2)]
 
         # Specular spot coordinates calculation
-        ind = np.unravel_index(np.argmax(np.abs(SpectreFilt), axis=None), SpectreFilt.shape)
+        ind = np.unravel_index(np.argmax(np.abs(SpectreFilt)**2,
+                                         axis=None), SpectreFilt.shape)
         kiy = ind[0]
         kix = ind[1]
         if DARKFIELD is True:
@@ -166,14 +167,18 @@ for hol in range(0, NB_HOLO):
             # Rytov
             Re_UBorn = np.log(np.abs(Amp_UBornC))
             Im_UBorn = Phase_UBornC
-            wreal.write(np.float32(Re_UBorn), contiguous=True)
-            wimag.write(np.float32(Im_UBorn), contiguous=True)
+            # wreal.write(np.float32(Re_UBorn), contiguous=True)
+            # wimag.write(np.float32(Im_UBorn), contiguous=True)
+            wreal.write(Re_UBorn, contiguous=True)
+            wimag.write(Im_UBorn, contiguous=True)            
         else:
             # Born
             Re_UBorn = Amp_UBornC*np.cos(Phase_UBornC)-1
             Im_UBorn = Amp_UBornC*np.sin(Phase_UBornC)-1
-            wreal.write(np.float32(Re_UBorn), contiguous=True)
-            wimag.write(np.float32(Im_UBorn), contiguous=True)
+            # wreal.write(np.float32(Re_UBorn), contiguous=True)
+            # wimag.write(np.float32(Im_UBorn), contiguous=True)
+            wreal.write(Re_UBorn, contiguous=True)
+            wimag.write(Im_UBorn, contiguous=True)             
         CPT += 1
         CPT_EXIST += 1
     else:
