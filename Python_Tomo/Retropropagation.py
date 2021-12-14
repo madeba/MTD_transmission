@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-@author: Nicolas Verrier
+@author: Nicolas Verrier et Steve Laroche
 """
 
 from linecache import getline
@@ -8,6 +8,7 @@ import time
 from scipy import signal
 from scipy.fftpack import fftn, ifftn, fftshift, ifftshift
 import numpy as np
+from FileTools import NextPow2
 
 def ReadCube(Chemin, dimX, dimY, nb_img, datatype):
     """
@@ -34,7 +35,6 @@ def ReadCube(Chemin, dimX, dimY, nb_img, datatype):
     with open(Chemin, 'r') as fid:
         DataCube = np.fromfile(fid, eval(datatype))
     DataCube = DataCube.reshape((nb_img, dimX, dimY)).transpose(1, -1, 0)
-
     return DataCube
 
 def Calc_fi(Chemin, nb_angle, dimHolo):
@@ -98,7 +98,7 @@ def Calc_fd(Nmax, REwald):
     fdm = np.array([dym, dxm, dzm])
     return fdm, sdzm, dxm, dym
 
-def decal_TF_holo(TF_holo, decal, P_holo, roll=False):
+def decal_TF_holo(TF_holo, decal, P_holo, roll=True):
     """
     Shifting the holograms according to illumination frequency
 
@@ -222,18 +222,22 @@ def retropropagation(holo_pile, nb_holo, SpecCoord, Nmax, R_Ewald, lambda_v, n0,
     TF_vol : complex128
         3D Fourier transform of the object masked according to experimental parameters.
     mask_sum : int32
-        3D OTF.0.5
+        3D OTF
 
     """
     if nb_holo > holo_pile.shape[2]:
         nb_holo = holo_pile.shape[2]
+    
+    pow2 = NextPow2(2*holo_pile.shape[0])
 
-    TF_vol = np.zeros(shape=(2*holo_pile.shape[0],
-                             2*holo_pile.shape[0],
-                             2*holo_pile.shape[0]), dtype=complex)
-    mask_sum = np.zeros(shape=(2*holo_pile.shape[0],
-                               2*holo_pile.shape[0],
-                               2*holo_pile.shape[0]), dtype=np.int32)
+    # TF_vol = np.zeros(shape=(2*holo_pile.shape[0],
+    #                          2*holo_pile.shape[0],
+    #                          2*holo_pile.shape[0]), dtype=complex)
+    # mask_sum = np.zeros(shape=(2*holo_pile.shape[0],
+    #                            2*holo_pile.shape[0],
+    #                            2*holo_pile.shape[0]), dtype=np.int32)
+    TF_vol = np.zeros(shape=(2**pow2, 2**pow2, 2**pow2), dtype=complex)
+    mask_sum = np.zeros(shape=(2**pow2, 2**pow2, 2**pow2), dtype=np.int32)    
     fd_m, sdz_m, dx_m, dy_m = Calc_fd(Nmax, R_Ewald)
 
     # Tukey Window
@@ -250,20 +254,21 @@ def retropropagation(holo_pile, nb_holo, SpecCoord, Nmax, R_Ewald, lambda_v, n0,
         TF_holo_shift_r = fftshift(fftn(TukeyWindow*holo_pile[:, :, cpt]))/(Delta_f_Uborn**2*Nmax**2)
         decal = np.array([k_inc[1], k_inc[0]]).astype(int)
         TF_holo_r = decal_TF_holo(TF_holo_shift_r, decal, holo_pile.shape[0], roll=True)
-        TF_vol, mask_sum = calc_tf_calotte(TF_vol, mask_sum, TF_holo_r, fd_m, sdz_m,
+        TF_vol3D, mask_sum = calc_tf_calotte(TF_vol, mask_sum, TF_holo_r, fd_m, sdz_m,
                                            dx_m, dy_m, Nmax, k_inc, R_Ewald, lambda_v, n0)
-    TF_vol[mask_sum != 0] = TF_vol[mask_sum != 0] / mask_sum[mask_sum != 0]
+    TF_vol3D[mask_sum != 0] = TF_vol3D[mask_sum != 0] / mask_sum[mask_sum != 0]
+    TF_vol3D[mask_sum == 0] = 0
     print("")
     print("----------")
     print("- FFT 3D -")
     print("----------")
     start_time = time.time()
-    f_recon = fftshift(ifftn(TF_vol))/(Tp_Tomo**3)
+    f_recon = fftshift(ifftn(TF_vol3D))/(Tp_Tomo**3)
     print("")
     print(f"3D-FFT calculation: {np.round(time.time() - start_time,decimals=2)} seconds")
     print("")
     mask_sum = fftshift(mask_sum)
-    TF_vol = fftshift(TF_vol)
+    TF_vol3D = fftshift(TF_vol3D)
     f_recon = fftshift(f_recon, [0, 1])
     return f_recon, TF_vol, mask_sum
 
@@ -368,8 +373,84 @@ def PhaseContrast(ComplexField, CutOff1, CutOff2):
                              np.arange(-int(Spectrum.shape[0]/2), int(Spectrum.shape[0]/2)),
                              np.arange(-int(Spectrum.shape[2]/2), int(Spectrum.shape[2]/2)))
     Mask = np.zeros((Spectrum.shape[1], Spectrum.shape[0], Spectrum.shape[2]), dtype=complex)
-    Mask[kx**2 + ky**2 + kz**2 < CutOff2**2] = np.exp(-1j*np.pi/2)
-    Mask[kx**2 + ky**2 + kz**2 < CutOff1**2] = 0 + 0j
+    Mask[kx**2 + ky**2 + kz**2 < CutOff2**2] = 0.1*(1 + 1*1j)
+    Mask[kx**2 + ky**2 + kz**2 < CutOff1**2] = np.exp(-1j*np.pi/2)
     Spectrum = Spectrum * Mask
     Field = ifftn(ifftshift(Spectrum))
     return Field
+
+def RheinbergIllumination(ComplexField, CutR, CutG, CutB):
+    """
+    Processing Rheinberg illumination images from tomographic acquisitions
+
+    Parameters
+    ----------
+    ComplexField : complex128
+        Reconstructed complex refractive index distribution.
+    CutR : int
+        Cut-off frequency of the Red filter (assumed to be a circulat mask).
+    CutG : int
+        Cut-off frequency of the Green filter (assumed to be a circulat mask).
+    CutB : int
+        Cut-off frequency of the Blue filter (assumed to be a circulat mask).
+
+    Returns
+    -------
+    Field : complex128
+        Phase-contrast filtered refractive index distribution.
+
+    """
+    Spectrum = fftshift(fftn(ComplexField))
+    kx, ky, kz = np.meshgrid(np.arange(-int(Spectrum.shape[1]/2), int(Spectrum.shape[1]/2)),
+                             np.arange(-int(Spectrum.shape[0]/2), int(Spectrum.shape[0]/2)),
+                             np.arange(-int(Spectrum.shape[2]/2), int(Spectrum.shape[2]/2)))
+    FiltR = np.zeros((Spectrum.shape[1], Spectrum.shape[0], Spectrum.shape[2]), dtype=complex)
+    FiltG = np.zeros((Spectrum.shape[1], Spectrum.shape[0], Spectrum.shape[2]), dtype=complex)
+    FiltB = np.zeros((Spectrum.shape[1], Spectrum.shape[0], Spectrum.shape[2]), dtype=complex)
+
+    FiltR[kx**2 + ky**2 + kz**2 < CutR[1]**2] = 1
+    FiltR[kx**2 + ky**2 + kz**2 < CutR[0]**2] = 0
+
+    FiltG[kx**2 + ky**2 + kz**2 < CutG**2] = 1
+
+    FiltB[kx**2 + ky**2 + kz**2 < CutB[1]**2] = 1
+    FiltB[kx**2 + ky**2 + kz**2 < CutB[0]**2] = 0
+
+    R = Spectrum * FiltR
+    G = Spectrum * FiltG
+    B = Spectrum * FiltB
+
+    FieldR = ifftn(ifftshift(R))
+    FieldG = ifftn(ifftshift(G))
+    FieldB = ifftn(ifftshift(B))
+
+    return FieldR, FieldG, FieldB
+
+def dic(ComplexField, DeltaX, DeltaY, DeltaZ, Phi):
+    """
+    Processing DIC images from tomographic acquisitions
+
+    Parameters
+    ----------
+    ComplexField : complex128
+        Reconstructed complex refractive index distribution.
+    DeltaX : int
+        Hologram shearing in x-direction
+    DeltaY : int
+        Hologram shearing in y-direction
+    DeltaZ : int
+        Hologram shearing in z-direction        
+    Phi : float64
+        Hologram phase-shift.
+
+    Returns
+    -------
+    Field : complex128
+        Phase-contrast filtered refractive index distribution.
+
+    """
+    ComplexFieldShift = np.roll(ComplexField, DeltaX, axis=1)
+    ComplexFieldShift = np.roll(ComplexFieldShift, DeltaY, axis=0)
+    ComplexFieldShift = np.roll(ComplexFieldShift, DeltaZ, axis=2)    
+    IDic = ComplexField - (ComplexFieldShift*np.exp(1j*Phi))
+    return IDic

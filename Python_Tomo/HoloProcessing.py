@@ -6,10 +6,16 @@
 from scipy.fftpack import fft2, ifft2, ifftshift
 import numpy as np
 import numba
+from numba.core.errors import NumbaDeprecationWarning, NumbaPendingDeprecationWarning, NumbaWarning
+import warnings
+
+warnings.simplefilter('ignore', category=NumbaDeprecationWarning)
+warnings.simplefilter('ignore', category=NumbaPendingDeprecationWarning)
+warnings.simplefilter('ignore', category=NumbaWarning)
 
 def filtrage(spectrum, dx, dy, radius):
     """
-    
+
     Bandpass filtering of the hologram spectrum. A circular mask is applied to the
     Fourier space data. Filtered spectrum is finally shifted of the quantities dx and dy
 
@@ -50,7 +56,7 @@ def filtrage(spectrum, dx, dy, radius):
 
 def reconstruction(I, z, Lambda, pix):
     """
-    
+
     Implementation of the Fresnel transform for hologram reconstruction. Depending on the object to sensor distance, reconstruction kernel is estimated in image or Fourier
     space.
 
@@ -103,7 +109,7 @@ def reconstruction(I, z, Lambda, pix):
 
 def unwrapping(PhiW, pix, approx=True):
     """
-    
+
     Phase unwrapping algorithm as proposed in Vyacheslav V. Volkov and Yimei Zhu, \"Deterministic phase unwrapping in the presence of noise,\" Opt. Lett. 28, 2156-2158 (2003).
 
     Parameters

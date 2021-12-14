@@ -24,36 +24,36 @@ def OTF_Cap(dimHolo, NA_ill, nimm, SpecCoord):
     Returns
     -------
     OTF_Simu : int32
-        Optical Transfert Function.    
+        Optical Transfert Function.
 
     """
     REwald = dimHolo/2
     OTF_Simu = np.zeros((2*dimHolo, 2*dimHolo, 2*dimHolo))
-    
-    # Maximal frequency   
+
+    # Maximal frequency
     Fmax = np.round(REwald*NA_ill/nimm)
-    
+
     # Definition of diffracted wavevectors
     kdx = np.arange(-Fmax,Fmax)
     kdy = np.arange(-Fmax,Fmax)
     KDX, KDY = np.meshgrid(kdx, kdy)
-    
+
     # Illumination wavevectors
     KIX = SpecCoord[1]
     KIY = SpecCoord[0]
     KIZ = np.round(np.sqrt(REwald**2-KIX**2-KIY**2))
-    
+
     index = np.where(REwald**2-KDX**2-KDY**2 >= 0)
     KDZ = np.zeros(KDX.shape)
     KDZ[index] = np.round(np.sqrt(REwald**2-KDX[index]**2-KDY[index]**2))
-        
+
     KOX = KDX - KIX
     KOY = KDY - KIY
     KOZ = KDZ - KIZ
 
     OTF_Simu[np.int32(KOY[index]+dimHolo),np.int32(KOX[index]+dimHolo),np.int32(KOZ[index]+dimHolo)]=1
     return OTF_Simu
-    
+
 
 def OTF_Flower(dimHolo, NA_ill, nimm, nbangle):
     """
@@ -79,10 +79,10 @@ def OTF_Flower(dimHolo, NA_ill, nimm, nbangle):
     REwald = dimHolo/2
     SpecCoord = np.zeros((dimHolo, dimHolo))
     OTF_Simu = np.zeros((2*dimHolo, 2*dimHolo, 2*dimHolo))
-    
+
     # MaxAngle = np.arcsin(NA_ill/nimm)
     Fmax = np.round(REwald*NA_ill/nimm)
-    
+
     # Flower parametrization
     n = 4
     d = 1
@@ -97,12 +97,12 @@ def OTF_Flower(dimHolo, NA_ill, nimm, nbangle):
     KIX = np.round(Fmax*np.cos(NbPetals*THETA)*np.cos(THETA))
     KIY = np.round(Fmax*np.cos(NbPetals*THETA)*np.sin(THETA))
     KIZ = np.round(np.sqrt(REwald**2-KIX**2-KIY**2))
-    
+
     SpecCoord[np.int32(KIY[0,0,:]+dimHolo/2+1),np.int32(KIX[0,0,:]+dimHolo/2+1)] = illum_number
     index = np.where(REwald**2-KDX**2-KDY**2 >= 0)
     KDZ = np.zeros(KDX.shape)
     KDZ[index] = np.round(np.sqrt(REwald**2-KDX[index]**2-KDY[index]**2))
-        
+
     KOX = KDX - KIX
     KOY = KDY - KIY
     KOZ = KDZ - KIZ
@@ -180,7 +180,7 @@ def Calc_TF_Holo(TF_vol3D, TF_Holo, fd_m, sdz_m, dx_m, dy_m, Nmax, k_inc, R_Ewal
 
     """
     fi = np.array([k_inc[0], k_inc[1], np.round(np.sqrt(R_Ewald**2 - k_inc[0]**2 - k_inc[1]**2))])
-    
+
     kv = 2*np.pi/lambda_v
     k0 = kv * n0
 
@@ -188,7 +188,7 @@ def Calc_TF_Holo(TF_vol3D, TF_Holo, fd_m, sdz_m, dx_m, dy_m, Nmax, k_inc, R_Ewal
     ctePot2UBorn = -1j*np.pi/k0
     cteNormalisation = -1/(2*np.pi)
 
-    fobj_m = (fd_m-np.round(fi[:, np.newaxis])).astype(int)
-    
-    TF_Holo[dx_m+Nmax,dy_m+Nmax] = (cteInd2Pot * ctePot2UBorn * cteNormalisation)/sdz_m * TF_vol3D[fobj_m[0,:], fobj_m[1,:], fobj_m[2,:]]
+    fobj_m = (fd_m-np.round(2*fi[:, np.newaxis])).astype(int)
+
+    TF_Holo[dy_m+Nmax, dx_m+Nmax] = (cteInd2Pot * ctePot2UBorn * cteNormalisation)/sdz_m * TF_vol3D[fobj_m[0,:], fobj_m[1,:], fobj_m[2,:]]
     return TF_Holo
