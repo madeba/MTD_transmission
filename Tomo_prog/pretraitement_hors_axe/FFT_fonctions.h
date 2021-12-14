@@ -50,4 +50,7 @@ void TF2Dcplx_INV(std::vector<std::complex<double>> const &entree, std::vector<s
 void TF2D_r2c_symetric(std::vector<double> const &entree, std::vector<std::complex<double> > &sortie, FFTW_init  &tf2D_Re);//calcul fft
 void TF2D_r2c(std::vector<double> const &entree, std::vector<std::complex<double> > &sortie, FFTW_init  &tf2D_Re, double delta_x);//calcul TF
 
+//--------pour dérivation dans Fourier (cf volkov)
+std::vector<vecteur> init_kvect_shift(Var2D dim2DHA);
+std::vector<double> init_kvect_mod2Shift(std::vector<vecteur> &kvect_shift);//
 #endif

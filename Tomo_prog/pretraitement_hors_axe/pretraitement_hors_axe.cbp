@@ -70,6 +70,7 @@
 		<Unit filename="include/Point2D.h" />
 		<Unit filename="include/deroulement_volkov2.h" />
 		<Unit filename="include/deroulement_volkov3.h" />
+		<Unit filename="include/deroulement_volkov4.h" />
 		<Unit filename="include/struct.h" />
 		<Unit filename="include/vecteur.h" />
 		<Unit filename="main.cpp" />
@@ -81,6 +82,7 @@
 		<Unit filename="src/Point2D.cpp" />
 		<Unit filename="src/deroulement_volkov2.cpp" />
 		<Unit filename="src/deroulement_volkov3.cpp" />
+		<Unit filename="src/deroulement_volkov4.cpp" />
 		<Unit filename="src/vecteur.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />

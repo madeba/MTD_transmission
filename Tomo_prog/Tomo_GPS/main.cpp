@@ -15,6 +15,7 @@ int main()
   vector<float> indice(readTiff3D(m1.chemin_result+"/indice.tif"));  //load refracive index
   vector<float> absorption(readTiff3D(m1.chemin_result+"/absorption.tif"));//load absorption
   int dim=round(pow(indice.size(),1.0/3.0));
+  cout<<"dimension!!!!!!!!="<<dim<<endl;
   double quad_err=0;
   vector<complex<double>> indiceCplx(indice.size());//init complex refractive index
   vector<complex<double>> indiceCplx_previous(indice.size(),0.0);//init complex refractive index
@@ -97,6 +98,14 @@ int main()
      auto elapsed_part2 = end_part2 - start_part2;
      std::cout <<"Temps pour 1 iter= "<< elapsed_part2.count()/(pow(10,9)) << '\n';
   }
+  /// Remarque Fabien : on applique une dernière fois la positivité/ la contrainte
+   for(cpt=0;cpt<nbPix3D;cpt++){
+        if(indiceCplx[cpt].real()>m1.delta_nMax) indiceCplx[cpt].real(m1.delta_nMax);//imposer la valeur MAX d'indice
+            else if(indiceCplx[cpt].real()<m1.delta_nMin) indiceCplx[cpt].real(m1.delta_nMin);//imposer la valeur MIN d'indice
+
+        if(indiceCplx[cpt].imag()<m1.kappa_Min) indiceCplx[cpt].imag(m1.kappa_Min);//imposer la valeur MIN de coefficient d'extinction
+            else if(indiceCplx[cpt].imag()>m1.kappa_Max) indiceCplx[cpt].imag(m1.kappa_Max);//imposer la valeur MAX de coefficient d'extinction
+        }
 cout<<"m1.tailleTheopixelTomo"<<m1.tailleTheoPixelTomo<<endl;
 SAV3D_Tiff(SpectreIndiceCplx_estim,"Re",m1.chemin_result+"spectre_RE_GPS.tif",m1.tailleTheoPixelTomo*pow(10,-5));
 SAV3D_Tiff(indiceCplx,"Re",m1.chemin_result+"indiceGPS.tif",m1.tailleTheoPixelTomo*pow(10,-5));

@@ -131,7 +131,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     cout<<"fichier config_manip.txt: "<<chemin_config_manip<<endl;
     chemin_recon=repertoire_config+"/recon.txt";
     cout<<"fichier recon.txt : "<<chemin_recon<<endl;
-
+    b_PC_ACQUIS=stof(extract_string("PC_ACQUIS",chemin_config_GUI));
     ///tester l'existence du fichiers de config:  config_manip.txt dans le chemin indiqué par l'utilisateur
     ifstream fichier_config_manip(chemin_config_manip.c_str(), ios::in);
     if(!fichier_config_manip)
@@ -328,6 +328,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
         // textFicManip=new wxTextCtrl(zone10,-1,"",wxPoint(160,195),wxSize(100,20));
         ///bouton Acquisition
         BoutonManip= new wxButton(zone13, idBoutonManip, wxT("&Acquisition"), wxPoint(194,60), wxDefaultSize, 0);
+        if(b_PC_ACQUIS==0) BoutonManip->Enable(false);
         //Bouton image
        // BoutonImage= new wxButton(zone13, idBoutonImage, wxT("&Image"), wxPoint(4,60), wxSize(40,26), 0);
         //BoutonImage->SetToolTip(wxT("Acquisition + Pretraitement + Reconstruction"));
@@ -854,6 +855,7 @@ string Gui_TomoFrame::extract_string(string token,  string chemin_fic)
     }
     if(valeur.empty())    {
         cout<<"mot_clé truc"<<token<<" inexistant dans le fichier "<<chemin_fic<<endl;
+        exit(0);
     //valeur="";
     }
     fichier.close();

@@ -10,8 +10,8 @@
 //fonction FFTW_init
 
 //void deroul_volkov2(std::vector<double> const &phase_enroul,std::vector<double> &phase_deroul,FFTW_init paramC2rHA);
-std::vector<vecteur> init_kvect_shift(Var2D dim2DHA);
-std::vector<double> init_kvect_mod2Shift(std::vector<vecteur> &kvect_shift);
+//std::vector<vecteur> init_kvect_shift(Var2D dim2DHA); //déplacé dans fft_fonctions
+//std::vector<double> init_kvect_mod2Shift(std::vector<vecteur> &kvect_shift);//déplacé dans fft_fonctions
 void deroul_volkov3(std::vector<double> const &phase_enroul,std::vector<double> &phase_deroul, std::vector<vecteur> &kvect_shift,  FFTW_init &param_c2c);
 
 void gradient_fft3(std::vector<double> const &entree, std::vector<std::complex<double>> &gradx,std::vector<std::complex<double>> &grady, std::vector<vecteur>  &kvect_shift, FFTW_init &paramC2rHA);

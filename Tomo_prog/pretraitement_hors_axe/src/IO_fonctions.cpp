@@ -296,6 +296,10 @@ void SAV_Tiff2D(std::vector<double> const &var_sav, string chemin, double taille
     float xres, yres;
     uint16  res_unit;
     TIFF *tif_out= TIFFOpen(chemin.c_str(), "w");//"w"->ecraser, "a"->ajouter
+    if(tif_out==NULL){
+            cout<<"Impossible d'ouvrir="<<chemin.c_str()<<endl;
+    exit(EXIT_FAILURE);
+    }
     TIFFSetField (tif_out, TIFFTAG_IMAGEWIDTH, dim);
     TIFFSetField (tif_out, TIFFTAG_IMAGELENGTH, dim);
     TIFFSetField (tif_out, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
@@ -337,6 +341,10 @@ void SAV_Tiff2D(std::vector<complex<double>> const & var_sav, string partie, str
     float xres, yres;
     uint16  res_unit;
     TIFF *tif_out= TIFFOpen(chemin.c_str(), "w");//"w"->ecraser, "a"->ajouter
+    if(tif_out==NULL){
+            cout<<"Impossible d'ouvrir="<<chemin.c_str()<<endl;
+    exit(EXIT_FAILURE);
+    }
     TIFFSetField (tif_out, TIFFTAG_IMAGEWIDTH, dim);
     TIFFSetField (tif_out, TIFFTAG_IMAGELENGTH, dim);
     TIFFSetField (tif_out, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);

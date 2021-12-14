@@ -39,7 +39,11 @@ void deroul_volkov3(vector<double> const &phase_enroul,vector<double> &phase_der
   integ_grad3(gradx_IntM,grady_IntM,IntM,kvect_shift,param_c2c);
   ///calcul phase dépliée
   for(size_t cpt=0;cpt<nbPix;cpt++){
-    phase_deroul[cpt]=phase_enroul[cpt]+M_2PI*IntM[cpt].real();
+         //  IntM[cpt].real(round( 100*IntM[cpt].real() )/100);
+              // double residu=(round(IntM[cpt].real())-IntM[cpt].real())*2*M_PI;
+   // phase_deroul[cpt]=phase_enroul[cpt]+M_2PI*(IntM[cpt].real())+residu;
+
+    phase_deroul[cpt]=phase_enroul[cpt]+M_2PI*(IntM[cpt].real());
   }
 }
 
@@ -109,6 +113,7 @@ void integ_grad3(vector<double> const &gradx, vector<double> const& grady, vecto
   tampon[0]=0;//(tampon[nbPix]+tampon[1])*0.5;//moyennage de la fréquence zéro pour éviter NAN
   TF2Dcplx_INV(tampon,sortie,param_c2c);
 }
+/*
 ///calculate the kvector field (array whose value a simply  kx and ky)
 std::vector<vecteur> init_kvect_shift(Var2D dim2DHA)
 {
@@ -132,3 +137,4 @@ std::vector<double> init_kvect_mod2Shift(vector<vecteur>  &kvect_shift)
 
   return kvect_mod_sq_shift;
 }
+*/

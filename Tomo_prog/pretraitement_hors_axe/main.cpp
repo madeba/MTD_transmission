@@ -11,6 +11,7 @@
 //#include "IO_fonctions.h"
 //#include "FFTW_init.h"
 #include "FFT_fonctions.h"
+#include "deroulement_volkov4.h"
 #include "deroulement_volkov3.h"
 #include "deroulement_volkov2.h"
 #include "deroulement_volkov.h"
@@ -177,15 +178,16 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
         else{
            // auto start_volkov = std::chrono::system_clock::now();
            // deroul_volkov2(phase_2Pi_vec,UnwrappedPhase, param_fftw2D_c2r_HA,param_fftw2D_r2c_HA);    //  auto end_calcAber = std::chrono::system_clock::now();
-           deroul_volkov3(phase_2Pi_vec,UnwrappedPhase, kvect_shift, param_fftw2D_c2r_HA);
-
+           //deroul_volkov3(phase_2Pi_vec,UnwrappedPhase, kvect_shift, param_fftw2D_c2r_HA);
+           deroul_volkov4_AS(phase_2Pi_vec,UnwrappedPhase, kvect_shift, param_fftw2D_c2r_HA);//antisymétrie avant intégration
+          // deroul_volkov4(phase_2Pi_vec,UnwrappedPhase, kvect_shift, param_fftw2D_c2r_HA);
            // auto end_volkov = std::chrono::system_clock::now();
           //  auto elapsed_volkov = end_volkov - start_volkov;
            // std::cout <<"Temps pour deroul volkov2= "<< elapsed_volkov.count()/(pow(10,9)) << '\n';
         }
     }
     else UnwrappedPhase=phase_2Pi_vec;
-      //SAV2(UnwrappedPhase,chemin_result+"/phase_deroul_volkov.raw",t_float,"a+b");
+      SAV2(UnwrappedPhase,chemin_result+"/phase_deroul_volkov_avant_corr_aber_volkov3.raw",t_float,"a+b");
       //-------------Correction aberration phase-------------------------------
       src=Mat(dim2DHA.x,dim2DHA.y,CV_64F, UnwrappedPhase.data());
       // auto start_calcAber = std::chrono::system_clock::now();
@@ -206,7 +208,7 @@ int flag=0;
     for(size_t y=0; y<dim2DHA.y; y++){ // reconstruire l'onde complexe/Recalculate the complex field
       for(size_t x=0; x<dim2DHA.x; x++){
         size_t cpt=x+y*dim2DHA.x;
-        PhaseFinal[cpt]=Phase_corr.at<double>(y,x);//copie opencV->Tableau
+        PhaseFinal[cpt]=Phase_corr.at<double>(y,x) ;//copie opencV->Tableau
         UBornAmpFinal[cpt]=UBornAmp_corr.at<double>(y,x);
         if(UBornAmpFinal[cpt]>10) UBornAmpFinal[cpt]=1;//Amplitude should always be around 1 after correction
         if(UBornAmpFinal[cpt]<-10)  UBornAmpFinal[cpt]=1;

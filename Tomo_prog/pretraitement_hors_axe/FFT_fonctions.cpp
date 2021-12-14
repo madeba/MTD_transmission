@@ -3,6 +3,29 @@
 #include "omp.h"
 
 using namespace std;
+///calculate the kvector field (array whose value a simply  kx and ky)
+std::vector<vecteur> init_kvect_shift(Var2D dim2DHA)
+{
+  size_t nbPix=dim2DHA.x*dim2DHA.y;
+  vector<vecteur> kvect(nbPix),kvect_shift(nbPix);
+  for(size_t cpt=0;cpt<nbPix;cpt++){
+    kvect[cpt].setx((cpt%dim2DHA.x-round(dim2DHA.x/2))/(dim2DHA.x));
+    kvect[cpt].sety((cpt/dim2DHA.y-round(dim2DHA.y/2))/(dim2DHA.y));
+  }
+  kvect_shift=fftshift2D(kvect);
+  return kvect_shift;
+}
+///calculate the kvector square modulus field (array whose value a simply  kx^2+ky^2)
+std::vector<double> init_kvect_mod2Shift(vector<vecteur>  &kvect_shift)
+{
+  size_t nbPix=kvect_shift.size();
+  vector<double> kvect_mod_sq_shift(nbPix);
+  for(size_t cpt=0;cpt<nbPix;cpt++){
+        kvect_mod_sq_shift[cpt]=pow(kvect_shift[cpt].getx(),2)+pow(kvect_shift[cpt].gety(),2);
+  }
+
+  return kvect_mod_sq_shift;
+}
 
 vector<vecteur>  fftshift2D(vector<vecteur> &entree)
 {

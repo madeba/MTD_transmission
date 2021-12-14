@@ -575,6 +575,7 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
                     imshow("Histogramme_plan_image", histImage);
 
                     holo2TF_UBorn(tmp,fft2D_UBorn,coinCropHA,tf2DROi);
+
                     TF2Dcplx_INV(fftshift2D(fft2D_UBorn),UBorn,tf2DUborn, 1);
 
                      double2mat(fftshift2D(UBorn),MatUborn);
