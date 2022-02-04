@@ -30,8 +30,6 @@ if not os.path.exists(PROCESSINGFOLDER):
     os.makedirs(PROCESSINGFOLDER)
 
 # Path to the parameter file, and parameters reading
-DARKFIELD = False
-PHASECONTRAST = False
 CHEMINPARAM = f"{DOSSIERDATA}Pretraitement/Param.txt"
 REWALD = float(ft.readvalue(CHEMINPARAM, 'REwald'))
 NB_ANGLE = int(ft.readvalue(CHEMINPARAM, 'nb_angle'))

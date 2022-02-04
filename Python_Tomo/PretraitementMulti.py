@@ -6,16 +6,14 @@
 import time
 import os
 import matplotlib.pyplot as plt
-from scipy.fftpack import fft2, ifft2, ifftshift, fftshift
+from scipy.fftpack import fft2, ifft2, ifftshift
 from scipy import signal
 import numpy as np
-import FileTools as ft
 import HoloProcessing as holo
 import CorrectionAberration as CAber
 import MultiModalMTD as mmtd
 import tifffile as tf
 import manip
-import math
 
 # Data folders and config files
 if os.name == 'nt': # Windows
