@@ -374,7 +374,7 @@ def PhaseContrast(ComplexField, CutOff1, CutOff2):
                              np.arange(-int(Spectrum.shape[2]/2), int(Spectrum.shape[2]/2)))
     Mask = np.zeros((Spectrum.shape[1], Spectrum.shape[0], Spectrum.shape[2]), dtype=complex)
     Mask[kx**2 + ky**2 + kz**2 < CutOff2**2] = 0.1*(1 + 1*1j)
-    Mask[kx**2 + ky**2 + kz**2 < CutOff1**2] = np.exp(-1j*np.pi/2)
+    Mask[kx**2 + ky**2 + kz**2 < CutOff1**2] = np.exp(1j*np.pi/2)
     Spectrum = Spectrum * Mask
     Field = ifftn(ifftshift(Spectrum))
     return Field

@@ -19,9 +19,9 @@ import math
 
 # Data folders and config files
 if os.name == 'nt': # Windows
-    DOSSIERACQUIS = "E:/Stage Master Irimas/ACQUIS_pollen_PN/"
+    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi_pollen_600U/"
 else:               # Linux
-    DOSSIERACQUIS = "/media/stagiaire/Seagate Expansion Drive/Stage Master Irimas/ACQUIS_pollen_PN/"
+    DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi_pollen_600U/"
     
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
@@ -37,7 +37,7 @@ if not os.path.exists(PROCESSINGFOLDER):
     os.makedirs(PROCESSINGFOLDER)
 
 # Acquisition data initialisation
-HOLOREF = True
+HOLOREF = False
 RYTOV = False
 
 CAMDIM = 1024
@@ -45,7 +45,8 @@ Gtot = M.F_TUBE/M.F_OBJ/M.RAPFOC
 REwald = CAMDIM*M.PIX/Gtot*M.NIMM/(M.LAMBDA) # Ewald sphere radius (pixel)
 fmaxHolo = round(REwald*M.NA/M.NIMM) # Max frequency support (pixel)
 dimHolo = int(2*fmaxHolo) # Hologram size
-NB_HOLO = M.NB_HOLOTOT # Number of holograms in the sequence
+# NB_HOLO = M.NB_HOLOTOT # Number of holograms in the sequence
+NB_HOLO = 50
 
 CHEMINSAV_RE = f"{DOSSIERDATA}Pretraitement/ReBorn_{dimHolo}.tiff"
 CHEMINSAV_RER = f"{DOSSIERDATA}Pretraitement/ReBornR_{dimHolo}.tiff"
@@ -56,6 +57,11 @@ CHEMINSAV_IM = f"{DOSSIERDATA}Pretraitement/ImBorn_{dimHolo}.tiff"
 CHEMINSAV_IMR = f"{DOSSIERDATA}Pretraitement/ImBornR_{dimHolo}.tiff"
 CHEMINSAV_IMG = f"{DOSSIERDATA}Pretraitement/ImBornG_{dimHolo}.tiff"
 CHEMINSAV_IMB = f"{DOSSIERDATA}Pretraitement/ImBornB_{dimHolo}.tiff"
+
+CHEMINSUM = f"{DOSSIERDATA}Pretraitement/Sum_{dimHolo}.tiff"
+CHEMINSUMR = f"{DOSSIERDATA}Pretraitement/SumR_{dimHolo}.tiff"
+CHEMINSUMG = f"{DOSSIERDATA}Pretraitement/SumG_{dimHolo}.tiff"
+CHEMINSUMB = f"{DOSSIERDATA}Pretraitement/SumB_{dimHolo}.tiff"
 
 CHEMINSAV_CENTRES = f"{DOSSIERDATA}Pretraitement/Centres_{dimHolo}.tiff"
 CHEMINSAV_CENTRESTXT = f"{DOSSIERDATA}Pretraitement/Centres_{dimHolo}.txt"
@@ -82,7 +88,7 @@ Method = {0 : "BASE",
           4 : "DIC",
           5 : "OBLIQUE"}
 
-MethodUsed = Method[4]
+MethodUsed = Method[0]
 
 # Loading reference image
 if HOLOREF is True:
@@ -117,6 +123,11 @@ wimag = tf.TiffWriter(CHEMINSAV_IM)
 wimagR = tf.TiffWriter(CHEMINSAV_IMR)
 wimagG = tf.TiffWriter(CHEMINSAV_IMG)
 wimagB = tf.TiffWriter(CHEMINSAV_IMB)
+
+wsum = tf.TiffWriter(CHEMINSUM)
+wsumR = tf.TiffWriter(CHEMINSUMR)
+wsumG = tf.TiffWriter(CHEMINSUMG)
+wsumB = tf.TiffWriter(CHEMINSUMB)
 
 start_time = time.time()
 for hol in range(0, NB_HOLO):
@@ -368,7 +379,10 @@ for hol in range(0, NB_HOLO):
 print(f"Pre-Processing time for {CPT_EXIST-1} holograms: "
       f"{np.round(time.time() - start_time,decimals=2)} seconds")
 
-
+wsum.write(np.float32(np.abs(SumHolo)))
+wsumR.write(np.float32(SumHoloR))
+wsumG.write(np.float32(SumHoloG))
+wsumB.write(np.float32(SumHoloB))
 wreal.close()
 wrealR.close()
 wrealG.close()
@@ -378,6 +392,10 @@ wimag.close()
 wimagR.close()
 wimagG.close()
 wimagB.close()
+wsum.close()
+wsumR.close()
+wsumG.close()
+wsumB.close()
 
 # Center recording and file closing
 fidParams.write(f"nb_angle {CPT_EXIST-1}\n")

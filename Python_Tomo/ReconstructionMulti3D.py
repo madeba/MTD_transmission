@@ -5,19 +5,16 @@
 
 import time
 import os
-# import matplotlib.pyplot as plt
 import numpy as np
 import FileTools as ft
 import Retropropagation as rp
-from scipy.fftpack import fftn, fftshift
-# import MultiModalMTD as mmtd
 import manip
 
 # Data folders and config files
 if os.name == 'nt': # Windows
-    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi/"
+    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi_pollen_600U/"
 else:               # Linux
-    DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi/"
+    DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi_pollen_600U/"
 
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
@@ -38,7 +35,7 @@ Method = {0 : "BASE",
           3 : "RHEINBERG",
           4 : "DIC"
           }
-MethodUsed = Method[4]
+MethodUsed = Method[3]
 
 # Path to the parameter file, and parameters reading
 CHEMINPARAM = f"{DOSSIERDATA}Pretraitement/Param.txt"
@@ -77,79 +74,74 @@ Refraction = f_recon.real
 Absorption = f_recon.imag
 
 if "DIC" == MethodUsed:
+    print("------------------")
+    print("- DIC simulation -")
+    print("------------------")
+    start_time = time.time()
     UBornCplxDIC = rp.dic(Refraction + 1j*Absorption, 3, 3, 1, 0.1) 
+    print(f"DIC processing time: {np.round(time.time() - start_time,decimals=2)} seconds")
 
 if "DARKFIELD" == MethodUsed:
+    print("------------------------")
+    print("- Darkfield simulation -")
+    print("------------------------")
+    start_time = time.time()
     UBornCplxDark = rp.DarkField(Refraction + 1j*Absorption, 5)
-
+    print(f"Darkfield processing time: {np.round(time.time() - start_time,decimals=2)} seconds")
 
 if "PHASECONTRAST" == MethodUsed:
+    print("------------------------------")
+    print("- Phase-Constrast simulation -")
+    print("------------------------------")
+    start_time = time.time()
     UBornCplxPC = rp.PhaseContrast(Refraction + 1j*Absorption, 5, 250)
-
+    print(f"Phase-Contrast processing time: {np.round(time.time() - start_time,decimals=2)} seconds")
 
 if "RHEINBERG" == MethodUsed:
+    print("----------------------------------")
+    print("- Rheinberg Constrast simulation -")
+    print("----------------------------------")
+    start_time = time.time()
     UBornCplxR, UBornCplxG, UBornCplxB = rp.RheinbergIllumination(Refraction + 1j*Absorption, [30,120], 60, [70,250])
-
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/CompoR_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-                    np.abs(UBornCplxR)**2, 2*PIXTHEO*1e6)
-
-
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFR_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-               np.abs(fftshift(fftn(UBornCplxR))), 1./(Refraction.shape[0]*2*PIXTHEO*1e6))
-
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/CompoG_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-               np.abs(UBornCplxG)**2, 2*PIXTHEO*1e6)
-
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFG_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-               np.abs(fftshift(fftn(UBornCplxG))), 1./(Refraction.shape[0]*2*PIXTHEO*1e6))
-
-
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/CompoB_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-                   np.abs(UBornCplxB)**2, 2*PIXTHEO*1e6)
-
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFB_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-               np.abs(fftshift(fftn(UBornCplxB))), 1./(Refraction.shape[0]*2*PIXTHEO*1e6))
-
-
-OTF = np.zeros_like(mask_sum)
-OTF[mask_sum != 0] = 1
-
-TFVolfilt = np.zeros_like(OTF)
-TFVolfilt[TFVol != 0] = 1
-
-# Writting results
-start_time = time.time()
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Refraction_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-                Refraction, 2*PIXTHEO*1e6)
-
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTF_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-                OTF, 2*PIXTHEO*1e6)
-
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Absorption_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-                Absorption, 2*PIXTHEO*1e6)
-
-
-print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
+    IntensiteRhein = np.zeros((DIMTOMO,DIMTOMO,DIMTOMO,3))
+    IntensiteRhein[:,:,:,0] = np.abs(UBornCplxR)**2
+    IntensiteRhein[:,:,:,1] = np.abs(UBornCplxG)**2
+    IntensiteRhein[:,:,:,2] = np.abs(UBornCplxB)**2
+    print(f"Rheinberg Contrast processing time: {np.round(time.time() - start_time,decimals=2)} seconds")
+    del UBornCplxR, UBornCplxG, UBornCplxB
+    
+    start_time = time.time()
+    ft.SAVtiffRGBCube(f"{PROCESSINGFOLDER}/IntensiteRheinSpec_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
+                    IntensiteRhein, 2*PIXTHEO*1e6)
+    print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
 
 # Darkfield processing
 if "DARKFIELD" == MethodUsed:
     DarkF = abs(UBornCplxDark)**2
+    start_time = time.time()
     ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Darkfield_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                    DarkF, 2*PIXTHEO*1e6)
+    print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
 
 
 if "BASE" == MethodUsed:
     Base = np.abs(Refraction + 1j*Absorption)**2
+    start_time = time.time()
     ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Brightfield_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                    Base, 2*PIXTHEO*1e6)
+    print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
 
 
 if "PHASECONTRAST" == MethodUsed:
     PhaseC = abs(UBornCplxPC)**2
+    start_time = time.time()
     ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Phasecontrast_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                     PhaseC, 2*PIXTHEO*1e6)
+    print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
 
 if "DIC" == MethodUsed:
     DIC = UBornCplxDIC
+    start_time = time.time()
     ft.SAVtiffCube(f"{PROCESSINGFOLDER}/DIC_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
                     DIC, 2*PIXTHEO*1e6)
+    print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")

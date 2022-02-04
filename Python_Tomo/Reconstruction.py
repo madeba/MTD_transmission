@@ -5,12 +5,10 @@
 
 import time
 import os
-# import matplotlib.pyplot as plt
 import numpy as np
 import FileTools as ft
 import Retropropagation as rp
 import manip
-from scipy.fftpack import fftshift
 import napari
 
 # Data folders and config files
@@ -31,8 +29,6 @@ if not os.path.exists(PROCESSINGFOLDER):
     os.makedirs(PROCESSINGFOLDER)
 
 # Path to the parameter file, and parameters reading
-DARKFIELD = False
-PHASECONTRAST = False
 CHEMINPARAM = f"{DOSSIERDATA}Pretraitement/Param.txt"
 REWALD = float(ft.readvalue(CHEMINPARAM, 'REwald'))
 NB_ANGLE = int(ft.readvalue(CHEMINPARAM, 'nb_angle'))
@@ -75,7 +71,8 @@ OTF[mask_sum != 0] = 1
 # TFVolfilt = np.zeros_like(OTF)
 # TFVolfilt[TFVol != 0] = 1
 
-viewer = napari.view_image(Absorption.transpose(-1, 1, 0), name='Absorption', colormap='magma')
+viewer=napari.Viewer()
+viewer.add_image(Absorption.transpose(-1, 1, 0), name='Absorption', colormap='magma')
 viewer.add_image(Refraction.transpose(-1, 1, 0), name='Refraction',colormap='magma')
 
 # Writting results
@@ -89,13 +86,3 @@ ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTF_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
 # ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Spectrum_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
 #                 fftshift(np.log10(abs(TFVol*1e17+1e-10)**2)), 1./(Refraction.shape[0]*2*PIXTHEO*1e6))
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
-
-# Darkfield processing
-if DARKFIELD is True:
-    DarkF = abs(Refraction + Absorption)**2
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Darkfield_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-                    DarkF, 2*PIXTHEO*1e6)
-if PHASECONTRAST is True:
-    PhaseC = abs(Refraction + Absorption)**2
-    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Phasecontrast_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-                    PhaseC, 2*PIXTHEO*1e6)
