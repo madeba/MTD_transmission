@@ -35,7 +35,7 @@ Method = {0 : "BASE",
           3 : "RHEINBERG",
           4 : "DIC"
           }
-MethodUsed = Method[3]
+MethodUsed = Method[2]
 
 # Path to the parameter file, and parameters reading
 CHEMINPARAM = f"{DOSSIERDATA}Pretraitement/Param.txt"

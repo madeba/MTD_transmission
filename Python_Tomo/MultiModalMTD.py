@@ -64,7 +64,7 @@ def phasecontrast(Spectrum, FiltRadius1, FiltRadius2, SpecCoord):
     kx, ky = np.meshgrid(np.arange(-int(Spectrum.shape[1]/2), int(Spectrum.shape[1]/2)),
                          np.arange(-int(Spectrum.shape[0]/2), int(Spectrum.shape[0]/2)))
     Mask = np.ones((Spectrum.shape[1], Spectrum.shape[0]), dtype=complex)
-    Mask[(kx-SpecCoord[1])**2+(ky-SpecCoord[0])**2 < FiltRadius2**2] = 1 * np.exp(-1j*np.pi/2)
+    Mask[(kx-SpecCoord[1])**2+(ky-SpecCoord[0])**2 < FiltRadius2**2] = 1 * np.exp(1j*np.pi/2)
     Mask[(kx-SpecCoord[1])**2+(ky-SpecCoord[0])**2 < FiltRadius1**2] = 0.7*(1+ 1*1j)
     Spectrum = Spectrum * Mask
     return Spectrum

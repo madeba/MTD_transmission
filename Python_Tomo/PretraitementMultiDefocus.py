@@ -6,7 +6,7 @@
 import time
 import os
 import matplotlib.pyplot as plt
-from scipy.fftpack import fft2, ifft2, ifftshift, fftshift
+from scipy.fftpack import fft2, ifft2, ifftshift
 from scipy import signal
 import numpy as np
 import FileTools as ft
@@ -15,7 +15,6 @@ import CorrectionAberration as CAber
 import MultiModalMTD as mmtd
 import tifffile as tf
 import manip
-import math
 
 # Data folders and config files
 if os.name == 'nt': # Windows
@@ -79,8 +78,8 @@ Method = {0 : "BASE",
           5 : "OBLIQUE"}
 MethodUsed = Method[2]
 
-Stack = np.zeros((250,250,30),dtype = float)
-StackRGB = np.zeros((250,250,30,3),dtype = float)
+Stack = np.zeros((dimHolo,dimHolo,30),dtype = float)
+StackRGB = np.zeros((dimHolo,dimHolo,30,3),dtype = float)
 
 # Loading reference image
 if HOLOREF is True:
@@ -106,7 +105,7 @@ Poly = np.zeros((NBCOEF, dimHolo*dimHolo), dtype=np.float64)
 Poly = CAber.CalcPoly_xy(DEGREPOLY, Masque, Poly)
 
 
-Illu = np.zeros((250,250),dtype = complex)
+Illu = np.zeros((dimHolo,dimHolo),dtype = complex)
 Illu[:,fmaxHolo:] = 1
 
 start_time = time.time()
@@ -114,10 +113,10 @@ CPTSUM = 0
 for Z in range(-1200,1200,80):
     CPT = 1
     CPT_EXIST = 1
-    SumHolo = np.zeros((250,250), dtype = float)
-    SumHoloR = np.zeros((250,250), dtype = float)
-    SumHoloG = np.zeros((250,250), dtype = float)
-    SumHoloB = np.zeros((250,250), dtype = float)
+    SumHolo = np.zeros((dimHolo,dimHolo), dtype = float)
+    SumHoloR = np.zeros((dimHolo,dimHolo), dtype = float)
+    SumHoloG = np.zeros((dimHolo,dimHolo), dtype = float)
+    SumHoloB = np.zeros((dimHolo,dimHolo), dtype = float)
     for hol in range(0, NB_HOLO):
         if CPT % 100 == 0:
             print(f"Hologram = {CPT} out of {NB_HOLO}")
