@@ -16,10 +16,10 @@ import manip
 
 # Data folders and config files
 if os.name == 'nt': # Windows
-    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/220214_C2C12_Cell_3/"
+    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi_pollen_600U/"
 else:               # Linux
-    DOSSIERACQUIS = "/home/nicolas/Acquisitions/220214_C2C12_Cell_3/"
-DATA = False # True for data preprocessing, False for white image processing
+    DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi_pollen_600U/"
+DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 if DATA is True:
     DOSSIERDATA = M.dossier_data
@@ -33,7 +33,7 @@ if not os.path.exists(PROCESSINGFOLDER):
     os.makedirs(PROCESSINGFOLDER)
 
 # Acquisition data initialisation
-HOLOREF = True
+HOLOREF = False
 RYTOV = True
 CAMDIM = 1024
 Gtot = M.F_TUBE/M.F_OBJ/M.RAPFOC

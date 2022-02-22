@@ -18,9 +18,9 @@ import manip
 
 # Data folders and config files
 if os.name == 'nt': # Windows
-    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi_pollen_600U/"
+    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/220214_C2C12_Cell_3/"
 else:               # Linux
-    DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi_pollen_600U/"
+    DOSSIERACQUIS = "/home/nicolas/Acquisitions/220214_C2C12_Cell_3/"
     
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
@@ -37,7 +37,7 @@ if not os.path.exists(PROCESSINGFOLDER):
 
 # Acquisition data initialisation
 
-HOLOREF = False
+HOLOREF = True
 RYTOV = False
 
 CAMDIM = 1024
@@ -46,7 +46,7 @@ REwald = CAMDIM*M.PIX/Gtot*M.NIMM/(M.LAMBDA) # Ewald sphere radius (pixel)
 fmaxHolo = round(REwald*M.NA/M.NIMM) # Max frequency support (pixel)
 dimHolo = int(2*fmaxHolo) # Hologram size
 # NB_HOLO = M.NB_HOLOTOT # Number of holograms in the sequence
-NB_HOLO = 50 # Number of holograms in the sequence
+NB_HOLO = 20 # Number of holograms in the sequence
 
 CHEMINSAV_RE = f"{DOSSIERDATA}Pretraitement/ReBorn_{dimHolo}.tiff"
 CHEMINSAV_RER = f"{DOSSIERDATA}Pretraitement/ReBornR_{dimHolo}.tiff"
