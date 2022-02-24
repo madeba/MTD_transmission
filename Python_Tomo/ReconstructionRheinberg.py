@@ -41,7 +41,7 @@ NB_HOLO = NB_ANGLE
 
 # Filter Radii
 GreenRadius = 60
-RedRadius = 100
+RedRadius = 80
 
 # Rounding tomographic volume dimensions to the next power of 2
 pow2 = ft.NextPow2(2*DIMHOLO)

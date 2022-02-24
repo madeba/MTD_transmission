@@ -15,9 +15,9 @@ import napari
 # Path to the parameter file, and parameters reading
 # Data folders and config files
 if os.name == 'nt': # Windows
-    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/220214_C2C12_Cell_3/"
+    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi_pollen_600S/"
 else:               # Linux
-    DOSSIERACQUIS = "/home/nicolas/Acquisitions/220214_C2C12_Cell_3/"
+    DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi_pollen_600S/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 DOSSIERDATA = M.dossier_data
@@ -52,8 +52,8 @@ Rec_Object = Refraction + Absorption*1j
 
 # Gerchberg parameters
 NBITER = 10
-NMIN = -0.1
-NMAX = 0.001
+NMIN = 0
+NMAX = 0.05
 KAPPAMIN = 0
 KAPPAMAX = 0
 

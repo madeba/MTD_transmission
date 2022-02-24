@@ -182,12 +182,14 @@ def calc_tf_calotte(TF_vol3D, mask_calotte, TF_holo, fd_m, sdz_m, dx_m, dy_m, Nm
     kv = 2*np.pi/lambda_v
     k0 = kv * n0
 
-    cteInd2Pot = -2*kv**2*n0
-    ctePot2UBorn = -1j*np.pi/k0
-    cteNormalisation = -1/(2*np.pi)
+    cteUBorn2Pot = 1j*k0/np.pi
+    cteNormalisation = -2*np.pi
+    # cteInd2Pot = -1/(2*kv**2*n0)
+    # ctePot2UBorn = -1j*k0/np.pi
+    # cteNormalisation = -(2*np.pi)
 
     fobj_m = (fd_m-(fi[:, np.newaxis])).astype(int)
-    TF_vol3D[fobj_m[0, :], fobj_m[1, :], fobj_m[2, :]] += TF_holo[dx_m+Nmax, dy_m+Nmax]*sdz_m/(cteInd2Pot*ctePot2UBorn*cteNormalisation)
+    TF_vol3D[fobj_m[0, :], fobj_m[1, :], fobj_m[2, :]] += TF_holo[dx_m+Nmax, dy_m+Nmax]*sdz_m*cteUBorn2Pot*cteNormalisation
     mask_calotte[fobj_m[0, :], fobj_m[1, :], fobj_m[2, :]] += 1
 
     return TF_vol3D, mask_calotte
@@ -229,6 +231,9 @@ def retropropagation(holo_pile, nb_holo, SpecCoord, Nmax, R_Ewald, lambda_v, n0,
         nb_holo = holo_pile.shape[2]
     
     pow2 = NextPow2(2*holo_pile.shape[0])
+    
+    kv = 2*np.pi/lambda_v
+    ctePot2Ind = -1/(2*kv**2*n0)
 
     # TF_vol = np.zeros(shape=(2*holo_pile.shape[0],
     #                          2*holo_pile.shape[0],
@@ -269,7 +274,7 @@ def retropropagation(holo_pile, nb_holo, SpecCoord, Nmax, R_Ewald, lambda_v, n0,
     print("")
     mask_sum = fftshift(mask_sum)
     TF_vol3D = fftshift(TF_vol3D)
-    f_recon = fftshift(f_recon, [0, 1])
+    f_recon = ctePot2Ind*fftshift(f_recon, [0, 1])
     return f_recon, TF_vol, mask_sum
 
 def Gerchberg(ReconsObjOrig, OTF, Delta_nmin, Delta_nmax, Kappa_min, Kappa_max, nbiter):
