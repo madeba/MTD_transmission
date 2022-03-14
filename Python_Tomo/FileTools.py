@@ -109,6 +109,27 @@ def SAVtiffCube(Folder, Data, pix):
     """
     tf.imwrite(Folder, Data.transpose(-1, 1, 0).astype(np.float32), imagej = True,
                 resolution=(1./pix, 1./pix), metadata={'spacing': pix, 'unit': 'um'})
+    
+def SAVtiffRGBCube(Folder, Data, pix):
+    """
+    Saving data as a multipage Tiff file
+
+    Parameters
+    ----------
+    Folder : str
+        Path of the saved file.
+    Data : float64
+        Data to be saved.
+    pix : float
+        sampling in micrometer for metadata
+
+    Returns
+    -------
+    None.
+
+    """
+    tf.imwrite(Folder, Data.transpose(2, 3, 1, 0).astype(np.float32), imagej = True,
+                resolution=(1./pix, 1./pix), metadata={'spacing': pix, 'unit': 'um'})
 
 
 def ReadtiffCube(Folder):

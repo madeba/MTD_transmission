@@ -9,13 +9,13 @@ import numpy as np
 import FileTools as ft
 import Retropropagation as rp
 import manip
-import napari
+import tifffile as tf
 
 # Data folders and config files
 if os.name == 'nt': # Windows
-    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi_pollen_600U/"
+    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi_pollen_600S/"
 else:               # Linux
-    DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi_pollen_600U/"
+    DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi_pollen_600S/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 if DATA is True:
@@ -42,6 +42,16 @@ NB_HOLO = NB_ANGLE
 CHEMIN_RE_UBORN = f"{DOSSIERDATA}Pretraitement/ReBorn_{DIMHOLO}.tiff"
 CHEMIN_IM_UBORN = f"{DOSSIERDATA}Pretraitement/ImBorn_{DIMHOLO}.tiff"
 
+# Paths to the saved cuts
+CHEMINSAV_XY = f"{PROCESSINGFOLDER}/XY_CUT.tiff"
+CHEMINSAV_YZ = f"{PROCESSINGFOLDER}/YZ_CUT.tiff"
+CHEMINSAVOTF_XY = f"{PROCESSINGFOLDER}/XY_CUT_OTF.tiff"
+CHEMINSAVOTF_YZ = f"{PROCESSINGFOLDER}/YZ_CUT_OTF.tiff"
+wxy = tf.TiffWriter(CHEMINSAV_XY)
+wyz = tf.TiffWriter(CHEMINSAV_YZ)
+wxyOTF = tf.TiffWriter(CHEMINSAVOTF_XY)
+wyzOTF = tf.TiffWriter(CHEMINSAVOTF_YZ)
+
 # Path to the specular coordinates
 SpecCoordPath = f"{DOSSIERDATA}Pretraitement/Centres_{DIMHOLO}.txt"
 fi = rp.Calc_fi(SpecCoordPath, NB_ANGLE, DIMHOLO)
@@ -55,34 +65,23 @@ del ReUBorn, ImUBorn
 # Rounding tomographic volume dimensions to the next power of 2
 pow2 = ft.NextPow2(2*DIMHOLO)
 DIMTOMO = 2**pow2
-
-start_time = time.time()
-f_recon, TFVol, mask_sum = rp.retropropagation(UBornCplx, NB_HOLO, fi, FMAXHOLO,
-                                               REWALD, M.LAMBDA, M.NIMM, PIXTHEO, UBornPitch)
-print(f"Reconstruction time for a {DIMTOMO}x{DIMTOMO}x{DIMTOMO} volume (3D-FFT included), "
-      f"with {NB_HOLO} holograms: {np.round(time.time() - start_time,decimals=2)} seconds")
-print("")
-
-Refraction = f_recon.real
-Absorption = f_recon.imag
-OTF = np.zeros_like(mask_sum)
-OTF[mask_sum != 0] = 1
-
-# TFVolfilt = np.zeros_like(OTF)
-# TFVolfilt[TFVol != 0] = 1
-
-viewer=napari.Viewer()
-viewer.add_image(Absorption.transpose(-1, 1, 0), name='Absorption', colormap='magma')
-viewer.add_image(Refraction.transpose(-1, 1, 0), name='Refraction',colormap='magma')
-
-# Writting results
-start_time = time.time()
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Refraction_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-                Refraction, 2*PIXTHEO*1e6)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Absorption_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-                Absorption, 2*PIXTHEO*1e6)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTF_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-                OTF, 1./(Refraction.shape[0]*2*PIXTHEO*1e6))
-# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/Spectrum_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-#                 fftshift(np.log10(abs(TFVol*1e17+1e-10)**2)), 1./(Refraction.shape[0]*2*PIXTHEO*1e6))
-print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
+for cptview in range(1,NB_ANGLE):
+    start_time = time.time()
+    f_recon, TFVol, mask_sum = rp.retropropagation(UBornCplx, cptview, fi, FMAXHOLO,
+                                                   REWALD, M.LAMBDA, M.NIMM, PIXTHEO, UBornPitch)
+    print(f"Reconstruction time for a {DIMTOMO}x{DIMTOMO}x{DIMTOMO} volume (3D-FFT included), "
+          f"with {NB_HOLO} holograms: {np.round(time.time() - start_time,decimals=2)} seconds")
+    print("")
+    OTF = np.zeros_like(mask_sum)
+    OTF[mask_sum != 0] = 1
+    
+    wxy.write(f_recon.real[:,:,int(DIMTOMO/2)-12],contiguous=True)
+    wyz.write(f_recon.real[int(DIMTOMO/2)-12,:,:],contiguous=True)
+    wxyOTF.write(OTF[:,:,int(DIMTOMO/2)],contiguous=True)
+    wyzOTF.write(OTF[int(DIMTOMO/2),:,:],contiguous=True)
+    del f_recon, TFVol, mask_sum, OTF
+    
+wxy.close()
+wyz.close()
+wxyOTF.close()
+wyzOTF.close()

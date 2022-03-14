@@ -11,15 +11,14 @@ from scipy import signal
 import numpy as np
 import HoloProcessing as holo
 import CorrectionAberration as CAber
-import MultiModalMTD as mmtd
 import tifffile as tf
 import manip
 
 # Data folders and config files
 if os.name == 'nt': # Windows
-    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi_pollen_600U/"
+    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/Topi_pollen_600S/"
 else:               # Linux
-    DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi_pollen_600U/"
+    DOSSIERACQUIS = "/home/nicolas/Acquisitions/Topi_pollen_600S/"
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
 if DATA is True:
@@ -36,8 +35,6 @@ if not os.path.exists(PROCESSINGFOLDER):
 # Acquisition data initialisation
 HOLOREF = False
 RYTOV = True
-DARKFIELD = False
-PHASECONTRAST = False
 CAMDIM = 1024
 Gtot = M.F_TUBE/M.F_OBJ/M.RAPFOC
 REwald = CAMDIM*M.PIX/Gtot*M.NIMM/(M.LAMBDA) # Ewald sphere radius (pixel)
@@ -132,13 +129,6 @@ for hol in range(0, NB_HOLO):
                                          axis=None), SpectreFilt.shape)
         kiy = ind[0]
         kix = ind[1]
-        if DARKFIELD is True:
-            SpectreFilt = mmtd.darkfield(SpectreFilt, 1, [ind[0]-SpectreFilt.shape[0]/2,
-                                                          ind[1]-SpectreFilt.shape[1]/2])
-        if PHASECONTRAST is True:
-            SpectreFilt = mmtd.phasecontrast(SpectreFilt, 20, 50,
-                                             [ind[0]-SpectreFilt.shape[0]/2,
-                                              ind[1]-SpectreFilt.shape[1]/2])
 
         # Coordinate writting
         fidCentrestxt.write(f"{kiy} {kix}\n")
@@ -167,16 +157,12 @@ for hol in range(0, NB_HOLO):
             # Rytov
             Re_UBorn = np.log(np.abs(Amp_UBornC))
             Im_UBorn = Phase_UBornC
-            # wreal.write(np.float32(Re_UBorn), contiguous=True)
-            # wimag.write(np.float32(Im_UBorn), contiguous=True)
             wreal.write(Re_UBorn, contiguous=True)
             wimag.write(Im_UBorn, contiguous=True)            
         else:
             # Born
             Re_UBorn = Amp_UBornC*np.cos(Phase_UBornC)-1
             Im_UBorn = Amp_UBornC*np.sin(Phase_UBornC)-1
-            # wreal.write(np.float32(Re_UBorn), contiguous=True)
-            # wimag.write(np.float32(Im_UBorn), contiguous=True)
             wreal.write(Re_UBorn, contiguous=True)
             wimag.write(Im_UBorn, contiguous=True)             
         CPT += 1

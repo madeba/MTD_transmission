@@ -30,8 +30,6 @@ if not os.path.exists(PROCESSINGFOLDER):
     os.makedirs(PROCESSINGFOLDER)
 
 # Path to the parameter file, and parameters reading
-DARKFIELD = False
-PHASECONTRAST = False
 CHEMINPARAM = f"{DOSSIERDATA}Pretraitement/Param.txt"
 REWALD = float(ft.readvalue(CHEMINPARAM, 'REwald'))
 NB_ANGLE = int(ft.readvalue(CHEMINPARAM, 'nb_angle'))
@@ -42,7 +40,7 @@ UBornPitch = 1/(2*FMAXHOLO*PIXTHEO)
 NB_HOLO = NB_ANGLE
 
 # Filter Radii
-GreenRadius = 20
+GreenRadius = 60
 RedRadius = 80
 
 # Rounding tomographic volume dimensions to the next power of 2
@@ -106,10 +104,14 @@ UBornBlue = UBornBlue.reshape(DIMHOLO,DIMHOLO,int((UBornBlue.shape[0])/DIMHOLO**
 fiB = fi[:,TabFilt[1,:] == 2]
 del UBornCplx, UBornCplxGreen, UBornCplxRed, UBornCplxBlue
 
+# Building composite
+IntensiteRhein = np.zeros((DIMTOMO, DIMTOMO, DIMTOMO, 3))
+OTFRhein = np.zeros((DIMTOMO, DIMTOMO, DIMTOMO, 3))
+
 start_time = time.time()
-print("--------------------------------------")
-print("- Reconstruction of the Green Channel-")
-print("--------------------------------------")
+print("---------------------------------------")
+print("- Reconstruction of the Green Channel -")
+print("---------------------------------------")
 f_reconG, TFVolG, mask_sum = rp.retropropagation(UBornGreen, UBornGreen.shape[2], fiG, FMAXHOLO,
                                                 REWALD, M.LAMBDA, M.NIMM, PIXTHEO, UBornPitch)
 print(f"Reconstruction time for a {DIMTOMO}x{DIMTOMO}x{DIMTOMO} volume (3D-FFT included), "
@@ -121,24 +123,14 @@ AbsorptionG = f_reconG.imag
 OTFG = np.zeros_like(mask_sum)
 OTFG[mask_sum != 0] = 1
 IntensiteG = np.abs(RefractionG+1j*AbsorptionG)**2
-
-# Writting results
-start_time = time.time()
-# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/RefractionG_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-#                 RefractionG, 2*PIXTHEO*1e6)
-# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/AbsorptionG_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-#                 AbsorptionG, 2*PIXTHEO*1e6)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/IntensityG_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-                IntensiteG, 2*PIXTHEO*1e6)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFG_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-                OTFG, 1./(IntensiteG.shape[0]*2*PIXTHEO*1e6))
-print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
-del RefractionG, AbsorptionG
+IntensiteRhein[:,:,:,1] = IntensiteG
+OTFRhein[:,:,:,1] = OTFG
+del RefractionG, AbsorptionG, OTFG, IntensiteG
 
 start_time = time.time()
-print("--------------------------------------")
-print("- Reconstruction of the Red Channel-")
-print("--------------------------------------")
+print("-------------------------------------")
+print("- Reconstruction of the Red Channel -")
+print("-------------------------------------")
 f_reconR, TFVolR, mask_sum = rp.retropropagation(UBornRed, UBornRed.shape[2], fiR, FMAXHOLO,
                                                 REWALD, M.LAMBDA, M.NIMM, PIXTHEO, UBornPitch)
 print(f"Reconstruction time for a {DIMTOMO}x{DIMTOMO}x{DIMTOMO} volume (3D-FFT included), "
@@ -150,23 +142,13 @@ AbsorptionR = f_reconR.imag
 OTFR = np.zeros_like(mask_sum)
 OTFR[mask_sum != 0] = 1
 IntensiteR = np.abs(RefractionR+1j*AbsorptionR)**2
-
-# Writting results
-start_time = time.time()
-# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/RefractionR_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-#                 RefractionR, 2*PIXTHEO*1e6)
-# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/AbsorptionR_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-#                 AbsorptionR, 2*PIXTHEO*1e6)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/IntensityR_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-                IntensiteR, 2*PIXTHEO*1e6)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFR_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-                OTFR, 1./(IntensiteR.shape[0]*2*PIXTHEO*1e6))
-print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
-del RefractionR, AbsorptionR
+IntensiteRhein[:,:,:,0] = IntensiteR
+OTFRhein[:,:,:,0] = OTFR
+del RefractionR, AbsorptionR, OTFR, IntensiteR
 
 start_time = time.time()
 print("--------------------------------------")
-print("- Reconstruction of the Blue Channel-")
+print("- Reconstruction of the Blue Channel -")
 print("--------------------------------------")
 f_reconB, TFVolB, mask_sum = rp.retropropagation(UBornBlue, UBornBlue.shape[2], fiB, FMAXHOLO,
                                                 REWALD, M.LAMBDA, M.NIMM, PIXTHEO, UBornPitch)
@@ -179,20 +161,18 @@ AbsorptionB = f_reconB.imag
 OTFB = np.zeros_like(mask_sum)
 OTFB[mask_sum != 0] = 1
 IntensiteB = np.abs(RefractionB+1j*AbsorptionB)**2
+IntensiteRhein[:,:,:,2] = IntensiteB
+OTFRhein[:,:,:,2] = OTFB
+del RefractionB, AbsorptionB,OTFB, IntensiteB
 
 # Writting results
 start_time = time.time()
-# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/RefractionB_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-#                 RefractionB, 2*PIXTHEO*1e6)
-# ft.SAVtiffCube(f"{PROCESSINGFOLDER}/AbsorptionB_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-#                 AbsorptionB, 2*PIXTHEO*1e6)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/IntensityB_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-                IntensiteB, 2*PIXTHEO*1e6)
-ft.SAVtiffCube(f"{PROCESSINGFOLDER}/OTFB_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
-                OTFB, 1./(IntensiteB.shape[0]*2*PIXTHEO*1e6))
+ft.SAVtiffRGBCube(f"{PROCESSINGFOLDER}/Rheinberg_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
+                  IntensiteRhein, 2*PIXTHEO*1e6)
+ft.SAVtiffRGBCube(f"{PROCESSINGFOLDER}/OTFRheinberg_{DIMTOMO}x{DIMTOMO}x{DIMTOMO}.tiff",
+                  OTFRhein, 1./(OTFRhein.shape[0]*2*PIXTHEO*1e6))
 print(f"Data saving: {np.round(time.time() - start_time,decimals=2)} seconds")
-del RefractionB, AbsorptionB
 
-viewer = napari.view_image(IntensiteB.transpose(-1, 1, 0), name='Bleu', colormap='blue')
-viewer.add_image(IntensiteR.transpose(-1, 1, 0), name='Rouge',colormap='red')
-viewer.add_image(IntensiteG.transpose(-1, 1, 0), name='Vert',colormap='green')
+viewer = napari.view_image(IntensiteRhein[:,:,:,2].transpose(-1, 1, 0), name='Bleu', colormap='blue')
+viewer.add_image(IntensiteRhein[:,:,:,1].transpose(-1, 1, 0), name='Rouge',colormap='red')
+viewer.add_image(IntensiteRhein[:,:,:,0].transpose(-1, 1, 0), name='Vert',colormap='green')

@@ -6,7 +6,7 @@
 import time
 import os
 import matplotlib.pyplot as plt
-from scipy.fftpack import fft2, ifft2, ifftshift, fftshift
+from scipy.fftpack import fft2, ifft2, ifftshift
 from scipy import signal
 import numpy as np
 import FileTools as ft
@@ -15,13 +15,12 @@ import CorrectionAberration as CAber
 import MultiModalMTD as mmtd
 import tifffile as tf
 import manip
-import math
 
 # Data folders and config files
 if os.name == 'nt': # Windows
-    DOSSIERACQUIS = "E:/Acquisitions/pollen_bouleau_24072020/"
+    DOSSIERACQUIS = "C:/Users/p1600109/Documents/Recherche/Acquisitions/220214_C2C12_Cell_3/"
 else:               # Linux
-    DOSSIERACQUIS = "/media/stagiaire/Seagate Expansion Drive/Acquisitions/Topi/"
+    DOSSIERACQUIS = "/home/nicolas/Acquisitions/220214_C2C12_Cell_3/"
     
 DATA = True # True for data preprocessing, False for white image processing
 M = manip.Manip(DOSSIERACQUIS, DATA)
@@ -46,7 +45,8 @@ Gtot = M.F_TUBE/M.F_OBJ/M.RAPFOC
 REwald = CAMDIM*M.PIX/Gtot*M.NIMM/(M.LAMBDA) # Ewald sphere radius (pixel)
 fmaxHolo = round(REwald*M.NA/M.NIMM) # Max frequency support (pixel)
 dimHolo = int(2*fmaxHolo) # Hologram size
-NB_HOLO = M.NB_HOLOTOT # Number of holograms in the sequence
+# NB_HOLO = M.NB_HOLOTOT # Number of holograms in the sequence
+NB_HOLO = 20 # Number of holograms in the sequence
 
 CHEMINSAV_RE = f"{DOSSIERDATA}Pretraitement/ReBorn_{dimHolo}.tiff"
 CHEMINSAV_RER = f"{DOSSIERDATA}Pretraitement/ReBornR_{dimHolo}.tiff"
@@ -76,10 +76,10 @@ Method = {0 : "BASE",
           3 : "RHEINBERG",
           4 : "DIC",
           5 : "OBLIQUE"}
-MethodUsed = Method[5]
+MethodUsed = Method[2]
 
-Stack = np.zeros((250,250,30),dtype = complex)
-StackRGB = np.zeros((250,250,10,3),dtype = float)
+Stack = np.zeros((dimHolo,dimHolo,30),dtype = float)
+StackRGB = np.zeros((dimHolo,dimHolo,30,3),dtype = float)
 
 # Loading reference image
 if HOLOREF is True:
@@ -104,18 +104,8 @@ Poly_US = CAber.CalcPolyUS_xy(DEGREPOLY, Masque, Poly_US)
 Poly = np.zeros((NBCOEF, dimHolo*dimHolo), dtype=np.float64)
 Poly = CAber.CalcPoly_xy(DEGREPOLY, Masque, Poly)
 
-# File opening for field recording
-wreal = tf.TiffWriter(CHEMINSAV_RE)
-wrealR = tf.TiffWriter(CHEMINSAV_RER)
-wrealG = tf.TiffWriter(CHEMINSAV_REG)
-wrealB = tf.TiffWriter(CHEMINSAV_REB)
 
-wimag = tf.TiffWriter(CHEMINSAV_IM)
-wimagR = tf.TiffWriter(CHEMINSAV_IMR)
-wimagG = tf.TiffWriter(CHEMINSAV_IMG)
-wimagB = tf.TiffWriter(CHEMINSAV_IMB)
-
-Illu = np.zeros((250,250),dtype = complex)
+Illu = np.zeros((dimHolo,dimHolo),dtype = complex)
 Illu[:,fmaxHolo:] = 1
 
 start_time = time.time()
@@ -123,10 +113,10 @@ CPTSUM = 0
 for Z in range(-1200,1200,80):
     CPT = 1
     CPT_EXIST = 1
-    SumHolo = np.zeros((250,250), dtype = float)
-    SumHoloR = np.zeros((250,250), dtype = float)
-    SumHoloG = np.zeros((250,250), dtype = float)
-    SumHoloB = np.zeros((250,250), dtype = float)
+    SumHolo = np.zeros((dimHolo,dimHolo), dtype = float)
+    SumHoloR = np.zeros((dimHolo,dimHolo), dtype = float)
+    SumHoloG = np.zeros((dimHolo,dimHolo), dtype = float)
+    SumHoloB = np.zeros((dimHolo,dimHolo), dtype = float)
     for hol in range(0, NB_HOLO):
         if CPT % 100 == 0:
             print(f"Hologram = {CPT} out of {NB_HOLO}")
@@ -226,13 +216,6 @@ for Z in range(-1200,1200,80):
                     SumHoloG = SumHoloG + np.abs(Re_UBornG+1j*Im_UBornG)**2
                     SumHoloB = SumHoloB + np.abs(Re_UBornB+1j*Im_UBornB)**2
                     
-                    wrealR.write(np.float32(Re_UBornR), contiguous=True)
-                    wrealG.write(np.float32(Re_UBornG), contiguous=True)
-                    wrealB.write(np.float32(Re_UBornB), contiguous=True)
-                    
-                    wimagR.write(np.float32(Im_UBornR), contiguous=True)
-                    wimagG.write(np.float32(Im_UBornG), contiguous=True)
-                    wimagB.write(np.float32(Im_UBornB), contiguous=True)
                 else:
                     # Born
                     Re_UBornR = Amp_UBornCR*np.cos(Phase_UBornCR)
@@ -247,14 +230,7 @@ for Z in range(-1200,1200,80):
                     SumHoloR = SumHoloR + np.abs(Re_UBornR+1j*Im_UBornR)**2
                     SumHoloG = SumHoloG + np.abs(Re_UBornG+1j*Im_UBornG)**2
                     SumHoloB = SumHoloB + np.abs(Re_UBornB+1j*Im_UBornB)**2
-                    
-                    wrealR.write(np.float32(Re_UBornR), contiguous=True)
-                    wrealG.write(np.float32(Re_UBornG), contiguous=True)
-                    wrealB.write(np.float32(Re_UBornB), contiguous=True)
-                    
-                    wimagR.write(np.float32(Im_UBornR), contiguous=True)            
-                    wimagG.write(np.float32(Im_UBornG), contiguous=True)            
-                    wimagB.write(np.float32(Im_UBornB), contiguous=True)
+                
                 CPT += 1
                 CPT_EXIST += 1
             
@@ -272,7 +248,7 @@ for Z in range(-1200,1200,80):
                     # Spectral filtering
                     SpectreFilt = mmtd.phasecontrast(SpectreFilt, 10, 100,
                                                      [ind[0]-SpectreFilt.shape[0]/2,
-                                                      ind[1]-SpectreFilt.shape[1]/2], M.LAMBDA)
+                                                      ind[1]-SpectreFilt.shape[1]/2])
                 if "OBLIQUE" == MethodUsed:
                 # Illumination filtering
                     if kiy-fmaxHolo < 0 :
@@ -316,9 +292,7 @@ for Z in range(-1200,1200,80):
                     
                     # Sum of intensities
                     SumHolo = SumHolo + np.abs(Re_UBorn+1j*Im_UBorn)**2
-                    
-                    wreal.write(np.float32(Re_UBorn), contiguous=True)
-                    wimag.write(np.float32(Im_UBorn), contiguous=True)
+
                 else:
                     # Born
                     if "DIC" == MethodUsed:
@@ -326,16 +300,13 @@ for Z in range(-1200,1200,80):
                         Im_UBorn = Amp_UBornC*np.sin(Phase_UBornC)-1
                         
                         # Sum of intensities
-                        SumHolo = SumHolo + (Re_UBorn+1j*Im_UBorn)
+                        SumHolo = SumHolo + np.abs(Re_UBorn+1j*Im_UBorn)
                     else :
                         Re_UBorn = Amp_UBornC*np.cos(Phase_UBornC)
                         Im_UBorn = Amp_UBornC*np.sin(Phase_UBornC)
                         
                         # Sum of intensities
                         SumHolo = SumHolo + np.abs(Re_UBorn+1j*Im_UBorn)**2
-                        
-                    wreal.write(np.float32(Re_UBorn), contiguous=True)
-                    wimag.write(np.float32(Im_UBorn), contiguous=True)
                 
                 CPT += 1
                 CPT_EXIST += 1
@@ -344,27 +315,25 @@ for Z in range(-1200,1200,80):
             CPT += 1
         
     if "RHEINBERG" == MethodUsed:
-        StackRGB[:,:,int((Z+1200)/240),0] = SumHoloR
-        StackRGB[:,:,int((Z+1200)/240),1] = SumHoloG
-        StackRGB[:,:,int((Z+1200)/240),2] = SumHoloB
+        StackRGB[:,:,int((Z+1200)/80),0] = SumHoloR
+        StackRGB[:,:,int((Z+1200)/80),1] = SumHoloG
+        StackRGB[:,:,int((Z+1200)/80),2] = SumHoloB
         
     else :
         Stack[:,:,int((Z+1200)/80)] = SumHolo
     
     CPTSUM += 1
-    print("Slice : %s sur 10" %CPTSUM)
-print(f"Pre-Processing time for {CPT_EXIST-1} holograms: "
+    print(f"Slice {CPTSUM} out of {Stack.shape[2]}")
+print(f"Pre-Processing time for {CPTSUM} Slices: "
       f"{np.round(time.time() - start_time,decimals=2)} seconds")
 
-wreal.close()
-wrealR.close()
-wrealG.close()
-wrealB.close()
 
-wimag.close()
-wimagR.close()
-wimagG.close()
-wimagB.close()
+if "RHEINBERG" == MethodUsed:
+    ft.SAVtiffRGBCube(f"{PROCESSINGFOLDER}/{MethodUsed}_{2*dimHolo}x{2*dimHolo}x{StackRGB.shape[2]}.tiff",
+                        StackRGB, 2*M.PIX*1e6)
+else:
+    ft.SAVtiffCube(f"{PROCESSINGFOLDER}/{MethodUsed}_{2*dimHolo}x{2*dimHolo}x{Stack.shape[2]}.tiff",
+                    Stack, 2*M.PIX*1e6)
 
 # Center recording and file closing
 fidParams.write(f"nb_angle {CPT_EXIST-1}\n")
