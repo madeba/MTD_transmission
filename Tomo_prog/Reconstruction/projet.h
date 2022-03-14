@@ -35,8 +35,12 @@
 
 
 //typedef enum PRECISION {CHAR, UINT, INT, FLOAT, DOUBLE};
-enum PRECISION {t_char, t_uint, t_int, t_float, t_double};
+enum PRECISION2 {t_char, t_uint, t_int, t_float, t_double};
+//enum PRECISION2 {t_char, t_uint, t_int, t_float, t_double};
+//enum PRECISION {CHAR, UINT, INT, FLOAT, DOUBLE};
 #endif
+
+
 
 
 

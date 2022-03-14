@@ -11,6 +11,7 @@ manip::manip()
     Var2D dimROI= {WINDOW_X, WINDOW_Y};
     cout<<"dans la classe manip"<<endl;
     string home=getenv("HOME");
+   // cout<<"HOME="<<home<<endl;
     string fin_chemin_gui_tomo="/.config/gui_tomo.conf";
     string chemin_config_GUI=getenv("HOME")+fin_chemin_gui_tomo;
     string repertoire_config=extract_string("CHEMIN_CONFIG",home+fin_chemin_gui_tomo);

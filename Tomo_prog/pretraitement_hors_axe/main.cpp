@@ -33,6 +33,7 @@ int main()
     manip m1; //créer un objet manip
     string chemin_result=m1.chemin_result, chemin_acquis=m1.chemin_acquis, Chemin_mask=m1.chemin_acquis+"/Image_mask.pgm";
     //dimensions hologrammes
+
     cout<<"camdimROI"<<m1.CamDimROI;
     Var2D const dimROI= {m1.CamDimROI,m1.CamDimROI}, coin= {0,0};
     Point2D const dimHolo(m1.CamDimROI,m1.CamDimROI,m1.CamDimROI);
@@ -187,7 +188,7 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
         }
     }
     else UnwrappedPhase=phase_2Pi_vec;
-      SAV2(UnwrappedPhase,chemin_result+"/phase_deroul_volkov_avant_corr_aber_volkov3.raw",t_float,"a+b");
+      SAV2(UnwrappedPhase,chemin_result+"/phase_deroul_volkov_avant_corr_aber_vvvvolkov3.raw",t_float,"a+b");
       //-------------Correction aberration phase-------------------------------
       src=Mat(dim2DHA.x,dim2DHA.y,CV_64F, UnwrappedPhase.data());
       // auto start_calcAber = std::chrono::system_clock::now();

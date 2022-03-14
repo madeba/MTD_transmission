@@ -567,7 +567,7 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
 
                    //circle(Mat& img, Point center, int radius, const Scalar& color, int thickness=1, int lineType=8, int shift=0)
 
-                    c = cvWaitKey(10);
+                    c = waitKey(10);
                     if (c == 's')
 	                   SAVE_IMAGE = true;
                     else

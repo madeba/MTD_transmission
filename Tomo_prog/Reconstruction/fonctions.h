@@ -86,8 +86,9 @@ void multiplier_masqueCplx2(nbCplx *image, nbCplx *masque, int t_image, int t_ma
 void prepare_wisdom2D(Var2D dim, const char *chemin);
 void prepare_wisdom3D(Var3D dim, char *chemin);
 
-void SAV2(double *var_sav, int NbPix2D, std::string chemin, enum PRECISION precision, char options[]);
-void SAVCplx(std::vector<std::complex<double> > var_sav, std::string partie, std::string chemin, enum PRECISION precision, char options[]);
+void SAV2(double *var_sav, int NbPix2D, std::string chemin, enum PRECISION2 precision, char options[]);
+//void SAVCplx(std::vector<std::complex<double> > var_sav, std::string partie, std::string chemin, enum PRECISION2 precision, char options[]);
+
 void SAV3D_Tiff(std::vector<std::complex <double>> var_sav, std::string partie, std::string chemin, double taille_pixel);
 void SAV3D_Tiff(std::vector<std::complex <double>> var_sav, Var3D const dim, std::string partie, std::string chemin, double taille_pixel);
 void SAV3D_Tiff(std::vector<double> var_sav, std::string chemin, double taille_pixel);

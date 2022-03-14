@@ -1787,8 +1787,8 @@ void SAV_Tiff2D(double *var_sav, string chemin, const size_t dim)
     TIFFWriteDirectory(tif);
     TIFFClose(tif);
 }
-
-void SAVCplx(std::vector<complex<double> > var_sav, string partie, std::string chemin, enum PRECISION precision, char options[])
+/*
+void SAVCplx(std::vector<complex<double> > var_sav, string partie, std::string chemin, enum PRECISION2 precision, char options[])
 {
     //double* var_sav = &v[0];
     unsigned int cpt;
@@ -1850,7 +1850,7 @@ void SAVCplx(std::vector<complex<double> > var_sav, string partie, std::string c
     }
     fclose(fichier_ID);
 }
-
+*/
 
 void SAV_Tiff2D(std::vector<double> var_sav, string chemin, double taille_pixel)
 {

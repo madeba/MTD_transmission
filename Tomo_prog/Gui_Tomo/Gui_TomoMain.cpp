@@ -226,6 +226,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
             editNbHolo->SetToolTip(wxT("Nombre d'hologrammes à acquérir"));
             //récupérer la valeur NB_HOLO dans fichier de config, convertir en string, puis l'afficher dans la case
             int Nb_Holo=stof(extract_string("NB_HOLO",chemin_config_manip));//stof=string to float
+
             wxString string_NbHolo = wxString::Format(wxT("%i"),Nb_Holo);
             editNbHolo->SetValue(string_NbHolo);
 
@@ -854,7 +855,7 @@ string Gui_TomoFrame::extract_string(string token,  string chemin_fic)
         }
     }
     if(valeur.empty())    {
-        cout<<"mot_clé truc"<<token<<" inexistant dans le fichier "<<chemin_fic<<endl;
+        cout<<"mot_clé "<<token<<" inexistant dans le fichier "<<chemin_fic<<endl;
         exit(0);
     //valeur="";
     }
@@ -868,7 +869,7 @@ string Gui_TomoFrame::extract_string(string token,  string chemin_fic)
 //extract a string from the file whose path is  "chemin_fic", but in addition can specify a default value
 string Gui_TomoFrame::extract_string(string token,  string chemin_fic,string defaut)
 {
-    cout<<"coucou"<<endl;
+
     ifstream fichier(chemin_fic.c_str(), ios::in);  // on ouvre en lecture
     string ligne,motcle,valeurMot,separ=" ";
     string valeur;

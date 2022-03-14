@@ -24,6 +24,7 @@
 #include "manip.h"
 
 #include "FFT_fonctions.h"
+#include "IO_fonctions.h"
 #define PI M_PI
 //using namespace cimg_library;
 using namespace std;
@@ -163,7 +164,9 @@ int main()
 
         recal= {posSpec.x,posSpec.y};
         decal2DCplxGen(TF_UBorn_normI,TF_UBorn_normC,dim2DHA,recal);  ///recaler le spectre à la position du spéculaire (la variable est attendue ainsi par la fonction retropropag)
-        //SAVCplx(TF_UBorn_normC,"Re",m1.chemin_result+"TF_UBorn_250x250_normC.raw",t_float,"a+b");
+       string sav_options="a+b";
+     //  SAVCplx(fftshift2D(TF_UBorn_normI),"Re",m1.chemin_result+"TF_UBorn_250x250_normI.raw",t_float,sav_options);
+
         if((cpt_angle-100*(cpt_angle/100))==0)
             printf("cpt_angle=%i\n",cpt_angle);
 

@@ -542,6 +542,7 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
                             PvPayloadType lType;
                             // We now have a valid buffer. This is where you would typically process the buffer.
                             lFrameRate->GetValue( lFrameRateVal );
+
                             lBandwidth->GetValue( lBandwidthVal );
 
                             // If the buffer contains an image, display width and height.

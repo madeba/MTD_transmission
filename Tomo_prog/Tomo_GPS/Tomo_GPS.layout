@@ -2,44 +2,9 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Release" />
-	<File name="include/IO_fonctions.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/IO_fonctions.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1879" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="include/FFTW_init.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1235" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="include/manip.h" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="847" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="include/FFT_fonctions.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="757" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src/FFTW_init.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4662" topLine="97" />
-		</Cursor>
-	</File>
-	<File name="src/manip.cpp" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2198" topLine="19" />
-		</Cursor>
-	</File>
-	<File name="include/fonctions.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="467" topLine="16" />
-		</Cursor>
-	</File>
-	<File name="src/FFT_fonctions.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="11860" topLine="263" />
+			<Cursor1 position="10423" topLine="292" />
 		</Cursor>
 	</File>
 	<File name="src/fonctions.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -47,14 +12,49 @@
 			<Cursor1 position="270" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src/IO_fonctions.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="main.cpp" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="10423" topLine="292" />
+			<Cursor1 position="4395" topLine="85" />
 		</Cursor>
 	</File>
-	<File name="main.cpp" open="1" top="1" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include/FFT_fonctions.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="4335" topLine="70" />
+			<Cursor1 position="757" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="include/fonctions.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="467" topLine="16" />
+		</Cursor>
+	</File>
+	<File name="include/manip.h" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="847" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/manip.cpp" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3598" topLine="104" />
+		</Cursor>
+	</File>
+	<File name="include/FFTW_init.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1235" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/FFTW_init.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4662" topLine="97" />
+		</Cursor>
+	</File>
+	<File name="include/IO_fonctions.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1879" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/FFT_fonctions.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="11860" topLine="263" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>
