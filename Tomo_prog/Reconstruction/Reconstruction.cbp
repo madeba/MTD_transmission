@@ -36,7 +36,6 @@
 					<Add option="-O3" />
 					<Add option="-Weffc++" />
 					<Add option="-pedantic-errors" />
-					<Add option="-pedantic" />
 					<Add option="-Wfatal-errors" />
 					<Add option="-Wall" />
 				</Compiler>
@@ -51,7 +50,7 @@
 			<Add option="-fexpensive-optimizations" />
 			<Add option="-O3" />
 			<Add option="-std=gnu++14" />
-			<Add option="-fexceptions -lpthread -std=c++11 -fopenmp" />
+			<Add option="-fexceptions  -std=c++11 -fopenmp `pkg-config --cflags opencv4`" />
 			<Add directory="/usr/include/opencv" />
 			<Add directory="include" />
 			<Add directory="." />
@@ -62,21 +61,21 @@
 			<Add library="/usr/lib/x86_64-linux-gnu/libfftw3.so" />
 			<Add library="/usr/lib/x86_64-linux-gnu/libfftw3_threads.so" />
 		</Linker>
-		<Unit filename="fonctions.cpp" />
-		<Unit filename="fonctions.h" />
 		<Unit filename="include/FFT_encaps.h" />
 		<Unit filename="include/FFT_fonctions.h" />
 		<Unit filename="include/Point2D.h" />
 		<Unit filename="include/Point3D.h" />
+		<Unit filename="include/fonctions.h" />
 		<Unit filename="include/manip.h" />
+		<Unit filename="include/projet.h" />
+		<Unit filename="include/struct.h" />
 		<Unit filename="main.cpp" />
-		<Unit filename="projet.h" />
 		<Unit filename="src/FFT_encaps.cpp" />
 		<Unit filename="src/FFT_fonctions.cpp" />
 		<Unit filename="src/Point2D.cpp" />
 		<Unit filename="src/Point3D.cpp" />
+		<Unit filename="src/fonctions.cpp" />
 		<Unit filename="src/manip.cpp" />
-		<Unit filename="struct.h" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

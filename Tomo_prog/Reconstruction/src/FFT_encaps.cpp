@@ -1,5 +1,7 @@
 #include "FFT_encaps.h"
 using namespace std;
+
+FFT_encaps::FFT_encaps(){}
 ///init3D fftw outplace
 FFT_encaps::FFT_encaps(Point3D dim,size_t nbThreads)
 {

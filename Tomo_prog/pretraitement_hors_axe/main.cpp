@@ -12,9 +12,9 @@
 //#include "FFTW_init.h"
 #include "FFT_fonctions.h"
 #include "deroulement_volkov4.h"
-#include "deroulement_volkov3.h"
-#include "deroulement_volkov2.h"
-#include "deroulement_volkov.h"
+//#include "deroulement_volkov3.h"
+//#include "deroulement_volkov2.h"
+//#include "deroulement_volkov.h"
 #include "deroulement_herraez.h"
 #include "Correction_aberration.h"
 #include <chrono>
@@ -28,8 +28,7 @@
 //#include <cv.h>
 using namespace std;
 
-int main()
-{
+int main(){
     manip m1; //créer un objet manip
     string chemin_result=m1.chemin_result, chemin_acquis=m1.chemin_acquis, Chemin_mask=m1.chemin_acquis+"/Image_mask.pgm";
     //dimensions hologrammes

@@ -3422,7 +3422,7 @@
 	<cstdlib>
 	<iostream>
 
-1595490449 /home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Reconstruction/include/FFT_encaps.h
+1649163392 /home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Reconstruction/include/FFT_encaps.h
 	"Point3D.h"
 	"Point2D.h"
 	<fftw3.h>
@@ -3448,7 +3448,7 @@
 	"manip.h"
 	"FFT_encaps.h"
 
-1646658834 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Reconstruction/main.cpp
+1649161590 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Reconstruction/main.cpp
 	"projet.h"
 	"fonctions.h"
 	<config.h>
@@ -3473,7 +3473,7 @@
 	<tiffio.h>
 	"projet.h"
 
-1595449678 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Reconstruction/src/FFT_encaps.cpp
+1649163416 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Reconstruction/src/FFT_encaps.cpp
 	"FFT_encaps.h"
 
 1595492425 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Reconstruction/src/FFT_fonctions.cpp
@@ -3493,4 +3493,55 @@
 
 1590396333 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Reconstruction/src/Point3D.cpp
 	"Point3D.h"
+
+1642593091 /home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Reconstruction/include/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<tiffio.h>
+	<vector>
+	<complex>
+	"projet.h"
+	"manip.h"
+
+1586182804 /home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Reconstruction/include/struct.h
+
+1642591533 /home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Reconstruction/include/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1586182804 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Reconstruction/src/deroulement.cpp
+	"deroulement.h"
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	<math.h>
+
+1586182804 /home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Reconstruction/include/deroulement.h
+	"struct.h"
+
+1649161117 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Reconstruction/src/fonctions.cpp
+	"fonctions.h"
+	<chrono>
+	<vector>
+	<algorithm>
+	"FFT_encaps.h"
+	"FFT_fonctions.h"
 

@@ -44,15 +44,14 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="-fexceptions  -fopenmp  -lpthread -std=c++11 `pkg-config --cppflags opencv`  -mveclibabi=svml" />
+			<Add option="-fexceptions  -fopenmp   -std=c++11 `pkg-config --cppflags opencv`  -mveclibabi=svml" />
 			<Add directory="/usr/include/opencv4" />
 			<Add directory="include" />
 			<Add directory="." />
 			<Add directory="src" />
 		</Compiler>
 		<Linker>
-			<Add option="`pkg-config --libs opencv`  -lpthread -lm -lgomp  -lopencv_core -lopencv_imgproc -lopencv_imgcodecs" />
-			<Add option="-lopencv_highgui -ltiff  -lfftw3 -lfftw3_threads" />
+			<Add option="`pkg-config --libs opencv4`  -lpthread -lm -ltiff -lgomp -lfftw3 -lfftw3_threads" />
 			<Add library="/usr/lib/x86_64-linux-gnu/libfftw3.so" />
 			<Add library="/usr/lib/x86_64-linux-gnu/libfftw3_threads.so" />
 			<Add directory="/usr/lib/x86_64-linux-gnu/" />
@@ -86,9 +85,6 @@
 		<Unit filename="src/vecteur.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
-			<envvars />
-			<code_completion />
-			<debugger />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

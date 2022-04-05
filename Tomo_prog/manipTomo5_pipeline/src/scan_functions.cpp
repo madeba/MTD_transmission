@@ -105,7 +105,7 @@ void scan_fermat(double Vmax, int nbHolo, std::vector<float2D> &Vout_table, Var2
     Vout_table[numHolo].x=sqrt((theta)/theta_max)*Vmax*cos((theta)*angle_dor);
     Vout_table[numHolo].y=sqrt((theta)/theta_max)*Vmax*sin((theta)*angle_dor);
 
-     spec.x=round(Vout_table[numHolo].x*nbPixVolt);
+    spec.x=round(Vout_table[numHolo].x*nbPixVolt);
     spec.y=round(Vout_table[numHolo].y*nbPixVolt);
     specI.x=spec.x+dim.x/2;
     specI.y=spec.y+dim.y/2;

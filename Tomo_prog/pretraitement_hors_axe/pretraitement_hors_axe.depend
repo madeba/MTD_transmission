@@ -2250,7 +2250,7 @@
 	"fonctions.h"
 	"IO_fonctions.h"
 
-1646653847 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe/main.cpp
+1649085892 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe/main.cpp
 	<iostream>
 	<vector>
 	"struct.h"
@@ -2261,9 +2261,6 @@
 	"fonctions.h"
 	"FFT_fonctions.h"
 	"deroulement_volkov4.h"
-	"deroulement_volkov3.h"
-	"deroulement_volkov2.h"
-	"deroulement_volkov.h"
 	"deroulement_herraez.h"
 	"Correction_aberration.h"
 	<chrono>
