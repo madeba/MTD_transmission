@@ -26,6 +26,7 @@
 					<Add option="-O2" />
 					<Add option="-static" />
 					<Add directory="/opt/pleora/ebus_sdk/Ubuntu-x86_64/lib" />
+					<Add directory="/usr/include/opencv4" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -42,7 +43,7 @@
 			<Add directory="/opt/pleora/ebus_sdk/Ubuntu-x86_64/include" />
 		</Compiler>
 		<Linker>
-			<Add option="`pkg-config --cflags --libs opencv` -lpthread -lm -lboost_system -lboost_filesystem -lboost_chrono  -lPvBase -lPvDevice -lPvBuffer -lPvGenICam" />
+			<Add option="`pkg-config --cflags --libs opencv4` -lpthread -lm -lboost_system -lboost_filesystem -lboost_chrono  -lPvBase -lPvDevice -lPvBuffer -lPvGenICam" />
 			<Add option="-lPvStream -lPvTransmitter -lPvVirtualDevice -lPvCameraBridge" />
 			<Add option="-lPvAppUtils   -lPvPersistence -lPvSystem  -lPvSerial -lPvGUI -lSimpleImagingLib -lboost_thread" />
 			<Add library="/opt/lib_tomo/labjack/libLjack.so" />
@@ -52,16 +53,14 @@
 			<Add directory="/opt/pleora/ebus_sdk/Ubuntu-x86_64/lib" />
 			<Add directory="/home/tomo-manip/Projet_tomo/Tomo_prog/manipTomo5_pipeline/" />
 		</Linker>
-		<Unit filename="fonctions.cpp" />
-		<Unit filename="fonctions.h" />
+		<Unit filename="include/fonctions.h" />
+		<Unit filename="include/projet.h" />
 		<Unit filename="include/scan_functions.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/fonctions.cpp" />
 		<Unit filename="src/scan_functions.cpp" />
 		<Extensions>
-			<envvars />
-			<code_completion />
 			<lib_finder disable_auto="1" />
-			<debugger />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
