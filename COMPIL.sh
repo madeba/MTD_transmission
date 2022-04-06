@@ -15,6 +15,9 @@ make
 cd ${DIR_TOMO}/Tomo_prog/Reconstruction
 make clean
 make
+cd ${DIR_TOMO}/Tomo_prog/Tomo_GPS
+make clean
+make
 
 
 

@@ -10,7 +10,7 @@ using namespace std;
 
 int main()
 {
-    manip m1;
+  manip m1;
   ///Init complex refractive index
   vector<float> indice(readTiff3D(m1.chemin_result+"/indice.tif"));  //load refracive index
   vector<float> absorption(readTiff3D(m1.chemin_result+"/absorption.tif"));//load absorption

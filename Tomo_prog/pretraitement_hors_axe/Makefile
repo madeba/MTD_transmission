@@ -5,7 +5,7 @@ CC=g++
 
 pretraitement_hors_axe : main.o Correction_aberration.o deroulement_herraez.o fonctions.o FFT_fonctions.o  manip.o  deroulement_volkov4.o FFTW_init.o IO_fonctions.o vecteur.o Point2D.o
 
-	g++ -o bin/Release/pretraitement_hors_axe $(OBJDIR)/Correction_aberration.o $(OBJDIR)/deroulement_herraez.o obj/Release/FFT_fonctions.o obj/Release/fonctions.o $(OBJDIR)/main.o $(OBJDIR)/manip.o  $(OBJDIR)/src/deroulement_volkov4.o $(OBJDIR)/src/FFTW_init.o $(OBJDIR)/src/IO_fonctions.o $(OBJDIR)/src/Point2D.o $(OBJDIR)/src/vecteur.o -O3  $(LDFLAGS)
+	g++ -o bin/Release/tomo_pretraitement $(OBJDIR)/Correction_aberration.o $(OBJDIR)/deroulement_herraez.o obj/Release/FFT_fonctions.o obj/Release/fonctions.o $(OBJDIR)/main.o $(OBJDIR)/manip.o  $(OBJDIR)/src/deroulement_volkov4.o $(OBJDIR)/src/FFTW_init.o $(OBJDIR)/src/IO_fonctions.o $(OBJDIR)/src/Point2D.o $(OBJDIR)/src/vecteur.o -O3  $(LDFLAGS)
 	
 
 main.o : main.cpp
@@ -45,6 +45,6 @@ Point2D.o : src/Point2D.cpp
 	
 	
 clean :
-	rm -f obj/Release/*.o obj/Release/src/*.o bin/Release/pretraitement_hors_axe
+	rm -f obj/Release/*.o obj/Release/src/*.o bin/Release/tomo_pretraitement
 mrproper: clean
 	rm -f bin/Release/pretraitement_hors_axe
