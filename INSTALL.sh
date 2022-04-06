@@ -1,6 +1,7 @@
 #!/bin/bash
 
 
+
 rm ${HOME}/.config/gui_tomo.conf
 touch ${HOME}/.config/gui_tomo.conf
 
