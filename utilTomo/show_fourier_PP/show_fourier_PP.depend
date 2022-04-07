@@ -3024,7 +3024,7 @@
 	<cstdlib>
 	<iostream>
 
-1623420785 source:/home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/main.cpp
+1594912695 source:/home/tomo-manip/Projet_tomo/utilTomo/show_fourier_PP/main.cpp
 	"opencv2/core/core.hpp"
 	"opencv2/imgproc/imgproc.hpp"
 	"opencv2/highgui/highgui.hpp"
@@ -3065,338 +3065,6 @@
 	"manip.h"
 	<PvDeviceFinderWnd.h>
 	<list>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvSampleUtils.h
-	<afxwin.h>
-	<windows.h>
-	<process.h>
-	<conio.h>
-	<stdio.h>
-	<string>
-	<iostream>
-	<sstream>
-	<iomanip>
-	<vector>
-	<PvTypes.h>
-	<PvDevice.h>
-	<PvSystem.h>
-	<PvDeviceGEV.h>
-	<stdlib.h>
-	<string.h>
-	<termios.h>
-	<unistd.h>
-	<fcntl.h>
-	<signal.h>
-	<sys/time.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvTypes.h
-	<stdint.h>
-	<stdint.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvDevice.h
-	<PvDeviceLib.h>
-	<PvDeviceEventSink.h>
-	<PvDeviceInfo.h>
-	<PvGenParameterArray.h>
-	<PvDeviceLib/Device.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvDeviceLib.h
-	<PvTypes.h>
-	<PvString.h>
-	<PvResult.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvString.h
-	<PvBaseLib.h>
-	<PvTypes.h>
-	<string>
-	<PtUtilsLib/String.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvBaseLib.h
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvResult.h
-	<PvBaseLib.h>
-	<PvTypes.h>
-	<PvString.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvDeviceEventSink.h
-	<PvDevice.h>
-	<PvGenParameterList.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvGenParameterList.h
-	<PvGenICamLib.h>
-	<PvGenParameter.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvGenICamLib.h
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvGenParameter.h
-	<PvString.h>
-	<PvResult.h>
-	<PvGenICamLib.h>
-	<PvGenTypes.h>
-	<PvGenParameterList.h>
-	<PvGenICamLib/GenParameter.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvGenTypes.h
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvDeviceInfo.h
-	<PvDeviceLib.h>
-	<PvDeviceEnums.h>
-	<string>
-	<PvDeviceLib/DeviceInfo.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvDeviceEnums.h
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvGenParameterArray.h
-	<PvGenICamLib.h>
-	<PvGenString.h>
-	<PvGenInteger.h>
-	<PvGenEnum.h>
-	<PvGenFloat.h>
-	<PvGenCommand.h>
-	<PvGenBoolean.h>
-	<PvGenRegister.h>
-	<PvGenCategory.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvGenString.h
-	<PvGenICamLib.h>
-	<PvGenParameter.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvGenInteger.h
-	<PvGenICamLib.h>
-	<PvGenParameter.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvGenEnum.h
-	<PvGenICamLib.h>
-	<PvGenParameter.h>
-	<PvGenEnumEntry.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvGenEnumEntry.h
-	<PvString.h>
-	<PvResult.h>
-	<PvGenICamLib.h>
-	<PvGenTypes.h>
-	<PvGenICamLib/GenParameter.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvGenFloat.h
-	<PvGenICamLib.h>
-	<PvGenParameter.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvGenCommand.h
-	<PvGenICamLib.h>
-	<PvGenParameter.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvGenBoolean.h
-	<PvGenICamLib.h>
-	<PvGenParameter.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvGenRegister.h
-	<PvGenICamLib.h>
-	<PvGenParameter.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvGenCategory.h
-	<PvString.h>
-	<PvResult.h>
-	<PvGenICamLib.h>
-	<PvGenTypes.h>
-	<PvGenICamLib/GenParameter.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvSystem.h
-	<PvDeviceLib.h>
-	<PvSystemEventSink.h>
-	<PvNetworkAdapter.h>
-	<PvUSBHostController.h>
-	<PvDeviceLib/System.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvSystemEventSink.h
-	<PvDeviceLib.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvNetworkAdapter.h
-	<PvDeviceLib.h>
-	<PvInterface.h>
-	<PvDeviceInfoGEV.h>
-	<PvDeviceInfoPleoraProtocol.h>
-	<PvDeviceLib/NetworkAdapter.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvInterface.h
-	<PvDeviceLib.h>
-	<PvDeviceInfo.h>
-	<PvDeviceLib/Interface.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvDeviceInfoGEV.h
-	<PvDeviceInfo.h>
-	<PvDeviceLib/DeviceInfoGEV.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvDeviceInfoPleoraProtocol.h
-	<PvDeviceInfo.h>
-	<PvDeviceLib/DeviceInfoPleoraProtocol.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvUSBHostController.h
-	<PvDeviceLib.h>
-	<PvInterface.h>
-	<PvDeviceInfoU3V.h>
-	<PvDeviceLib/USBHostController.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvDeviceInfoU3V.h
-	<PvDeviceInfoUSB.h>
-	<PvUSBHostController.h>
-	<PvDeviceLib/DeviceInfoU3V.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvDeviceInfoUSB.h
-	<PvDeviceInfo.h>
-	<PvDeviceLib/DeviceInfoUSB.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvDeviceGEV.h
-	<PvDevice.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvDeviceU3V.h
-	<PvDevice.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvStream.h
-	<PvTypes.h>
-	<PvResult.h>
-	<PvString.h>
-	<PvBuffer.h>
-	<PvStreamEventSink.h>
-	<PvGenParameterArray.h>
-	<PvStreamLib.h>
-	<PvStreamLib/Stream.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvBuffer.h
-	<PvResult.h>
-	<PvString.h>
-	<PvTypes.h>
-	<PvBufferLib.h>
-	<PvPixelType.h>
-	<PvPayloadType.h>
-	<PvImage.h>
-	<PvRawData.h>
-	<PvBufferLib/Buffer.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvBufferLib.h
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvPixelType.h
-	<PvTypes.h>
-	<PvBufferLib.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvPayloadType.h
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvImage.h
-	<PvResult.h>
-	<PvTypes.h>
-	<PvPixelType.h>
-	<PvBufferLib/Buffer.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvRawData.h
-	<PvResult.h>
-	<PvTypes.h>
-	<PvPixelType.h>
-	<PvBufferLib/Buffer.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvStreamEventSink.h
-	<PvStreamLib.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvStreamLib.h
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvStreamGEV.h
-	<PvStream.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvStreamU3V.h
-	<PvStream.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvPipeline.h
-	<PvTypes.h>
-	<PvResult.h>
-	<PvStream.h>
-	<PvPipelineEventSink.h>
-	<PvStreamLib/Pipeline.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvPipelineEventSink.h
-	<PvStreamLib.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/john/macros.h
-	<time.h>
-	<stdlib.h>
-	"vChrono.h"
-	<xmmintrin.h>
-	<immintrin.h>
-	<smmintrin.h>
-	<sys/mman.h>
-	<assert.h>
-	"legacy_macros.h"
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/john/vChrono.h
-	<boost/chrono.hpp>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/john/legacy_macros.h
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/john/vectra.h
-	<sys/stat.h>
-	<stdio.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/john/vChronos.h
-	"vChrono.h"
-	"macros.h"
-	<string.h>
-	<boost/chrono.hpp>
-	<iostream>
-	"vChronos.h"
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/fonctions.h
-	"struct.h"
-	<time.h>
-	<math.h>
-	<iostream>
-	<cstdlib>
-	<strstream>
-	<cstring>
-	<fstream>
-	<sstream>
-	<assert.h>
-	<vector>
-	"projet.h"
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/struct.h
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/projet.h
-	"fonctions.h"
-	<config.h>
-	<time.h>
-	<math.h>
-	<iostream>
-	<cstdlib>
-	<cstring>
-	<fstream>
-	<sstream>
-	<assert.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/manip.h
-	<cstdlib>
-	<iostream>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvDeviceFinderWnd.h
-	<PvGUILib.h>
-	<PvWnd.h>
-	<PvDeviceInfo.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvGUILib.h
-	<PvTypes.h>
-	<PvString.h>
-	<PvResult.h>
-
-1591619536 /home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/include/pleora/PvWnd.h
-	<PvGUILib.h>
-	<windows.h>
-
-1591619510 source:/home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/src/fonctions.cpp
-	"fonctions.h"
-	<tiffio.h>
-	<chrono>
-
-1591619510 source:/home/mat/Dropbox/projet_c/2021/Projet_tomo/utilTomo/show_fourier_PP/src/manip.cpp
-	"manip.h"
-	<iostream>
-	"fonctions.h"
-	"projet.h"
 
 1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvSampleUtils.h
 	<afxwin.h>
@@ -3625,6 +3293,66 @@
 1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvPipelineEventSink.h
 	<PvStreamLib.h>
 
+1593697759 /home/tomo-manip/Projet_tomo/utilTomo/show_fourier_PP/include/john/macros.h
+	<time.h>
+	<stdlib.h>
+	"vChrono.h"
+	<xmmintrin.h>
+	<immintrin.h>
+	<smmintrin.h>
+	<sys/mman.h>
+	<assert.h>
+	"legacy_macros.h"
+
+1593697759 /home/tomo-manip/Projet_tomo/utilTomo/show_fourier_PP/include/john/vChrono.h
+	<boost/chrono.hpp>
+
+1593697759 /home/tomo-manip/Projet_tomo/utilTomo/show_fourier_PP/include/john/legacy_macros.h
+
+1593697759 /home/tomo-manip/Projet_tomo/utilTomo/show_fourier_PP/include/john/vectra.h
+	<sys/stat.h>
+	<stdio.h>
+
+1593697759 /home/tomo-manip/Projet_tomo/utilTomo/show_fourier_PP/include/john/vChronos.h
+	"vChrono.h"
+	"macros.h"
+	<string.h>
+	<boost/chrono.hpp>
+	<iostream>
+	"vChronos.h"
+
+1593697759 /home/tomo-manip/Projet_tomo/utilTomo/show_fourier_PP/include/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<vector>
+	"projet.h"
+
+1593697759 /home/tomo-manip/Projet_tomo/utilTomo/show_fourier_PP/include/struct.h
+
+1593697759 /home/tomo-manip/Projet_tomo/utilTomo/show_fourier_PP/include/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1617964075 /home/tomo-manip/Projet_tomo/utilTomo/show_fourier_PP/include/manip.h
+	<cstdlib>
+	<iostream>
+
 1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvDeviceFinderWnd.h
 	<PvGUILib.h>
 	<PvWnd.h>
@@ -3640,50 +3368,18 @@
 1521607712 /opt/pleora/ebus_sdk/Ubuntu-x86_64/include/PvWnd.h
 	<PvGUILib.h>
 
-1551784012 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/src/fonctions.cpp
+1594905254 source:/home/tomo-manip/Projet_tomo/utilTomo/show_fourier_PP/src/fonctions.cpp
 	"fonctions.h"
 	<tiffio.h>
 	<chrono>
 
-1497273350 /home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/include/fonctions.h
-	"struct.h"
-	<time.h>
-	<math.h>
-	<iostream>
-	<cstdlib>
-	<strstream>
-	<cstring>
-	<fstream>
-	<sstream>
-	<assert.h>
-	<vector>
-	"projet.h"
-
-1493388756 /home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/include/struct.h
-
-1497263415 /home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/include/projet.h
-	"fonctions.h"
-	<config.h>
-	<time.h>
-	<math.h>
-	<iostream>
-	<cstdlib>
-	<cstring>
-	<fstream>
-	<sstream>
-	<assert.h>
-
-1582798200 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/src/manip.cpp
+1593697759 source:/home/tomo-manip/Projet_tomo/utilTomo/show_fourier_PP/src/manip.cpp
 	"manip.h"
 	<iostream>
 	"fonctions.h"
 	"projet.h"
 
-1582798200 /home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/include/manip.h
-	<cstdlib>
-	<iostream>
-
-1646403054 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/main.cpp
+1648740786 source:/home/tomo-cerna/Projet_tomo/utilTomo/show_fourier_PP/main.cpp
 	"opencv2/core/core.hpp"
 	"opencv2/imgproc/imgproc.hpp"
 	"opencv2/highgui/highgui.hpp"
@@ -3724,6 +3420,77 @@
 	"manip.h"
 	<PvDeviceFinderWnd.h>
 	<list>
+
+1593697759 /home/tomo-cerna/Projet_tomo/utilTomo/show_fourier_PP/include/john/macros.h
+	<time.h>
+	<stdlib.h>
+	"vChrono.h"
+	<xmmintrin.h>
+	<immintrin.h>
+	<smmintrin.h>
+	<sys/mman.h>
+	<assert.h>
+	"legacy_macros.h"
+
+1593697759 /home/tomo-cerna/Projet_tomo/utilTomo/show_fourier_PP/include/john/vChrono.h
+	<boost/chrono.hpp>
+
+1593697759 /home/tomo-cerna/Projet_tomo/utilTomo/show_fourier_PP/include/john/legacy_macros.h
+
+1593697759 /home/tomo-cerna/Projet_tomo/utilTomo/show_fourier_PP/include/john/vectra.h
+	<sys/stat.h>
+	<stdio.h>
+
+1593697759 /home/tomo-cerna/Projet_tomo/utilTomo/show_fourier_PP/include/john/vChronos.h
+	"vChrono.h"
+	"macros.h"
+	<string.h>
+	<boost/chrono.hpp>
+	<iostream>
+	"vChronos.h"
+
+1593697759 /home/tomo-cerna/Projet_tomo/utilTomo/show_fourier_PP/include/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<vector>
+	"projet.h"
+
+1593697759 /home/tomo-cerna/Projet_tomo/utilTomo/show_fourier_PP/include/struct.h
+
+1593697759 /home/tomo-cerna/Projet_tomo/utilTomo/show_fourier_PP/include/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1617964075 /home/tomo-cerna/Projet_tomo/utilTomo/show_fourier_PP/include/manip.h
+	<cstdlib>
+	<iostream>
+
+1594905254 source:/home/tomo-cerna/Projet_tomo/utilTomo/show_fourier_PP/src/fonctions.cpp
+	"fonctions.h"
+	<tiffio.h>
+	<chrono>
+
+1646645193 source:/home/tomo-cerna/Projet_tomo/utilTomo/show_fourier_PP/src/manip.cpp
+	"manip.h"
+	<iostream>
+	"fonctions.h"
+	"projet.h"
 
 1576849456 /usr/include/opencv4/opencv2/core/core.hpp
 	"opencv2/core.hpp"
@@ -4504,7 +4271,104 @@
 1576849456 /usr/include/opencv4/opencv2/highgui/highgui.hpp
 	"opencv2/highgui.hpp"
 
-1493388756 /home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/include/john/macros.h
+1594905254 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/src/fonctions.cpp
+	"fonctions.h"
+	<tiffio.h>
+	<chrono>
+
+1593697759 /home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/include/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<vector>
+	"projet.h"
+
+1593697759 /home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/include/struct.h
+
+1593697759 /home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/include/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1646645193 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/src/manip.cpp
+	"manip.h"
+	<iostream>
+	"fonctions.h"
+	"projet.h"
+
+1617964075 /home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/include/manip.h
+	<cstdlib>
+	<iostream>
+
+1649326190 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/main.cpp
+	"opencv2/core/core.hpp"
+	"opencv2/imgproc/imgproc.hpp"
+	"opencv2/highgui/highgui.hpp"
+	<iostream>
+	<string>
+	<sstream>
+	<PvSampleUtils.h>
+	<PvDevice.h>
+	<PvDeviceGEV.h>
+	<PvDeviceU3V.h>
+	<PvStream.h>
+	<PvStreamGEV.h>
+	<PvStreamU3V.h>
+	<PvPipeline.h>
+	<PvBuffer.h>
+	"string.h"
+	<boost/thread.hpp>
+	<boost/date_time.hpp>
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+	<unistd.h>
+	<stdio.h>
+	<math.h>
+	<assert.h>
+	<termios.h>
+	<unistd.h>
+	<fcntl.h>
+	<fftw3.h>
+	<tiffio.h>
+	<iostream>
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"fonctions.h"
+	"manip.h"
+	<PvDeviceFinderWnd.h>
+	<list>
+
+1593697759 /home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/include/john/vectra.h
+	<sys/stat.h>
+	<stdio.h>
+
+1593697759 /home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/include/john/vChronos.h
+	"vChrono.h"
+	"macros.h"
+	<string.h>
+	<boost/chrono.hpp>
+	<iostream>
+	"vChronos.h"
+
+1593697759 /home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/include/john/vChrono.h
+	<boost/chrono.hpp>
+
+1593697759 /home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/include/john/macros.h
 	<time.h>
 	<stdlib.h>
 	"vChrono.h"
@@ -4515,20 +4379,5 @@
 	<assert.h>
 	"legacy_macros.h"
 
-1493388756 /home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/include/john/vChrono.h
-	<boost/chrono.hpp>
-
-1493388756 /home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/include/john/legacy_macros.h
-
-1493388756 /home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/include/john/vectra.h
-	<sys/stat.h>
-	<stdio.h>
-
-1493388756 /home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/include/john/vChronos.h
-	"vChrono.h"
-	"macros.h"
-	<string.h>
-	<boost/chrono.hpp>
-	<iostream>
-	"vChronos.h"
+1593697759 /home/mat/Dropbox/projet_c/2022/Projet_tomo/utilTomo/show_fourier_PP/include/john/legacy_macros.h
 

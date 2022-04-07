@@ -28,10 +28,11 @@ using namespace std;
 #include <PvPipeline.h>
 #include <PvBuffer.h>
 
-#include "macros.h"
-#include "vectra.h"
+
+//#include "macros.h"
+//#include "vectra.h"
 #include "string.h"
-#include "vChronos.h"
+//#include "vChronos.h"
 #include <boost/thread.hpp>
 #include <boost/date_time.hpp>
 #include <opencv2/core/core.hpp>
@@ -122,6 +123,12 @@ void mat2double(Mat entree, double* sortie, int taille);
 void SAV_Tiff(double *var_sav, char *chemin, int dim);
 void normlog(double* entree, double* sortie, int taille);
 void calcul_histo(Mat src, Mat dst, int hist_h, int hist_w);
+bool SetExposureTime( PvDevice *pDevice, float iExposureTime );
+int SetExposureMode( PvDevice *pDevice, int iExposureMode );
+//float GetExposureTime( PvDevice *pDevice,float iExposureTime );
+double GetExposureTime( PvDevice *pDevice);
+bool AddExposureTime( PvDevice *pDevice,float DeltaExposureTime );
+bool SubExposureTime( PvDevice *pDevice,float DeltaExposureTime );
 //float extract_val(string token,  string chemin_fic);
 /* -------------------------------------------------------------------------- */
 // Usage
@@ -443,9 +450,9 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
     // Acquire images until the user instructs us to stop.
     cout << endl << "<press a key to stop streaming>" << endl;
 
-    vChronos vTime("prise d'images"); vTime.clear();
+//    vChronos vTime("prise d'images"); vTime.clear();
 
-    vTime.start();    //while ( !PvKbHit() )//tant que touche pas pressée
+  //  vTime.start();    //while ( !PvKbHit() )//tant que touche pas pressée
 
     unsigned char c;
     bool SAVE_IMAGE = false;
@@ -466,7 +473,7 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
     //namedWindow("Image", CV_WINDOW_AUTOSIZE);
     /// Create Window for spectrum
     //namedWindow("TF", CV_WINDOW_AUTOSIZE);
-
+    string strTpsExpo;
     //while ( ! _kbhit() )
     while(continuer)
     {
@@ -492,9 +499,9 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
                 uint32_t lWidth = 0, lHeight = 0;
                 lType = lBuffer->GetPayloadType();
 
-                cout << fixed << setprecision( 1 );
-                cout << lDoodle[ lDoodleIndex ];
-                cout << " BlockID: " << uppercase << hex << setfill( '0' ) << setw( 16 ) << lBuffer->GetBlockID();
+            //    cout << fixed << setprecision( 1 );
+            //    cout << lDoodle[ lDoodleIndex ];
+           //     cout << " BlockID: " << uppercase << hex << setfill( '0' ) << setw( 16 ) << lBuffer->GetBlockID();
 
                 if ( lType == PvPayloadTypeImage )///le buffer contient bien une image? Tout est ok, on traite le flux
                 {
@@ -507,7 +514,7 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
                     // Read width, height.
                     lWidth = lImage->GetWidth();
                     lHeight = lImage->GetHeight();
-                    cout << "  W: " << dec << lWidth << " H: " << lHeight;
+               //     cout << "  W: " << dec << lWidth << " H: " << lHeight;
 
                     // Copy/convert Pleora Vision image pointer to cv::Mat container
                     cv::Mat lframe(lHeight,lWidth,CV_8UC1,img, cv::Mat::AUTO_STEP);
@@ -517,8 +524,9 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
                     //imwrite("/ramdisk/ACQUIS/.pgm", lframe);
                     //cvStartWindowThread();
                     /// Create Window
-                    //char* source_window_img = "Image";
-                    //namedWindow( source_window_img, CV_WINDOW_AUTOSIZE );
+                    char* source_window_img = "Image";
+                   // namedWindow( source_window_img, CV_WINDOW_AUTOSIZE );
+
                     imshow("Image", lframe);
 
                     int hist_w = 512; int hist_h = 400;
@@ -562,12 +570,14 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
 //                    fft_mat=fft_mat/100;
 //                    fft_mat.copyTo(targetROI);
 //                    imshow("Image et sa TF", dst);
+    strTpsExpo=to_string(GetExposureTime(aDevice));
 
+        putText(fft_mat, strTpsExpo,Point(50,50),FONT_HERSHEY_COMPLEX,0.5,Scalar(255),1);
                     imshow("TF", fft_mat/100 );
 
                    //circle(Mat& img, Point center, int radius, const Scalar& color, int thickness=1, int lineType=8, int shift=0)
 
-                    c = waitKey(10);
+                    c = cv::waitKey(10);
                     if (c == 's')
 	                   SAVE_IMAGE = true;
                     else
@@ -582,19 +592,30 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
                     {
                         continuer=0;
                     }
+                     if(c==100)//112=code ascii P
+                    {
+                        AddExposureTime( aDevice,20 );
+                        cout<<GetExposureTime(aDevice)<<endl;
+
+                    }
+                         if(c==113)//112=code ascii P
+                    {
+                        SubExposureTime( aDevice,20 );
+                    }
+
 
 
                 }
                 else
                 {
-                    cout << " (buffer does not contain image)";
+                   // cout << " (buffer does not contain image)";
                 }
-                cout << "  " << lFrameRateVal << " FPS  " << ( lBandwidthVal / 1000000.0 ) << " Mb/s   \r";
+             //   cout << "  " << lFrameRateVal << " FPS  " << ( lBandwidthVal / 1000000.0 ) << " Mb/s   \r";
             }
             else
             {
                 // Non OK operational result
-                cout << lDoodle[ lDoodleIndex ] << " " << lOperationResult.GetCodeString().GetAscii() << "\r";
+            //    cout << lDoodle[ lDoodleIndex ] << " " << lOperationResult.GetCodeString().GetAscii() << "\r";
             }
 
             // Release the buffer back to the pipeline
@@ -603,7 +624,7 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
         else
         {
             // Retrieve buffer failure
-            cout << lDoodle[ lDoodleIndex ] << " " << lResult.GetCodeString().GetAscii() << "\r";
+          //  cout << lDoodle[ lDoodleIndex ] << " " << lResult.GetCodeString().GetAscii() << "\r";
         }
 
         ++lDoodleIndex %= 6;
@@ -760,6 +781,7 @@ void circshift2D(double* entree, double* sortie, int taille, int decal)
     }
 }
 
+
 void normlog(double* entree, double* sortie, int taille)
 {
     for (size_t j = 0; j < taille; j++)
@@ -826,6 +848,115 @@ void calcul_histo(Mat src, Mat dst, int hist_h, int hist_w)
                          Scalar( 0, 0, 255), 2, 8, 0  );
     }
 
+}
+
+// Sets the exposure mode
+//iExposureMode: 0:Timed 1:TriggerWidth
+int SetExposureMode( PvDevice *pDevice, int iExposureMode )
+{
+PvGenEnum* lPvGenEnum=dynamic_cast<PvGenEnum*>(pDevice->GetCommunicationParameters()->Get( "ExposureMode" ) );
+if( lPvGenEnum==NULL ) return false;
+PvResult lResult = lPvGenEnum->SetValue(iExposureMode);
+return (bool)lResult.IsOK();
+}
+
+
+//iExposureTime: Min:0 Max:16777215
+bool SetExposureTime( PvDevice *pDevice,float iExposureTime )
+{
+double value;
+//pDevice->StreamDisable();
+PvGenFloat *ic_exposure= dynamic_cast<PvGenFloat*>(pDevice ->GetParameters()->Get("ExposureTime"));
+PvString lValue, lName, lCategory;
+ic_exposure->GetName( lName );
+ic_exposure->ToString( lValue );
+//cout << lName.GetAscii() << ": " << lValue.GetAscii() << endl;
+double TempsExpo=0;
+ic_exposure->GetValue(TempsExpo);
+
+
+cout<< "--------------------------------"<<endl;
+if( ic_exposure==NULL ) return true;
+
+    PvResult lResult =ic_exposure->SetValue(iExposureTime);
+
+return lResult.IsOK();
+}
+
+//iExposureTime: Min:0 Max:16777215
+double  GetExposureTime( PvDevice *pDevice)
+{
+double value;
+//pDevice->StreamDisable();
+PvGenFloat *ic_exposure= dynamic_cast<PvGenFloat*>(pDevice ->GetParameters()->Get("ExposureTime"));
+PvString lValue, lName, lCategory;
+ic_exposure->GetName( lName );
+ic_exposure->ToString( lValue );
+//cout << lName.GetAscii() << ": " << lValue.GetAscii() << endl;
+double TempsExpo=0;
+ic_exposure->GetValue(TempsExpo);
+//cout<<"tempsExpo="<<TempsExpo<<endl;
+
+//return lResult.IsOK();
+return TempsExpo;
+}
+
+//iExposureTime: Min:0 Max:16777215
+bool AddExposureTime( PvDevice *pDevice,float DeltaExposureTime )
+{
+double value;
+//pDevice->StreamDisable();
+PvGenFloat *ic_exposure= dynamic_cast<PvGenFloat*>(pDevice ->GetParameters()->Get("ExposureTime"));
+PvString lValue, lName, lCategory;
+ic_exposure->GetName( lName );
+ic_exposure->ToString( lValue );
+cout << lName.GetAscii() << ": " << lValue.GetAscii() << endl;
+double TempsExpo=0;
+ic_exposure->GetValue(TempsExpo);
+
+
+cout<< "--------------------------------"<<endl;
+if( ic_exposure==NULL ) return true;
+
+    PvResult lResult =ic_exposure->SetValue(TempsExpo+DeltaExposureTime);
+
+return lResult.IsOK();
+}
+//iExposureTime: Min:0 Max:16777215
+bool SubExposureTime( PvDevice *pDevice,float DeltaExposureTime )
+{
+double value;
+//pDevice->StreamDisable();
+PvGenFloat *ic_exposure= dynamic_cast<PvGenFloat*>(pDevice ->GetParameters()->Get("ExposureTime"));
+PvString lValue, lName, lCategory;
+ic_exposure->GetName( lName );
+ic_exposure->ToString( lValue );
+cout << lName.GetAscii() << ": " << lValue.GetAscii() << endl;
+double TempsExpo=0;
+ic_exposure->GetValue(TempsExpo);
+
+
+cout<< "--------------------------------"<<endl;
+if( ic_exposure==NULL ) return true;
+
+    PvResult lResult =ic_exposure->SetValue(TempsExpo-DeltaExposureTime);
+
+return lResult.IsOK();
+}
+//iExposureTime: Min:0 Max:16777215
+float GetExposureTime( PvDevice *pDevice,float iExposureTime )
+{
+double value;
+//pDevice->StreamDisable();
+PvGenFloat *ic_exposure= dynamic_cast<PvGenFloat*>(pDevice ->GetParameters()->Get("ExposureTime"));
+PvString lValue, lName, lCategory;
+ic_exposure->GetName( lName );
+ic_exposure->ToString( lValue );
+
+cout << lName.GetAscii() << ": " << lValue.GetAscii() << endl;
+
+// PvResult lResult =ic_exposure->GetValue();
+return 0;
 }
 /*
 float extract_val(string token,  string chemin_fic)

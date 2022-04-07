@@ -105,7 +105,7 @@ float ecrire_val(string token, float valeur_token, string chemin_fic)
             {
                 int pos_separ=ligne.find(separ);//trouver l'espace
                // cout<<"position de l'espace="<<pos_separ<<endl;
-                int long_separ=separ.length();
+//                int long_separ=separ.length();
                 motcle = ligne.substr(0, pos_separ);//copie une portion de lachaine entre 0 et pos_separ=)isole le mot-clé
                 if(motcle==token){
                 ss << valeur_token;
