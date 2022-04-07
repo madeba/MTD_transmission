@@ -21,6 +21,8 @@ sudo cp ${DIR_TOMO}/Tomo_prog/Gui_Tomo/bin/Release/tomo_gui /usr/bin/tomo_gui
 sudo cp ${DIR_TOMO}/Tomo_prog/pretraitement_hors_axe/bin/Release/tomo_pretraitement /usr/bin/tomo_pretraitement
 sudo cp ${DIR_TOMO}/Tomo_prog/Reconstruction/bin/Release/tomo_reconstruction /usr/bin/tomo_reconstruction
 sudo cp ${DIR_TOMO}/Tomo_prog/Tomo_GPS/bin/Release/tomo_GPS /usr/bin/tomo_GPS
+sudo cp ${DIR_TOMO}/utilTomo/show_fourier_PP/bin/Release/tomo_show_fourier /usr/bin/tomo_show_fourier
+sudo cp ${DIR_TOMO}/utilTomo/set_Flower /usr/bin/tomo_set_flower
 
 
 

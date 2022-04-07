@@ -18,6 +18,9 @@ make
 cd ${DIR_TOMO}/Tomo_prog/Tomo_GPS
 make clean
 make
+cd ${DIR_TOMO}/utilTomo/show_fourier_PP
+make clean
+make
 
 
 
