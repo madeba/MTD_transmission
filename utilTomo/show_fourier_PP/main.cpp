@@ -29,10 +29,10 @@ using namespace std;
 #include <PvBuffer.h>
 
 
-//#include "macros.h"
-//#include "vectra.h"
+#include "macros.h"
+#include "vectra.h"
 #include "string.h"
-//#include "vChronos.h"
+#include "vChronos.h"
 #include <boost/thread.hpp>
 #include <boost/date_time.hpp>
 #include <opencv2/core/core.hpp>
@@ -450,9 +450,9 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
     // Acquire images until the user instructs us to stop.
     cout << endl << "<press a key to stop streaming>" << endl;
 
-//    vChronos vTime("prise d'images"); vTime.clear();
+    vChronos vTime("prise d'images"); vTime.clear();
 
-  //  vTime.start();    //while ( !PvKbHit() )//tant que touche pas pressée
+    vTime.start();    //while ( !PvKbHit() )//tant que touche pas pressée
 
     unsigned char c;
     bool SAVE_IMAGE = false;
@@ -475,6 +475,14 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
     //namedWindow("TF", CV_WINDOW_AUTOSIZE);
     string strTpsExpo;
     //while ( ! _kbhit() )
+    namedWindow("Image",cv::WINDOW_NORMAL);
+    moveWindow("Image",0,0);
+    resizeWindow("Image", 800, 800);
+    namedWindow("TF",cv::WINDOW_NORMAL);
+    moveWindow("TF",820,0);
+    resizeWindow("TF", 800, 800);
+
+
     while(continuer)
     {
         PvBuffer *lBuffer = NULL;
@@ -524,7 +532,7 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
                     //imwrite("/ramdisk/ACQUIS/.pgm", lframe);
                     //cvStartWindowThread();
                     /// Create Window
-                    char* source_window_img = "Image";
+                  //  char* source_window_img = "Image";
                    // namedWindow( source_window_img, CV_WINDOW_AUTOSIZE );
 
                     imshow("Image", lframe);
@@ -560,20 +568,10 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
                     line(fft_mat, Point(cercle.a-1.15*cercle.c,y2),Point(cercle.a+1.15*cercle.c,y2),(0,0,255),1,8,0);
                     line(fft_mat, Point(cercle.a,y2-1.15*cercle.c),Point(cercle.a,y2+1.15*cercle.c),(0,0,255),1,8,0);
 
-//                    int dstWidth=lframe.cols * 2;
-//                    int dstHeight=lframe.rows;
-//                    Mat dst(dstHeight,dstWidth, CV_64F);
-//                    Rect roi(Rect(0,0,lframe.cols, lframe.rows));
-//                    Mat targetROI = dst(roi);
-//                    lframe.copyTo(targetROI);
-//                    targetROI = dst(Rect(lframe.cols,0,lframe.cols, lframe.rows));
-//                    fft_mat=fft_mat/100;
-//                    fft_mat.copyTo(targetROI);
-//                    imshow("Image et sa TF", dst);
-    strTpsExpo=to_string(GetExposureTime(aDevice));
 
-        putText(fft_mat, strTpsExpo,Point(50,50),FONT_HERSHEY_COMPLEX,0.5,Scalar(255),1);
+                    putText(fft_mat, strTpsExpo,Point(50,50),FONT_HERSHEY_COMPLEX,0.5,Scalar(255),1);
                     imshow("TF", fft_mat/100 );
+
 
                    //circle(Mat& img, Point center, int radius, const Scalar& color, int thickness=1, int lineType=8, int shift=0)
 
@@ -585,22 +583,40 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
 
                     if (SAVE_IMAGE)
                     {
-	                    imwrite("last_fmod.pgm", fft_mat);
+	                    imwrite("fft_show_fourier.pgm", fft_mat);
 	                    imwrite("image_show_fourier.pgm",lframe);
+	                    cout<<endl<<"images saved in "<<getenv("PWD")<<endl;
 	                }
 	                if(c==27)//27=code ascii Escape
                     {
                         continuer=0;
                     }
-                     if(c==100)//112=code ascii P
+                    ///Q,D, R : change exposure time
+                    strTpsExpo=to_string(GetExposureTime(aDevice));
+
+                    if(c==82 || c==114){
+                     SetExposureTime(aDevice,500);// R->reset expo to 500µs
+                    }
+                    if(c==100)//112=code ascii P, add 20µs to exposure time
                     {
                         AddExposureTime( aDevice,20 );
                         cout<<GetExposureTime(aDevice)<<endl;
-
                     }
-                         if(c==113)//112=code ascii P
+                    if(c==113)//112=code ascii P
                     {
                         SubExposureTime( aDevice,20 );
+                    }
+                    if(c==104){
+                         namedWindow("Help",cv::WINDOW_NORMAL);
+                         resizeWindow("Help", 300, 300);
+                         moveWindow("Help",10,10);
+                         Mat help_windows(Size(300,300), CV_8UC1, Scalar(50));
+                         putText(help_windows, "Q, P : change exposure time",Point(10,20),FONT_HERSHEY_PLAIN,1,Scalar(255),1);
+                         putText(help_windows, "R : reset exposure time (0,5 ms)",Point(10,40),FONT_HERSHEY_PLAIN,1,Scalar(255),1);
+                         putText(help_windows, "S : save images",Point(10,60),FONT_HERSHEY_PLAIN,1,Scalar(255),1);
+                         putText(help_windows, "ESC : Quit",Point(10,80),FONT_HERSHEY_PLAIN,1,Scalar(255),1);
+//                         cv.blur(help_windows,(2,2));
+                         imshow("Help",help_windows);
                     }
 
 
@@ -629,14 +645,17 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
 
         ++lDoodleIndex %= 6;
     }
-    //destroyAllWindows ();
+    destroyAllWindows();
+    waitKey(1);
+   /* destroyWindow("Help");
+    waitKey(1);
     destroyWindow("Image");
     waitKey(1);
     destroyWindow("TF");
     waitKey(1);
     destroyWindow("Histogramme_plan_image");
-    waitKey(1);
-    cout<<endl<<"sortie boucle d'aquisition"<<endl;
+    waitKey(1);*/
+    cout<<endl<<"sortie boucle d'acquisition"<<endl;
 
 
 
@@ -645,7 +664,7 @@ void AcquireImages( PvDevice *aDevice, PvStream *aStream, PvPipeline *aPipeline,
     delete [] fft_shift;
     delete [] fft_log;
 
-    PvGetChar(); // Flush key buffer for next stop.
+   // PvGetChar(); // Flush key buffer for next stop.//force un appu isur clavier pour fermer la caméra
     cout << endl << endl;
 
     // Tell the device to stop sending images.
@@ -855,7 +874,7 @@ void calcul_histo(Mat src, Mat dst, int hist_h, int hist_w)
 int SetExposureMode( PvDevice *pDevice, int iExposureMode )
 {
 PvGenEnum* lPvGenEnum=dynamic_cast<PvGenEnum*>(pDevice->GetCommunicationParameters()->Get( "ExposureMode" ) );
-if( lPvGenEnum==NULL ) return false;
+if( lPvGenEnum==NULL ) return FALSE;
 PvResult lResult = lPvGenEnum->SetValue(iExposureMode);
 return (bool)lResult.IsOK();
 }

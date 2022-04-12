@@ -9,3 +9,4 @@ sudo rm /usr/bin/tomo_reconstruction
 sudo rm /usr/bin/tomo_show_fourier
 sudo rm /usr/bin/tomo_GPS
 sudo rm /usr/bin/tomo_set_flower
+sudo rm /usr/bin/tomo_manip
