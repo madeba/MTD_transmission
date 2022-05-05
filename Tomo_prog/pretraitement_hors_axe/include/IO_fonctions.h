@@ -33,6 +33,7 @@
 
 
 ///-----------entree/sortie+parseur---------------------------------
+void deleteCplxField(std::string chemin_result, std::string dimImg);//delete complex field file
 float extract_val(std::string token,  std::string chemin_fic);
 std::string extract_string(std::string token,  std::string chemin_fic);
 bool is_readable( const std::string & file);

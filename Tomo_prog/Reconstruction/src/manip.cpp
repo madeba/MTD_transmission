@@ -45,6 +45,7 @@ manip::manip()
     f_obj=extract_val("F_OBJ",fic_cfg_manip),///focale objectif
     G=f_tube/f_obj,	//grossissement telan+objectif
     TpCam=extract_val("TPCAM",fic_cfg_manip),//cam. photon focus
+    //NXMAX_OBJ=extract_val("NXMAX_OBJ",fic_cfg_manip);
     Rf=extract_val("RF",fic_cfg_manip),//1.2;=1/facteur grossissement
     Gt=G/Rf;
     cout<<"Gt="<<Gt<<endl;
@@ -58,6 +59,7 @@ manip::manip()
     if(NXMAX==0)
         cout<<"----- ERREUR : NXMAX absent du fichier de configuration" <<fic_cfg_manip<<endl;
     dim_final=extract_val("DIM_FINAL",fic_cfg_recon);
+    if(dim_final<4*NXMAX) cout<<"Attention, dim_final<4*NXMAX"<<endl;
     tailleTheoPixelUborn=tailleTheoPixelHolo*dimROI/(2*NXMAX);
     Delta_fUborn=1/(tailleTheoPixelUborn*2*NXMAX);//echantillonnage fréquentiel Uborn, utile pour repasser le rayon en métrique dans le volume 3D final
     tailleTheoPixelTomo=tailleTheoPixelUborn*(2*NXMAX)/dim_final;
@@ -138,7 +140,7 @@ manip::manip()
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
     fichier_sav_parametre<<"| Chp tomo pixel |     "<<dim_final<<" pix^3  |" <<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
-    fichier_sav_parametre<<"|  Dela_fUborn   |   "<<Delta_fUborn<<" m-1  |"<<endl;
+    fichier_sav_parametre<<"|  Delta_fUborn   |   "<<Delta_fUborn<<" m-1  |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
     fichier_sav_parametre<<"|    Tp Tomo theo|     "<<(2*NXMAX_theo)/dim_final*tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI*pow(10,9)<<" nm |"<<endl;
     fichier_sav_parametre<<"+---------------------------------+"<<endl;

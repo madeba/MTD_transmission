@@ -60,7 +60,7 @@ integ_grad4(AS_gradx_IntM,AS_grady_IntM,double_IntM,double_kvect_shift,param_c2c
   vector<double> IntM(nbPix);
   IntM=cut_quad4(double_IntM);
  // SAV_Tiff2D(double_IntM,"Re","/home/mat/tomo_test/double_Int_M.tiff",1);
-  SAV_Tiff2D(IntM,"/home/mat/tomo_test/Int_M_gradient_central.tiff",1);
+//  SAV_Tiff2D(IntM,"/home/mat/tomo_test/Int_M_gradient_central.tiff",1);
 
 
  for(size_t cpt=0;cpt<nbPix;cpt++){
@@ -92,12 +92,12 @@ double_kvect_shift=init_kvect_shift({2*dimROI.x,2*dimROI.y});
 //------------------calcul gradient de la phase enroulé: on symétrize d'abord (symétrie paire)
 Symetrise_mirror(phase_enroul,phase_enroul_sym);
 
-  SAV_Tiff2D(phase_enroul_sym,"/ramdisk/phase_enroul_sym.tiff",1);
+ // SAV_Tiff2D(phase_enroul_sym,"/ramdisk/phase_enroul_sym.tiff",1);
 
 gradient_fft4(phase_enroul_sym, gradx_enroul_fft_sym,grady_enroul_fft_sym, double_kvect_shift,param_c2c_double);
 ///----------------------------------------------------
-SAV_Tiff2D(gradx_enroul_fft_sym,"Re","/ramdisk/gradx_enroul_fft_sym.tiff",1);
-SAV_Tiff2D(grady_enroul_fft_sym,"Re","/ramdisk/grady_enroul_fft_sym.tiff",1);
+//SAV_Tiff2D(gradx_enroul_fft_sym,"Re","/ramdisk/gradx_enroul_fft_sym.tiff",1);
+//SAV_Tiff2D(grady_enroul_fft_sym,"Re","/ramdisk/grady_enroul_fft_sym.tiff",1);
 
   vector<complex<double>> Z_sym(4*nbPix);
   vector<complex<double>> Gradx_Z_fft_sym(4*nbPix), Grady_Z_fft_sym(4*nbPix);

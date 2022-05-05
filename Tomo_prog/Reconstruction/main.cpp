@@ -24,7 +24,7 @@
 #include "manip.h"
 
 #include "FFT_fonctions.h"
-#include "IO_fonctions.h"
+//#include "IO_fonctions.h"
 #define PI M_PI
 //using namespace cimg_library;
 using namespace std;
@@ -57,21 +57,27 @@ usage(int argc, char **argv)
 int main()
 {
     manip m1;
-    int NXMAX=m1.NXMAX, NbAngle=m1.NbAngle;
+    ///find the number of angle with the size of tabPosSpec
+    const unsigned int taille_octet_fic=get_bin_file_size(m1.chemin_result+"/tab_posSpec.raw");
+    cout<< "Taille_octet="<<taille_octet_fic<<endl;
+    const unsigned int NbAngle=get_bin_file_size(m1.chemin_result+"/tab_posSpec.raw")/16;//2 coord (x,y)  *8 octet (position saved in double)
+    int NXMAX=m1.NXMAX;
     Var2D NMAX= {NXMAX,NXMAX},dimChpCplx= {2*NXMAX,2*NXMAX};
     Point2D dim2DUBorn(2*NXMAX,2*NXMAX,2*NXMAX);
     string dimImg=to_string(dimChpCplx.x)+"x"+to_string(dimChpCplx.y)+"x"+to_string(NbAngle);
 
     ///------Récupérer spéculaire dans le fichier binaire---
     //lire_bin(chemin_fichier,variable de stockage, type de donnée en bits (32,64...), nombre d'images 2D)
-    double *TabPosSpec=new double[2*m1.NbAngle];
+
+    double *TabPosSpec=new double[2*NbAngle];
     vector<double> centres(dimChpCplx.x*dimChpCplx.y);
     cout<<"chemin tomo test ="<<m1.chemin_result+"/tab_posSpec.raw"<<endl;
     cout<<"lecture posSpec"<<endl;
-    lire_bin(m1.chemin_result+"/tab_posSpec.raw",TabPosSpec,64,2*m1.NbAngle);
 
-    for(size_t holo_numero=0; holo_numero<m1.NbAngle; holo_numero++){
-        int cpt2D=round(TabPosSpec[holo_numero+m1.NbAngle])*dimChpCplx.x+round(TabPosSpec[holo_numero]);
+    lire_bin(m1.chemin_result+"/tab_posSpec.raw",TabPosSpec,64,2*NbAngle);
+
+    for(size_t holo_numero=0; holo_numero<NbAngle; holo_numero++){
+        int cpt2D=round(TabPosSpec[holo_numero+NbAngle])*dimChpCplx.x+round(TabPosSpec[holo_numero]);
         centres[cpt2D]=holo_numero;//save centres in a image file, for quick visualisation
     }
     SAV_Tiff2D(centres,m1.chemin_result+"centre_reconstruction.tif",1);
@@ -152,7 +158,7 @@ int main()
     for(int cpt_angle=premier_plan; cpt_angle<NbAngle; cpt_angle++) //boucle sur tous les angles    {
     {
         posSpec= {(int)TabPosSpec[cpt_angle],(int)TabPosSpec[NbAngle+cpt_angle]};  //récupérer spéculaire puis champ cplx depuis sauvegarde prétraitement
-       // cout<<"posSpec.x,posSpec.y"<<posSpec.x<<","<<posSpec.y<<endl;
+        //cout<<"posSpec.x,posSpec.y"<<posSpec.x<<","<<posSpec.y<<endl;
         for(int cpt=0; cpt<NbPixU_Born; cpt++)//retrieve complex fields in the stack
         {
             UBornFinal2D[cpt].real(UBornFinal3D[cpt+cpt_angle*NbPixU_Born].real()*mask_tukey2D[cpt]);

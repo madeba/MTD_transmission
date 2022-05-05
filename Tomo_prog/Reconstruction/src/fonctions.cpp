@@ -818,7 +818,8 @@ void InitTabCplx(nbCplx *z,int taille)//initailiser un tableau (taille totale="t
 
 
 void retroPropag_Born(vector <complex<double>> &TF3D_PotObj, vector<complex<double>> const &TF_Uborn_norm, vector<double>  &sup_redon, int dim_final, Var2D posSpec, Var3D decal3D, Var2D NMAX, double rayon, manip m1)
-{
+{ //int Nmax_obj=m1.NXMAX_OBJ;
+//cout<<"Nmax_obj="<<Nmax_obj<<endl;
     int fxmi=posSpec.x, fymi=posSpec.y;
     //  cout<<"fi : "<<fxmi<<","<<fymi<<endl;
     int fxm0=(fxmi-NMAX.x), fym0=(fymi-NMAX.x);//coordonnée dans le repère humain (xm0,ym0)=(0,0)=au centre de l'image
@@ -833,6 +834,7 @@ void retroPropag_Born(vector <complex<double>> &TF3D_PotObj, vector<complex<doub
     double cteNorm=-2*PI;
     double r2=rayon*rayon, fzm0, fzm0_carre = rayon*rayon-fxm0*fxm0-fym0*fym0;
     double norm_altitude=1.0/rayon;//normaliser fdz pour passer en  sdz;
+   // if(sqrt(fxm0*fxm0+fym0*fym0)<Nmax_obj){
 
     if(round(fzm0_carre)>=0)
     {
@@ -861,7 +863,8 @@ void retroPropag_Born(vector <complex<double>> &TF3D_PotObj, vector<complex<doub
                     double koz=round(sqrt(fdz_carre)-fzm0);
                     double sdz=sqrt(rayon*rayon-fdx*fdx-fdy*fdy)*norm_altitude;
                     double altitude=(koz+decal3D.z)*dimPlanFinal; //donne n'importequoi sans l'arrondi sur koz!!
-
+                   // cout<<"fxm0="<<fxm0<<endl;
+                   // cout<<"dimPlanFinal="<<dimPlanFinal<<endl;
                     cptPot=(-fxm0+fdx+decal3D.x)+(-fym0+fdy+decal3D.y)*dimVolX+round(altitude);//indice du tableau 1D du volume 3D
                     TF3D_PotObj[cptPot]+=cteUb2Pot*cteNorm*sdz*TF_Uborn_norm[cpt];
                     sup_redon[cptPot]+=1;//pour calculer le support
@@ -870,6 +873,7 @@ void retroPropag_Born(vector <complex<double>> &TF3D_PotObj, vector<complex<doub
             }
         }
     }
+   // }
 }
 
 
@@ -1720,6 +1724,28 @@ int CreerZoneFresnel(double *FresnelRe,double * FresnelIm, Var2D dim, Var2D cent
     }
     return 1;
 }
+///#########lecture  d'un fichire binaire 3D, connaissant sa taille et son type de données
+///read a  binary file. (path, 3D table, data format (double=64), Nbpixels to be read). for data format, can use enum PRECISION, cf "projet.h"
+int get_bin_file_size(string chemin)
+{
+    size_t lTaille, nb_elmnt_lu;//size and number of elements
+    //unsigned short int dimData=precision/8;//taille en octet d'un element.
+    FILE* pFichier = NULL;
+    pFichier = fopen(chemin.c_str(), "r");  //ouverture de ce fichier en écriture binaire
+
+    if(pFichier==NULL){
+        fputs("Impossible d'ouvrir le fichier\n",stderr);
+        cout<<chemin<<endl;
+        exit (1);// obtenir la longueur du fichier, comparer avec donnée entrée.
+    }
+    else{
+        fseek(pFichier,0,SEEK_END);//trouver la fin de fichier
+        lTaille = ftell (pFichier);//retourne la position courante (en octet) du curseur de fichier : ici, position de la fin du fichier
+        rewind(pFichier);
+        fclose(pFichier);
+    }
+return lTaille;
+}
 
 ///#########lecture  d'un fichire binaire 3D, connaissant sa taille et son type de données
 ///read a  binary file. (path, 3D table, data format (double=64), Nbpixels to be read). for data format, can use enum PRECISION, cf "projet.h"
@@ -1737,12 +1763,13 @@ void lire_bin(string chemin, double resultat[], short int precision, const size_
     }
     else{
         fseek(pFichier,0,SEEK_END);//trouver la fin de fichier
-        lTaille = ftell (pFichier);//retourne la position courante (en octet) du curseur de fichier : ici, position de la fin du fichier
-        // printf("taille trouvée en octet par ftell %li, taille estimée : %i\n",lTaille,NbPix*dimData);//
+        lTaille = ftell (pFichier);//retourne la position courante (en octet) du curseur de fichier : ici, position de la fin du fichier->taille du fichier
+        cout<<"Fichier "<<chemin<<endl;
+         printf("taille trouvée en octet par ftell %li, taille estimée : %i\n",lTaille, NbPix*dimData);//
         rewind(pFichier);
 
         if(NbPix*dimData!=lTaille)
-            cout<<"Taille du fichier incompatible avec les dimensions\n"<<endl;
+            cout<<"Taille du fichier "<<chemin <<" incompatible avec les dimensions\n"<<endl;
 
         nb_elmnt_lu = fread (resultat,1,lTaille,pFichier);//lecture
         //nb_elmnt_lu = fread (&resultat_vector[0], 1,lTaille,pFichier);

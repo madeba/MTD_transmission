@@ -66,10 +66,13 @@ vector<double> tukey2D(int dimx,int dimy, float alpha)
         vector<double> tuk1Dy(dimx*dimy);
 
         int borne1=round(alpha*(N-1)/2);
+      //  cout<<"borne1="<<borne1<<endl;
         int borne2=round((N-1)*(1-alpha/2));
 
         for(int cpt=0; cpt<borne1+1; cpt++)
                 tuk1Dx[cpt]=0.5*(1+cos(3.1415*(2*cpt/(alpha*(N-1))-1)));
+
+
         for(int cpt=borne1+1; cpt<borne2+1; cpt++)
                 tuk1Dx[cpt]=1;
         for(int cpt=borne2+1; cpt<N; cpt++)

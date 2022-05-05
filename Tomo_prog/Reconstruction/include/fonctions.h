@@ -72,6 +72,7 @@ void genere_OTF_T_Holo(nbCplx *OTFr, Var2D posSpec, Var3D dim_final, Var3D decal
 void genere_OTF_RH_Holo(nbCplx *OTFr, Var2D posSpec, Var3D dim_final, Var3D decal, Var2D NMAX, double rayon);
 
 void lire_bin(std::string chemin, double resultat[], short int precision, const size_t NbParam);
+int get_bin_file_size(std::string chemin);
 void Import3D_Tiff(std::vector<double> &imgTiff, std::string chemin, double taille_pixel);
 void genereCache(double masque[], int t_image, int t_mask, int centreX, int centreY);
 void interp3D(double *volume_interp_3D, int taille_x,int taille_y,int taille_z);

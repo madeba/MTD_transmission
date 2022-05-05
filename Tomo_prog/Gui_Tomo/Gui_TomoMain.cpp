@@ -779,7 +779,7 @@ void Gui_TomoFrame::refreshValue(string chemin_fic, string chemin_recon)
     cout<<"####-- Maj des données avec le fichier : "<<chemin_fic<<" --####"<<endl;
     ///-------------MAJ paramètres manip----------------------------------
     editNbHolo->SetValue(wxString::Format(wxT("%i"),stoi(extract_string("NB_HOLO",chemin_fic,"400"))));
-    editN0->SetValue(wxString::Format(wxT("%i"),stoi(extract_string("N0",chemin_fic))));
+    editN0->SetValue(wxString::Format(wxT("%.2f"),stoi(extract_string("N0",chemin_fic))));
     editVymin->SetValue(wxString::Format( wxT("%.2f"),extract_val("VYMIN",chemin_fic) ));
     editVxmin->SetValue(wxString::Format(wxT("%.2f"),extract_val("VXMIN",chemin_fic) ));
     editVxmax->SetValue(wxString::Format(wxT("%.2f"), extract_val("VXMAX",chemin_fic)));
@@ -1001,16 +1001,14 @@ void Gui_TomoFrame::sav_val(string chemin_fic,vector<string> &tab_val)
     dst<<src.rdbuf();
     src.close();
     dst.close();
-
     ofstream flux_ecriture(chemin_fic.c_str(), ios::out);  // ouverture en écriture
-    for(size_t cpt=0; cpt<tab_val.size(); cpt++)
-    {
+    for(size_t cpt=0; cpt<tab_val.size(); cpt++){
         flux_ecriture<<tab_val[cpt]<<endl;//ecriture dans le fichier
     }
     flux_ecriture.close();  //  fermer
 }
-///-------les champ edit sont modifiés dans tab_val ici, les booleens sont déjà modifiés dans les fonctions de boutons
 
+///-------les champ edit sont modifiés dans tab_val ici, les booleens sont déjà modifiés dans les fonctions de boutons
 //sauvegarde des paramètres dans le dossier des données, tous pc (acquis et recon)
 /*void Gui_TomoFrame::sav_all_pc_recon()
 {

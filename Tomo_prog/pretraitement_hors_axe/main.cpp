@@ -19,9 +19,7 @@
 #include "Correction_aberration.h"
 #include <chrono>
 #include <opencv2/core/utility.hpp>
-//#include "opencv2/video/tracking.hpp"
 #include "opencv2/imgproc.hpp"
-//#include "opencv2/videoio.hpp"
 #include "opencv2/highgui.hpp"
 #include "opencv2/core.hpp"
 
@@ -68,7 +66,7 @@ int main(){
     Var2D const dim2DHA= {(size_t)2*m1.NXMAX,(size_t)2*m1.NXMAX},coinHA= {m1.circle_cx-m1.NXMAX,m1.circle_cy-m1.NXMAX},coinHA_shift={m1.fPortShift.x-m1.NXMAX,m1.fPortShift.y-m1.NXMAX};
     Var2D posSpec= {0,0},decal2DHA= {m1.NXMAX,m1.NXMAX};;
     cout<<"dimension decoupe dimDHA="<<dim2DHA.x<<endl;
-    vector<complex<double>> TF_UBornTot(NbPixUBorn*NbAngle);///variable stockant les N champs complexes decoupés depuis la zone 1024 (pour utilsier wisdom en 1024)
+    vector<complex<double>> TF_UBornTot(NbPixUBorn*NbAngle);///variable stockant les N champs complexes decoupés depuis la zone 1024 (pour utiliser wisdom en 1024)
     vector<double>  TF_champMod(NbPixUBorn), centre(NbPixUBorn);///centre pour controler balayage
 
 auto start_decoupeHA = std::chrono::system_clock::now();///démarrage chrono Hors-axe
@@ -79,32 +77,34 @@ unsigned short int cptAngle=0;
 //#pragma omp parallel forTF2D_r2c
 //cout<<"hello"<<endl;
 for(cptAngle=0; cptAngle<NbAngle; cptAngle++){
-  if((cptAngle-100*(cptAngle/100))==0)    cout<<cptAngle<<endl;
-    sprintf(charAngle,"%03i",cptAngle);
-    string nomFichierHolo=m1.chemin_acquis+"/i"+charAngle+".pgm";
-    test_existence = fopen(nomFichierHolo.c_str(), "rb");
-
-    // cout<<nomFichierHolo<<endl;
-
-   // cout<<nomFichierHolo<<endl;
-
-    if(test_existence!=NULL) {
-      fclose(test_existence);
-    //  cout<<"cahrger..."<<endl;
-      charger_image2D_OCV(holo1,nomFichierHolo, coin, dimROI);
-      for(size_t cpt=0;cpt<NbPixROI2d;cpt++){
-         //holo1[cpt]=holo1[cpt]/ampli_ref[cpt];
-        holo1[cpt]=holo1[cpt];
+        if((cptAngle-100*(cptAngle/100))==0)    cout<<cptAngle<<endl;
+        sprintf(charAngle,"%03i",cptAngle);
+        string nomFichierHolo=m1.chemin_acquis+"/i"+charAngle+".pgm";
+        test_existence = fopen(nomFichierHolo.c_str(), "rb");
+        // cout<<nomFichierHolo<<endl;
+        if(test_existence!=NULL)
+        {
+            fclose(test_existence);
+            //  cout<<"cahrger..."<<endl;
+         //    auto start_holo2tf = chrono::steady_clock::now();
+            charger_image2D_OCV(holo1,nomFichierHolo, coin, dimROI);
+          //  auto end_holo2tf = chrono::steady_clock::now();
+//auto elapsed = end_holo2tf - start_holo2tf;
+//std::cout <<"Temps pour chargement= "<< chrono::duration_cast<chrono::microseconds>(elapsed).count()<< '\n';
+            for(size_t cpt=0; cpt<NbPixROI2d; cpt++)
+            {
+                //holo1[cpt]=holo1[cpt]/ampli_ref[cpt];
+                holo1[cpt]=holo1[cpt];
       }
-
      // SAV2(holo1,chemin_result+"holo1_divise_1024x1024.raw",t_float,"a+b");
+
 
     holo2TF_UBorn( holo1, TF_UBornTot,dimROI, dim2DHA, coinHA, NbAngleOk,masqueTukeyHolo, in_holo,out_holo, p_forward_holo);
 
      ///nouvelles versions
-   // holo2TF_UBorn2(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF holo+ découpe dans TF symétrisée, repère humain
-    // holo2TF_UBorn2_shift(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA_shift,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF hologrammes +  découper de dimROI à 2NXMAX dans TF symétrisée, repère informatique
-    // holo2TF_UBorn2_shift_r2c(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA_shift,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF hologrammes +  découper de dimROI à 2NXMAX dans TF NON symétrique, repère info
+    //holo2TF_UBorn2(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF holo+ découpe dans TF symétrisée, repère humain
+    //holo2TF_UBorn2_shift(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA_shift,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF hologrammes +  découper de dimROI à 2NXMAX dans TF symétrisée, repère informatique
+    //holo2TF_UBorn2_shift_r2c(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA_shift,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF hologrammes +  découper de dimROI à 2NXMAX dans TF NON symétrique, repère info
       NbAngleOk++;
     }
     else cout<<"fichier "<<cptAngle<<" inexistant\n";
@@ -112,7 +112,9 @@ for(cptAngle=0; cptAngle<NbAngle; cptAngle++){
 auto end_decoupeHA = std::chrono::system_clock::now();
 auto elapsed = end_decoupeHA - start_decoupeHA;
 std::cout <<"Temps pour FFT holo+découpe Spectre= "<< elapsed.count()/(pow(10,9)) << '\n';
-
+ //SAVCplx(TF_UBornTot,"Re",chemin_result+"/TF_Uborn_Tot_GPU_250x250x599x64_orig.raw",t_float,"wb");
+m1.dimImg=to_string(dim2DHA.x)+"x"+to_string(dim2DHA.y)+"x"+to_string(NbAngleOk);
+deleteCplxField(chemin_result, m1.dimImg);
 ///initialiser les variables de champ, phase, amplitude etc.
 
 vector<complex<double>> TF_UBorn(NbPixUBorn),  UBorn(NbPixUBorn);
@@ -140,13 +142,14 @@ cout<<"\n#########################Calcul champs cplx 2D Uborn/Rytov + eventuelle
 
 vector<complex<double>> UBornFinal(NbPixUBorn), UBornFinalDecal(NbPixUBorn), TF_UBorn_norm(NbPixUBorn);
 vector<double> UBornAmpFinal(NbPixUBorn),  UBornAmp(NbPixUBorn);
-vector<double> tabPosSpec(NbAngle*2);  ///stockage des spéculaires pour exportation vers reconstruction
+vector<double> tabPosSpec(NbAngleOk*2);  ///stockage des spéculaires pour exportation vers reconstruction
 ///init opérateur différentiation kvect
 
 vector<vecteur>  kvect_shift(init_kvect_shift(dim2DHA));
 vector<double> kvect_mod2Shift(init_kvect_mod2Shift(kvect_shift));
 auto start_part2= std::chrono::system_clock::now();
 //#pragma omp parallel for
+
 for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les angles : correction aberrations
   TF_UBorn.assign(TF_UBornTot.begin()+NbPixUBorn*cpt_angle, TF_UBornTot.begin()+NbPixUBorn*(cpt_angle+1));  ///Récupérer la TF2D dans la pile de spectre2D
  // SAVCplx(TF_UBorn,"Re",chemin_result+"/TF_Uborn_iterateur_Re_220x220x599x32.raw",t_float,"a+b");
@@ -159,7 +162,7 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
   const int kxmi=cpt_max%(2*m1.NXMAX), kymi=cpt_max/(2*m1.NXMAX);
   posSpec= {kxmi,kymi}; ///coord informatique speculaire
   tabPosSpec[cpt_angle]=(double)posSpec.x;
-  tabPosSpec[cpt_angle+NbAngle]=(double)posSpec.y;
+  tabPosSpec[cpt_angle+NbAngleOk]=(double)posSpec.y;
   centre[kxmi*2*m1.NXMAX+kymi]=cpt_angle;
 
   if(m1.b_CorrAber==true){
@@ -260,7 +263,7 @@ delete[] UnwrappedPhase_herraez;
 
 ///------------SAUVER LES PARAMETRES UTILES À RECONSTRUCTION ou au contrôle//Save useful paramaters for tomo_reconstruction
 cout<<"NXMAX sauve="<<m1.NXMAX<<endl;
-vector<double> param{m1.NXMAX,NbAngle,m1.rayon,dimROI.x,m1.tailleTheoPixelHolo};
+vector<double> param{m1.NXMAX,NbAngleOk,m1.rayon,dimROI.x,m1.tailleTheoPixelHolo};
 SAV2(param,m1.chemin_result+"/parametres.raw", t_double, "wb");
 /*for(int cpt=0;cpt<NbAngle;cpt++)
 {

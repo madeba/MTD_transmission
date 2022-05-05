@@ -6,6 +6,20 @@
 using namespace std;
 using namespace cv;
 
+///delete cplxfield because it is saved with "a+b" option
+void deleteCplxField(string chemin_result, string dimImg){
+
+        string tampon="/UBornfinal_Im"+dimImg+".raw";
+        string result=chemin_result+tampon;
+        cout<<"Effacement Uborn : "<<result<<endl;
+        if( remove(result.c_str())== 0 )
+        perror( "Fichier Ubornfinal_Im impossible à effacer" );
+       // tampon="/UBornfinal_Re.raw";
+        tampon="/UBornfinal_Re"+dimImg+".raw";
+        result=chemin_result+tampon;
+        if( remove(result.c_str()) == 0 )
+        perror( "Fichier UBornfinal_Re impossible à effacer" );
+}
 ///load picture into a vector C++ thanks to opencv
 void charger_image2D_OCV(std::vector<double> &imgTab, string imgFile, Var2D coin, Var2D dimROI)
 {

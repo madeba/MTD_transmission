@@ -11,6 +11,7 @@ struct manip {
         double lambda0;
         int dimROI;
         size_t NXMAX, NYMAX;
+        //size_t NXMAX_OBJ;
         size_t premier_plan;
         size_t Num_Angle_final;
         size_t NbAngle;//peut différer de premier_angle-Num_angle_final  si des angles ont été enlevés dans le prétraitement

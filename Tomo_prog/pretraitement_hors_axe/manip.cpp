@@ -82,7 +82,7 @@ manip::manip()
         dimImg=to_string(dim2DHA.x)+"x"+to_string(dim2DHA.y)+"x"+to_string(NbAngle);
 
         //string tampon="/UBornfinal_Im.raw";
-        string tampon="/UBornfinal_Im"+dimImg+".raw";
+      /*  string tampon="/UBornfinal_Im"+dimImg+".raw";
         string result=chemin_result+tampon;
         cout<<"Effacement Uborn : "<<result<<endl;
         if( remove(result.c_str())== 0 )
@@ -91,7 +91,7 @@ manip::manip()
         tampon="/UBornfinal_Re"+dimImg+".raw";
         result=chemin_result+tampon;
         if( remove(result.c_str()) == 0 )
-        perror( "Fichier UBornfinal_Re impossible à effacer" );
+        perror( "Fichier UBornfinal_Re impossible à effacer" );*/
 
       rayon=round(NXMAX*n0/NA);//calcul du rayon Ewald à partir de la fréquence NXMAX defini pare l'utlisateur
       double R_Ewald=IMAGE_DIMX*tailleTheoPixelHolo*n0/(lambda0*pow(10,9)); //vraie valeur de R_Ewald.
