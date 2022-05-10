@@ -12,6 +12,9 @@ make
 cd ${DIR_TOMO}/Tomo_prog/pretraitement_hors_axe/
 make clean
 make
+cd ${DIR_TOMO}/Tomo_prog/pretraitement_hors_axe_GPU/
+make clean
+make
 cd ${DIR_TOMO}/Tomo_prog/Reconstruction
 make clean
 make

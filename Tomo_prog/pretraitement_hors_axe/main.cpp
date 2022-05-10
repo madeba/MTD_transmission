@@ -98,9 +98,11 @@ for(cptAngle=0; cptAngle<NbAngle; cptAngle++){
       }
      // SAV2(holo1,chemin_result+"holo1_divise_1024x1024.raw",t_float,"a+b");
 
-
+ //auto start_holo2tf = chrono::steady_clock::now();
     holo2TF_UBorn( holo1, TF_UBornTot,dimROI, dim2DHA, coinHA, NbAngleOk,masqueTukeyHolo, in_holo,out_holo, p_forward_holo);
-
+       //     auto end_holo2tf = chrono::steady_clock::now();
+//auto elapsed = end_holo2tf - start_holo2tf;
+//std::cout <<"Temps pour holo2tf= "<< chrono::duration_cast<chrono::microseconds>(elapsed).count()<< '\n';
      ///nouvelles versions
     //holo2TF_UBorn2(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF holo+ découpe dans TF symétrisée, repère humain
     //holo2TF_UBorn2_shift(holo1,TF_UBornTot,dimROI,dim2DHA,coinHA_shift,NbAngleOk, masqueTukeyHolo,param_fftw2D_r2c_Holo);///calcul TF hologrammes +  découper de dimROI à 2NXMAX dans TF symétrisée, repère informatique

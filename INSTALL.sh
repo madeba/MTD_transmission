@@ -20,6 +20,7 @@ echo "PC_ACQUIS 0">>$HOME/.config/gui_tomo.conf
 sudo cp ${DIR_TOMO}/Tomo_prog/Gui_Tomo/bin/Release/tomo_gui /usr/bin/tomo_gui
 sudo cp ${DIR_TOMO}/Tomo_prog/manipTomo5_pipeline/bin/Release/tomo_manip /usr/bin/tomo_manip
 sudo cp ${DIR_TOMO}/Tomo_prog/pretraitement_hors_axe/bin/Release/tomo_pretraitement /usr/bin/tomo_pretraitement
+sudo cp ${DIR_TOMO}/Tomo_prog/pretraitement_hors_axe_GPU/bin/Release/tomo_pretraitement_GPU /usr/bin/tomo_pretraitement_GPU
 sudo cp ${DIR_TOMO}/Tomo_prog/Reconstruction/bin/Release/tomo_reconstruction /usr/bin/tomo_reconstruction
 sudo cp ${DIR_TOMO}/Tomo_prog/Tomo_GPS/bin/Release/tomo_GPS /usr/bin/tomo_GPS
 sudo cp ${DIR_TOMO}/utilTomo/show_fourier_PP/bin/Release/tomo_show_fourier /usr/bin/tomo_show_fourier

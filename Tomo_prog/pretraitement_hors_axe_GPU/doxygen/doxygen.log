@@ -1,0 +1,7 @@
+/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/FFTW_init.cpp:39: warning: no matching class member found for 
+  FFTW_init::FFTW_init(Point2D dim2D, const vector< double > &entree, size_t nbThread)
+Possible candidates:
+  FFTW_init::FFTW_init(Point3D dim, size_t nbThread)
+  FFTW_init::FFTW_init(Point2D dim, size_t nbThread)
+  FFTW_init::FFTW_init(Point2D dim, std::vector< double > const &entree, size_t nbThread)
+

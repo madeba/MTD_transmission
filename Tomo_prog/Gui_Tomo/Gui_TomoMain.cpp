@@ -779,7 +779,8 @@ void Gui_TomoFrame::refreshValue(string chemin_fic, string chemin_recon)
     cout<<"####-- Maj des données avec le fichier : "<<chemin_fic<<" --####"<<endl;
     ///-------------MAJ paramètres manip----------------------------------
     editNbHolo->SetValue(wxString::Format(wxT("%i"),stoi(extract_string("NB_HOLO",chemin_fic,"400"))));
-    editN0->SetValue(wxString::Format(wxT("%.2f"),stoi(extract_string("N0",chemin_fic))));
+    //editN0->SetValue(wxString::Format(wxT("%.2f"),stoi(extract_string("N0",chemin_fic))));
+     editN0->SetValue(wxString::Format( wxT("%.3f"),extract_val("N0",chemin_fic) ));
     editVymin->SetValue(wxString::Format( wxT("%.2f"),extract_val("VYMIN",chemin_fic) ));
     editVxmin->SetValue(wxString::Format(wxT("%.2f"),extract_val("VXMIN",chemin_fic) ));
     editVxmax->SetValue(wxString::Format(wxT("%.2f"), extract_val("VXMAX",chemin_fic)));
