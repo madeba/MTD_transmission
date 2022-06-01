@@ -1,4 +1,5 @@
 # MTD_transmission
+Code for tomographic diffractive microscopy : off axis holography, aberration correction, phase unwrapping, 3D reconstruction...
 
 from Projet_tomo directory, launch
 1. sh COMPIL.sh
