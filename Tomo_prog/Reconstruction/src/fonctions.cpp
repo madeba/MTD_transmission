@@ -857,7 +857,7 @@ void retroPropag_Born(vector <complex<double>> &TF3D_PotObj, vector<complex<doub
                 if(fdx*fdx+fdy_carre<NMAX_CARRE)    //ne pas depasser l'ouverture numérique pour 1 hologramme
                 {
                     // cout<<"---------------------"<<endl;
-                    // cout<<"fi,fy="<<fxm0<<","<<fym0<<endl;
+                   //  cout<<"fxm0,fym0="<<fxm0<<","<<fym0<<endl;
                     // cout<<"fdx,fdy="<<fdx<<","<<fdy<<endl;
                     double fdz_carre=r2-fdx*fdx-fdy_carre; //altitude au carré des données
                     double koz=round(sqrt(fdz_carre)-fzm0);

@@ -19,6 +19,8 @@
 #include "Gui_TomoMain.h"
 #include<algorithm>//fonction remove() sur string
 #include <wx/notebook.h>///gestion des onglets
+#include "wx/popupwin.h"
+#include "IO_fonctions.h"
 using namespace std;
 
 //helper functions
@@ -120,18 +122,21 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     //repertoire_config=extract_string("CHEMIN_CONFIG_ACQUIS",home+fin_chemin_gui_tomo);///repertoire config_manip.txt : Inutile ?
 
     chemin_rep_acquis=extract_string("CHEMIN_ACQUIS",home+fin_chemin_gui_tomo);///repertoire des données
+    if(IsPathOk(chemin_rep_acquis)==0) cout<<"\033[1;31m No Acquisition directory "<<chemin_rep_acquis <<". Please create it \033[1;0m"<<endl;//https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
+
     repertoire_config=extract_string("CHEMIN_CONFIG",home+fin_chemin_gui_tomo);///repertoire config_manip.txt
+    if(IsPathOk(repertoire_config)==0) cout<<"\033[1;31m No config directory "<<repertoire_config <<". Please create it \033[1;0m"<<endl;
     //cout<<"Repertoire_config="<<repertoire_config<<endl;
     chemin_result=extract_string("CHEMIN_RESULT",home+fin_chemin_gui_tomo);///repertoire des résultats
+    if(IsPathOk(chemin_result)==0) cout<<"\033[1;31m No results directory "<<chemin_result <<". Please create it \033[1;0m"<<endl;
 
-
-   std::remove(chemin_result.begin(), chemin_result.end(), ' ');
+    std::remove(chemin_result.begin(), chemin_result.end(), ' ');
 
     chemin_config_manip=repertoire_config+"/config_manip.txt";
     cout<<"fichier config_manip.txt: "<<chemin_config_manip<<endl;
     chemin_recon=repertoire_config+"/recon.txt";
     cout<<"fichier recon.txt : "<<chemin_recon<<endl;
-    b_PC_ACQUIS=stof(extract_string("PC_ACQUIS",chemin_config_GUI));
+    b_PC_ACQUIS=stof(extract_string("PC_ACQUIS",chemin_config_GUI),0);
     ///tester l'existence du fichiers de config:  config_manip.txt dans le chemin indiqué par l'utilisateur
     ifstream fichier_config_manip(chemin_config_manip.c_str(), ios::in);
     if(!fichier_config_manip)
@@ -151,9 +156,9 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     ifstream fichier_recon(chemin_recon.c_str(), ios::in);
     if(!fichier_recon)
     {
-      //  cout<<endl<<"fichier "<<chemin_config_manip<<" inexistant"<<endl;
-          //  chemin_config_manip=repertoire_config_defaut+"/config_manip.txt";
-           // cout<<"Utilisation du fichier par defaut : "<<chemin_config_manip<<endl;
+        //  cout<<endl<<"fichier "<<chemin_config_manip<<" inexistant"<<endl;
+        //  chemin_config_manip=repertoire_config_defaut+"/config_manip.txt";
+        // cout<<"Utilisation du fichier par defaut : "<<chemin_config_manip<<endl;
         cout<<endl<<"fichier "<<chemin_recon<<" inexistant"<<endl;
         ///on copie le fichier defaut dans le repertoire de config...
         ifstream src(repertoire_config_defaut+"recon.txt",ios::binary);
@@ -178,13 +183,23 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     this->init_tab_val(home+fin_chemin_gui_tomo,r_tab_val_gui_conf);
     // this->init_tab_val(chemin_config_manip_pc_acquis,r_tab_val_manip_pc_acquis);///tableau si on est sur un pc acquisition
     // Create a top-level panel to hold all the contents of the frame
-
+    ///dark theme
+    wxColor *backgroundColor = new wxColor(5,10,20);
+    wxColor *panelColor = new wxColor(23,42,70);
+    wxColor *staticTxtColor =  new wxColor(200,210,250);
+    ///bright theme
+    /*  wxColor *backgroundColor = new wxColor(200,200,200);
+      wxColor *panelColor = new wxColor(235,235,220);
+      wxColor *staticTxtColor =  new wxColor(23,42,70);*/
     // Créer le widget wxNotebook
     wxNotebook* notebook = new wxNotebook(this, wxID_ANY);//crer un widget notebook dont le aprent est la class een cours
 
     wxPanel* panel_tab1 = new wxPanel(notebook, wxID_ANY);//céer un panel dont la fenetre parent est le wxNotebook
     notebook->AddPage(panel_tab1,wxT("Général"));
-    panel_tab1->SetBackgroundColour(*wxLIGHT_GREY);
+    panel_tab1->SetBackgroundColour(*backgroundColor);
+    // panel_tab1->SetBackgroundColour(wxColor(40, 40, 40));///background colour for the 1st tab
+
+
 
     ///##########TAB 1 ################################################
     wxBoxSizer *sizer_horizontal = new wxBoxSizer(wxHORIZONTAL);
@@ -194,8 +209,8 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     ///Le panneau gauche a pour parent le page onglet 1
     wxPanel *panel_gauche = new wxPanel(panel_tab1,wxID_ANY);
 
-    panel_gauche->SetBackgroundColour(wxColor(240, 240, 240));
-
+    panel_gauche->SetBackgroundColour(*backgroundColor);///background color for  the left panel
+    panel_gauche->SetForegroundColour(*staticTxtColor);//font color for this panel
     //le panneau gauche sera géré par le sizer horizontal global
     sizer_horizontal->Add(panel_gauche, 1, wxALL | wxEXPAND, 2);
     //->Add(parent, etirable horizontablement,bordure=2 pixels )
@@ -205,134 +220,138 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     //  sizer_horizontal->Add(sizer_vertical0, 1, wxALL | wxEXPAND, 10);
     //wxPanel *zone10 = new wxPanel(panel_gauche,wxID_ANY, wxPoint(1,1),wxSize(200,40),wxSIMPLE_BORDER );
     wxPanel *zone10 = new wxPanel(panel_gauche,wxID_ANY );
+
     //wxPanel *zone10 = new wxPanel(panel_gauche);
     sizer_vertical0->Add(zone10, 1, wxALL | wxEXPAND, 1);
-    zone10->SetBackgroundColour(*wxLIGHT_GREY);
+    zone10->SetBackgroundColour(*panelColor);
     zone10->SetSize(180,10);//ne fonctionne pas en hauteur?
     ///Titre
     // titre_Acquis=new wxStaticText(zone10,0,"Acquisition",wxPoint(2,2),wxSize(100,40));
     titre_Acquis=new wxStaticText(zone10,0,"Acquisition",wxPoint(2,2),wxSize(100,40));
     titre_Acquis->SetFont( wxFont(12, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL) );
     ///--------------------NB HOLO+N0
-        wxPanel *zone11 = new wxPanel(panel_gauche);
-        // sizer->Add(leftPanel, true, wxEXPAND | wxTOP | wxBOTTOM | wxLEFT, 20);
-        sizer_vertical0->Add(zone11, 0, wxALL | wxEXPAND | wxALIGN_CENTER, 1);// Ajout de cette zone au sizer vertical    //
-        zone11->SetBackgroundColour(*wxLIGHT_GREY);//fond gris clair
-        zone11->SetSize(180,40);
-        ///NB_HOLO-----
-            textNbHolo=new wxStaticText(zone11,1,"Nombre d'hologrammes  : ",wxPoint(2,2),wxSize(98,50));
-            //édition du champ
-            editNbHolo=new wxTextCtrl(zone11,1,"",wxPoint(120,4),wxSize(50,25));
-            editNbHolo->SetToolTip(wxT("Nombre d'hologrammes à acquérir"));
-            //récupérer la valeur NB_HOLO dans fichier de config, convertir en string, puis l'afficher dans la case
-            int Nb_Holo=stof(extract_string("NB_HOLO",chemin_config_manip));//stof=string to float
+    wxPanel *zone11 = new wxPanel(panel_gauche);
+    // sizer->Add(leftPanel, true, wxEXPAND | wxTOP | wxBOTTOM | wxLEFT, 20);
+    sizer_vertical0->Add(zone11, 0, wxALL | wxEXPAND | wxALIGN_CENTER, 1);// Ajout de cette zone au sizer vertical    //
+    zone11->SetBackgroundColour(*panelColor);//fond gris clair
+    zone11->SetSize(180,40);
+    ///NB_HOLO-----
+    textNbHolo=new wxStaticText(zone11,1,"Nombre d'hologrammes  : ",wxPoint(2,2),wxSize(98,50));
+    //édition du champ
+    editNbHolo=new wxTextCtrl(zone11,1,"",wxPoint(120,4),wxSize(50,25));
+    editNbHolo->SetToolTip(wxT("Nombre d'hologrammes à acquérir"));
+    //récupérer la valeur NB_HOLO dans fichier de config, convertir en string, puis l'afficher dans la case
+    int Nb_Holo=stof(extract_string("NB_HOLO",chemin_config_manip));//stof=string to float
 
-            wxString string_NbHolo = wxString::Format(wxT("%i"),Nb_Holo);
-            editNbHolo->SetValue(string_NbHolo);
+    wxString string_NbHolo = wxString::Format(wxT("%i"),Nb_Holo);
+    editNbHolo->SetValue(string_NbHolo);
 
-        ///indice milieu montage
-            textN0=new wxStaticText(zone11,1,"Indice n0 ",wxPoint(2,40),wxSize(98,50));
-            editN0=new wxTextCtrl(zone11,1,"",wxPoint(120,40),wxSize(52,25));
-            float edit_N0=stof(extract_string("N0",chemin_config_manip));//stof=string to float
-            wxString string_N0 = wxString::Format(wxT("%.3f"),edit_N0); //%.3f=3chiffres apres virgule
-            editN0->SetValue(string_N0);
-            editN0->SetToolTip(wxT("Indice milieu de montage"));
+    ///indice milieu montage
+    textN0=new wxStaticText(zone11,1,"Indice n0 ",wxPoint(2,40),wxSize(98,50));
+    editN0=new wxTextCtrl(zone11,1,"",wxPoint(120,40),wxSize(52,25));
+    float edit_N0=stof(extract_string("N0",chemin_config_manip));//stof=string to float
+    wxString string_N0 = wxString::Format(wxT("%.3f"),edit_N0); //%.3f=3chiffres apres virgule
+    editN0->SetValue(string_N0);
+    editN0->SetToolTip(wxT("Indice milieu de montage"));
 
     ///------------BALAYAGE
     ///--------------------------SCHEMA BALAYAGE
-        wxPanel *zone11b = new wxPanel(panel_gauche);
-        zone11b->SetSize(200,50);
-        sizer_vertical0->Add(zone11b, 1, wxALL | wxEXPAND | wxALIGN_BOTTOM, 1);// Ajout de cette zone au sizer vertical    //
-        zone11b->SetBackgroundColour(*wxLIGHT_GREY);
+    wxPanel *zone11b = new wxPanel(panel_gauche);
+    zone11b->SetSize(200,50);
+    sizer_vertical0->Add(zone11b, 1, wxALL | wxEXPAND | wxALIGN_BOTTOM, 1);// Ajout de cette zone au sizer vertical    //
+    zone11b->SetBackgroundColour(*panelColor);
 
-        textScanPattern=new wxStaticText(zone11b,1,wxT("&Schéma"),wxPoint(2,10),wxSize(98,50));
-       // string str_scanPattern=stof(extract_string("SCAN_PATTERN",chemin_config_manip));//stof=string to float
+    textScanPattern=new wxStaticText(zone11b,1,wxT("&Schéma"),wxPoint(2,10),wxSize(98,50));
+    // string str_scanPattern=stof(extract_string("SCAN_PATTERN",chemin_config_manip));//stof=string to float
 
-        ComboBox_Scan = new wxComboBox(zone11b, idComboScan, _T(""), wxPoint(120,10), wxSize(140,26),
-        0, NULL, wxTE_PROCESS_ENTER | wxTE_PROCESS_TAB);//Constructor, creating and showing a combobox.
-        ComboBox_Scan->SetToolTip(wxT("Schéma de balayage"));
-        ComboBox_Scan->Append ( wxT("ANNULAR") );
-        ComboBox_Scan->Append ( wxT("ARCHIMEDE") );
-        ComboBox_Scan->Append ( wxT("FERMAT") );
-        ComboBox_Scan->Append ( wxT("RANDOM_POLAR") );
-        ComboBox_Scan->Append ( wxT("ROSACE") );
-        ComboBox_Scan->Append ( wxT("UNIFORM3D") );
-        ComboBox_Scan->Append ( wxT("STAR") );
-        wxArrayString  listeScanPattern(6);
-        listeScanPattern=ComboBox_Scan->GetStrings();//récupérer les label de pattern dans un tableau
-        wxString defaultPattern=extract_string("SCAN_PATTERN",chemin_config_manip,"ROSACE");//lire le pattern du fichier de config
-        ComboBox_Scan->SetSelection(listeScanPattern.Index(defaultPattern));//par defaut, mettre le pattern du fichier de config
+    ComboBox_Scan = new wxComboBox(zone11b, idComboScan, _T(""), wxPoint(120,10), wxSize(140,26),
+                                   0, NULL, wxTE_PROCESS_ENTER | wxTE_PROCESS_TAB);//Constructor, creating and showing a combobox.
+    ComboBox_Scan->SetToolTip(wxT("Schéma de balayage"));
+    ComboBox_Scan->Append ( wxT("ANNULAR") );///attention, respecter l'ordre alpĥabétique
+    ComboBox_Scan->Append ( wxT("ARCHIMEDE") );
+    ComboBox_Scan->Append ( wxT("FERMAT") );
+    ComboBox_Scan->Append ( wxT("RANDOM_POLAR") );
+    ComboBox_Scan->Append ( wxT("ROSACE") );
+    ComboBox_Scan->Append ( wxT("STAR") );
+    ComboBox_Scan->Append ( wxT("UNIFORM3D") );
+    wxArrayString  listeScanPattern(6);
+    listeScanPattern=ComboBox_Scan->GetStrings();//récupérer les label de pattern dans un tableau
 
-            //édition du champ cercles concentriques
-        int Nb_circles_annular=stof(  extract_string("NB_CIRCLES_ANNULAR", chemin_config_manip, "8")  );//stof=string to float
-        editnbCirclesAnnular=new wxTextCtrl(zone11b,1,"",wxPoint(120,40),wxSize(36,24));
-        editnbCirclesAnnular->SetToolTip(wxT("Nombre de cercles concentriques"));
-        if(ComboBox_Scan->GetString(ComboBox_Scan->GetSelection())==wxT("ANNULAR")) editnbCirclesAnnular->Enable(true);
-        else    editnbCirclesAnnular->Enable(false);
 
-        wxString string_NbCirclesAnnular = wxString::Format(wxT("%i"),Nb_circles_annular);
-        editnbCirclesAnnular->SetValue(string_NbCirclesAnnular);
+    //édition du champ cercles concentriques
+    int Nb_circles_annular=stof(  extract_string("NB_CIRCLES_ANNULAR", chemin_config_manip, "8")  );//stof=string to float
+    editnbCirclesAnnular=new wxTextCtrl(zone11b,1,"",wxPoint(120,40),wxSize(36,24));
+    editnbCirclesAnnular->SetToolTip(wxT("Nombre de cercles concentriques si ANNULAR"));
+    if(ComboBox_Scan->GetString(ComboBox_Scan->GetSelection())==wxT("ANNULAR")) editnbCirclesAnnular->Enable(true);
+    else    editnbCirclesAnnular->Enable(false);
 
+    wxString string_NbCirclesAnnular = wxString::Format(wxT("%i"),Nb_circles_annular);
+    editnbCirclesAnnular->SetValue(string_NbCirclesAnnular);
+
+    wxString defaultPattern=extract_string("SCAN_PATTERN",chemin_config_manip,"ROSACE");//lire le pattern du fichier de config, défaut sur Rosace
+    cout<<"listeScanPattern.Index(defaultPattern)="<<listeScanPattern.Index(defaultPattern)<<endl;
+    ComboBox_Scan->SetSelection(listeScanPattern.Index(defaultPattern));//par defaut, mettre le pattern du fichier de config
 
     ///--------------------INTERVALLE de BALAYAGE------------------
     wxPanel *zone12 = new wxPanel(panel_gauche);
     sizer_vertical0->Add(zone12, 0, wxALL | wxEXPAND | wxALIGN_CENTER, 1);// Ajout de cette zone au sizer vertical    //
-    zone12->SetBackgroundColour(*wxLIGHT_GREY);
+    //  zone12->SetBackgroundColour(*panelColor);
+    zone12->SetBackgroundColour(*panelColor);
 
     titre_Interval_Balayage=new wxStaticText(zone12,-1," Intervalle de Balayage",wxPoint(0,0),wxSize(100,40));
     titre_Interval_Balayage->SetFont(wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD) );
 
-        textVxmin=new wxStaticText(zone12,-1,"Vxm ",wxPoint(10,30),wxSize(30,40));
-        editVxmin=new wxTextCtrl(zone12,-1,"",wxPoint(50,28),wxSize(50,25));
-        editVxmin->SetToolTip(wxT("tension mini en volt selon l'axe x"));
-        float Vxmin=extract_val("VXMIN",chemin_config_manip);
-        wxString string_Vxmin = wxString::Format(wxT("%.2f"),Vxmin);
-        editVxmin->SetValue(string_Vxmin);
+    textVxmin=new wxStaticText(zone12,-1,"Vxm ",wxPoint(10,30),wxSize(30,40));
+    editVxmin=new wxTextCtrl(zone12,-1,"",wxPoint(50,28),wxSize(50,25));
+    editVxmin->SetToolTip(wxT("tension mini en volt selon l'axe x"));
+    float Vxmin=extract_val("VXMIN",chemin_config_manip);
+    wxString string_Vxmin = wxString::Format(wxT("%.2f"),Vxmin);
+    editVxmin->SetValue(string_Vxmin);
 
-        textVymin=new wxStaticText(zone12,-1,"Vym ",wxPoint(110,30),wxSize(30,40));
-        editVymin=new wxTextCtrl(zone12,-1,"",wxPoint(140,28),wxSize(50,25));
-        editVymin->SetToolTip(wxT("tension mini en volt selon l'axe y"));
-        float Vymin=extract_val("VYMIN",chemin_config_manip);
-        wxString string_Vymin = wxString::Format(wxT("%.2f"),Vymin);
-        editVymin->SetValue(string_Vymin);
+    textVymin=new wxStaticText(zone12,-1,"Vym ",wxPoint(110,30),wxSize(30,40));
+    editVymin=new wxTextCtrl(zone12,-1,"",wxPoint(140,28),wxSize(50,25));
+    editVymin->SetToolTip(wxT("tension mini en volt selon l'axe y"));
+    float Vymin=extract_val("VYMIN",chemin_config_manip);
+    wxString string_Vymin = wxString::Format(wxT("%.2f"),Vymin);
+    editVymin->SetValue(string_Vymin);
 
-        textVxmax=new wxStaticText(zone12,-1,"VxM ",wxPoint(10,70),wxSize(30,40));
-        editVxmax=new wxTextCtrl(zone12,-1,"",wxPoint(50,68),wxSize(50,25));
-        editVxmax->SetToolTip(wxT("tension maxi en volt selon l'axe x"));
-        float Vxmax=extract_val("VXMAX",chemin_config_manip);
-        wxString string_Vxmax = wxString::Format(wxT("%.2f"),Vxmax);
-        editVxmax->SetValue(string_Vxmax);
+    textVxmax=new wxStaticText(zone12,-1,"VxM ",wxPoint(10,70),wxSize(30,40));
+    editVxmax=new wxTextCtrl(zone12,-1,"",wxPoint(50,68),wxSize(50,25));
+    editVxmax->SetToolTip(wxT("tension maxi en volt selon l'axe x"));
+    float Vxmax=extract_val("VXMAX",chemin_config_manip);
+    wxString string_Vxmax = wxString::Format(wxT("%.2f"),Vxmax);
+    editVxmax->SetValue(string_Vxmax);
 
-        textVymax=new wxStaticText(zone12,-1,"VyM ",wxPoint(110,70),wxSize(30,40));
-        editVymax=new wxTextCtrl(zone12,-1,"",wxPoint(140,68),wxSize(50,25));
-        editVymax->SetToolTip(wxT("tension maxi en volt selon l'axe y"));
-        float Vymax=extract_val("VYMAX",chemin_config_manip);
-        wxString string_Vymax = wxString::Format(wxT("%.2f"),Vymax);
-        editVymax->SetValue(string_Vymax);
+    textVymax=new wxStaticText(zone12,-1,"VyM ",wxPoint(110,70),wxSize(30,40));
+    editVymax=new wxTextCtrl(zone12,-1,"",wxPoint(140,68),wxSize(50,25));
+    editVymax->SetToolTip(wxT("tension maxi en volt selon l'axe y"));
+    float Vymax=extract_val("VYMAX",chemin_config_manip);
+    wxString string_Vymax = wxString::Format(wxT("%.2f"),Vymax);
+    editVymax->SetValue(string_Vymax);
 
-        textNAcondLim=new wxStaticText(zone12,-1,"NAlim",wxPoint(10,110),wxSize(50,40));
-        editNAcondLim=new wxTextCtrl(zone12,-1,"",wxPoint(50,110),wxSize(50,25));
-        editNAcondLim->SetToolTip(wxT("coefficient limitant NA balayage, valeur=[0,1]"));
-        float NACondLim=extract_val("NA_COND_LIM",chemin_config_manip);
-        wxString string_LimNACond = wxString::Format(wxT("%.2f"),NACondLim);
-        editNAcondLim->SetValue(string_LimNACond);
+    textNAcondLim=new wxStaticText(zone12,-1,"NAlim",wxPoint(10,110),wxSize(50,40));
+    editNAcondLim=new wxTextCtrl(zone12,-1,"",wxPoint(50,110),wxSize(50,25));
+    editNAcondLim->SetToolTip(wxT("coefficient limitant NA balayage, valeur=[0,1]"));
+    float NACondLim=extract_val("NA_COND_LIM",chemin_config_manip);
+    wxString string_LimNACond = wxString::Format(wxT("%.2f"),NACondLim);
+    editNAcondLim->SetValue(string_LimNACond);
 
     ////-------------------------
     ///--------------------LANCER ACQUISITION------------------
-        wxPanel *zone13 = new wxPanel(panel_gauche);
-        sizer_vertical0->Add(zone13, 1, wxALL | wxEXPAND | wxALIGN_CENTER, 1);// Ajout de cette zone au sizer vertical    //
-        zone13->SetBackgroundColour(*wxLIGHT_GREY);
-        /// Dialog fichier de données;
-        BoutonOpenDir=new wxButton(zone13, idBoutonOpenDir, wxT("&Données"), wxPoint(5,10), wxDefaultSize, 0);
-        editDirAcquis=new wxTextCtrl(zone13,-1,chemin_rep_acquis,wxPoint(105,14), wxSize(180,26));
-        editDirAcquis->SetToolTip(wxT("Répertoire des acquisitions : "+chemin_rep_acquis));
-        // textFicManip=new wxTextCtrl(zone10,-1,"",wxPoint(160,195),wxSize(100,20));
-        ///bouton Acquisition
-        BoutonManip= new wxButton(zone13, idBoutonManip, wxT("&Acquisition"), wxPoint(194,60), wxDefaultSize, 0);
-        if(b_PC_ACQUIS==0) BoutonManip->Enable(false);
-        //Bouton image
-       // BoutonImage= new wxButton(zone13, idBoutonImage, wxT("&Image"), wxPoint(4,60), wxSize(40,26), 0);
-        //BoutonImage->SetToolTip(wxT("Acquisition + Pretraitement + Reconstruction"));
+    wxPanel *zone13 = new wxPanel(panel_gauche);
+    sizer_vertical0->Add(zone13, 1, wxALL | wxEXPAND | wxALIGN_CENTER, 1);// Ajout de cette zone au sizer vertical    //
+    zone13->SetBackgroundColour(*panelColor);
+    /// Dialog fichier de données;
+    BoutonOpenDir=new wxButton(zone13, idBoutonOpenDir, wxT("&Données"), wxPoint(5,10), wxDefaultSize, 0);
+    editDirAcquis=new wxTextCtrl(zone13,-1,chemin_rep_acquis,wxPoint(105,14), wxSize(180,26));
+    editDirAcquis->SetToolTip(wxT("Répertoire des acquisitions : "+chemin_rep_acquis));
+    // textFicManip=new wxTextCtrl(zone10,-1,"",wxPoint(160,195),wxSize(100,20));
+    ///bouton Acquisition
+    BoutonManip= new wxButton(zone13, idBoutonManip, wxT("&Acquisition"), wxPoint(194,60), wxDefaultSize, 0);
+    if(b_PC_ACQUIS==0) BoutonManip->Enable(false);
+    //Bouton image
+    // BoutonImage= new wxButton(zone13, idBoutonImage, wxT("&Image"), wxPoint(4,60), wxSize(40,26), 0);
+    //BoutonImage->SetToolTip(wxT("Acquisition + Pretraitement + Reconstruction"));
 
     ///-----------------------------
     ///--------------------------
@@ -349,16 +368,17 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     //le panneau gauche sera géré par le sizer horizontal global
     sizer_horizontal->Add(panel_centre, 1, wxALL | wxEXPAND, 2);
     wxBoxSizer *sizer_vertical1 = new wxBoxSizer(wxVERTICAL);
-    panel_centre->SetBackgroundColour(wxColor(240, 240, 240));
+    panel_centre->SetBackgroundColour(*backgroundColor);
+    panel_centre->SetForegroundColour(*staticTxtColor);
     //-------------zone du haut -------------------------------------------------------------------------------------
     wxPanel *zone20 = new wxPanel(panel_centre);
-    zone20->SetBackgroundColour(*wxLIGHT_GREY);                                  //
+    zone20->SetBackgroundColour(*panelColor);                                  //
     sizer_vertical1->Add(zone20, 0, wxALL | wxEXPAND | wxALIGN_CENTER, 1);// Ajout de cette zone au sizer vertical    //
     titre_Pretraitement=new wxStaticText(zone20,-1,wxT(" Prétraitement"),wxPoint(0,0),wxSize(100,40));               //
     titre_Pretraitement->SetFont(wxFont(12, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL) );      //
     //-------------zone du milieu ------------------------------------------------------------------------------------
     wxPanel *zone21 = new wxPanel(panel_centre, wxID_ANY, wxDefaultPosition, wxSize(-1, 160));
-    zone21->SetBackgroundColour(*wxLIGHT_GREY);
+    zone21->SetBackgroundColour(*panelColor);
 
     // Ajout de cette zone au sizer vertical
     sizer_vertical1->Add(zone21, 0, wxALL | wxEXPAND, 1);
@@ -381,7 +401,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
 
     //-------------zone du bas---------------------------------------------------------------------------------------//
     wxPanel *zone22 = new wxPanel(panel_centre);
-    zone22->SetBackgroundColour(*wxLIGHT_GREY);
+    zone22->SetBackgroundColour(*panelColor);
     // Ajout de cette zone au sizer vertical
     sizer_vertical1->Add(zone22, 2, wxALL | wxEXPAND, 1);
     /// Dialog fichier;
@@ -400,20 +420,21 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
 
     ///Le panneau droit a pour parent le page onglet 1
     wxPanel *panel_droit = new wxPanel(panel_tab1,wxID_ANY);
-    panel_droit->SetBackgroundColour(wxColor(240, 240, 240));
+    panel_droit->SetBackgroundColour(*backgroundColor);
+    panel_droit->SetForegroundColour(*staticTxtColor);
     sizer_horizontal->Add(panel_droit, 1, wxALL | wxEXPAND, 2); //le panneau gauche sera géré par le sizer horizontal global
 
     wxBoxSizer *sizer_vertical2 = new wxBoxSizer(wxVERTICAL);
 
     wxPanel *zone30= new wxPanel(panel_droit);
-    zone30->SetBackgroundColour(*wxLIGHT_GREY);
+    zone30->SetBackgroundColour(*panelColor);
     // Ajout de cette zone au sizer vertical
     sizer_vertical2->Add(zone30, 0, wxALL | wxEXPAND | wxALIGN_CENTER, 1);
     titre_Recons=new wxStaticText(zone30,-1,wxT(" Reconstruction"),wxPoint(0,0),wxSize(100,40));
     titre_Recons->SetFont(wxFont(12, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL) );
     //-------------zone Hors axe -------------------------------------------------------------------------------------
     wxPanel *zone31 = new wxPanel(panel_droit);
-    zone31->SetBackgroundColour(*wxLIGHT_GREY);
+    zone31->SetBackgroundColour(*panelColor);
     sizer_vertical2->Add(zone31, 0, wxALL | wxEXPAND | wxALIGN_CENTER, 1);
     titre_HorsAxe=new wxStaticText(zone31,-1,wxT(" Hors-axe"),wxPoint(0,0),wxSize(100,40));
     titre_HorsAxe->SetFont(wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD) );
@@ -450,7 +471,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
 
     //-------------zone du bas -------------------------------------------------------------------------------------
     wxPanel *zone32 = new wxPanel(panel_droit);
-    zone32->SetBackgroundColour(*wxLIGHT_GREY);
+    zone32->SetBackgroundColour(*panelColor);
     // Ajout de cette zone au sizer vertical
     sizer_vertical2->Add(zone32, 1, wxALL | wxEXPAND | wxALIGN_CENTER, 1);
 
@@ -475,15 +496,15 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     ///##########TAB 2 ################################################
     wxPanel* panel_tab2 = new wxPanel(notebook, wxID_ANY,wxPoint(1,1),wxSize(100,40));//céer un panel dont la fenetre parent est le wxNotebook
     notebook->AddPage(panel_tab2,wxT("Avancé"));
-    panel_tab2->SetBackgroundColour(wxColor(240, 240, 240));
-
+    panel_tab2->SetBackgroundColour(wxColor(10, 25, 50));
+    panel_tab2->SetForegroundColour(wxColor(200, 210, 250));
     wxBoxSizer *sizer_horizontalB = new wxBoxSizer(wxHORIZONTAL);
     sizer_horizontalB->SetMinSize(200, 100);
     panel_tab2->SetSizer(sizer_horizontalB);//affecter l'organiseur (sizer) horizontal à l'onglet  1.
     ///#################### Partie Gauche #############################
     ///Le panneau gauche a pour parent le page onglet 2
     wxPanel *panel_gauche_tabB = new wxPanel(panel_tab2,wxID_ANY,wxPoint(1,1),wxSize(200,40));
-    panel_gauche_tabB->SetBackgroundColour(wxColor(250, 250, 250));
+    panel_gauche_tabB->SetBackgroundColour(wxColor(10, 25, 50));
     //le panneau gauche sera géré par le sizer horizontal global
     sizer_horizontalB->Add(panel_gauche_tabB, 0, wxALL | wxEXPAND, 2);
     //->Add(parent, etirable horizontablement,bordure=2 pixels )
@@ -495,7 +516,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     //  sizer_horizontal->Add(sizer_vertical0, 1, wxALL | wxEXPAND, 10);
     wxPanel *zoneB10 = new wxPanel(panel_gauche_tabB,wxID_ANY, wxPoint(1,1),wxSize(200,30) );
     sizer_vertical_tabB_0->Add(zoneB10, 0, wxALL |wxALIGN_LEFT, 1);//zoneB10, non étirable verticalement
-    zoneB10->SetBackgroundColour(*wxLIGHT_GREY);
+    zoneB10->SetBackgroundColour(*panelColor);
     //zoneB10->SetBor
     ///Titre
     titre_GPS=new wxStaticText(zoneB10,0,"Traitement GPS",wxPoint(2,2),wxSize(100,20));
@@ -504,7 +525,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     ///--------------------Intervalle indice------------------
     wxPanel *zoneB11 = new wxPanel(panel_gauche_tabB, wxID_ANY, wxPoint(1,1),wxSize(200,40));
     sizer_vertical_tabB_0->Add(zoneB11, 1, wxALL |wxALIGN_LEFT, 1);// Ajout de cette zone au sizer vertical    //
-    zoneB11->SetBackgroundColour(*wxLIGHT_GREY);
+    zoneB11->SetBackgroundColour(*panelColor);
 
     titre_interval_indice=new wxStaticText(zoneB11,-1,"Gamme d'indice",wxPoint(0,0),wxSize(100,40));
     titre_interval_indice->SetFont(wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD) );
@@ -529,7 +550,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     ///--------------------Intervalle coefficient extinction ------------------
     wxPanel *zoneB12 = new wxPanel(panel_gauche_tabB, wxID_ANY, wxPoint(1,1),wxSize(200,40));
     sizer_vertical_tabB_0->Add(zoneB12, 1, wxALL |wxALIGN_LEFT, 1);// Ajout de cette zone au sizer vertical    //
-    zoneB12->SetBackgroundColour(*wxLIGHT_GREY);
+    zoneB12->SetBackgroundColour(*panelColor);
 
     titre_interval_kappa=new wxStaticText(zoneB12,-1,"Coefficient d'extinction",wxPoint(0,0),wxSize(100,40));
     titre_interval_kappa->SetFont(wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD) );
@@ -554,7 +575,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     ///----------NB ITERATION GPS-----------------
     wxPanel *zoneB13 = new wxPanel(panel_gauche_tabB, wxID_ANY, wxPoint(1,1),wxSize(200,40));
     sizer_vertical_tabB_0->Add(zoneB13, 1, wxALL |wxALIGN_LEFT, 1);// Ajout de cette zone au sizer vertical    //
-    zoneB13->SetBackgroundColour(*wxLIGHT_GREY);
+    zoneB13->SetBackgroundColour(*panelColor);
 
     titre_iterationGPS=new wxStaticText(zoneB13,-1,wxT("Nombre d'itérations"),wxPoint(4,6),wxSize(200,40));
     titre_iterationGPS->SetFont(wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD) );
@@ -600,8 +621,8 @@ void Gui_TomoFrame::OnBoutonManip(wxCommandEvent &event)///Acquisition bouton
     //  float Ry=abs(Vymax-Vymin);
     //float offY=Vymax-Ry;
 
-   // wxString param1 =editDirAcquis->GetValue();
-  //  wxString string_NbHolo=editNbHolo->GetValue();
+    // wxString param1 =editDirAcquis->GetValue();
+    //  wxString string_NbHolo=editNbHolo->GetValue();
     // wxString cmd_final=wxT("manipTomo5 -ni ")+editNbHolo->GetValue()+wxT(" -voffset ")+wxString::Format(wxT("%.2f"), offX)+" "+
     // wxString::Format(wxT("%.2f"),offY)+wxT(" -vfleur ")+wxString::Format(wxT("%.2f"),Rx)+" "+wxString::Format(wxT("%.2f"),Ry);
     sav_all();
@@ -617,8 +638,8 @@ void Gui_TomoFrame::OnBoutonImage(wxCommandEvent &event)///image complète
     //  float Ry=abs(Vymax-Vymin);
     //float offY=Vymax-Ry;
 
-   // wxString param1 =editDirAcquis->GetValue();
-  //  wxString string_NbHolo=editNbHolo->GetValue();
+    // wxString param1 =editDirAcquis->GetValue();
+    //  wxString string_NbHolo=editNbHolo->GetValue();
     // wxString cmd_final=wxT("manipTomo5 -ni ")+editNbHolo->GetValue()+wxT(" -voffset ")+wxString::Format(wxT("%.2f"), offX)+" "+
     // wxString::Format(wxT("%.2f"),offY)+wxT(" -vfleur ")+wxString::Format(wxT("%.2f"),Rx)+" "+wxString::Format(wxT("%.2f"),Ry);
     sav_all();
@@ -723,19 +744,20 @@ void Gui_TomoFrame::OnBoutonAmpliRef(wxCommandEvent& WXUNUSED(event))
 
 void Gui_TomoFrame::OnBoutonOpenDir(wxCommandEvent& WXUNUSED(event))
 {
-   // wxString defaultPath = chemin_rep_acquis;//wxT("/ramdisk/Acquis/");
+    // wxString defaultPath = chemin_rep_acquis;//wxT("/ramdisk/Acquis/");
     wxDirDialog* OpenDirDial = new wxDirDialog(this, _("Choisir un répertoire"),editDirAcquis->GetValue());
 
-    if ( OpenDirDial->ShowModal() == wxID_OK ){
+    if ( OpenDirDial->ShowModal() == wxID_OK )
+    {
         wxString path = OpenDirDial->GetPath();
         editDirAcquis->SetValue(path);
     }
-  //récupérer le nouveau chemin
-  string dir_config(editDirAcquis->GetValue().ToStdString());//ToStdString =wxwidget 3.0. Non compatible wxWidget 2.8
+    //récupérer le nouveau chemin
+    string dir_config(editDirAcquis->GetValue().ToStdString());//ToStdString =wxwidget 3.0. Non compatible wxWidget 2.8
 
-  chemin_config_manip=dir_config+"/config_manip.txt";
-  chemin_recon=dir_config+"/recon.txt";
-  refreshValue(chemin_config_manip, chemin_recon);
+    chemin_config_manip=dir_config+"/config_manip.txt";
+    chemin_recon=dir_config+"/recon.txt";
+    refreshValue(chemin_config_manip, chemin_recon);
 
 }
 
@@ -780,7 +802,7 @@ void Gui_TomoFrame::refreshValue(string chemin_fic, string chemin_recon)
     ///-------------MAJ paramètres manip----------------------------------
     editNbHolo->SetValue(wxString::Format(wxT("%i"),stoi(extract_string("NB_HOLO",chemin_fic,"400"))));
     //editN0->SetValue(wxString::Format(wxT("%.2f"),stoi(extract_string("N0",chemin_fic))));
-     editN0->SetValue(wxString::Format( wxT("%.3f"),extract_val("N0",chemin_fic) ));
+    editN0->SetValue(wxString::Format( wxT("%.3f"),extract_val("N0",chemin_fic) ));
     editVymin->SetValue(wxString::Format( wxT("%.2f"),extract_val("VYMIN",chemin_fic) ));
     editVxmin->SetValue(wxString::Format(wxT("%.2f"),extract_val("VXMIN",chemin_fic) ));
     editVxmax->SetValue(wxString::Format(wxT("%.2f"), extract_val("VXMAX",chemin_fic)));
@@ -788,8 +810,8 @@ void Gui_TomoFrame::refreshValue(string chemin_fic, string chemin_recon)
     editNAcondLim->SetValue(wxString::Format(wxT("%.2f"),  extract_val("NA_COND_LIM",  chemin_fic)));
 
     wxArrayString  listeScanPattern(6);
-    listeScanPattern=ComboBox_Scan->GetStrings();//récupérer les label de pattern dans un tableau des tring
-   // wxString defaultPattern=extract_string("SCAN_PATTERN",chemin_fic);//lire le pattern du fichier de config
+    listeScanPattern=ComboBox_Scan->GetStrings();//récupérer les label de pattern dans un tableau de string
+    // wxString defaultPattern=extract_string("SCAN_PATTERN",chemin_fic);//lire le pattern du fichier de config
     ComboBox_Scan->SetSelection(listeScanPattern.Index(extract_string("SCAN_PATTERN",chemin_fic,"ROSACE")));//
 
     editNXMAX->SetValue(wxString::Format(wxT("%i"),stoi(extract_string("NXMAX",chemin_fic,"0"))));
@@ -835,18 +857,22 @@ string Gui_TomoFrame::extract_string(string token,  string chemin_fic)
         cerr << "Impossible d'ouvrir le fichier : "<< chemin_fic<< endl;
 
     int nb_tok=tokens.size();//length of thetable
-    for(int cpt=0; cpt<nb_tok; cpt++){//parcourir le tableau
+    for(int cpt=0; cpt<nb_tok; cpt++) //parcourir le tableau
+    {
         ligne=tokens[cpt];//récupérer une ligne
-        if(ligne!=""){//si elle n'est aps vide
+        if(ligne!="") //si elle n'est aps vide
+        {
             int pos_separ=ligne.find(separ);//trouver la position du séparateur (délime mot-clé et valeur)
             int long_separ=separ.length();
             motcle = ligne.substr(0, pos_separ);//sbstr(pos_debut,pos_fin) : le mot clé est entre la position 0 et la position du séparateur
-            if(motcle==token){
+            if(motcle==token)
+            {
                 valeurMot=ligne.substr(pos_separ+long_separ,ligne.size()-(motcle.size()+long_separ));
                 ///remove spaces possibly inserted at the beginning (position=0) of the keyword.
                 pos_separ=valeurMot.find(separ);//find space inside the keyword
-               // char current_character=valeurMot[pos_separ];
-                while(valeurMot[pos_separ]==separ){//is the current character equal to "space" ? then remove it
+                // char current_character=valeurMot[pos_separ];
+                while(valeurMot[pos_separ]==separ) //is the current character equal to "space" ? then remove it
+                {
                     valeurMot=valeurMot.substr(pos_separ+1,valeurMot.length()-1);//on raccourci la chaine de caractère de l'espace
                     pos_separ++;
                 }
@@ -855,10 +881,11 @@ string Gui_TomoFrame::extract_string(string token,  string chemin_fic)
             }
         }
     }
-    if(valeur.empty())    {
+    if(valeur.empty())
+    {
         cout<<"mot_clé "<<token<<" inexistant dans le fichier "<<chemin_fic<<endl;
         exit(0);
-    //valeur="";
+        //valeur="";
     }
     fichier.close();
     return valeur;
@@ -905,7 +932,8 @@ string Gui_TomoFrame::extract_string(string token,  string chemin_fic,string def
 
                 ///remove spaces possibly inserted by mistake at the beginning (position=0) of the keyword.
                 pos_separ=valeurMot.find(separ);//find space inside the keyword
-                while(valeurMot[pos_separ]==separ){//is the current character equal to "space" ? then remove it
+                while(valeurMot[pos_separ]==separ) //is the current character equal to "space" ? then remove it
+                {
                     valeurMot=valeurMot.substr(pos_separ+1,valeurMot.length()-1);//on raccourci la chaine de caractère de l'espace
                     pos_separ++;
                 }
@@ -1003,7 +1031,8 @@ void Gui_TomoFrame::sav_val(string chemin_fic,vector<string> &tab_val)
     src.close();
     dst.close();
     ofstream flux_ecriture(chemin_fic.c_str(), ios::out);  // ouverture en écriture
-    for(size_t cpt=0; cpt<tab_val.size(); cpt++){
+    for(size_t cpt=0; cpt<tab_val.size(); cpt++)
+    {
         flux_ecriture<<tab_val[cpt]<<endl;//ecriture dans le fichier
     }
     flux_ecriture.close();  //  fermer
@@ -1132,12 +1161,15 @@ void Gui_TomoFrame::OnComboScan(wxCommandEvent &even)
 {
     modif_tab_val("SCAN_PATTERN", ComboBox_Scan->GetString(ComboBox_Scan->GetSelection()).ToStdString(),tab_val_manip);
     cout<<"Schéma: "<<ComboBox_Scan->GetString(ComboBox_Scan->GetSelection())<<endl;
-    if(ComboBox_Scan->GetString(ComboBox_Scan->GetSelection())==wxT("ANNULAR")){
+    if(ComboBox_Scan->GetString(ComboBox_Scan->GetSelection())==wxT("ANNULAR"))
+    {
 
-    cout<<"schema ANNULAR!"<<endl;
-    editnbCirclesAnnular->Enable(true);}
-    else{
-    editnbCirclesAnnular->Enable(false);
+        cout<<"schema ANNULAR!"<<endl;
+        editnbCirclesAnnular->Enable(true);
+    }
+    else
+    {
+        editnbCirclesAnnular->Enable(false);
     }
 //wxArrayString  liste_scan(4);
 //liste_scan=ComboBox_Scan->GetStrings();

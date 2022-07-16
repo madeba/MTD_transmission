@@ -42,12 +42,12 @@ int main( int argc, char** argv )
 
 
     ///Génération de l'objet (bille polystyrène, n=1.5983, absorption=?)
-    double Rboule_metrique=2.4*pow(10,-6);///rayon bille en m
+    double Rboule_metrique=10.4*pow(10,-6);///rayon bille en m
     int rayon_boule_pix=round(Rboule_metrique/m1.Tp_Tomo);///rayon bille en pixel
     Point3D centre_boule(dim3D.x/2,dim3D.x/2,dim3D.x/2,dim3D.x);//bille centrée dans l'image
     double indice=1.430,kappa=0.000;//indice + coef d'extinction
     complex<double> nObj= {indice,kappa},n0= {m1.n0,0.0},Delta_n=nObj-n0;///init propriété bille
-  //  genere_bille(vol_bille,centre_boule, rayon_boule_pix,nObj-n0,dim3D.x);
+genere_bille(vol_bille,centre_boule, rayon_boule_pix,nObj-n0,dim3D.x);
     Point3D coordMin(-25*pow(10,-6),-10*pow(10,-6),-0.31*pow(10,-6),dim3D.x),
             coordMax(25*pow(10,-6),10*pow(10,-6),0.31*pow(10,-6),dim3D.x);
 
@@ -55,15 +55,15 @@ int main( int argc, char** argv )
 
   // coordMin.set_coord3D(-25*pow(10,-6),-10*pow(10,-6),2.31*pow(10,-6));
       //  coordMax.set_coord3D(25*pow(10,-6),10*pow(10,-6),2.61*pow(10,-6));
-    genere_barre(vol_bille,coordMin,coordMax,-0.02, m1);
+  //  genere_barre(vol_bille,coordMin,coordMax,-0.02, m1);
 
    // coordMin.set_coord3D(-25*pow(10,-6),-10*pow(10,-6),3.31*pow(10,-6));
    // coordMax.set_coord3D(25*pow(10,-6),10*pow(10,-6),3.61*pow(10,-6));
   /*  genere_barre(vol_bille,coordMin,coordMax,-0.06, m1);*/
 
 
-    //SAV3D_Tiff((vol_bille),"Re",m1.chemin_result+"barre_Re.tif",m1.Tp_Tomo);
-  //  SAV3D_Tiff((vol_bille),"im",m1.chemin_result+"bille_im.tif",m1.Tp_Tomo);
+    SAV3D_Tiff((vol_bille),"Re",m1.chemin_result+"/bille_Re.tif",m1.Tp_Tomo);
+   // SAV3D_Tiff((vol_bille),"im",m1.chemin_result+"/bille_im.tif",m1.Tp_Tomo);
 
     ///--------------- Données physiques (en µm)----------------------------
     double phase_au_centre=Delta_n.real()*2*Rboule_metrique*2*pi/m1.lambda_v;
@@ -102,7 +102,7 @@ int main( int argc, char** argv )
     //CoordSpec2=mon_OTF.bFleur(nbAxes);//retrieve tabular of specular beam from class OTF & create 3D OTF;
 
    // interp_lin3D(mon_OTF.Valeur);
-    SAV3D_Tiff(mon_OTF.Valeur,"Re",m1.chemin_result+"OTF_simule_Re.tif",m1.Tp_Tomo);
+    SAV3D_Tiff(mon_OTF.Valeur,"Re",m1.chemin_result+"/OTF_simule_Re.tif",m1.Tp_Tomo);
     ///calcul objet convolué
     for(int cpt=0; cpt<pow(m1.dim_final,3); cpt++){
      //SpectreObjConv[cpt]=mon_OTF.Valeur[cpt]*TF_bille[cpt];

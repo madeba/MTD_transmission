@@ -1890,13 +1890,13 @@
 
 1599554069 /home/mat/Dropbox/projet_c/2021/Projet_tomo/Tomo_prog/Gui_Tomo/fonctions.h
 
-1607683484 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Gui_Tomo/Gui_TomoApp.cpp
+1657955878 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Gui_Tomo/Gui_TomoApp.cpp
 	"wx_pch.h"
 	"Gui_TomoApp.h"
 	"Gui_TomoMain.h"
 	<iostream>
 
-1593697758 /home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Gui_Tomo/Gui_TomoApp.h
+1605006437 /home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Gui_Tomo/Gui_TomoApp.h
 	<wx/app.h>
 
 1639478862 /home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Gui_Tomo/Gui_TomoMain.h
@@ -1908,15 +1908,39 @@
 	<wx/frame.h>
 	<vector>
 
-1651751492 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Gui_Tomo/Gui_TomoMain.cpp
+1657960351 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Gui_Tomo/Gui_TomoMain.cpp
 	"Gui_TomoApp.h"
 	"fonctions.h"
 	"wx_pch.h"
 	"Gui_TomoMain.h"
 	<algorithm>
 	<wx/notebook.h>
+	"wx/popupwin.h"
+	"IO_fonctions.h"
 
 1599554069 /home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Gui_Tomo/fonctions.h
 
 1585059103 /usr/lib/x86_64-linux-gnu/wx/include/gtk3-unicode-3.0/wx/setup.h
+
+1585059103 /usr/include/wx-3.0/wx/popupwin.h
+	"wx/defs.h"
+	"wx/nonownedwnd.h"
+	"wx/msw/popupwin.h"
+	"wx/os2/popupwin.h"
+	"wx/gtk/popupwin.h"
+	"wx/gtk1/popupwin.h"
+	"wx/x11/popupwin.h"
+	"wx/motif/popupwin.h"
+	"wx/dfb/popupwin.h"
+	"wx/osx/popupwin.h"
+
+1585059103 /usr/include/wx-3.0/wx/gtk/popupwin.h
+
+1657955291 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Gui_Tomo/src/IO_fonctions.cpp
+	"IO_fonctions.h"
+	<iostream>
+	<sys/stat.h>
+
+1657955332 /home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Gui_Tomo/include/IO_fonctions.h
+	<string>
 

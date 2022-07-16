@@ -107,9 +107,9 @@ unsigned short int cptAngle=0;
                 chargeImageGPU_via_OCV(holoGPU,nomFichierHolo,coin);
 
                // holoGPU=transpose(holoGPU);///to compare with non GPU code using opencv
-                //  af::timer start1=af::timer::start();
+                 // af::timer start1=af::timer::start();
                 holo2TF_UBorn_GPU(holoGPU, TF_UBornTot_GPU,dimROI, dim2DHA, coinHA, NbAngleOk,masqueTukey_GPU,TukeyBorn_cplx_GPU);
-                   // printf("elapsed seconds: %g\n", af::timer::stop(start1));
+                  //  printf("elapsed seconds: %g\n", af::timer::stop(start1));
                   #endif // GPU
                 NbAngleOk++;
             }
@@ -325,7 +325,7 @@ SAV2(param,m1.chemin_result+"/parametres.raw", t_double, "wb");
 {
     cout<<"tabPosSpec.y="<<tabPosSpec[cpt]<<","<<"tabPosSpec.y="<<tabPosSpec[cpt+NbAngle]<<endl;
 }*/
-SAV2(tabPosSpec,m1.chemin_result+"/tab_posSpec.raw",t_double,"wb");///sav speculaire en copord informatique [0->2NXMAX-1]
+SAV2(tabPosSpec,m1.chemin_result+"/tab_posSpec.raw",t_double,"wb");///sav speculaire en coord informatique [0->2NXMAX-1]
 SAV_Tiff2D(centre,m1.chemin_result+"/centres.tif",m1.NA/m1.NXMAX); //exportation des spéculaires en "unité NA"
 cout<<"Fin prétraitement"<<endl;
 return 0;

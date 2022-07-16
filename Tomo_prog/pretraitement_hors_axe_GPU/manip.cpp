@@ -8,7 +8,7 @@ using namespace std;
 manip::manip()
 {
 
-    Var2D dimROI= {WINDOW_X, WINDOW_Y};
+
     cout<<"dans la classe manip"<<endl;
     string home=getenv("HOME");
    // cout<<"HOME="<<home<<endl;
@@ -24,6 +24,7 @@ manip::manip()
     cout<<"chemin config="<<fic_cfg_manip<<endl;
 
     cout<<"\n##################### INFO MANIP ##################\n"<<endl;
+    Var2D dimROI= {extract_val("CCD_ROIX",fic_cfg_manip), extract_val("CCD_ROIX",fic_cfg_manip)};
     n0=extract_val("N0",fic_cfg_manip);	//indice de l'huile
     NA=extract_val("NA",fic_cfg_manip);	/// NA=Numerical aperture of the objective///ouverture numerique de l'objectif? (celle du condenseur intervient sur la forme, la taille, du papillon)
     lambda0=extract_val("LAMBDA",fic_cfg_manip);///lambda0 = laser wavelength
@@ -84,7 +85,7 @@ manip::manip()
 
 
       rayon=round(NXMAX*n0/NA);//calcul du rayon Ewald à partir de la fréquence NXMAX defini pare l'utlisateur
-      double R_Ewald=IMAGE_DIMX*tailleTheoPixelHolo*n0/(lambda0*pow(10,9)); //vraie valeur de R_Ewald.
+      double R_Ewald=dimROI.x*tailleTheoPixelHolo*n0/(lambda0*pow(10,9)); //vraie valeur de R_Ewald.
       double NXMAX_theo=R_Ewald*NA/n0;
     ///-------------enregistrer les paramètres dans un fichier log.--------------------------------------
     string sav_param=chemin_result+"/SAV_param_manip.txt";
@@ -97,7 +98,7 @@ manip::manip()
     cout<<"|---------------------------------|"<<endl;
     cout<<"|    Tp Holo     |     "<<tailleTheoPixelHolo<<" nm      |"<<endl;
     cout<<"|---------------------------------|"<<endl;
-    cout<<"|     Champ      |     "<<round(IMAGE_DIMX*tailleTheoPixelHolo/1000)<<" µm      |"<<endl;
+    cout<<"|     Champ      |     "<<round(dimROI.x*tailleTheoPixelHolo/1000)<<" µm      |"<<endl;
     cout<<"|---------------------------------|"<<endl;
     cout<<"|     R_Ewald    |     "<<round(R_Ewald)<<" pixels |"<<endl;
     cout<<"|---------------------------------|"<<endl;
@@ -118,7 +119,7 @@ manip::manip()
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
     fichier_sav_parametre<<"|    Tp Holo     |     "<<tailleTheoPixelHolo<<" nm      |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
-    fichier_sav_parametre<<"|     Champ      |     "<<round(IMAGE_DIMX*tailleTheoPixelHolo/1000)<<" µm      |"<<endl;
+    fichier_sav_parametre<<"|     Champ      |     "<<round(dimROI.x*tailleTheoPixelHolo/1000)<<" µm      |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
     fichier_sav_parametre<<"|     R_Ewald    |     "<<round(R_Ewald)<<" pixels |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;

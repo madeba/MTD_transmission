@@ -25,6 +25,7 @@ IMPLEMENT_APP(Gui_TomoApp);
 
 bool Gui_TomoApp::OnInit()
 {
+   // wxFont font(wxFontInfo(14).FaceName("segoe ui semilight"));
     Gui_TomoFrame* frame = new Gui_TomoFrame(0L, _("Interface Tomo")) ;
 
     wxSize frame_size(900,560);

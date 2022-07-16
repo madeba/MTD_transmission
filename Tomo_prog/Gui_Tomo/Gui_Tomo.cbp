@@ -44,6 +44,8 @@
 		<Unit filename="Gui_TomoApp.h" />
 		<Unit filename="Gui_TomoMain.cpp" />
 		<Unit filename="Gui_TomoMain.h" />
+		<Unit filename="include/IO_fonctions.h" />
+		<Unit filename="src/IO_fonctions.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
