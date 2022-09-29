@@ -72,6 +72,7 @@ class Gui_TomoFrame: public wxFrame
         int fx0,fy0,nbHolo,nbCirclesAnnular;
         unsigned int  DIM_FINAL=512, NXMAX=110;
         bool b_BORN=0, b_VOLKOV=1, b_DEROUL=1, b_ABER=1, b_EXPORT_OTF=0, b_PC_ACQUIS;
+
        // std::vector<std::string> fichier_tmp;
         std::vector<std::string> tab_val_recon;
         std::vector<std::string> tab_val_manip;

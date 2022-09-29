@@ -26,7 +26,8 @@ manip::manip()
     cout<<"\n##################### INFO MANIP ##################\n"<<endl;
     Var2D dimROI= {extract_val("CCD_ROIX",fic_cfg_manip), extract_val("CCD_ROIX",fic_cfg_manip)};
     n0=extract_val("N0",fic_cfg_manip);	//indice de l'huile
-    NA=extract_val("NA",fic_cfg_manip);	/// NA=Numerical aperture of the objective///ouverture numerique de l'objectif? (celle du condenseur intervient sur la forme, la taille, du papillon)
+    NA_obj=extract_val("NA",fic_cfg_manip);	/// NA=Numerical aperture of the objective///ouverture numerique de l'objectif? (celle du condenseur intervient sur la forme, la taille, du papillon)
+
     lambda0=extract_val("LAMBDA",fic_cfg_manip);///lambda0 = laser wavelength
     f_tube=extract_val("F_TUBE",fic_cfg_manip), ///f_tube = tube lens focal length
     f_obj=extract_val("F_OBJ",fic_cfg_manip),///f_obj=focale objectif
@@ -38,7 +39,7 @@ manip::manip()
     size_t dim_final=extract_val("DIM_FINAL",fic_cfg_recon);
     tailleTheoPixelHolo=TpCam/Gt*pow(10,9);//Pour info, taille des pixels sur un hologramme=Tpcam/GT
     cout<<"taille theorique pixel holo="<<tailleTheoPixelHolo<<endl;
-    theta=asin(NA/n0);
+    theta=asin(NA_obj/n0);
     ///---fréquence porteuse/coordinates of the off-axis career---
     circle_cx=extract_val("CIRCLE_CX",fic_cfg_manip);
     circle_cy=extract_val("CIRCLE_CY",fic_cfg_manip);
@@ -84,9 +85,9 @@ manip::manip()
 
 
 
-      rayon=round(NXMAX*n0/NA);//calcul du rayon Ewald à partir de la fréquence NXMAX defini pare l'utlisateur
+      rayon=round(NXMAX*n0/NA_obj);//calcul du rayon Ewald à partir de la fréquence NXMAX defini pare l'utlisateur
       double R_Ewald=dimROI.x*tailleTheoPixelHolo*n0/(lambda0*pow(10,9)); //vraie valeur de R_Ewald.
-      double NXMAX_theo=R_Ewald*NA/n0;
+      double NXMAX_theo=R_Ewald*NA_obj/n0;
     ///-------------enregistrer les paramètres dans un fichier log.--------------------------------------
     string sav_param=chemin_result+"/SAV_param_manip.txt";
     cout<<sav_param<<endl;
@@ -102,9 +103,9 @@ manip::manip()
     cout<<"|---------------------------------|"<<endl;
     cout<<"|     R_Ewald    |     "<<round(R_Ewald)<<" pixels |"<<endl;
     cout<<"|---------------------------------|"<<endl;
-    cout<<"|     NXMAX_theo |     "<<round(R_Ewald*NA/n0)<<" pixels |"<<endl;
+    cout<<"|     NXMAX_theo |     "<<round(R_Ewald*NA_obj/n0)<<" pixels |"<<endl;
     cout<<"|---------------------------------|"<<endl;
-    cout<<"| Taille chp cplx|     "<<2*round(R_Ewald*NA/n0)<<" pixels |"<<endl;
+    cout<<"| Taille chp cplx|     "<<2*round(R_Ewald*NA_obj/n0)<<" pixels |"<<endl;
     cout<<"|---------------------------------|"<<endl;
     cout<<"|    Tp Chp cplx |     "<<round(tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI.x)<<" nm     |"<<endl;
     cout<<"|---------------------------------|"<<endl;
@@ -123,15 +124,15 @@ manip::manip()
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
     fichier_sav_parametre<<"|     R_Ewald    |     "<<round(R_Ewald)<<" pixels |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
-    fichier_sav_parametre<<"|     NXMAX_theo |     "<<round(R_Ewald*NA/n0)<<" pixels |"<<endl;
+    fichier_sav_parametre<<"|     NXMAX_theo |     "<<round(R_Ewald*NA_obj/n0)<<" pixels |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
-    fichier_sav_parametre<<"| Taille chp cplx|     "<<2*round(R_Ewald*NA/n0)<<" pixels |"<<endl;
+    fichier_sav_parametre<<"| Taille chp cplx|     "<<2*round(R_Ewald*NA_obj/n0)<<" pixels |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
     fichier_sav_parametre<<"|    Tp Chp cplx |     "<<round(tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI.x)<<" nm     |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
     fichier_sav_parametre<<"|    Tp Tomo theo|     "<<(2*NXMAX_theo)/dim_final*tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI.x<<" nm      |"<<endl;
     fichier_sav_parametre<<"+---------------------------------+"<<endl;
-    fichier_sav_parametre<<"NA="<<NA<<endl<<"f_tube="<<f_tube<<endl<<"f_obj="<<f_obj<<endl<<"Rf="<<Rf<<endl;
+    fichier_sav_parametre<<"NA_obj="<<NA_obj<<endl<<"f_tube="<<f_tube<<endl<<"f_obj="<<f_obj<<endl<<"Rf="<<Rf<<endl;
     fichier_sav_parametre<<"\n##################### FIN INFO Reconstruction ##################\n"<<endl;
 
     fichier_sav_parametre.close();

@@ -182,15 +182,19 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     this->init_tab_val(chemin_config_manip,r_tab_val_manip);///
     this->init_tab_val(home+fin_chemin_gui_tomo,r_tab_val_gui_conf);
     // this->init_tab_val(chemin_config_manip_pc_acquis,r_tab_val_manip_pc_acquis);///tableau si on est sur un pc acquisition
-    // Create a top-level panel to hold all the contents of the frame
+
+     bool b_DARK_THEME=stof(extract_string("DARK_THEME",chemin_config_manip),0);
+        ///color bright theme
+        wxColor *backgroundColor = new wxColor(200,200,200);
+       wxColor *panelColor = new wxColor(235,235,220);
+        wxColor *staticTxtColor =  new wxColor(23,42,70);
     ///dark theme
-    wxColor *backgroundColor = new wxColor(5,10,20);
-    wxColor *panelColor = new wxColor(23,42,70);
-    wxColor *staticTxtColor =  new wxColor(200,210,250);
-    ///bright theme
-    /*  wxColor *backgroundColor = new wxColor(200,200,200);
-      wxColor *panelColor = new wxColor(235,235,220);
-      wxColor *staticTxtColor =  new wxColor(23,42,70);*/
+    if(b_DARK_THEME==1){
+     *backgroundColor =  wxColor(5,10,20);
+     *panelColor = wxColor(23,42,70);
+     *staticTxtColor =   wxColor(200,210,250);
+    }
+ // Create a top-level panel to hold all the contents of the frame
     // Créer le widget wxNotebook
     wxNotebook* notebook = new wxNotebook(this, wxID_ANY);//crer un widget notebook dont le aprent est la class een cours
 

@@ -130,6 +130,58 @@ float extract_val(string token,  string chemin_fic)
     fichier.close();
     return valeur;
 }
+
+float extract_val(string token,  string chemin_fic, double defaut)
+{
+    ifstream fichier(chemin_fic.c_str(), ios::in);  // on ouvre en lecture
+    string ligne,motcle,valeurMot,separ=" ";
+    float valeur=0;
+    vector<std::string> tokens;
+
+    if(fichier)  // si l'ouverture a fonctionné
+    {
+        while(!fichier.eof())
+        {
+            getline(fichier,ligne,'\n');//extrait chaque ligne du fichier (séparateur=retour chariot)
+            if(ligne[0]!='#')//si pas ligne de commentaire
+                tokens.push_back(ligne);
+        }
+    }
+    else
+        cerr << "Impossible d'ouvrir le fichier !"<< chemin_fic<< endl;
+
+    int nb_tok=tokens.size();
+    for(int cpt=0; cpt<nb_tok; cpt++)
+    {
+        ligne=tokens[cpt];
+        if(ligne!="")
+        {
+            int pos_separ=ligne.find(separ);
+            int long_separ=separ.length();
+            motcle = ligne.substr(0, pos_separ);//sbstr(pos_debut,pos_fin)
+            if(motcle==token)
+            {
+                valeurMot=ligne.substr(pos_separ+long_separ,ligne.size()-(motcle.size()+long_separ));
+                cout<<motcle<<"="<<valeurMot<<endl;
+                valeur=atof(valeurMot.c_str());
+            }
+        }
+    }
+    if(valeurMot.empty()){
+        cout<<"mot_clé "<<token<<" inexistant dans le fichier "<<chemin_fic<<endl;
+    cout<<"Utlisation valeur par défaut: "<<defaut<<endl;
+    valeur=defaut;
+    }
+    fichier.close();
+    return valeur;
+}
+
+
+
+
+
+
+
 void prepare_wisdom2D(Var2D dim, const char *chemin)
 {
     fftw_plan_with_nthreads(4);
@@ -854,7 +906,7 @@ void retroPropag_Born(vector <complex<double>> &TF3D_PotObj, vector<complex<doub
             for (int fdx = -NMAX.x; fdx < NMAX.x; fdx++)    //on balaye l'image 2D en y, centre au milieu
             {
                 int cpt=(fdy+NMAX.y)*2*NMAX.x+fdx+NMAX.x;//calcul du cpt du tableau 1D de l'image 2D
-                if(fdx*fdx+fdy_carre<NMAX_CARRE)    //ne pas depasser l'ouverture numérique pour 1 hologramme
+                if(fdx*fdx+fdy_carre<m1.coef_NA_obj_limit*NMAX_CARRE)    //ne pas depasser l'ouverture numérique pour 1 hologramme
                 {
                     // cout<<"---------------------"<<endl;
                    //  cout<<"fxm0,fym0="<<fxm0<<","<<fym0<<endl;

@@ -6,7 +6,7 @@
 #include "struct.h"
 class manip {
 public :
-        double NA, Tp;
+        double NA_obj, Tp;
         double n0;
         double rayon;
         double lambda0;

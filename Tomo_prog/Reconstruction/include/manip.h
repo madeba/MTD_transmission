@@ -4,7 +4,8 @@
 #include <cstdlib>
 #include <iostream>
 struct manip {
-        double NA;
+        double NA_obj;
+        double coef_NA_obj_limit;
         double Tp;
         double n0;
         double rayon;

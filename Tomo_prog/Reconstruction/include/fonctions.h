@@ -37,6 +37,7 @@ float   total;
 /* --------------------------------------------------------------------------- */
 std::vector<std::complex<double>> extractSliceZ(std::vector<std::complex<double>> &index3D,std::string axis, size_t z_height);
 float extract_val(std::string token,  std::string chemin_fic);
+float extract_val(std::string token,  std::string chemin_fic, double defaut);
 void interp_lin3D(std::vector <std::complex <double> > &volume_interp_3D);
 //void divCplx(nbCplx* imageA,nbCplx* imageB,nbCplx* resultat, int NbPix);
 //void multiplierCplx(nbCplx* image1,nbCplx* image2,nbCplx* resultat, int NbPix);

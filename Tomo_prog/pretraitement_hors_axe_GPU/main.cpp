@@ -326,7 +326,7 @@ SAV2(param,m1.chemin_result+"/parametres.raw", t_double, "wb");
     cout<<"tabPosSpec.y="<<tabPosSpec[cpt]<<","<<"tabPosSpec.y="<<tabPosSpec[cpt+NbAngle]<<endl;
 }*/
 SAV2(tabPosSpec,m1.chemin_result+"/tab_posSpec.raw",t_double,"wb");///sav speculaire en coord informatique [0->2NXMAX-1]
-SAV_Tiff2D(centre,m1.chemin_result+"/centres.tif",m1.NA/m1.NXMAX); //exportation des spéculaires en "unité NA"
+SAV_Tiff2D(centre,m1.chemin_result+"/centres.tif",m1.NA_obj/m1.NXMAX); //exportation des spéculaires en "unité NA"
 cout<<"Fin prétraitement"<<endl;
 return 0;
 }

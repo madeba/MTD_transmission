@@ -62,6 +62,7 @@ int main()
     cout<< "Taille_octet="<<taille_octet_fic<<endl;
     const unsigned int NbAngle=get_bin_file_size(m1.chemin_result+"/tab_posSpec.raw")/16;//2 coord (x,y)  *8 octet (position saved in double)
     int NXMAX=m1.NXMAX;
+
     Var2D NMAX= {NXMAX,NXMAX},dimChpCplx= {2*NXMAX,2*NXMAX};
     Point2D dim2DUBorn(2*NXMAX,2*NXMAX,2*NXMAX);
     string dimImg=to_string(dimChpCplx.x)+"x"+to_string(dimChpCplx.y)+"x"+to_string(NbAngle);

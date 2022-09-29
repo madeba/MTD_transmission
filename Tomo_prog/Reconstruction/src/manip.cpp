@@ -39,7 +39,8 @@ manip::manip()
     cout<<"dimROIparam="<<dimROI<<endl;
     cout<<"\n##################### INFO MANIP ##################\n"<<endl;
     n0=extract_val("N0",fic_cfg_manip);	//indice de l'huile
-    NA=extract_val("NA",fic_cfg_manip);	//ouverture numerique de l'objectif? (celle du condenseur intervient sur la forme, la taille, du papillon)
+    NA_obj=extract_val("NA",fic_cfg_manip);	//ouverture numerique de l'objectif? (celle du condenseur intervient sur la forme, la taille, du papillon)
+    coef_NA_obj_limit=extract_val("COEF_NA_OBJ_LIMIT",fic_cfg_recon,1);
     lambda0=extract_val("LAMBDA",fic_cfg_manip);
     f_tube=extract_val("F_TUBE",fic_cfg_manip), ///focale lentille tube
     f_obj=extract_val("F_OBJ",fic_cfg_manip),///focale objectif
@@ -51,7 +52,7 @@ manip::manip()
     cout<<"Gt="<<Gt<<endl;
     tailleTheoPixelHolo=TpCam/Gt;//Pour info, taille des pixels sur un hologramme=Tpcam/GT
     cout<<"taille theorique pixel holo="<<tailleTheoPixelHolo*pow(10,9)<<"nm"<<endl;
-    theta=asin(NA/n0);
+    theta=asin(NA_obj/n0);
  //   circle_cx=extract_val("CIRCLE_CX",fic_cfg_manip);
    // circle_cy=extract_val("CIRCLE_CY",fic_cfg_manip);
   //  NXMAX=extract_val("NXMAX",fic_cfg_manip);
@@ -79,9 +80,9 @@ manip::manip()
     b_Export_OTF=extract_val("EXPORT_OTF",fic_cfg_recon);///Exporter OTF ?
     cout<<"\n##########################################################"<<endl;
 
-      rayon=round(NXMAX*n0/NA);//calcul du rayon à partir de la fréquence NXMAX defini pare l'utlisateur
+      rayon=round(NXMAX*n0/NA_obj);//calcul du rayon à partir de la fréquence NXMAX defini pare l'utlisateur
       double R_Ewald=IMAGE_DIMX*tailleTheoPixelHolo*n0/(lambda0); //vraie valeur de R_Ewald.
-      double NXMAX_theo=R_Ewald*NA/n0;
+      double NXMAX_theo=R_Ewald*NA_obj/n0;
     string sav_param=chemin_result+"/SAV_param_manip.txt";
     cout<<sav_param<<endl;
     ofstream fichier_sav_parametre(sav_param);
@@ -100,13 +101,13 @@ manip::manip()
     cout<<"|---------------------------------|"<<endl;
     cout<<"|     R_Ewald    |     "<<round(R_Ewald)<<" pixels |"<<endl;
     cout<<"|---------------------------------|"<<endl;
-    cout<<"|     NXMAX_theo |     "<<round(R_Ewald*NA/n0)<<" pixels |"<<endl;
+    cout<<"|     NXMAX_theo |     "<<round(R_Ewald*NA_obj/n0)<<" pixels |"<<endl;
     cout<<"|---------------------------------|"<<endl;
-    cout<<"| chp UBorn pix  |     "<<2*round(R_Ewald*NA/n0)<<" pixels |"<<endl;
+    cout<<"| chp UBorn pix  |     "<<2*round(R_Ewald*NA_obj/n0)<<" pixels |"<<endl;
     cout<<"|---------------------------------|"<<endl;
     cout<<"|    Tp UBorn    |     "<<(tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI)*pow(10,9)<<" nm     |"<<endl;
     cout<<"|---------------------------------|"<<endl;
-    cout<<"| chp UBorn µm   |     "<<2*round(R_Ewald*NA/n0)*(tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI)*pow(10,6) <<" µm    |"<<endl;
+    cout<<"| chp UBorn µm   |     "<<2*round(R_Ewald*NA_obj/n0)*(tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI)*pow(10,6) <<" µm    |"<<endl;
     cout<<"|---------------------------------|"<<endl;
     cout<<"| Chp tomo pixel |     "<<dim_final<<" pix^3  |" <<endl;
     cout<<"|---------------------------------|"<<endl;
@@ -130,13 +131,13 @@ manip::manip()
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
     fichier_sav_parametre<<"|     R_Ewald    |     "<<round(R_Ewald)<<" pixels |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
-    fichier_sav_parametre<<"|     NXMAX_theo |     "<<round(R_Ewald*NA/n0)<<" pixels |"<<endl;
+    fichier_sav_parametre<<"|     NXMAX_theo |     "<<round(R_Ewald*NA_obj/n0)<<" pixels |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
-    fichier_sav_parametre<<"| chp UBorn pix  |     "<<2*round(R_Ewald*NA/n0)<<" pixels |"<<endl;
+    fichier_sav_parametre<<"| chp UBorn pix  |     "<<2*round(R_Ewald*NA_obj/n0)<<" pixels |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
     fichier_sav_parametre<<"|    Tp UBorn    |     "<<(tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI)*pow(10,9)<<" nm     |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
-    fichier_sav_parametre<<"| chp UBorn µm   |     "<<2*round(R_Ewald*NA/n0)*(tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI)*pow(10,6) <<" µm    |"<<endl;
+    fichier_sav_parametre<<"| chp UBorn µm   |     "<<2*round(R_Ewald*NA_obj/n0)*(tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI)*pow(10,6) <<" µm    |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
     fichier_sav_parametre<<"| Chp tomo pixel |     "<<dim_final<<" pix^3  |" <<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
