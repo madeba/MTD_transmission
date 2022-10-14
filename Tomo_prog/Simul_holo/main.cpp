@@ -3,7 +3,7 @@
 #include <fstream>
 #include <iomanip>  //setprecision
 #include "opencv2/imgproc/imgproc.hpp"
-#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/highgui.hpp"
 #include <stdlib.h>
 #include <stdio.h>
 #include "fonctions.h"
@@ -26,7 +26,7 @@ int main( int argc, char** argv )
     string home=getenv("HOME");
 ///--------------- Chargement ou création de l'objet (bille, spectre etc.)------------
     int dimROI=1024;
-    manip m1(dimROI);//Initialiser la manip avec la taille du champ holographique (acquisition) en pixel
+    manip m1(dimROI);//Initialiser la manip avec la taille du champ holographique (acquisition) en pixel. Attention, cela effacera la valeur du fichier de config !
     Point3D dim3D(m1.dim_final,m1.dim_final,m1.dim_final);
     Point2D dim2D((double)m1.dim_Uborn,(double)m1.dim_Uborn,round(m1.dim_Uborn));
     unsigned int nbPix3D=pow(m1.dim_final,3),nbPix2D=pow(m1.dim_Uborn,2);
@@ -42,10 +42,10 @@ int main( int argc, char** argv )
 
 
     ///Génération de l'objet (bille polystyrène, n=1.5983, absorption=?)
-    double Rboule_metrique=10.4*pow(10,-6);///rayon bille en m
+    double Rboule_metrique=2.5*pow(10,-6);///rayon bille en m
     int rayon_boule_pix=round(Rboule_metrique/m1.Tp_Tomo);///rayon bille en pixel
     Point3D centre_boule(dim3D.x/2,dim3D.x/2,dim3D.x/2,dim3D.x);//bille centrée dans l'image
-    double indice=1.430,kappa=0.000;//indice + coef d'extinction
+    double indice=1.460,kappa=0.000;//indice + coef d'extinction
     complex<double> nObj= {indice,kappa},n0= {m1.n0,0.0},Delta_n=nObj-n0;///init propriété bille
 genere_bille(vol_bille,centre_boule, rayon_boule_pix,nObj-n0,dim3D.x);
     Point3D coordMin(-25*pow(10,-6),-10*pow(10,-6),-0.31*pow(10,-6),dim3D.x),
@@ -84,7 +84,7 @@ genere_bille(vol_bille,centre_boule, rayon_boule_pix,nObj-n0,dim3D.x);
     TF3Dcplx(tf3D.in,tf3D.out,fftshift3D(vol_bille),TF_bille,tf3D.p_forward_OUT,m1.Tp_Tomo);
     vector<complex<double>>().swap(vol_bille);
     TF_bille=fftshift3D(TF_bille);
-    //SAV3D_Tiff(TF_bille,"Re",m1.chemin_result+"TF_bille_Re.tif", m1.Delta_f_tomo*pow(10,-6));
+    SAV3D_Tiff(TF_bille,"Re",m1.chemin_result+"/TF_bille_Re.tif", m1.Delta_f_tomo*pow(10,-6));
 
     Point2D spec_H(0.0,0.0,m1.dim_Uborn);//coordonnées spec2D dans une image de dimension dimUBorn
     const int nbAngle=m1.nbHolo;
@@ -148,13 +148,13 @@ genere_bille(vol_bille,centre_boule, rayon_boule_pix,nObj-n0,dim3D.x);
             amplitudeRytov[cpt]=exp(sqrt(holo[cpt].imag()*holo[cpt].imag()+holo[cpt].real()*holo[cpt].real()));
             amplitudeBorn[cpt]=(sqrt(holo[cpt].imag()*holo[cpt].imag()+holo[cpt].real()*holo[cpt].real()));
             unwrappedPhase[cpt]=holo[cpt].imag();
-          //  phaseWrap[cpt]=wrapPhase(holo[cpt].imag());
+            //phaseWrap[cpt]=wrapPhase(holo[cpt].imag());
         }
         wrappedPhase=wrap_phase(unwrappedPhase);
-        SAV2(fftshift2D(wrappedPhase),m1.chemin_result+"/wrapped_phase_rytov"+m1.dimImg+".raw",t_double,"a+b");
-        SAV2(fftshift2D(unwrappedPhase),m1.chemin_result+"/phase_rytov"+m1.dimImg+".raw",t_double,"a+b");
-        SAV2(fftshift2D(amplitudeRytov),m1.chemin_result+"/amplitude_rytov"+m1.dimImg+".raw",t_double,"a+b");
-        SAV2(fftshift2D(amplitudeBorn),m1.chemin_result+"/amplitude_born"+m1.dimImg+".raw",t_double,"a+b");
+        //SAV2(fftshift2D(wrappedPhase),m1.chemin_result+"/wrapped_phase_rytov"+m1.dimImg+".raw",t_double,"a+b");
+       // SAV2(fftshift2D(unwrappedPhase),m1.chemin_result+"/phase_rytov"+m1.dimImg+".raw",t_double,"a+b");
+       // SAV2(fftshift2D(amplitudeRytov),m1.chemin_result+"/amplitude_rytov"+m1.dimImg+".raw",t_double,"a+b");
+        //SAV2(fftshift2D(amplitudeBorn),m1.chemin_result+"/amplitude_born"+m1.dimImg+".raw",t_double,"a+b");
     }
 
     //sauver les centres sous forme d'image, pour contrôle

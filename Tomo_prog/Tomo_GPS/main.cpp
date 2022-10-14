@@ -13,6 +13,8 @@ int main()
   manip m1;
   ///Init complex refractive index
   vector<float> indice(readTiff3D(m1.chemin_result+"/indice.tif"));  //load refracive index
+
+
   vector<float> absorption(readTiff3D(m1.chemin_result+"/absorption.tif"));//load absorption
   int dim=round(pow(indice.size(),1.0/3.0));
   cout<<"dimension="<<dim<<endl;
@@ -36,7 +38,7 @@ int main()
 
 
 
-  vector<float> OTF3D(readTiff3D(m1.chemin_result+"/OTF3D.tif"));//init complex refractive index
+  vector<float> OTF3D(readTiff3D(m1.chemin_result+"/OTF3D.tif"));//init OTF
 
   cout<<"indice.size()"<<indice.size()<<endl;
   ///measured refractive index
@@ -53,21 +55,26 @@ int main()
   cout<<"dim_final="<<dim_final<<endl;
 //   FFT_encaps tf3D_out(dim3D,m1.nbThreads);
   bool b_inplace=true;
-  FFTW_init tf3D_INP(dim3D,6, b_inplace);
+  FFTW_init tf3D_INP(dim3D,4, true);
 
   ///calculate 'measured' spectrum
   FFT3Dcplx_Inplace(fftshift3D(indiceCplx), SpectreIndiceCplx,tf3D_INP);
   SpectreIndiceCplx=fftshift3D(SpectreIndiceCplx);
 
- // SAV3D_Tiff(SpectreIndiceCplx,"Re",m1.chemin_result+"SpectreIndiceCplxRE.tif",m1.tailleTheoPixelTomo);
-  //SAV3D_Tiff(SpectreIndiceCplx,"Im",m1.chemin_result+"SpectreIndiceCplxIm.tif",m1.tailleTheoPixelTomo);
+  SAV3D_Tiff(SpectreIndiceCplx,"Re",m1.chemin_result+"SpectreIndiceCplxRE.tif",m1.tailleTheoPixelTomo);
+  SAV3D_Tiff(SpectreIndiceCplx,"Im",m1.chemin_result+"SpectreIndiceCplxIm.tif",m1.tailleTheoPixelTomo);
   vector<complex<double>> SpectreIndiceCplx_estim(nbPix3D);//init complex refractive index
   //for(cpt=0;cpt<nbPix3D;cpt++) SpectreIndiceCplx_estim[cpt]=SpectreIndiceCplx[cpt];
 
 
-  cout<<"Itérations"<<endl;
-  unsigned short int num_iter, nb_iter=m1.nbIterGPS;
-  size_t cpt=0;
+    cout<<"Itérations"<<endl;
+    unsigned short int num_iter, nb_iter=m1.nbIterGPS;
+    size_t cpt=0;
+    cout<<"Contraintes : "<<endl;
+    cout<<"delta_nMax="<<m1.delta_nMax<<endl;
+    cout<<"delta_nMin="<<m1.delta_nMin<<endl;
+    cout<<"kappa_Max="<<m1.kappa_Max<<endl;
+    cout<<"kappa_Min="<<m1.kappa_Min<<endl;
 
   for(num_iter=0;num_iter<nb_iter;num_iter++){
     auto start_part2= std::chrono::system_clock::now();
@@ -106,9 +113,9 @@ int main()
         if(indiceCplx[cpt].imag()<m1.kappa_Min) indiceCplx[cpt].imag(m1.kappa_Min);//imposer la valeur MIN de coefficient d'extinction
             else if(indiceCplx[cpt].imag()>m1.kappa_Max) indiceCplx[cpt].imag(m1.kappa_Max);//imposer la valeur MAX de coefficient d'extinction
         }
-cout<<"m1.tailleTheopixelTomo"<<m1.tailleTheoPixelTomo<<endl;
-SAV3D_Tiff(SpectreIndiceCplx_estim,"Re",m1.chemin_result+"spectre_RE_GPS.tif",m1.tailleTheoPixelTomo*pow(10,-5));
-SAV3D_Tiff(indiceCplx,"Re",m1.chemin_result+"indiceGPS.tif",m1.tailleTheoPixelTomo*pow(10,-5));
-SAV3D_Tiff(indiceCplx,"Im",m1.chemin_result+"absorptionGPS.tif",m1.tailleTheoPixelTomo*pow(10,-5));
-
+cout<<"m1.tailleTheopixelTomo="<<m1.tailleTheoPixelTomo<<endl;
+SAV3D_Tiff(SpectreIndiceCplx_estim,"Re",m1.chemin_result+"/"+"spectre_RE_GPS.tif",m1.tailleTheoPixelTomo*pow(10,-5));
+SAV3D_Tiff(indiceCplx,"Re",m1.chemin_result+"/"+"indiceGPS.tif",m1.tailleTheoPixelTomo*pow(10,-5));
+SAV3D_Tiff(indiceCplx, "Im",m1.chemin_result+"/"+"/absorptionGPS.tif",m1.tailleTheoPixelTomo*pow(10,-5));
+cout<<"images saved in "<<m1.chemin_result<<endl;
 }

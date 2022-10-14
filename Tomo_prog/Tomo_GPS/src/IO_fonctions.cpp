@@ -403,6 +403,7 @@ void SAV3D_Tiff(vector<complex <double>> const &var_sav, string partie, string c
     int x, y;
     float buffer2D[dim * dim];
     out = TIFFOpen(chemin.c_str(), "w");
+    cout<<"saving "<<out<<endl;
     if (!out)
             fprintf (stderr, "Can't open  for writing\n");
 

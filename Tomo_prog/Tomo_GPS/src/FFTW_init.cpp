@@ -21,33 +21,43 @@ using namespace std;
 
 }*/
 
-
+///1)outplace 2a) inplace and wisdow if dim==512 2b) inplace and measure if dim!=512
 FFTW_init::FFTW_init(Point3D dim,size_t nbThreads, bool b_inPlace)
 {
+    cout<<"init fftw with dim="<<dim.x<<endl;
     unsigned int nbPix=dim.x*dim.y*dim.z;
     m_Nthread=nbThreads;
 
     fftwThreadInit=fftw_init_threads();
     fftw_plan_with_nthreads(m_Nthread);
-    if(b_inPlace==0){//si pas inpolace, alors estimate
+    if(b_inPlace==0){//si pas inplace, alors estimate
     in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
     out=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
     p_forward_OUT=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, out,FFTW_FORWARD, FFTW_ESTIMATE);
     p_backward_OUT=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, out,FFTW_BACKWARD, FFTW_ESTIMATE );
     }
     else{
-  //  int isWisdomOK=import_wisdom("/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_config/Wisdom/wisdom3D_512_c2c_double_backward_EXHAUSTIVE_inplace_4Thrd_i5-3550.txt");
-   cout<<"### Attention : wisdom calculée en 512^3###"<<endl;
-   int isWisdomOK=import_wisdom("wisdom3d_512_c2c_dbl_back_EXHAUSTIVE_inplace_6Thrd_Ryzen3600x.txt");
-    cout<<"isWisdomOk="<<isWisdomOK<<endl;
-    cout<<"chemin wisdom="<<"wisdom3d_512_c2c_dbl_back_EXHAUSTIVE_inplace_6Thrd_Ryzen3600x.txt"<<endl;
-    in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
-    out=nullptr;
-    p_forward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_FORWARD, FFTW_MEASURE);///problème, wisdom calculée en backward !!->MEASURE! possiblité d'avoir 2 wisdom ?
-    //p_backward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_BACKWARD, FFTW_MEASURE);
-    p_backward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_BACKWARD, FFTW_WISDOM_ONLY);
-   // p_forward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_FORWARD, FFTW_ESTIMATE);///problème, wisdom calculée en backward !!
-   // p_backward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_BACKWARD, FFTW_ESTIMATE);
+        if(dim.x==512){
+      //  int isWisdomOK=import_wisdom("/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_config/Wisdom/wisdom3D_512_c2c_double_backward_EXHAUSTIVE_inplace_4Thrd_i5-3550.txt");
+       cout<<"### Attention : wisdom calculée en 512^3###"<<endl;
+       int isWisdomOK=import_wisdom("wisdom3d_512_c2c_dbl_back_EXHAUSTIVE_inplace_6Thrd_Ryzen3600x.txt");
+        cout<<"isWisdomOk="<<isWisdomOK<<endl;
+        cout<<"chemin wisdom="<<"wisdom3d_512_c2c_dbl_back_EXHAUSTIVE_inplace_6Thrd_Ryzen3600x.txt"<<endl;
+        in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
+        out=nullptr;
+        p_forward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_FORWARD, FFTW_MEASURE);///problème, wisdom calculée en backward !!->MEASURE! possiblité d'avoir 2 wisdom ?
+        p_backward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_BACKWARD, FFTW_MEASURE);
+        //p_backward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_BACKWARD, FFTW_WISDOM_ONLY);///WISDOMW_ONLYias planter le code une fois sur 2
+        //p_forward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_FORWARD, FFTW_ESTIMATE);///problème, wisdom calculée en backward !!
+       // p_backward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_BACKWARD, FFTW_ESTIMATE);
+        }
+        else{
+            cout<<"dimension != 512 : using FFT_MEASURE"<<endl;
+            in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
+            out=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
+            p_forward_OUT=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, out,FFTW_FORWARD, FFTW_ESTIMATE);
+            p_backward_OUT=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, out,FFTW_BACKWARD, FFTW_ESTIMATE);
+        }
     }
 }
 ///init3D fftw inplace
@@ -59,7 +69,7 @@ FFTW_init::FFTW_init(Point3D dim,size_t nbThread,bool b_inplace, unsigned int pl
 
     fftwThreadInit=fftw_init_threads();
     fftw_plan_with_nthreads(m_Nthread);
-    if(b_inplace=1){
+    if(b_inplace==1){
     in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
 
     p_forward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in, FFTW_FORWARD, plan_type );
@@ -82,7 +92,7 @@ FFTW_init::FFTW_init(vector<double> const &entree,size_t nbThread,bool b_inplace
 
     fftwThreadInit=fftw_init_threads();
     fftw_plan_with_nthreads(m_Nthread);
-    if(b_inplace=1){
+    if(b_inplace==1){
     in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
 
     p_forward_IN=fftw_plan_dft_3d(dim, dim, dim, in, in, FFTW_FORWARD, plan_type );

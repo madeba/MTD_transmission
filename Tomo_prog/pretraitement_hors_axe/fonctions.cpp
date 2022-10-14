@@ -345,10 +345,22 @@ void calc_Uborn2(vector<complex<double>> const &TF_UBorn,vector<complex<double>>
 
     vector<complex<double>> TF_UBorn_I(NbPixUBorn);
 
+    //save shifted image (with fringes)
+    /*   {
+    vector<complex<double>> UBorn_I2(NbPixUBorn);
+    TF2Dcplx_INV(fftshift2D((TF_UBorn)), UBorn_I2, param_c2c);
+
+   // decal2DCplxGen2(UBorn_I,UBorn_I2,DecalU_Born);
+    SAVCplx(fftshift2D(UBorn_I2),"Re","/home/mat/tomo_test/Uborn_decal.raw",t_float,"a+b");
+    }*/
+
+
     decal2DCplxGen2(TF_UBorn,TF_UBorn_I,recalUBorn);
 
     vector<complex<double>> UBorn_I(NbPixUBorn);
     TF2Dcplx_INV(TF_UBorn_I, UBorn_I, param_c2c);
+
+//SAVCplx(fftshift2D(UBorn_I),"Re","/home/mat/tomo_test/Uborn_I.raw",t_float,"a+b");
 
     decal2DCplxGen2(UBorn_I,UBorn,DecalU_Born);
 

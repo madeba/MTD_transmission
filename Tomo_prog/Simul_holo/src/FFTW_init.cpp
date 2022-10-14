@@ -28,7 +28,7 @@ FFTW_init::FFTW_init(Point2D dim)
 }
 
 ///init3D fftw /outinplace, nb_threads, fftw_measure/fftw_wisdom
-FFTW_init::FFTW_init(Point3D dim,size_t nbThread,bool b_inplace, unsigned int plan_type)
+FFTW_init::FFTW_init(Point3D dim, size_t nbThread, bool b_inplace, unsigned int plan_type)
 {
     unsigned int nbPix=dim.x*dim.y*dim.z;
 
