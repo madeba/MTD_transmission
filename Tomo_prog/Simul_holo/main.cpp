@@ -109,6 +109,7 @@ genere_bille(vol_bille,centre_boule, rayon_boule_pix,nObj-n0,dim3D.x);
      SpectreObjConv[cpt].real(mon_OTF.Valeur[cpt].real()*TF_bille[cpt].real());
      SpectreObjConv[cpt].imag(mon_OTF.Valeur[cpt].imag()*TF_bille[cpt].imag());
     }
+
     vector<complex<double>>().swap(mon_OTF.Valeur);
     TF3Dcplx_INV(tf3D.in,tf3D.out,fftshift3D(SpectreObjConv),obj_conv,tf3D.p_forward_OUT,m1.Delta_f_tomo);
     vector<complex<double>>().swap(SpectreObjConv);
