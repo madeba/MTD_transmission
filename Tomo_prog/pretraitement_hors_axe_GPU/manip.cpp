@@ -24,7 +24,9 @@ manip::manip()
     cout<<"chemin config="<<fic_cfg_manip<<endl;
 
     cout<<"\n##################### INFO MANIP ##################\n"<<endl;
-    Var2D dimROI= {extract_val("CCD_ROIX",fic_cfg_manip), extract_val("CCD_ROIX",fic_cfg_manip)};
+    //Var2D dimROI= {extract_val("CCD_ROIX",fic_cfg_manip), extract_val("CCD_ROIX",fic_cfg_manip)};
+    Var2D dimROI= {extract_val("DIM_ROI",fic_cfg_manip), extract_val("DIM_ROI",fic_cfg_manip)};
+    cout<<"CCD_ROIX======="<<dimROI.x<<endl;
     n0=extract_val("N0",fic_cfg_manip);	//indice de l'huile
     NA_obj=extract_val("NA",fic_cfg_manip);	/// NA=Numerical aperture of the objective///ouverture numerique de l'objectif? (celle du condenseur intervient sur la forme, la taille, du papillon)
 
@@ -118,7 +120,7 @@ manip::manip()
     fichier_sav_parametre<<"+----------------+----------------+"<<endl;
     fichier_sav_parametre<<"|    Grandeur    |    Valeur      |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
-    fichier_sav_parametre<<"|    Tp Holo     |     "<<tailleTheoPixelHolo<<" nm      |"<<endl;
+    fichier_sav_parametre<<"|    Tp Holo     |     "<<tailleTheoPixelHolo<<" nm    |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
     fichier_sav_parametre<<"|     Champ      |     "<<round(dimROI.x*tailleTheoPixelHolo/1000)<<" µm      |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
@@ -132,9 +134,9 @@ manip::manip()
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
     fichier_sav_parametre<<"|    Tp Tomo theo|     "<<(2*NXMAX_theo)/dim_final*tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI.x<<" nm      |"<<endl;
     fichier_sav_parametre<<"+---------------------------------+"<<endl;
-    fichier_sav_parametre<<"NA_obj="<<NA_obj<<endl<<"f_tube="<<f_tube<<endl<<"f_obj="<<f_obj<<endl<<"Rf="<<Rf<<endl;
+    fichier_sav_parametre<<"NbAngle="<<NbAngle<<endl;
+    fichier_sav_parametre<<"NA_obj="<<NA_obj<<endl<<"f_tube="<<f_tube<<endl<<"f_obj="<<f_obj<<endl<<"Rf="<<Rf<<endl<<"Gt="<<Gt<<endl<<"Tp Camera="<<TpCam<<endl;
     fichier_sav_parametre<<"\n##################### FIN INFO Reconstruction ##################\n"<<endl;
-
     fichier_sav_parametre.close();
 
 

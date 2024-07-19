@@ -24,12 +24,13 @@ void delete_file(string file_path){
 std::vector<double> wrap_phase(std::vector<double> &unwrapped_phase){
     vector<double> wrapped_phase(unwrapped_phase.size());
     for(size_t cpt=0;cpt<unwrapped_phase.size();cpt++){
-            if(unwrapped_phase[cpt]<2*M_PI){
+            if(abs(unwrapped_phase[cpt])<2*M_PI){
                 wrapped_phase[cpt]=unwrapped_phase[cpt];
             }
             else{
                 int k=floor(unwrapped_phase[cpt]/(2*M_PI));
                 wrapped_phase[cpt]=unwrapped_phase[cpt]-k*2*M_PI;
+                cout<<"k="<<k<<endl;
             }
     }
     return wrapped_phase;
@@ -802,6 +803,46 @@ float extract_val(string token,  string chemin_fic)
     return valeur;
 }
 
+float extract_val(string token,  string chemin_fic, double defaut)
+{
+    ifstream fichier(chemin_fic.c_str(), ios::in);  // on ouvre en lecture
+    string ligne,motcle,valeurMot,separ=" ";
+    float valeur=0;
+    vector<std::string> tokens;
+
+    if(fichier)  // si l'ouverture a fonctionné
+    {
+        while(!fichier.eof()){
+            getline(fichier,ligne,'\n');//extrait chaque ligne du fichier (séparateur=retour chariot)
+            if(ligne[0]!='#')//si pas ligne de commentaire
+            tokens.push_back(ligne);
+        }
+    }
+    else
+        cerr << "Impossible d'ouvrir le fichier !"<< chemin_fic<< endl;
+
+    int nb_tok=tokens.size();
+    for(int cpt=0;cpt<nb_tok;cpt++){
+        ligne=tokens[cpt];
+        if(ligne!=""){
+            int pos_separ=ligne.find(separ);
+            int long_separ=separ.length();
+            motcle = ligne.substr(0, pos_separ);//sbstr(pos_debut,pos_fin)
+            if(motcle==token){
+            valeurMot=ligne.substr(pos_separ+long_separ,ligne.size()-(motcle.size()+long_separ));
+            cout<<motcle<<"="<<valeurMot<<endl;
+            valeur=atof(valeurMot.c_str());
+            }
+        }
+    }
+    if(valeurMot.empty()){
+    cout<<"mot_clé "<<token<<" inexistant dans le fichier "<<chemin_fic<<endl;
+    cout<<"Utilisation valeur par défaut "<<token<<"="<<defaut<<endl;
+    valeur=defaut;
+    }
+    fichier.close();
+    return valeur;
+}
 
 //convolution par une sphere d'Ewald de centre spec
 void Conv_Ewald(Point2D spec,std::vector<std::complex<double>> TF_vol3D,std::vector<std::complex<double>> &TF_conv3D, manip m1)

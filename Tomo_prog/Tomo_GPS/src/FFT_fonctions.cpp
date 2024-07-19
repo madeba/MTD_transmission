@@ -309,7 +309,9 @@ void FFT3Dcplx_Inplace(vector<complex<double>> const & entree, vector<complex<do
         param_Inplace_c2c.in[cpt][0]=entree[cpt].real();
         param_Inplace_c2c.in[cpt][1]=entree[cpt].imag();
     }
+
     fftw_execute(param_Inplace_c2c.p_forward_IN);
+
     for(cpt=0; cpt<(nbPix); cpt++) {
         sortie[cpt].real(param_Inplace_c2c.in[cpt][0]/nbPix);
         sortie[cpt].imag(param_Inplace_c2c.in[cpt][1]/nbPix);

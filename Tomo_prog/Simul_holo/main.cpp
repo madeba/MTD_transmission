@@ -1,3 +1,4 @@
+//######Generate a 3D complex object (bead or box), calculate its spectrum and extract hologram thanks to Ewald sphere.######//
 #include <iostream>
 #include <cmath>
 #include <fstream>
@@ -42,12 +43,12 @@ int main( int argc, char** argv )
 
 
     ///Génération de l'objet (bille polystyrène, n=1.5983, absorption=?)
-    double Rboule_metrique=2.5*pow(10,-6);///rayon bille en m
+    double Rboule_metrique=5*pow(10,-6);///rayon bille en m
     int rayon_boule_pix=round(Rboule_metrique/m1.Tp_Tomo);///rayon bille en pixel
     Point3D centre_boule(dim3D.x/2,dim3D.x/2,dim3D.x/2,dim3D.x);//bille centrée dans l'image
-    double indice=1.460,kappa=0.000;//indice + coef d'extinction
+    double indice=1.40,kappa=0.000;//indice + coef d'extinction
     complex<double> nObj= {indice,kappa},n0= {m1.n0,0.0},Delta_n=nObj-n0;///init propriété bille
-genere_bille(vol_bille,centre_boule, rayon_boule_pix,nObj-n0,dim3D.x);
+    genere_bille(vol_bille,centre_boule, rayon_boule_pix,nObj-n0,dim3D.x);
     Point3D coordMin(-25*pow(10,-6),-10*pow(10,-6),-0.31*pow(10,-6),dim3D.x),
             coordMax(25*pow(10,-6),10*pow(10,-6),0.31*pow(10,-6),dim3D.x);
 
@@ -151,9 +152,11 @@ genere_bille(vol_bille,centre_boule, rayon_boule_pix,nObj-n0,dim3D.x);
             unwrappedPhase[cpt]=holo[cpt].imag();
             //phaseWrap[cpt]=wrapPhase(holo[cpt].imag());
         }
-        wrappedPhase=wrap_phase(unwrappedPhase);
-        //SAV2(fftshift2D(wrappedPhase),m1.chemin_result+"/wrapped_phase_rytov"+m1.dimImg+".raw",t_double,"a+b");
-       // SAV2(fftshift2D(unwrappedPhase),m1.chemin_result+"/phase_rytov"+m1.dimImg+".raw",t_double,"a+b");
+        //wrappedPhase=wrap_phase(unwrappedPhase);
+
+        SAV2(fftshift2D(wrappedPhase),m1.chemin_result+"/wrapped_phase_rytov"+m1.dimImg+".raw",t_double,"a+b");
+
+        SAV2(fftshift2D(unwrappedPhase),m1.chemin_result+"/phase_rytov"+m1.dimImg+".raw",t_double,"a+b");
        // SAV2(fftshift2D(amplitudeRytov),m1.chemin_result+"/amplitude_rytov"+m1.dimImg+".raw",t_double,"a+b");
         //SAV2(fftshift2D(amplitudeBorn),m1.chemin_result+"/amplitude_born"+m1.dimImg+".raw",t_double,"a+b");
     }
@@ -163,9 +166,10 @@ genere_bille(vol_bille,centre_boule, rayon_boule_pix,nObj-n0,dim3D.x);
     //repasser les spéculaires en coordonnées informatique (car attendu par tomo_reconstruction)
     vector<double> tabPosSpec_I(m1.nbHolo*2);  ///nbHolo*2 coordonnées. stockage des speculaires pour exportation vers reconstruction
     for(int holo_numero=0;holo_numero<m1.nbHolo;holo_numero++){
-        tabPosSpec_I[holo_numero]=CoordSpec_H[holo_numero].x+m1.dim_Uborn/2; //save tab_posSpec to a format readable by Tomo_reconstruction (computer )
-        tabPosSpec_I[holo_numero+m1.nbHolo]=-CoordSpec_H[holo_numero].y+m1.dim_Uborn/2;
+        tabPosSpec_I[holo_numero]=CoordSpec_H[holo_numero].x+m1.dim_Uborn/2; //save tab_posSpec_X to a format readable by Tomo_reconstruction (computer )
+        tabPosSpec_I[holo_numero+m1.nbHolo]=-CoordSpec_H[holo_numero].y+m1.dim_Uborn/2; //tab_posSpec_Y
     }
+    cout<<"Résultats écrits dans "<<m1.chemin_result<<endl;
     ///donnée utiles à la reconstruction
     SAV2(tabPosSpec_I,m1.chemin_result+"/tab_posSpec.raw",t_double,"wb");
     vector<double> param{m1.NXMAX,m1.nbHolo,m1.R_EwaldPix,dimROI,m1.Tp_holo};//devenu inutile avec fichier de config

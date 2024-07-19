@@ -162,6 +162,7 @@ void compuBackgr2(Mat const &coefficients, Mat const & polynome_to_fit, Mat &Pol
             PolyBackgr.at<double>(y,x) = sum;//poly2DEval2(coefficients, polynome_to_fit, UsCoord1D);///calculate the numerical value of the poly for one  (x,y)
             Coord1D++;
         }
+
 }
 ///--------------------//Top functions used in main containing the algorithm for phase and amplitude------------------------------------------------------------------------------
 Mat  aberCorr2(Mat const &image, Mat const &mask,  Mat const &polynomeUs_to_fit, Mat const &polynome_to_fit)
@@ -172,6 +173,7 @@ Mat  aberCorr2(Mat const &image, Mat const &mask,  Mat const &polynomeUs_to_fit,
     compuBackgr2(coefsolve, polynome_to_fit, resultatpolyBG);/// Compute the background image with the coef of polynomial
 
     result_final = image-resultatpolyBG;
+      //SAV2(resultatpolyBG, "/home/mat/tomo_test/poly_aber.raw", t_float, "a+b");
     return result_final;
 }
 Mat  ampliCorr2(Mat const & image,  Mat const &polynomeUs_to_fit, Mat const &polynome_to_fit, Mat mask)
@@ -180,6 +182,7 @@ Mat  ampliCorr2(Mat const & image,  Mat const &polynomeUs_to_fit, Mat const &pol
     compuCoefPoly2(image, mask, coefsolve, polynomeUs_to_fit, true); /// Compute the coef of polynomial (Least Squares method)
     Mat resultatpoly(image.rows, image.cols, CV_64F), result(image.rows, image.cols, CV_64F);
     compuBackgr2(coefsolve, polynome_to_fit,  resultatpoly);/// Compute the background image with the coef of polynomial
+
     result = image/(resultatpoly+0.00000001);
     return result;
 }

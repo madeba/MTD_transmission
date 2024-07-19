@@ -36,6 +36,7 @@
 			<Add option="-lstdc++ -std=c++11 -static `wx-config --cppflags`" />
 			<Add directory="/usr/include/wx-3.0" />
 			<Add directory="/usr/lib/x86_64-linux-gnu/wx/include/base-unicode-3.0" />
+			<Add directory="include" />
 		</Compiler>
 		<Linker>
 			<Add option="`wx-config --libs` -L/usr/lib/x86_64-linux-gnu/" />

@@ -126,9 +126,9 @@ unsigned short int cptAngle=0;
       //  SAV3D_Tiff(TF_UBornTot,"Re",chemin_result+"/TF_Uborn_Tot_GPU_250x250x599x64.raw",1);
       // SAVCplx(TF_UBornTot,"Re",chemin_result+"/TF_Uborn_Tot_RE_GPU_250x250x599x64.raw",t_float,"wb");
        // SAVCplx(TF_UBornTot,"Im",chemin_result+"/TF_Uborn_Tot_Im_GPU_250x250x599x64.raw",t_float,"wb");
-      //  auto end_decoupeHA = std::chrono::system_clock::now();
-      //  auto elapsed = end_decoupeHA - start_decoupeHA;
-       // std::cout <<"Temps pour FFT holo+découpe Spectre= "<< elapsed.count()/(pow(10,9)) << '\n';
+        auto end_decoupeHA = std::chrono::system_clock::now();
+        auto elapsed = end_decoupeHA - start_decoupeHA;
+        std::cout <<"Temps pour FFT holo+découpe Spectre= "<< elapsed.count()/(pow(10,9)) << '\n';
    }
       catch (af::exception& e)
     {
@@ -158,7 +158,7 @@ auto end_init_var = std::chrono::system_clock::now();
 Mat src=Mat(1, ampli_ref.size(), CV_64F, ampli_ref.data()), mask_aber=init_mask_aber(Chemin_mask,chemin_acquis,dim2DHA);
 
 
-size_t NbPtOk=countM(mask_aber),  degre_poly=3, nbCoef = sizePoly2D(degre_poly);//Nb coef poly
+size_t NbPtOk=countM(mask_aber),  degre_poly=4, nbCoef = sizePoly2D(degre_poly);//Nb coef poly
 Mat polynomeUs_to_fit(Size(nbCoef,NbPtOk), CV_64F);///(undersampled) Polynome to fit= function to fit (We use a polynome). we have to generate a table containing polynome_to_fit=[1,x,x^2,xy,y^2] for each coordinate (x,y)
 Mat polynome_to_fit(Size(nbCoef,dim2DHA.x*dim2DHA.y), CV_64F);
 
@@ -211,7 +211,7 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
             //  SAVCplx(UBorn,"Re",chemin_result+"/ampli_UBorn_debut_extract.raw",t_float,"a+b");
             ///----------Calcul phase + deroulement--------------------------------
             calcPhase_mpi_pi_atan2(UBorn,phase_2Pi_vec); ///fonction atan2
-            //  SAV2(phase_2Pi_vec,chemin_result+"/phasePI_atan2.raw",t_float,"a+b");
+              SAV2(phase_2Pi_vec,chemin_result+"/phasePI_atan2.raw",t_float,"a+b");
             //phase2pi(UBorn, dim2DHA,phase2Pi);//asin
             if(m1.b_Deroul==true)
             {
@@ -226,13 +226,19 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
                    /// auto start_volkov = std::chrono::system_clock::now();
                     // deroul_volkov2(phase_2Pi_vec,UnwrappedPhase, param_fftw2D_c2r_HA,param_fftw2D_r2c_HA);    //  auto end_calcAber = std::chrono::system_clock::now();
                     //deroul_volkov3(phase_2Pi_vec,UnwrappedPhase, kvect_shift, param_fftw2D_c2r_HA);
-                    phase_2Pi_vec_GPU=af::array(dim2DHA.x,dim2DHA.y,phase_2Pi_vec.data());
+
                     //  SAV_Tiff2D(kvect_shiftX_GPU,"/home/mat/tomo_test/kvect_shift_X_GPU.tif",1);
-                    deroul_volkov3_GPU2(phase_2Pi_vec_GPU,UnwrappedPhase_GPU,kvect_shiftX_GPU,kvect_shiftY_GPU);
-                    //    SAV_Tiff2D(UnwrappedPhase_GPU,"/home/mat/tomo_test/Unwrapped_GPU.tif",1);
-                    UnwrappedPhase_GPU.host(UnwrappedPhase.data());
-                    //  SAV2(UnwrappedPhase,"/home/mat/UnWrapped_GPU.bin",t_float,"a+b");
+                    ///deroulement GPU mais volkov sans symétrie---------------
+                    phase_2Pi_vec_GPU=af::array(dim2DHA.x,dim2DHA.y,phase_2Pi_vec.data());
+                    //deroul_volkov3_GPU2(phase_2Pi_vec_GPU,UnwrappedPhase_GPU,kvect_shiftX_GPU,kvect_shiftY_GPU);
+                    //  UnwrappedPhase_GPU.host(UnwrappedPhase.data());
+                          //    SAV_Tiff2D(UnwrappedPhase_GPU,"/home/mat/tomo_test/Unwrapped_GPU.tif",1);
+                    ///fin_deroulement GPU-----------------
                     //deroul_volkov4_AS(phase_2Pi_vec,UnwrappedPhase, kvect_shift, param_fftw2D_c2r_HA);//antisymétrie avant intégration
+
+                     // SAV2(UnwrappedPhase,"/home/mat/tomo_test/UnWrapped_phase_GPU.raw",t_float,"a+b");
+                    //deroul_volkov4_AS(phase_2Pi_vec,UnwrappedPhase, kvect_shift, param_fftw2D_c2r_HA);//antisymétrie avant intégration
+                    deroul_volkov4_total_sym_mix(phase_2Pi_vec,UnwrappedPhase);
                     //deroul_volkov4(phase_2Pi_vec,UnwrappedPhase, kvect_shift, param_fftw2D_c2r_HA);
                   ///  auto end_volkov = std::chrono::system_clock::now();
                   ///  auto elapsed_volkov = end_volkov - start_volkov;
@@ -245,13 +251,13 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
             //auto start_aber = std::chrono::system_clock::now();
             //-------------Correction aberration phase-------------------------------
             src=Mat(dim2DHA.x,dim2DHA.y,CV_64F, UnwrappedPhase.data());
-            // auto start_calcAber = std::chrono::system_clock::now();
+           //  auto start_calcAber = std::chrono::system_clock::now();
             Mat Phase_corr(aberCorr2(src, mask_aber,polynomeUs_to_fit,polynome_to_fit));
             //  auto end_calcAber = std::chrono::system_clock::now();
-            //auto elapsed = end_calcAber - start_calcAber;
-            //std::cout <<"Temps pour FFT holo+découpe Spectre= "<< elapsed.count()/(pow(10,9)) << '\n';
+          //  auto elapsed = end_calcAber - start_calcAber;
+           // std::cout <<"Temps pour FFT holo+découpe Spectre= "<< elapsed.count()/(pow(10,9)) << '\n';
 
-            // SAV2((double*)Phase_corr.data,Phase_corr.rows*Phase_corr.cols,"/home/mat/tmp/phaseCorr_main.raw",t_float,"a+b");
+             SAV2((double*)Phase_corr.data,Phase_corr.rows*Phase_corr.cols,"/home/mat/tomo_test/phaseCorr_main.raw",t_float,"a+b");
             ///---------------Correction amplitude----------------------------------------
             for(size_t cpt=0; cpt<(NbPixUBorn); cpt++)
                 UBornAmp[cpt]=abs(UBorn[cpt]);
@@ -308,7 +314,6 @@ int flag=0;
 
     SAVCplx(UBorn,"Re", chemin_result+"/UBornfinal_Re"+m1.dimImg+".raw", t_double, "a+b");
     SAVCplx(UBorn,"Im", chemin_result+"/UBornfinal_Im"+m1.dimImg+".raw", t_double, "a+b");
-
   }
 }//fin de boucle for sur tous les angles
 SAV2(UBornAmpFinal,chemin_result+"/UBornAmpFinal.raw",t_float,"a+b");

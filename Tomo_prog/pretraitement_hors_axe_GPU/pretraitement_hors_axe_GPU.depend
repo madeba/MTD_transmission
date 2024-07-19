@@ -2375,7 +2375,7 @@
 	"Correction_aberration.h"
 	"FFT_fonctions.h"
 
-1638286211 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/Correction_aberration.cpp
+1710758621 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/Correction_aberration.cpp
 	<iostream>
 	<fstream>
 	<sstream>
@@ -2435,8 +2435,10 @@
 
 1652449365 /home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/projet.h
 
-1651830507 /home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/include/IO_fonctions.h
+1684788562 /home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/include/IO_fonctions.h
 	"FFTW_init.h"
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
 	<vector>
 	<complex>
 	<tiffio.h>
@@ -2480,7 +2482,7 @@
 	"fonctions.h"
 	"omp.h"
 
-1660829376 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/manip.cpp
+1675436723 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/manip.cpp
 	"manip.h"
 	<iostream>
 	"fonctions.h"
@@ -2522,7 +2524,7 @@
 	"vecteur.h"
 	"FFTW_init.h"
 
-1651838612 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/src/deroulement_volkov4.cpp
+1710758609 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/src/deroulement_volkov4.cpp
 	<vector>
 	<complex>
 	"fonctions.h"
@@ -2542,7 +2544,7 @@
 	"FFTW_init.h"
 	"struct.h"
 
-1651839232 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/src/IO_fonctions.cpp
+1684788511 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/src/IO_fonctions.cpp
 	"IO_fonctions.h"
 	<opencv2/core/core.hpp>
 	<opencv2/highgui/highgui.hpp>
@@ -2571,7 +2573,7 @@
 	"fonctions.h"
 	"IO_fonctions.h"
 
-1660829385 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/main.cpp
+1715089933 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/main.cpp
 	<iostream>
 	<vector>
 	"struct.h"

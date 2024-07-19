@@ -183,7 +183,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     this->init_tab_val(home+fin_chemin_gui_tomo,r_tab_val_gui_conf);
     // this->init_tab_val(chemin_config_manip_pc_acquis,r_tab_val_manip_pc_acquis);///tableau si on est sur un pc acquisition
 
-     bool b_DARK_THEME=stof(extract_string("DARK_THEME",chemin_config_manip),0);
+     bool b_DARK_THEME=stof(extract_string("DARK_THEME",home+fin_chemin_gui_tomo,"1"));
         ///color bright theme
         wxColor *backgroundColor = new wxColor(200,200,200);
        wxColor *panelColor = new wxColor(235,235,220);
@@ -411,7 +411,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     /// Dialog fichier;
     BoutonOpenMask=new wxButton(zone22, idBoutonOpenMask, wxT("&Masque"), wxPoint(5,10), wxSize(70,30), 0);
     editFicMask=new wxTextCtrl(zone22,-1,chemin_rep_acquis+"/Mask.png",wxPoint(85,6), wxSize(200,40));
-    editFicMask->SetToolTip(wxT("Masque pour correction d'aberration"));
+    editFicMask->SetToolTip(wxT("Masque pour correction d'aberration : Image_mask.pgm"));
 
     BoutonRecons= new wxButton(zone22, idBoutonTraitement, wxT("&Prétraitement"), wxPoint(180,160), wxDefaultSize, 0);
 
@@ -827,7 +827,7 @@ void Gui_TomoFrame::refreshValue(string chemin_fic, string chemin_recon)
     m_born->SetValue(stof(extract_string("BORN",chemin_recon,"0")));
     m_volkov->SetValue(stof(extract_string("VOLKOV",chemin_recon,"1")));
     m_Deroul->SetValue(stof(extract_string("DEROUL",chemin_recon,"1")));
-    m_Aber->SetValue(stof(extract_string("C_ABER",chemin_recon)));
+    m_Aber->SetValue(stof(extract_string("C_ABER",chemin_recon,"1")));
     m_AmpliRef->SetValue(stof(extract_string("AMPLI_REF",chemin_recon,"1")));
     editDimFinal->SetValue(wxString::Format(wxT("%i"),stoi(extract_string("DIM_FINAL",chemin_recon,"512"))));
     m_export_OTF->SetValue(stof(extract_string("EXPORT_OTF",chemin_recon)));
@@ -887,7 +887,7 @@ string Gui_TomoFrame::extract_string(string token,  string chemin_fic)
     }
     if(valeur.empty())
     {
-        cout<<"mot_clé "<<token<<" inexistant dans le fichier "<<chemin_fic<<endl;
+        cout<<"mot_clé "<<token<<" inexistant dans le fichier"<<chemin_fic<<endl;
         exit(0);
         //valeur="";
     }
@@ -942,15 +942,15 @@ string Gui_TomoFrame::extract_string(string token,  string chemin_fic,string def
                     pos_separ++;
                 }
                 cout<<motcle<<"="<<valeurMot<<endl;
-                valeur=valeurMot.c_str();
+                valeur=valeurMot;
             }
         }
     }
     if(valeur.empty())
     {
-        cout<<"mot_clé  bidule "<<token<<" inexistant dans le fichier "<<chemin_fic<<endl;
+        cout<<"mot_clé  bidule "<<token<<" inexistant dans le fichier"<<chemin_fic<<endl;
         cout<<"Utlisation valeur par défaut: "<<defaut<<endl;
-        valeur=defaut;
+        valeur=defaut.c_str();
     }
     fichier.close();
     return valeur;

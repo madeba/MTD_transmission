@@ -466,9 +466,49 @@ bool is_readable( const std::string & file )
     return !fichier.fail();
 }
 
-
-///read tiff3D
+//read a 3D tiff without needing TIFFTAG PAGENUMBER, buggy
 vector<float> readTiff3D(string chemin_img)
+{
+    TIFF* tiff = TIFFOpen(chemin_img.c_str(), "r");
+    if (!tiff){
+        cerr << "Failed to open image" << endl;
+        exit(1);
+    }
+    uint32 width, height;
+    // Read dimensions of image
+    if (TIFFGetField(tiff,TIFFTAG_IMAGEWIDTH,&width) != 1){
+        cerr << "Failed to read width" << endl;
+        exit(1);
+    }
+    if (TIFFGetField(tiff,TIFFTAG_IMAGELENGTH, &height) != 1){
+        cerr << "Failed to read height" << endl;
+        exit(1);
+    }
+    cout<<"(width,height)=("<<width<<","<<height<<")"<<endl;
+    vector<float> image2D(width*height);
+    vector<float> image3D;
+    float   buffer[width*height];
+    int num_slice=0;
+
+    do{
+        size_t nbPixPlan=num_slice*(width*height);
+            for (uint32 y = 0; y < height; y++)//extract line
+                TIFFReadScanline(tiff,&buffer[y*width],y);
+
+            for(short unsigned int y2D=0; y2D<height; y2D++){
+                size_t nbpixlgn=y2D*width;
+                for(short unsigned int x2D=0; x2D<width; x2D++)//extract 2d Image
+                    image2D[nbpixlgn+x2D]=buffer[nbpixlgn+x2D];
+            }
+        image3D.insert(image3D.end(),image2D.begin(),image2D.end());//build the 3D image from 2d images
+        num_slice++;
+    } while (TIFFReadDirectory(tiff));
+    cout<<"z_max="<<num_slice<<endl;
+    TIFFClose(tiff);
+    return image3D;
+}
+///read tiff3D
+/*vector<float> readTiff3D(string chemin_img)
 {
 
 	TIFF* tiff = TIFFOpen(chemin_img.c_str(), "r");
@@ -515,7 +555,7 @@ vector<float> readTiff3D(string chemin_img)
 
  float   buffer[width*height];
 
-for(short unsigned int numpage=0;numpage<pagenumber[0];numpage++){
+for(short unsigned int numpage=0;numpage<604;numpage++){
     size_t nbPixPlan=numpage*(width*height);
  for (uint32 y = 0; y < height; y++)
     TIFFReadScanline(tiff,&buffer[y*width],y);
@@ -530,7 +570,7 @@ for(short unsigned int numpage=0;numpage<pagenumber[0];numpage++){
 
   TIFFClose(tiff);
   return image3D;
-}
+}*/
 vector<double> readTiff2D(string chemin_img)
 {
   TIFF* tiff = TIFFOpen(chemin_img.c_str(), "r");

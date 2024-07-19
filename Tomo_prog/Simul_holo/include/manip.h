@@ -6,7 +6,7 @@
 #include <stdint.h>
 struct manip {
 
-        double NAObj,NACond; //ouverture numérique objectif et condenseur
+        double NAObj=-1,NACond=-1; //ouverture numérique objectif et condenseur
         double n0;         //indice du milieu d'immersion
         double R_EwaldPix; //Rayon de la sphere d'Ewald en pixel
         double R_EwaldMet; //Rayon de la sphere d'Ewald métrique

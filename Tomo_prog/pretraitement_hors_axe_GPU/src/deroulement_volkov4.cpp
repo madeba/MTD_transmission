@@ -209,8 +209,8 @@ for(size_t cpt=0;cpt<4*nbPix;cpt++){
     grady_IntM_sym[cpt]=(ay.real()-grady_enroul_fft_sym[cpt].real())/(M_2PI);
   }
 
-  SAV_Tiff2D(gradx_IntM_sym,"/ramdisk/gradx_IntM_sym.tiff",1);
-    SAV_Tiff2D(grady_IntM_sym,"/ramdisk/grady_IntM_sym.tiff",1);
+ // SAV_Tiff2D(gradx_IntM_sym,"/ramdisk/gradx_IntM_sym.tiff",1);
+    //SAV_Tiff2D(grady_IntM_sym,"/ramdisk/grady_IntM_sym.tiff",1);
 
 //get the original function in the 4th quadrant
  vector<double> gradx_IntM(nbPix), grady_IntM(nbPix);

@@ -170,7 +170,7 @@ Mat  aberCorr2(Mat const &image, Mat const &mask,  Mat const &polynomeUs_to_fit,
     compuCoefPoly2(image, mask, coefsolve, polynomeUs_to_fit, true); /// Compute the coef of polynomial (Least Squares method)
     Mat resultatpolyBG(image.rows, image.cols, CV_64F), result_final(image.rows, image.cols, CV_64F);
     compuBackgr2(coefsolve, polynome_to_fit, resultatpolyBG);/// Compute the background image with the coef of polynomial
-
+    SAV2(resultatpolyBG, "/home/mat/tomo_test/poly_aber.raw", t_float, "a+b");
     result_final = image-resultatpolyBG;
     return result_final;
 }

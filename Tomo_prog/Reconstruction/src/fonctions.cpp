@@ -879,9 +879,11 @@ void retroPropag_Born(vector <complex<double>> &TF3D_PotObj, vector<complex<doub
     int points_faux=0;
 
     int dimVolX=round(dim_final), dimPlanFinal=round(dim_final*dim_final);
-    float n0=m1.n0, kv=2*PI/m1.lambda0, k0=kv*n0;
+    float n0=m1.n0, //refractive index of the background medium
+    kv=2*PI/m1.lambda0, //wavevector in vaccuum
+    k0=kv*n0; //wavevector in the background medium
 
-    //création de variable pou-9r éviter N calculs dans la boucle sur le volume 3D
+    //création de variable pour éviter N calculs dans la boucle sur le volume 3D
     int cptPot=0; //indice tableau 1d des données du potentiel3D
     double cteNorm=-2*PI;
     double r2=rayon*rayon, fzm0, fzm0_carre = rayon*rayon-fxm0*fxm0-fym0*fym0;
@@ -897,7 +899,7 @@ void retroPropag_Born(vector <complex<double>> &TF3D_PotObj, vector<complex<doub
 
         //#pragma omp parallel for
         // cout<<"NMAX.y="<<NMAX.y<<endl;
-        for(short int fdy = -NMAX.y; fdy < NMAX.y; fdy++)    //on balaye le champ Uborn2D en x , origine (0,0) de l'image au milieu
+        for(short int fdy = -NMAX.y; fdy < NMAX.y; fdy++)    //X cscan of the filed Uborn2D, origin (0,0) in the middle of the picture
         {
 
             //cout<<"-----------------------"<<fdy<<endl;

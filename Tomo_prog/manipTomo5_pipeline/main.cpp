@@ -281,6 +281,7 @@ int main(int argc, char *argv[])
 
                             ConfigureStream( lDevice, lStream );
                             lPipeline = CreatePipeline( lDevice, lStream );
+                            lPipeline->SetBufferCount(32);
                             if( lPipeline )
                                 {
                                     AcquireImages(lDevice, lStream, lPipeline, &ljDAC_flower, chemin_result,chemin_acquis, dimROI,Vout_table);
@@ -359,7 +360,7 @@ const PvDeviceInfo *SelectDevice( PvDeviceFinderWnd *aDeviceFinderWnd )
     return lDeviceInfo;
 }
 
-PvDevice *ConnectToDevice( const PvDeviceInfo *aDeviceInfo )
+PvDevice *ConnectToDevice(const PvDeviceInfo *aDeviceInfo )
 {
     PvDevice *lDevice;
     PvResult lResult;

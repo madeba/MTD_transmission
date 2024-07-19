@@ -10,7 +10,7 @@ private:
 
 public:
     size_t m_Nthread;
-    fftw_plan p_forward_IN, p_backward_IN, p_forward_OUT, p_backward_OUT;
+    fftw_plan p_forward_IN, p_backward_IN, p_forward_OUT, p_backward_OUT;//plan to execute fftw : inplace or out of place
     int fftwThreadInit;
 
     fftw_complex *in=nullptr,*out=nullptr;

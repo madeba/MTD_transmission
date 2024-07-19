@@ -108,12 +108,12 @@ for(size_t cpt=0;cpt<4*nbPix;cpt++){
     Z_sym[cpt].imag(sin(phase_enroul_sym[cpt]));
   }
 //SAV_Tiff2D(gradx_enroul_fft,"Re","/home/mat/tomo_test/gradx_enroul.tiff",1);
- SAV_Tiff2D(Z_sym,"Re","/ramdisk/Z_sym.tiff",1);
+ //SAV_Tiff2D(Z_sym,"Re","/ramdisk/Z_sym.tiff",1);
 
 
  gradient_fft4(Z_sym, Gradx_Z_fft_sym,Grady_Z_fft_sym, double_kvect_shift, param_c2c_double);
 
- SAV_Tiff2D(Gradx_Z_fft_sym,"Re","/ramdisk/gradx_Z_fft_sym.tiff",1);
+// SAV_Tiff2D(Gradx_Z_fft_sym,"Re","/ramdisk/gradx_Z_fft_sym.tiff",1);
   //SAVCplx(Z_sym,"Re",nbPix,"/home/mat/tomo_test/TF_gradx.bin",t_float,"w+b");
   /// Calcul du champ des entiers de déroulement
 
@@ -127,13 +127,13 @@ for(size_t cpt=0;cpt<4*nbPix;cpt++){
     grady_IntM_sym[cpt]=(ay.real()-grady_enroul_fft_sym[cpt].real())/(M_2PI);
   }
 
-  SAV_Tiff2D(gradx_IntM_sym,"/ramdisk/gradx_IntM_sym.tiff",1);
-    SAV_Tiff2D(grady_IntM_sym,"/ramdisk/grady_IntM_sym.tiff",1);
+ // SAV_Tiff2D(gradx_IntM_sym,"/ramdisk/gradx_IntM_sym.tiff",1);
+  //  SAV_Tiff2D(grady_IntM_sym,"/ramdisk/grady_IntM_sym.tiff",1);
 
  vector<complex<double>> double_IntM(4*nbPix);
 
 integ_grad4(gradx_IntM_sym,grady_IntM_sym,double_IntM,double_kvect_shift,param_c2c_double);
-  SAV_Tiff2D(double_IntM,"Re","/ramdisk/double_Int_M.tiff",1);
+ // SAV_Tiff2D(double_IntM,"Re","/ramdisk/double_Int_M.tiff",1);
 
   vector<double> IntM(nbPix);
   IntM=cut_quad4(double_IntM);
@@ -147,7 +147,7 @@ integ_grad4(gradx_IntM_sym,grady_IntM_sym,double_IntM,double_kvect_shift,param_c
   }
 //  SAV_Tiff2D(IntM,"/home/mat/tomo_test/Int_M.tiff",1);
   ///calcul phase dépliée en ajoutant 2\pi*carte des entiers
-SAV_Tiff2D(IntM,"/ramdisk/Int_M.tiff",1);
+//SAV_Tiff2D(IntM,"/ramdisk/Int_M.tiff",1);
 //SAV_Tiff2D(IntM,"Re","/home/mat/tomo_test/Int_M.tiff",1);
 
 }
@@ -174,12 +174,12 @@ double_kvect_shift=init_kvect_shift({2*dimROI.x,2*dimROI.y});
 //------------------calcul gradient de la phase enroulé: on symétrize d'abord (symétrie paire)
 Symetrise_mirror(phase_enroul,phase_enroul_sym);
 
-  SAV_Tiff2D(phase_enroul_sym,"/ramdisk/phase_enroul_sym.tiff",1);
+  //SAV_Tiff2D(phase_enroul_sym,"/ramdisk/phase_enroul_sym.tiff",1);
 
 gradient_fft4(phase_enroul_sym, gradx_enroul_fft_sym,grady_enroul_fft_sym, double_kvect_shift,param_c2c_double);
 ///----------------------------------------------------
-SAV_Tiff2D(gradx_enroul_fft_sym,"Re","/ramdisk/gradx_enroul_fft_sym.tiff",1);
-SAV_Tiff2D(grady_enroul_fft_sym,"Re","/ramdisk/grady_enroul_fft_sym.tiff",1);
+//SAV_Tiff2D(gradx_enroul_fft_sym,"Re","/ramdisk/gradx_enroul_fft_sym.tiff",1);
+//SAV_Tiff2D(grady_enroul_fft_sym,"Re","/ramdisk/grady_enroul_fft_sym.tiff",1);
 
   vector<complex<double>> Z_sym(4*nbPix);
   vector<complex<double>> Gradx_Z_fft_sym(4*nbPix), Grady_Z_fft_sym(4*nbPix);
@@ -190,12 +190,12 @@ for(size_t cpt=0;cpt<4*nbPix;cpt++){
     Z_sym[cpt].imag(sin(phase_enroul_sym[cpt]));
   }
 //SAV_Tiff2D(gradx_enroul_fft,"Re","/home/mat/tomo_test/gradx_enroul.tiff",1);
- SAV_Tiff2D(Z_sym,"Re","/ramdisk/Z_sym.tiff",1);
+// SAV_Tiff2D(Z_sym,"Re","/ramdisk/Z_sym.tiff",1);
 
 
  gradient_fft4(Z_sym, Gradx_Z_fft_sym,Grady_Z_fft_sym, double_kvect_shift, param_c2c_double);
 
- SAV_Tiff2D(Gradx_Z_fft_sym,"Re","/ramdisk/gradx_Z_fft_sym.tiff",1);
+ //SAV_Tiff2D(Gradx_Z_fft_sym,"Re","/ramdisk/gradx_Z_fft_sym.tiff",1);
   //SAVCplx(Z_sym,"Re",nbPix,"/home/mat/tomo_test/TF_gradx.bin",t_float,"w+b");
   /// Calcul du champ des entiers de déroulement
 
@@ -209,8 +209,8 @@ for(size_t cpt=0;cpt<4*nbPix;cpt++){
     grady_IntM_sym[cpt]=(ay.real()-grady_enroul_fft_sym[cpt].real())/(M_2PI);
   }
 
-  SAV_Tiff2D(gradx_IntM_sym,"/ramdisk/gradx_IntM_sym.tiff",1);
-    SAV_Tiff2D(grady_IntM_sym,"/ramdisk/grady_IntM_sym.tiff",1);
+ // SAV_Tiff2D(gradx_IntM_sym,"/ramdisk/gradx_IntM_sym.tiff",1);
+  //  SAV_Tiff2D(grady_IntM_sym,"/ramdisk/grady_IntM_sym.tiff",1);
 
 //get the original function in the 4th quadrant
  vector<double> gradx_IntM(nbPix), grady_IntM(nbPix);
@@ -228,10 +228,10 @@ ASymetrise_OddX(gradx_IntM, AS_gradx_IntM);//odd parity for grad_X
 ASymetrise_EvenY(grady_IntM, AS_grady_IntM);//even parity for grad_Y
 
 //integ_grad4(gradx_IntM,grady_IntM,IntM,kvect_shift,param_c2c);
-  SAV_Tiff2D(AS_gradx_IntM,"/ramdisk/AS_gradx_IntM_sym.tiff",1);
+ // SAV_Tiff2D(AS_gradx_IntM,"/ramdisk/AS_gradx_IntM_sym.tiff",1);
 
 integ_grad4(AS_gradx_IntM,AS_grady_IntM,double_IntM,double_kvect_shift,param_c2c_double);
-  SAV_Tiff2D(double_IntM,"Re","/ramdisk/double_Int_M.tiff",1);
+ // SAV_Tiff2D(double_IntM,"Re","/ramdisk/double_Int_M.tiff",1);
 
   vector<double> IntM(nbPix);
   IntM=cut_quad4(double_IntM);
@@ -246,7 +246,7 @@ integ_grad4(AS_gradx_IntM,AS_grady_IntM,double_IntM,double_kvect_shift,param_c2c
 //  SAV_Tiff2D(IntM,"/home/mat/tomo_test/Int_M.tiff",1);
 
   ///calcul phase dépliée en ajoutant 2\pi*carte des entiers
-SAV_Tiff2D(IntM,"/ramdisk/Int_M.tiff",1);
+//SAV_Tiff2D(IntM,"/ramdisk/Int_M.tiff",1);
 //SAV_Tiff2D(IntM,"Re","/home/mat/tomo_test/Int_M.tiff",1);
 
 }
@@ -285,8 +285,8 @@ ASymetrise_OddX(phase_enroul,phase_enroul_sym);
 
 gradient_fft4(phase_enroul_sym, gradx_enroul_fft_sym,grady_enroul_fft_sym, double_kvect_shift,param_c2c_double);
 ///----------------------------------------------------
-SAV_Tiff2D(gradx_enroul_fft_sym,"Re","/ramdisk/gradx_enroul_fft_Asym.tiff",1);
-SAV_Tiff2D(grady_enroul_fft_sym,"Re","/ramdisk/grady_enroul_fft_Asym.tiff",1);
+//SAV_Tiff2D(gradx_enroul_fft_sym,"Re","/ramdisk/gradx_enroul_fft_Asym.tiff",1);
+//SAV_Tiff2D(grady_enroul_fft_sym,"Re","/ramdisk/grady_enroul_fft_Asym.tiff",1);
 
   vector<complex<double>> Z_sym(4*nbPix);
   vector<complex<double>> Gradx_Z_fft_sym(4*nbPix), Grady_Z_fft_sym(4*nbPix);
@@ -297,12 +297,12 @@ for(size_t cpt=0;cpt<4*nbPix;cpt++){
     Z_sym[cpt].imag(sin(phase_enroul_sym[cpt]));
   }
 //SAV_Tiff2D(gradx_enroul_fft,"Re","/home/mat/tomo_test/gradx_enroul.tiff",1);
- SAV_Tiff2D(Z_sym,"Re","/ramdisk/Z_sym.tiff",1);
+// SAV_Tiff2D(Z_sym,"Re","/ramdisk/Z_sym.tiff",1);
 
 
  gradient_fft4(Z_sym, Gradx_Z_fft_sym,Grady_Z_fft_sym, double_kvect_shift, param_c2c_double);
 
- SAV_Tiff2D(Gradx_Z_fft_sym,"Re","/ramdisk/gradx_Z_fft_sym.tiff",1);
+ //SAV_Tiff2D(Gradx_Z_fft_sym,"Re","/ramdisk/gradx_Z_fft_sym.tiff",1);
   //SAVCplx(Z_sym,"Re",nbPix,"/home/mat/tomo_test/TF_gradx.bin",t_float,"w+b");
   /// Calcul du champ des entiers de déroulement
   complex<double> ax,ay;
@@ -334,10 +334,10 @@ ASymetrise_OddX(gradx_IntM, AS_gradx_IntM);//odd parity for grad_X
 ASymetrise_EvenY(grady_IntM, AS_grady_IntM);//even parity for grad_Y
 
 //integ_grad4(gradx_IntM,grady_IntM,IntM,kvect_shift,param_c2c);
-  SAV_Tiff2D(AS_gradx_IntM,"/ramdisk/AS_gradx_IntM_sym.tiff",1);
+ // SAV_Tiff2D(AS_gradx_IntM,"/ramdisk/AS_gradx_IntM_sym.tiff",1);
 
 integ_grad4(AS_gradx_IntM,AS_grady_IntM,double_IntM,double_kvect_shift,param_c2c_double);
-  SAV_Tiff2D(double_IntM,"Re","/ramdisk/double_Int_M.tiff",1);
+// SAV_Tiff2D(double_IntM,"Re","/ramdisk/double_Int_M.tiff",1);
 
   vector<double> IntM(nbPix);
   IntM=cut_quad4(double_IntM);
@@ -352,7 +352,7 @@ integ_grad4(AS_gradx_IntM,AS_grady_IntM,double_IntM,double_kvect_shift,param_c2c
 //  SAV_Tiff2D(IntM,"/home/mat/tomo_test/Int_M.tiff",1);
 
   ///calcul phase dépliée en ajoutant 2\pi*carte des entiers
-SAV_Tiff2D(IntM,"/ramdisk/Int_M.tiff",1);
+//SAV_Tiff2D(IntM,"/ramdisk/Int_M.tiff",1);
 //SAV_Tiff2D(IntM,"Re","/home/mat/tomo_test/Int_M.tiff",1);
 
 }
@@ -368,6 +368,7 @@ SAV_Tiff2D(IntM,"/ramdisk/Int_M.tiff",1);
 ///main function, all calculation with FFT. The integration is antisymetrize. Nothing before gradient
 void deroul_volkov4_AS(vector<double> &phase_enroul,vector<double> &phase_deroul,vector<vecteur>  &kvect_shift,  FFTW_init &param_c2c)
 {
+
   complex<double> I(0,1);
   unsigned int nbPix=phase_enroul.size();
   Var2D dimROI={sqrt(nbPix),sqrt(nbPix)};

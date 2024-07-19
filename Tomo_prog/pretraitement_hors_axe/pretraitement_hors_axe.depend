@@ -2231,14 +2231,16 @@
 
 1586696835 /home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe/projet.h
 
-1651246324 /home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe/include/IO_fonctions.h
+1684832247 /home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe/include/IO_fonctions.h
 	"FFTW_init.h"
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
 	<vector>
 	<complex>
 	<tiffio.h>
 	"projet.h"
 
-1665738858 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe/fonctions.cpp
+1665740037 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe/fonctions.cpp
 	<fstream>
 	<vector>
 	<chrono>
@@ -2250,7 +2252,7 @@
 	"fonctions.h"
 	"IO_fonctions.h"
 
-1652045901 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe/main.cpp
+1684834941 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe/main.cpp
 	<iostream>
 	<vector>
 	"struct.h"
@@ -2261,6 +2263,7 @@
 	"fonctions.h"
 	"FFT_fonctions.h"
 	"deroulement_volkov4.h"
+	"deroulement_volkov3.h"
 	"deroulement_herraez.h"
 	"Correction_aberration.h"
 	<chrono>
@@ -2333,7 +2336,7 @@
 	"deroulement_volkov3.h"
 	<chrono>
 
-1651223010 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/deroulement_volkov4.cpp
+1681982017 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/deroulement_volkov4.cpp
 	<vector>
 	<complex>
 	"fonctions.h"
@@ -2346,7 +2349,7 @@
 	"FFTW_init.h"
 	"struct.h"
 
-1651246324 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/IO_fonctions.cpp
+1684832236 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe/src/IO_fonctions.cpp
 	"IO_fonctions.h"
 	<opencv2/core/core.hpp>
 	<opencv2/highgui/highgui.hpp>
@@ -2363,7 +2366,7 @@
 	<cstring>
 	<string>
 
-1638286211 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe/Correction_aberration.cpp
+1684832236 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe/Correction_aberration.cpp
 	<iostream>
 	<fstream>
 	<sstream>

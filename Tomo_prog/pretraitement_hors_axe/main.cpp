@@ -12,7 +12,7 @@
 //#include "FFTW_init.h"
 #include "FFT_fonctions.h"
 #include "deroulement_volkov4.h"
-//#include "deroulement_volkov3.h"
+#include "deroulement_volkov3.h"
 //#include "deroulement_volkov2.h"
 //#include "deroulement_volkov.h"
 #include "deroulement_herraez.h"
@@ -176,6 +176,7 @@ for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les
     //phase2pi(UBorn, dim2DHA,phase2Pi);//asin
     if(m1.b_Deroul==true){
       if(m1.b_volkov==0){
+
         phaseUnwrapping_Mat(dim2DHA, phase_2Pi_vec, UnwrappedPhase_herraez);
         for(size_t cpt=0;cpt<NbPixUBorn;cpt++)
           UnwrappedPhase[cpt]=UnwrappedPhase_herraez[cpt];///plutôt passer pointeur ?

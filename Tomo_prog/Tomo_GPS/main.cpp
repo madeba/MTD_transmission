@@ -12,12 +12,13 @@ int main()
 {
   manip m1;
   ///Init complex refractive index
-  vector<float> indice(readTiff3D(m1.chemin_result+"/indice.tif"));  //load refracive index
 
+ vector<float> indice(readTiff3D(m1.chemin_result+"/indice.tif"));  //load refracive index
 
+  cout<<"couuuuuuuuuuu"<<endl;
   vector<float> absorption(readTiff3D(m1.chemin_result+"/absorption.tif"));//load absorption
   int dim=round(pow(indice.size(),1.0/3.0));
-  cout<<"dimension="<<dim<<endl;
+  cout<<"dimension fichier indice="<<dim<<endl;
   double quad_err=0;
   vector<complex<double>> indiceCplx(indice.size());//init complex refractive index
   vector<complex<double>> indiceCplx_previous(indice.size(),0.0);//init complex refractive index
@@ -55,10 +56,11 @@ int main()
   cout<<"dim_final="<<dim_final<<endl;
 //   FFT_encaps tf3D_out(dim3D,m1.nbThreads);
   bool b_inplace=true;
-  FFTW_init tf3D_INP(dim3D,4, true);
+  FFTW_init tf3D_INP(dim3D,4, true); //true=inplace, false=out place
 
   ///calculate 'measured' spectrum
   FFT3Dcplx_Inplace(fftshift3D(indiceCplx), SpectreIndiceCplx,tf3D_INP);
+
   SpectreIndiceCplx=fftshift3D(SpectreIndiceCplx);
 
   SAV3D_Tiff(SpectreIndiceCplx,"Re",m1.chemin_result+"SpectreIndiceCplxRE.tif",m1.tailleTheoPixelTomo);

@@ -16,8 +16,8 @@
 //#include <core/core_c.h>
 //#include <highgui/highgui_c.h>
 
-//#include <opencv2/core/core.hpp>
-//#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 //#include <cstring>
 //#include <fstream>
@@ -40,7 +40,7 @@ bool is_readable( const std::string & file);
 void charger_image2D_OCV(std::vector<double> &imgTab, std::string imgFile, Var2D coin,Var2D taille);
 
 void SAV2(std::vector<double>  &v, std::string chemin, enum PRECISION2 precision, char options[]);
-
+void SAV2(cv::Mat &imgCrop, std::string chemin, enum PRECISION2 precision, char options[]);
 void SAV2(double *var_sav, int NbPix2D, std::string chemin, enum PRECISION2 precision, char options[]);
 
 void SAVCplx(std::vector<std::complex<double>> const &v, std::string partie, std::string chemin, enum PRECISION2 precision, char options[]);

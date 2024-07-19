@@ -159,7 +159,7 @@ int main()
     for(int cpt_angle=premier_plan; cpt_angle<NbAngle; cpt_angle++) //boucle sur tous les angles    {
     {
         posSpec= {(int)TabPosSpec[cpt_angle],(int)TabPosSpec[NbAngle+cpt_angle]};  //récupérer spéculaire puis champ cplx depuis sauvegarde prétraitement
-        //cout<<"posSpec.x,posSpec.y"<<posSpec.x<<","<<posSpec.y<<endl;
+        cout<<"posSpec.x,posSpec.y"<<posSpec.x<<","<<posSpec.y<<endl;
         for(int cpt=0; cpt<NbPixU_Born; cpt++)//retrieve complex fields in the stack
         {
             UBornFinal2D[cpt].real(UBornFinal3D[cpt+cpt_angle*NbPixU_Born].real()*mask_tukey2D[cpt]);
@@ -317,7 +317,7 @@ int main()
     std::cout <<"Temps total ecriture tiff= "<< elapsed_tiff.count()/(pow(10,9)) << '\n';
     cout<<"dim_index="<<pow(indice_cplx.size(),1.0/3)<<endl;
     vector<complex<double>> slice=extractSliceZ(indice_cplx,"x",236);
-    SAV_Tiff2DCplx(slice,"Re","/ramdisk/slice.tiff",m1.tailleTheoPixelTomo);
+    SAV_Tiff2DCplx(slice,"Re",m1.chemin_result+"/slice.tiff",m1.tailleTheoPixelTomo);
     temps_arrivee = clock ();
     temps_cpu = (temps_arrivee-temps_depart )/CLOCKS_PER_SEC;
     printf("temps total: %f\n",temps_cpu);

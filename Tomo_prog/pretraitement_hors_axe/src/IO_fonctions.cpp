@@ -270,6 +270,62 @@ void SAV2(double *var_sav,int NbPix2D, std::string chemin, enum PRECISION2 preci
 
         fclose(fichier_ID);
 }
+///save a openCV Mat double into a binary file. partie : PRECISON=64 (double), 32 (float) etc.
+void SAV2(cv::Mat &imgCrop, std::string chemin, enum PRECISION2 precision, char options[])
+{
+    vector<double> v(imgCrop.rows*imgCrop.cols);
+     v.assign(imgCrop.begin<double>(), imgCrop.end<double>());//copy openCV mat into vector double
+
+        size_t NbPix2D=v.size();
+        double* var_sav = &v[0];
+        FILE *fichier_ID;
+        fichier_ID= fopen(chemin.c_str(), options);
+        if(fichier_ID==0)
+                cout<<"Erreur d'ouverture du fichier "<<chemin<<endl;
+
+        switch(precision) {
+        case t_double: //64 bit
+
+                for(unsigned int cpt=0; cpt<NbPix2D; cpt++) {
+                        double tampon=var_sav[cpt];
+                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
+                }
+                break;
+        case t_float://32 bits float
+
+                for(unsigned int cpt=0; cpt<NbPix2D; cpt++) {
+                        float tampon=var_sav[cpt];
+                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
+                }
+                break;
+
+        case t_int: //32 bit signé
+
+                for(unsigned int cpt=0; cpt<NbPix2D; cpt++) {
+                        int tampon=var_sav[cpt];
+                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
+                }
+                break;
+        case t_uint://32 bit non signé
+
+                for(unsigned int cpt=0; cpt<NbPix2D; cpt++) {
+                        unsigned int tampon=var_sav[cpt];
+                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
+                }
+                break;
+        case t_char: //8 bits
+
+                for(unsigned int cpt=0; cpt<NbPix2D; cpt++) {
+                        char tampon=var_sav[cpt];
+                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
+                }
+                break;
+        default:
+                break;
+        }
+
+        fclose(fichier_ID);
+}
 
 ///save a C-type array (double) into a TIFF.
 void SAV_Tiff2D(double *var_sav, string chemin, int dim)

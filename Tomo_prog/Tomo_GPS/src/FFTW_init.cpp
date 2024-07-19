@@ -21,7 +21,7 @@ using namespace std;
 
 }*/
 
-///1)outplace 2a) inplace and wisdow if dim==512 2b) inplace and measure if dim!=512
+///1)outplace 2a) inplace and wisdow if dim==512 2b) inplace and measure if dim!=512 (edit no more wisdom)
 FFTW_init::FFTW_init(Point3D dim,size_t nbThreads, bool b_inPlace)
 {
     cout<<"init fftw with dim="<<dim.x<<endl;
@@ -51,12 +51,14 @@ FFTW_init::FFTW_init(Point3D dim,size_t nbThreads, bool b_inPlace)
         //p_forward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_FORWARD, FFTW_ESTIMATE);///problème, wisdom calculée en backward !!
        // p_backward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_BACKWARD, FFTW_ESTIMATE);
         }
-        else{
+        else{//estimate and inplace
             cout<<"dimension != 512 : using FFT_MEASURE"<<endl;
             in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
-            out=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
-            p_forward_OUT=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, out,FFTW_FORWARD, FFTW_ESTIMATE);
-            p_backward_OUT=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, out,FFTW_BACKWARD, FFTW_ESTIMATE);
+            //out=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
+            out=nullptr;
+            p_forward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_FORWARD, FFTW_MEASURE);
+            p_backward_IN=fftw_plan_dft_3d(dim.x, dim.y, dim.z, in, in,FFTW_BACKWARD, FFTW_MEASURE);
+            cout<<"init over"<<endl;
         }
     }
 }

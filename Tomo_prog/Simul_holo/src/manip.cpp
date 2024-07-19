@@ -27,8 +27,9 @@ manip::manip(unsigned short int dimROI)
     cout<<"\n##################### INFO MANIP ##################\n"<<endl;
     nbAxesRosace=extract_val("NB_AXES_FLEUR",fic_cfg_manip);//indice de l'huile
     n0=extract_val("N0",fic_cfg_manip);//indice de l'huile
-    NACond=extract_val("NA_COND",fic_cfg_manip);
-    NAObj=extract_val("NA_OBJ",fic_cfg_manip);	//ouverture numerique de l'objectif? (celle du condenseur intervient sur la forme, la taille, du papillon)
+    NACond=extract_val("NA_COND",fic_cfg_manip,1.4);
+
+    NAObj=extract_val("NA_OBJ",fic_cfg_manip,1.4);	//ouverture numerique de l'objectif? (celle du condenseur intervient sur la forme, la taille, du papillon)
     lambda_v=extract_val("LAMBDA",fic_cfg_manip);
     f_tube=extract_val("F_TUBE",fic_cfg_manip);
     f_obj=extract_val("F_OBJ",fic_cfg_manip);

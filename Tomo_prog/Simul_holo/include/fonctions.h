@@ -62,5 +62,6 @@ void genere_bille(std::vector <std::complex<double>> &vol_bille, Point3D centre,
 
 void genere_barre(std::vector<std::complex<double>> &vol_obj,  Point3D coordMin, Point3D coordMax, std::complex<double> delta_indice, manip m1);
 float extract_val(string token,  string chemin_fic);
+float extract_val(string token,  string chemin_fic, double defaut);
 string extract_string(std::string token,  std::string chemin_fic);
 #endif
