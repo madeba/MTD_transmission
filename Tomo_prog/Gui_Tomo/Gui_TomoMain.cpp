@@ -197,7 +197,6 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
  // Create a top-level panel to hold all the contents of the frame
     // Créer le widget wxNotebook
     wxNotebook* notebook = new wxNotebook(this, wxID_ANY);//crer un widget notebook dont le aprent est la class een cours
-
     wxPanel* panel_tab1 = new wxPanel(notebook, wxID_ANY);//céer un panel dont la fenetre parent est le wxNotebook
     notebook->AddPage(panel_tab1,wxT("Général"));
     panel_tab1->SetBackgroundColour(*backgroundColor);

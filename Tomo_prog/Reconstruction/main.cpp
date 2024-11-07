@@ -159,7 +159,7 @@ int main()
     for(int cpt_angle=premier_plan; cpt_angle<NbAngle; cpt_angle++) //boucle sur tous les angles    {
     {
         posSpec= {(int)TabPosSpec[cpt_angle],(int)TabPosSpec[NbAngle+cpt_angle]};  //récupérer spéculaire puis champ cplx depuis sauvegarde prétraitement
-        cout<<"posSpec.x,posSpec.y"<<posSpec.x<<","<<posSpec.y<<endl;
+       // cout<<"posSpec.x,posSpec.y"<<posSpec.x<<","<<posSpec.y<<endl;
         for(int cpt=0; cpt<NbPixU_Born; cpt++)//retrieve complex fields in the stack
         {
             UBornFinal2D[cpt].real(UBornFinal3D[cpt+cpt_angle*NbPixU_Born].real()*mask_tukey2D[cpt]);

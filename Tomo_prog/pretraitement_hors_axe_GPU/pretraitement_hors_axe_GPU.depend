@@ -2780,3 +2780,246 @@
 
 1651829350 /home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/include/deroulement_volkov3_GPU.h
 
+1710758621 source:/home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/Correction_aberration.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	"fonctions.h"
+	<chrono>
+	"Correction_aberration.h"
+	"FFT_fonctions.h"
+
+1651006092 /home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<fftw3.h>
+	"FFTW_init.h"
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	"projet.h"
+	"IO_fonctions.h"
+	"Point2D.h"
+	"vecteur.h"
+	<vector>
+	<complex>
+	<tiffio.h>
+	<arrayfire.h>
+
+1586696835 /home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/include/struct.h
+
+1588950682 /home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/include/FFTW_init.h
+	"Point3D.h"
+	"Point2D.h"
+	<fftw3.h>
+	"struct.h"
+
+1586696835 /home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/include/Point3D.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	<iostream>
+	"Point2D.h"
+
+1586696835 /home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/include/Point2D.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	<vector>
+	<complex>
+
+1652449365 /home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/projet.h
+
+1684788562 /home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/include/IO_fonctions.h
+	"FFTW_init.h"
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+	<vector>
+	<complex>
+	<tiffio.h>
+	"projet.h"
+	<arrayfire.h>
+
+1591619507 /home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/include/vecteur.h
+	<iostream>
+
+1604951823 /home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/Correction_aberration.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<opencv2/core.hpp>
+	<opencv2/highgui.hpp>
+
+1637252113 /home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/FFT_fonctions.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	"vecteur.h"
+	"FFTW_init.h"
+
+1586696835 source:/home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/deroulement_herraez.cpp
+	"deroulement_herraez.h"
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	<vector>
+	<math.h>
+
+1586696835 /home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/deroulement_herraez.h
+	"struct.h"
+	<vector>
+
+1651608350 source:/home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/FFT_fonctions.cpp
+	"FFT_fonctions.h"
+	"fonctions.h"
+	"omp.h"
+
+1651234091 source:/home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/fonctions.cpp
+	<fstream>
+	<vector>
+	<chrono>
+	<complex>
+	<fftw3.h>
+	"struct.h"
+	"projet.h"
+	"FFT_fonctions.h"
+	"fonctions.h"
+	"IO_fonctions.h"
+
+1715089933 source:/home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/main.cpp
+	<iostream>
+	<vector>
+	"struct.h"
+	<complex>
+	"manip.h"
+	<string>
+	"projet.h"
+	"fonctions.h"
+	"FFT_fonctions.h"
+	"deroulement_volkov3_GPU.h"
+	"deroulement_volkov4.h"
+	"deroulement_volkov3.h"
+	"deroulement_herraez.h"
+	"Correction_aberration.h"
+	<chrono>
+	<opencv2/core/utility.hpp>
+	"opencv2/imgproc.hpp"
+	"opencv2/highgui.hpp"
+	"opencv2/core.hpp"
+	"GPU_fonctions.h"
+
+1660829364 /home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/manip.h
+	<cstdlib>
+	<iostream>
+	"struct.h"
+
+1651829350 /home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/include/deroulement_volkov3_GPU.h
+
+1651829330 /home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/include/deroulement_volkov4.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"vecteur.h"
+	"FFTW_init.h"
+
+1651589994 /home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/include/deroulement_volkov3.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"vecteur.h"
+	"FFTW_init.h"
+
+1651829330 /home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/include/GPU_fonctions.h
+	<vector>
+	<complex>
+	"vecteur.h"
+	<arrayfire.h>
+	"struct.h"
+	"projet.h"
+
+1675436723 source:/home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/manip.cpp
+	"manip.h"
+	<iostream>
+	"fonctions.h"
+	"projet.h"
+
+1595514041 source:/home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/src/deroulement_volkov2.cpp
+	<vector>
+	<complex>
+	"fonctions.h"
+	"FFT_fonctions.h"
+	"vecteur.h"
+	"deroulement_volkov2.h"
+	<chrono>
+
+1588332463 /home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/include/deroulement_volkov2.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"FFTW_init.h"
+
+1651849980 source:/home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/src/deroulement_volkov3.cpp
+	<vector>
+	<complex>
+	"fonctions.h"
+	"FFT_fonctions.h"
+	"vecteur.h"
+	"deroulement_volkov3.h"
+	<chrono>
+
+1651849821 source:/home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/src/deroulement_volkov3_GPU.cpp
+	"fonctions.h"
+	"deroulement_volkov3_GPU.h"
+	"GPU_fonctions.h"
+	<chrono>
+
+1710758609 source:/home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/src/deroulement_volkov4.cpp
+	<vector>
+	<complex>
+	"fonctions.h"
+	"FFT_fonctions.h"
+	"vecteur.h"
+	"deroulement_volkov4.h"
+	<chrono>
+
+1651609088 source:/home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/src/FFTW_init.cpp
+	"FFTW_init.h"
+	"struct.h"
+
+1660904280 source:/home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/src/GPU_fonctions.cpp
+	"GPU_fonctions.h"
+	"fonctions.h"
+	"struct.h"
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+
+1684788511 source:/home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/src/IO_fonctions.cpp
+	"IO_fonctions.h"
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+	<fstream>
+
+1587120874 source:/home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/src/Point2D.cpp
+	"Point2D.h"
+
+1587120893 source:/home/mat/Dropbox/projet_c/2024/Projet_tomo/Tomo_prog/pretraitement_hors_axe_GPU/src/vecteur.cpp
+	"vecteur.h"
+	<cmath>
+	<cstdlib>
+	<iostream>
+	<cstring>
+	<string>
+

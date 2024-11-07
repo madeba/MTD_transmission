@@ -4271,3 +4271,116 @@
 1576849456 /usr/include/opencv4/opencv2/highgui/highgui.hpp
 	"opencv2/highgui.hpp"
 
+1725634923 source:/home/mat/Dropbox/projet_c/2024/Projet_tomo/utilTomo/show_fourier_PP/main.cpp
+	"opencv2/core/core.hpp"
+	"opencv2/imgproc/imgproc.hpp"
+	"opencv2/highgui/highgui.hpp"
+	<iostream>
+	<string>
+	<sstream>
+	<PvSampleUtils.h>
+	<PvDevice.h>
+	<PvDeviceGEV.h>
+	<PvDeviceU3V.h>
+	<PvStream.h>
+	<PvStreamGEV.h>
+	<PvStreamU3V.h>
+	<PvPipeline.h>
+	<PvBuffer.h>
+	"macros.h"
+	"vectra.h"
+	"string.h"
+	"vChronos.h"
+	<boost/thread.hpp>
+	<boost/date_time.hpp>
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+	<unistd.h>
+	<stdio.h>
+	<math.h>
+	<assert.h>
+	<termios.h>
+	<unistd.h>
+	<fcntl.h>
+	<fftw3.h>
+	<tiffio.h>
+	<iostream>
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"fonctions.h"
+	"manip.h"
+	<PvDeviceFinderWnd.h>
+	<list>
+
+1721228585 /home/mat/Dropbox/projet_c/2024/Projet_tomo/utilTomo/show_fourier_PP/include/john/macros.h
+	<time.h>
+	<stdlib.h>
+	"vChrono.h"
+	<xmmintrin.h>
+	<immintrin.h>
+	<smmintrin.h>
+	<sys/mman.h>
+	<assert.h>
+	"legacy_macros.h"
+
+1721228585 /home/mat/Dropbox/projet_c/2024/Projet_tomo/utilTomo/show_fourier_PP/include/john/vChrono.h
+	<boost/chrono.hpp>
+
+1721228585 /home/mat/Dropbox/projet_c/2024/Projet_tomo/utilTomo/show_fourier_PP/include/john/legacy_macros.h
+
+1721228585 /home/mat/Dropbox/projet_c/2024/Projet_tomo/utilTomo/show_fourier_PP/include/john/vectra.h
+	<sys/stat.h>
+	<stdio.h>
+
+1721228585 /home/mat/Dropbox/projet_c/2024/Projet_tomo/utilTomo/show_fourier_PP/include/john/vChronos.h
+	"vChrono.h"
+	"macros.h"
+	<string.h>
+	<boost/chrono.hpp>
+	<iostream>
+	"vChronos.h"
+
+1593697759 /home/mat/Dropbox/projet_c/2024/Projet_tomo/utilTomo/show_fourier_PP/include/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<vector>
+	"projet.h"
+
+1593697759 /home/mat/Dropbox/projet_c/2024/Projet_tomo/utilTomo/show_fourier_PP/include/struct.h
+
+1593697759 /home/mat/Dropbox/projet_c/2024/Projet_tomo/utilTomo/show_fourier_PP/include/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1617964075 /home/mat/Dropbox/projet_c/2024/Projet_tomo/utilTomo/show_fourier_PP/include/manip.h
+	<cstdlib>
+	<iostream>
+
+1594905254 source:/home/mat/Dropbox/projet_c/2024/Projet_tomo/utilTomo/show_fourier_PP/src/fonctions.cpp
+	"fonctions.h"
+	<tiffio.h>
+	<chrono>
+
+1646645193 source:/home/mat/Dropbox/projet_c/2024/Projet_tomo/utilTomo/show_fourier_PP/src/manip.cpp
+	"manip.h"
+	<iostream>
+	"fonctions.h"
+	"projet.h"
+

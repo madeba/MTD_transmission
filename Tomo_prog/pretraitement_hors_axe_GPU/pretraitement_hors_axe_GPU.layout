@@ -2,39 +2,84 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Release" />
-	<File name="main.cpp" open="1" top="1" tabpos="41" split="0" active="1" splitpos="0" zoom_1="3" zoom_2="0">
+	<File name="include/IO_fonctions.h" open="1" top="0" tabpos="34" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="11177" topLine="220" />
+			<Cursor1 position="1253" topLine="16" />
 		</Cursor>
 	</File>
-	<File name="fonctions.h" open="1" top="0" tabpos="42" split="0" active="1" splitpos="0" zoom_1="3" zoom_2="0">
+	<File name="fonctions.h" open="1" top="0" tabpos="26" split="0" active="1" splitpos="0" zoom_1="3" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="467" topLine="18" />
 		</Cursor>
 	</File>
-	<File name="src/GPU_fonctions.cpp" open="1" top="0" tabpos="62" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/deroulement_volkov3.cpp" open="1" top="0" tabpos="38" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3947" topLine="81" />
+			<Cursor1 position="2446" topLine="73" />
 		</Cursor>
 	</File>
-	<File name="deroulement_herraez.cpp" open="1" top="0" tabpos="51" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1290" topLine="539" />
-		</Cursor>
-	</File>
-	<File name="src/deroulement_volkov3_GPU.cpp" open="1" top="0" tabpos="64" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1127" topLine="30" />
-		</Cursor>
-	</File>
-	<File name="Correction_aberration.h" open="1" top="0" tabpos="56" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Correction_aberration.h" open="1" top="0" tabpos="40" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1298" topLine="19" />
 		</Cursor>
 	</File>
-	<File name="manip.h" open="1" top="0" tabpos="66" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include/deroulement_volkov3_GPU.h" open="1" top="0" tabpos="49" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="674" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="main.cpp" open="1" top="1" tabpos="25" split="0" active="1" splitpos="0" zoom_1="3" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4276" topLine="88" />
+		</Cursor>
+	</File>
+	<File name="deroulement_herraez.h" open="1" top="0" tabpos="41" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="870" topLine="6" />
+		</Cursor>
+	</File>
+	<File name="fonctions.cpp" open="1" top="0" tabpos="31" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="309" topLine="238" />
+		</Cursor>
+	</File>
+	<File name="src/deroulement_volkov3_GPU.cpp" open="1" top="0" tabpos="48" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1127" topLine="30" />
+		</Cursor>
+	</File>
+	<File name="include/deroulement_volkov3.h" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="584" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="include/deroulement_volkov4.h" open="1" top="0" tabpos="43" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="181" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="manip.h" open="1" top="0" tabpos="50" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="870" topLine="7" />
+		</Cursor>
+	</File>
+	<File name="src/IO_fonctions.cpp" open="1" top="0" tabpos="42" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="8378" topLine="199" />
+		</Cursor>
+	</File>
+	<File name="include/FFTW_init.h" open="1" top="0" tabpos="29" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1054" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="include/GPU_fonctions.h" open="1" top="0" tabpos="45" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="175" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="Correction_aberration.cpp" open="1" top="0" tabpos="33" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="7478" topLine="153" />
 		</Cursor>
 	</File>
 	<File name="src/Point2D.cpp" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -42,12 +87,52 @@
 			<Cursor1 position="512" topLine="2" />
 		</Cursor>
 	</File>
-	<File name="include/Point2D.h" open="1" top="0" tabpos="55" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/GPU_fonctions.cpp" open="1" top="0" tabpos="46" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1287" topLine="38" />
+		</Cursor>
+	</File>
+	<File name="src/FFTW_init.cpp" open="1" top="0" tabpos="28" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2374" topLine="54" />
+		</Cursor>
+	</File>
+	<File name="FFT_fonctions.cpp" open="1" top="0" tabpos="27" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="181" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/vecteur.cpp" open="1" top="0" tabpos="47" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/deroulement_volkov4.cpp" open="1" top="0" tabpos="44" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="6623" topLine="141" />
+		</Cursor>
+	</File>
+	<File name="manip.cpp" open="1" top="0" tabpos="30" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="950" topLine="2" />
+		</Cursor>
+	</File>
+	<File name="src/deroulement_volkov2.cpp" open="1" top="0" tabpos="37" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2617" topLine="39" />
+		</Cursor>
+	</File>
+	<File name="include/deroulement_volkov2.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="447" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="include/Point2D.h" open="1" top="0" tabpos="39" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="131" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src/vecteur.cpp" open="1" top="0" tabpos="63" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="FFT_fonctions.h" open="1" top="0" tabpos="36" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="0" topLine="0" />
 		</Cursor>
@@ -57,99 +142,14 @@
 			<Cursor1 position="201" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="FFT_fonctions.cpp" open="1" top="0" tabpos="43" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
+	<File name="deroulement_herraez.cpp" open="1" top="0" tabpos="35" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="181" topLine="0" />
+			<Cursor1 position="1290" topLine="539" />
 		</Cursor>
 	</File>
-	<File name="src/FFTW_init.cpp" open="1" top="0" tabpos="44" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2374" topLine="54" />
-		</Cursor>
-	</File>
-	<File name="deroulement_herraez.h" open="1" top="0" tabpos="57" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="870" topLine="6" />
-		</Cursor>
-	</File>
-	<File name="src/deroulement_volkov3.cpp" open="1" top="0" tabpos="54" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2446" topLine="73" />
-		</Cursor>
-	</File>
-	<File name="FFT_fonctions.h" open="1" top="0" tabpos="52" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="0" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="Correction_aberration.cpp" open="1" top="0" tabpos="49" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="7478" topLine="153" />
-		</Cursor>
-	</File>
-	<File name="include/deroulement_volkov2.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="447" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="fonctions.cpp" open="1" top="0" tabpos="47" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="309" topLine="238" />
-		</Cursor>
-	</File>
-	<File name="manip.cpp" open="1" top="0" tabpos="46" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="950" topLine="2" />
-		</Cursor>
-	</File>
-	<File name="src/IO_fonctions.cpp" open="1" top="0" tabpos="58" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="8378" topLine="199" />
-		</Cursor>
-	</File>
-	<File name="include/deroulement_volkov4.h" open="1" top="0" tabpos="59" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="181" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src/deroulement_volkov4.cpp" open="1" top="0" tabpos="60" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="6623" topLine="141" />
-		</Cursor>
-	</File>
-	<File name="include/IO_fonctions.h" open="1" top="0" tabpos="50" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1253" topLine="16" />
-		</Cursor>
-	</File>
-	<File name="include/deroulement_volkov3.h" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="584" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="include/FFTW_init.h" open="1" top="0" tabpos="45" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1054" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="include/deroulement_volkov3_GPU.h" open="1" top="0" tabpos="65" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="674" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="projet.h" open="1" top="0" tabpos="48" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="projet.h" open="1" top="0" tabpos="32" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="39" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src/deroulement_volkov2.cpp" open="1" top="0" tabpos="53" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2617" topLine="39" />
-		</Cursor>
-	</File>
-	<File name="include/GPU_fonctions.h" open="1" top="0" tabpos="61" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="175" topLine="0" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

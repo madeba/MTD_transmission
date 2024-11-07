@@ -8,7 +8,8 @@ using namespace af;
 using namespace std;
 using namespace cv;
 
-///normalement dans fonctions.h
+///CPU equivalent in fonctions.h
+//init kvectors table for integration and derivation
 af::array init_kvect_shiftX_GPU(int dim2DHA)
 {
   af::array  kvect_shiftX=af::array(dim2DHA,dim2DHA,f64);
@@ -19,6 +20,7 @@ gfor(seq y,dim2DHA)
  return kvect_shiftX;
 }
 ///normalement dans fonctions.h
+//init kvectors table for integration and derivation
 af::array init_kvect_shiftY_GPU(int dim2DHA)
 {
   af::array  kvect_shiftY=af::array(dim2DHA,dim2DHA,f64);
@@ -29,6 +31,7 @@ for(int x=0;x<dim2DHA-1;x++)
  return kvect_shiftY;
 }
 ///dans IO_fonctions. Tres lent, voir chargeviaOCV (10 fois + rapide)
+///load image with GPU, but very slow, prefer ""chargeviaOCV", see below
 void chargeImageGPU(af::array &img, string nomImg, Var2D coin){
     Var2D dimCrop{img.dims(0),img.dims(1)};//crop @ dimension of the hologram
 
@@ -60,6 +63,7 @@ void chargeImageGPU_via_OCV(af::array &img_array, string nomImg, Var2D coin){
     img_array=af::array(img.cols,img.rows,imgTab.data());
 }
 
+///display image on GPU
 void display(af::array img){
     const static int width = img.dims(0), height = img.dims(1);
 Window window(width, height, "Title");
@@ -98,6 +102,7 @@ af::array tukey2D_GPU(size_t dimx,size_t dimy, float alpha){
 
     return tuk2D;//segfault si pas de return !
 }
+///crop image
 af::array crop(af::array img_orig,Var2D dim_crop, Var2D coord_coin){
     int cx=coord_coin.x,cy=coord_coin.y;
     af::array img_crop(dim_crop.x,dim_crop.y,f64);
