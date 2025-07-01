@@ -1,0 +1,221 @@
+
+
+
+%%% LaTeX Template: Two column article
+%%%
+%%% Source: http://www.howtotex.com/
+%%% Feel free to distribute this template, but please keep to referal to http://www.howtotex.com/ here.
+%%% Date: February 2011
+
+%%% Preamble
+\documentclass[	french,DIV=calc,%
+							paper=a4,%
+							fontsize=11pt,%
+							twocolumn]{scrartcl}	 					% KOMA-article class
+
+\usepackage{lipsum}													% Package to create dummy text
+\usepackage[utf8x]{inputenc}
+\usepackage[francais]{babel}	
+% English language/hyphenation
+\usepackage[protrusion=true,expansion=true]{microtype}				% Better typography
+\usepackage{amsmath,amsfonts,amsthm}					% Math packages
+\usepackage[pdftex]{graphicx}									% Enable pdflatex
+\usepackage[svgnames]{xcolor}									% Enabling colors by their 'svgnames'
+\usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption}	% Custom captions under/above floats
+\usepackage{epstopdf}												% Converts .eps to .pdf
+\usepackage{subfig}													% Subfigures
+\usepackage{booktabs}												% Nicer tables
+\usepackage{fix-cm}													% Custom fontsizes
+
+\usepackage[squaren,Gray]{SIunits}
+
+%%% Custom sectioning (sectsty package)
+\usepackage{sectsty}													% Custom sectioning (see below)
+\allsectionsfont{%															% Change font of al section commands
+	\usefont{OT1}{phv}{b}{n}%										% bch-b-n: CharterBT-Bold font
+	}
+
+\sectionfont{%																% Change font of \section command
+	\usefont{OT1}{phv}{b}{n}%										% bch-b-n: CharterBT-Bold font
+	}
+
+
+
+%%% Headers and footers
+\usepackage{fancyhdr}												% Needed to define custom headers/footers
+	\pagestyle{fancy}														% Enabling the custom headers/footers
+\usepackage{lastpage}	
+
+% Header (empty)
+\lhead{}
+\chead{}
+\rhead{}
+% Footer (you may change this to your own needs)
+\lfoot{\footnotesize \texttt{Manip tomo} \textbullet Réglages optiques et logiciels}
+\cfoot{}
+\rfoot{\footnotesize page \thepage\ of \pageref{LastPage}}	% "Page 1 of 2"
+\renewcommand{\headrulewidth}{0.0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\newcommand{\code}[1]{\texttt{#1}}
+
+
+%%% Creating an initial of the very first character of the content
+\usepackage{lettrine}
+\newcommand{\initial}[1]{%
+     \lettrine[lines=3,lhang=0.3,nindent=0em]{
+     				\color{DarkGoldenrod}
+     				{\textsf{#1}}}{}}
+
+
+
+%%% Title, author and date metadata
+\usepackage{titling}															% For custom titles
+
+\newcommand{\HorRule}{\color{DarkGoldenrod}%			% Creating a horizontal rule
+									  	\rule{\linewidth}{1pt}%
+										}
+
+\pretitle{\vspace{-30pt} \begin{flushleft} \HorRule 
+				\fontsize{50}{50} \usefont{OT1}{phv}{b}{n} \color{DarkRed} \selectfont 
+				}
+\title{Documentation Tomo}					% Title of your article goes here
+\posttitle{\par\end{flushleft}\vskip 0.5em}
+
+\preauthor{\begin{flushleft}
+					\large \lineskip 0.5em \usefont{OT1}{phv}{b}{sl} \color{DarkRed}}
+\author{Matthieu Debailleul, }											% Author name goes here
+\postauthor{\footnotesize \usefont{OT1}{phv}{m}{sl} \color{Black} 
+					Laboratoire MIPS 								% Institution of author
+					\par\end{flushleft}\HorRule}
+
+\date{}																				% No date
+
+
+
+%%% Begin document
+\begin{document}
+\maketitle
+\thispagestyle{fancy} 			% Enabling the custom headers/footers for the first page 
+% The first character should be within \initial{}
+\initial{B}\textbf{rief description of the optical set-up and the useful softwares.}
+
+
+\section{Useful programms}
+
+\subsection*{Show\_fourier : réglages du hors-axe et balayage angulaire}
+
+Les deux dernières étapes sont faites avec le programme \textbf{showfourier}, qui affiche la TF de l'objet.  en indiquant à quel 
+endroit doit se situer le spectre objet cohérent (ordre +1).
+
+
+
+\subsection{Compilation :  bibliothèques externes}
+Les bibliothèques (hors Debian) utiles aux programmes ont été placées dans 
+\texttt{/opt/tomo\_lib/} et la variable d'environnement \texttt{\$LD\_LIBRARY\_PATH} réglé en conséquence (\texttt{/etc/ld.conf}, \texttt{.bashrc}). Les sources des programmes sont disponibles 
+dans \texttt{Tomo\_prog}, et les binaires ont été placés dans le 
+\texttt{/usr/bin/}. 
+
+\subsection{Acquisition : manip\_tomo}
+Elle se lance avec la commande manipTomo5 : 
+    \begin{center}
+    \texttt{manipTomo5 -ni 600 -voffset 0 -0.1 \\-vfleur 4.2 3}   
+    \end{center}
+    
+ pour 600 images acquises. 
+Les paramètres \texttt{voffset} et \texttt{vfleur} dépendant du réglage du balayage (décalage du zéro et intervalle max de tension  $v_x$ et $v_y$, réglées à l'aide de \code{show\_fourier}).
+
+La nouvelle version ne prend aucun paramètre en option : ils sont lus dans les fichiers recon.txt et config.txt.  
+On lance simplement  l'acquisition avec \textbf{\code{manip\_tomo5}}
+
+\subsection{Reconstruction}
+\subsubsection{Exécutables}
+Elle se fait en 2 étapes : prétraitement puis reconstruction à proprement parler. 
+
+Le prétraitement  extrait les champs complexes  des hologrammes (hors-axe, aberration, déroulement \ldots). La commande nécessite le chemin vers les acquisitions 
+Les coordonnées du centre du cercle de hors-axe (lui-même réglé avec le programme \texttt{show\_fourier}) sont 
+
+    \begin{center}
+    \texttt{Tomo\_pretraitement -i /ramdisk/ACQUIS}
+    \end{center}
+
+Les champs complexes sont enfin utilisés pour la reconstruction.
+
+
+La dernière version ne prend
+plus de paramètres en options : ils sont lus dans les fichiers de configuration et se lance avec \code{Tomo\_pretraitement}.
+
+
+\subsubsection{Configuration}
+Le pretraitement et la reconstruction sont contrôlés par deux fichiers situés dans le repertoire \code{Tomo\_config}~:
+\begin{enumerate}
+ \item config\_manip.txt
+ \item recon.txt
+\end{enumerate}
+
+Le fichier de configuration de la manip est a priori invariant une fois la manip fixée (longueur d'onde, grandissement total, NA etc.).
+Le fichier recon.txt permet de contrôler le pretraitement et la reconstruction (cf \textsc{Tab.} \ref{recon_tab}). 
+
+\textbf{
+L'ensemble des chemins (recon.txt, config\_manip.txt, acquisitions) doit être indiqué dans \$HOME/.config./gui\_tomo.conf}
+
+
+\begin{table}[h!]
+\caption{Mot-clés contrôlant la reconstruction}
+\centering
+	\begin{tabular}{ll}
+		\toprule
+		\multicolumn{2}{c}{\code{Tomo\_config/recon.txt}} \\
+		\cmidrule(r){1-2}
+			Mot-clé 	& Fonction  \\
+		\midrule
+			BORN 		&  Approx. utilisée (0=RYTOV) \\
+			C\_ABER  	& 1=Corriger les aberrations  \\
+			DEROUL		& 1=Dérouler la phase\\
+			NB\_HOLO\_RECON	& Nbre d'hologrammes à traiter\\
+		\bottomrule
+	\end{tabular}\label{recon_tab}
+\end{table}
+
+L'approximation de  Rytov est meilleure pour les objets épais ($>5\micro$m), mais nécessite un déroulement de phase.
+
+
+\subsection{Correction des aberrations}
+
+Les aberrations résiduelles peuvent être  corrigées (\texttt{C\_ABER=1} dans \texttt{recon.txt}) en analysant le fond des acquisitions, dont la phase est supposée plane. L'écart à la planéité fournit le polynôme de
+correction des aberrations. 
+
+Pour fonctionner de façon optimale, la correction d'aberration nécessite un masque binaire séparant l'objet du fond, fourni par l'utilisateur (en l'absence de masque, une masque unité
+est créé).
+
+
+\section{Réglages de la manip}
+Le réglage  optique du tomo demande d'effectuer différentes étapes~:
+
+\begin{enumerate}
+ \item planéité de l'onde d'illumination sur l'objet
+ \item accord de phase entre référence et illumination sur la caméra
+ \item conjugaison des diaphragmes de champ avec l'objet et la caméra
+ \item réglage du hors-axe
+ \item réglage du balayage
+\end{enumerate}
+
+
+\subsection{eBusPLayer : utilisation et réglages caméra}
+Voltages\_BlackLevelOffset (eBusPlayer 4.1.5) : la valeur 101 permet d'avoir à la fois un zéro (capteur couvert) et le niveau de saturation.  
+Ce paramètre disparait avec la nouvelle caméra (MV1-D2048-96-G2-10, pixel de 5,5 µm).
+
+\subsubsection{Réglages réseaux}
+La caméra est sur la 3è carte ethernet (pci) déclarée en \texttt{eth2}. Les jumbo frames (trames géantes) doivent être activée avec 
+l'option \texttt{MTU=9000}, sinon 
+la caméra plafonne à 80 IPS au lieu de 90. La carte ethernet prends un adresse locale de type \texttt{169.168.0.2}. 
+Il faut enfin fixer une adresse IP pour la caméra. 
+
+\section{Bruit cohérent}
+Le bruit cohérent peut être corrigé en réalisant une acquisition à vide, qui peut être soustraite à l'image finale.
+
+\section{Interface graphique}
+
+Le fichier de configuration des chemins utiles se trouve dans \code{\$HOME/.config/gui\_tomo.conf}. Il fournit à l'interface graphique un fichier L'interface graphique enregistre les paramètres dans les fichiers de 
+configurations \code{recon.txt} et \code{config\_manip.txt}, puis lance les binaires d'acquisition, de pretraitement et reconstruction.
+\end{document}
