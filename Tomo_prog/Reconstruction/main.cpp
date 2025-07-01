@@ -22,7 +22,7 @@
 #include <assert.h>
 #include <omp.h>
 #include "manip.h"
-
+#include "IO_functions.h"
 #include "FFT_fonctions.h"
 //#include "IO_fonctions.h"
 #define PI M_PI
@@ -54,9 +54,53 @@ usage(int argc, char **argv)
 /* --------------------------------------------------------------------------- */
 
 //int main(int argc, char *argv[])
-int main()
+int main(int argc,char *argv[])
 {
-    manip m1;
+    string gui_config_name;
+    string etat_polar;
+  //  vector<string> etat_polar_demoz={"/LC/polar0/","/LC/polar90/","/RC/polar0/","/RC/polar90/"};
+    bool b_polar=false;
+    for (int i = 0; i < argc; ++i){
+        //std::cout << "Argument " << i << " : " << argv[i] << "\n";
+
+        std::string arg = argv[i];
+        if(arg == "--help"){
+                cout<<"-polar : mode polar"<<endl;
+                cout<<"-etat : indiquez un des 4 états :"<<endl;
+                cout<<"/LC/polar0/"<<endl;
+                cout<<"/LC/polar90/"<<endl;
+                cout<<"/RC/polar0/"<<endl;
+                cout<<"/RC/polar90/"<<endl;
+        return 0;
+        }
+        else if(arg=="-polar"){
+                cout<<"Mode polarisation activé, reconstruction des 4 états : RC0,RC90,LC0,LC90"<<endl;
+                b_polar=true;
+                gui_config_name="gui_tomo_polar.conf";
+        }else if(arg == "-etat" && i + 1 < argc) {
+        etat_polar = argv[++i];
+        cout<<"etat polar="<<etat_polar <<endl;
+        gui_config_name="gui_tomo_polar.conf";
+        }
+        else gui_config_name="gui_tomo.conf";
+    }
+cout<<"b_pôlar="<<b_polar<<endl;
+    /*for (int i = 0; i < argc; ++i) {
+        //std::cout << "Argument " << i << " : " << argv[i] << "\n";
+
+        std::string arg = argv[i];
+        if(arg == "--help"){
+                cout<<"-polar : mode polar"<<endl;
+                return 0;
+        }
+        else if(arg=="-polar"){
+                b_polar=true;
+                gui_config_name="gui_tomo_polar.conf";
+        }
+        else gui_config_name="gui_tomo.conf";
+    }*/
+    manip m1(gui_config_name,etat_polar,b_polar);
+
     ///find the number of angle with the size of tabPosSpec
     const unsigned int taille_octet_fic=get_bin_file_size(m1.chemin_result+"/tab_posSpec.raw");
     cout<< "Taille_octet="<<taille_octet_fic<<endl;
@@ -212,7 +256,7 @@ int main()
     temps_cpu = (temps_final - temps_initial) * 1e-6;
     printf("temps apres normalisation : %lf\n",temps_cpu);
     //SAV(TF3D_PotObj_Re, N_tab, "/home/aziz/Projet_tomo/Tomo_Images/TF2d_apres_masquage/TF3D_PotObj_Re_norm_avant.bin", float,"wb");
-     SAV3D_Tiff(TF3D_PotObj,"Re", m1.chemin_result+"/TF3DPotObjRE.tif",tailleTheoPixelTomo);
+   //  SAV3D_Tiff(TF3D_PotObj,"Re", m1.chemin_result+"/TF3DPotObjRE.tif",tailleTheoPixelTomo);
 
     //////////////////////////////papillon binarisé
     vector<double> papillon_masque(N_tab,0);
@@ -307,10 +351,22 @@ int main()
         indice_cplx[cpt]=ctePot2Ind*PotObj3D[cpt];
     }
     printf("ecriture de PotObj3D.Re, PotObj3D.Im \n");
+    cout<<"ecriture de PotObj3D.Re, PotObj3D.Im \n"<<m1.chemin_result<<endl;
     auto start_tiff = std::chrono::system_clock::now();
 
-    SAV3D_Tiff(indice_cplx,"Re", m1.chemin_result+"/indice.tif",tailleTheoPixelTomo);
-    SAV3D_Tiff(indice_cplx,"Im", m1.chemin_result+"/absorption.tif",tailleTheoPixelTomo);
+
+  //  SAV3D_Tiff_Optimized(indice_cplx,"Im", m1.chemin_result+"/absorption.tif",tailleTheoPixelTomo);
+    hsize_t Nx=dim_final,Ny=dim_final,Nz=dim_final;
+   if(b_polar==true){
+   cout<<"sauvegarde en hdf dans"<< m1.chemin_result+"/indice_cplx_hdf5.hdf"<<endl;
+   save_complex_volume_hdf5(indice_cplx, m1.chemin_result+"/indice_cplx_hdf5.hdf",Nx,Ny,Nz,tailleTheoPixelTomo);
+   cout<<"sauvegarde HDF!"<<endl;
+   }else{
+   SAV3D_Tiff_Optimized(indice_cplx,"Re", m1.chemin_result+"/indice.tif",tailleTheoPixelTomo);
+    SAV3D_Tiff_Optimized(indice_cplx,"Im", m1.chemin_result+"/absorption.tif",tailleTheoPixelTomo);
+   }
+   // save_real_hdf5_volume(indice_cplx, m1.chemin_result+"/indice_hdf5.hdf",Nx,Ny,Nz,"/volume_real");
+
 
     auto end_tiff = std::chrono::system_clock::now();
     auto elapsed_tiff = end_tiff - start_tiff;
@@ -322,6 +378,7 @@ int main()
     temps_cpu = (temps_arrivee-temps_depart )/CLOCKS_PER_SEC;
     printf("temps total: %f\n",temps_cpu);
     cout<<"#######-- Reconstruction terminée --#######"<<endl;
+    cout<<"Résultats dans "<<m1.chemin_result<<endl;
     return 0;
 }
 

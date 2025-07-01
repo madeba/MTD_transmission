@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "fonctions.h"
+#include "tiff_functions.h"
 #include <complex>
 #include "include/Point3D.h"
 #include <fftw3.h>
@@ -17,7 +18,7 @@
 #include "FFT_fonctions.h" //fonctions fftw
 #include "FFTW_init.h" //gestion init fftw
 #include "manip.h" //gestion manip
-
+#include "champCplx_functions.h"
 using namespace std;
 using namespace cv;
 
@@ -26,13 +27,14 @@ int main( int argc, char** argv )
 {
     string home=getenv("HOME");
 ///--------------- Chargement ou création de l'objet (bille, spectre etc.)------------
-    int dimROI=1024;
+    int dimROI=2048;
     manip m1(dimROI);//Initialiser la manip avec la taille du champ holographique (acquisition) en pixel. Attention, cela effacera la valeur du fichier de config !
     Point3D dim3D(m1.dim_final,m1.dim_final,m1.dim_final);
+    Var3D dim={m1.dim_final,m1.dim_final,m1.dim_final};
     Point2D dim2D((double)m1.dim_Uborn,(double)m1.dim_Uborn,round(m1.dim_Uborn));
     unsigned int nbPix3D=pow(m1.dim_final,3),nbPix2D=pow(m1.dim_Uborn,2);
     ///variables 3D : objet+spectre
-    vector<complex<double>> vol_bille(nbPix3D),  TF_bille(nbPix3D);
+    vector<complex<double>> vol_obj(nbPix3D),  TF_obj(nbPix3D);
     vector<complex<double>> obj_conv(nbPix3D), SpectreObjConv(nbPix3D);
 
     ///variables 2D : champ complexe+spectre
@@ -46,13 +48,36 @@ int main( int argc, char** argv )
     double Rboule_metrique=5*pow(10,-6);///rayon bille en m
     int rayon_boule_pix=round(Rboule_metrique/m1.Tp_Tomo);///rayon bille en pixel
     Point3D centre_boule(dim3D.x/2,dim3D.x/2,dim3D.x/2,dim3D.x);//bille centrée dans l'image
-    double indice=1.40,kappa=0.000;//indice + coef d'extinction
+    double indice=1.395,kappa=0.000;//indice + coef d'extinction
     complex<double> nObj= {indice,kappa},n0= {m1.n0,0.0},Delta_n=nObj-n0;///init propriété bille
-    genere_bille(vol_bille,centre_boule, rayon_boule_pix,nObj-n0,dim3D.x);
-    Point3D coordMin(-25*pow(10,-6),-10*pow(10,-6),-0.31*pow(10,-6),dim3D.x),
-            coordMax(25*pow(10,-6),10*pow(10,-6),0.31*pow(10,-6),dim3D.x);
 
-  //  genere_barre(vol_bille,coordMin,coordMax,nObj-n0, m1);
+   // genere_bille(vol_obj,centre_boule, rayon_boule_pix,nObj-n0,dim3D.x);
+   ///first abscissa, we add a width (x_width) and a repetition distance (delta_x)
+   /* double x0=-2.5*pow(10,-6),delta_x=10*pow(10,-6),x_width=5*pow(10,-6);
+    double x1=x0+x_width;
+    double y0=-2.5*pow(10,-6),delta_y=0*pow(10,-6),y_width= 5*pow(10,-6);
+    double y1=y0+y_width;
+    double z_width=5*pow(10,-6);*/
+
+    double x0=-15*pow(10,-6),delta_x=10*pow(10,-6),x_width=30*pow(10,-6);
+    double x1=x0+x_width;
+    double y0=-15*pow(10,-6),delta_y=0*pow(10,-6),y_width= 30*pow(10,-6);
+    double y1=y0+y_width;
+    double z_width=5*pow(10,-6);
+
+    Point3D coordMin(x0,y0,-z_width/2,dim3D.x),coordMax(x1,y1,z_width/2,dim3D.x);
+
+   genere_barre(vol_obj,coordMin,coordMax,nObj-n0, m1);
+
+  /*  coordMin.set_coord3D(x1+delta_x,y1+delta_y,-z_width/2);
+    coordMax.set_coord3D(x1+delta_x+x_width,y1+delta_y+y_width,z_width/2);
+    genere_barre(vol_obj,coordMin,coordMax,nObj-n0, m1);*/
+
+  /*  coordMin.set_coord3D(x0+2*(delta_x+x_width),-15*pow(10,-6),-z_width/2);
+    coordMax.set_coord3D(x0+2*(delta_x+x_width)+x_width,15*pow(10,-6),z_width/2);
+    genere_barre(vol_obj,coordMin,coordMax,nObj-n0, m1);*/
+
+
 
   // coordMin.set_coord3D(-25*pow(10,-6),-10*pow(10,-6),2.31*pow(10,-6));
       //  coordMax.set_coord3D(25*pow(10,-6),10*pow(10,-6),2.61*pow(10,-6));
@@ -63,9 +88,10 @@ int main( int argc, char** argv )
   /*  genere_barre(vol_bille,coordMin,coordMax,-0.06, m1);*/
 
 
-    SAV3D_Tiff((vol_bille),"Re",m1.chemin_result+"/bille_Re.tif",m1.Tp_Tomo);
+    SAV3D_Tiff(vol_obj,"Re",m1.chemin_result+"/obj_Re.tif",m1.Tp_Tomo);
    // SAV3D_Tiff((vol_bille),"im",m1.chemin_result+"/bille_im.tif",m1.Tp_Tomo);
-
+    double energy = computeEnergy(vol_obj);
+    std::cout << "Energy = " << energy/vol_obj.size() << std::endl;
     ///--------------- Données physiques (en µm)----------------------------
     double phase_au_centre=Delta_n.real()*2*Rboule_metrique*2*pi/m1.lambda_v;
     cout<<setprecision(3);
@@ -76,16 +102,12 @@ int main( int argc, char** argv )
     cout<<"| phase au centre| "<<phase_au_centre<<" rad                          |"<<endl;
     cout<<"*---------------------------------------------------*"<<endl;
 
-
-
-
-
     ///Calcul spectre objet
     FFTW_init tf3D(dim3D),tf2D(dim2D); ///init fftw pour spectre 3D et 2D
-    TF3Dcplx(tf3D.in,tf3D.out,fftshift3D(vol_bille),TF_bille,tf3D.p_forward_OUT,m1.Tp_Tomo);
-    vector<complex<double>>().swap(vol_bille);
-    TF_bille=fftshift3D(TF_bille);
-    SAV3D_Tiff(TF_bille,"Re",m1.chemin_result+"/TF_bille_Re.tif", m1.Delta_f_tomo*pow(10,-6));
+    TF3Dcplx(tf3D.in,tf3D.out,fftshift3D(vol_obj),TF_obj,tf3D.p_forward_OUT,m1.Tp_Tomo);
+    vector<complex<double>>().swap(vol_obj);
+    TF_obj=fftshift3D(TF_obj);
+    SAV3D_Tiff(TF_obj,"Re",m1.chemin_result+"/TF_obj_Re.tif", m1.Delta_f_tomo*pow(10,-6));
 
     Point2D spec_H(0.0,0.0,m1.dim_Uborn);//coordonnées spec2D dans une image de dimension dimUBorn
     const int nbAngle=m1.nbHolo;
@@ -103,19 +125,30 @@ int main( int argc, char** argv )
     //CoordSpec2=mon_OTF.bFleur(nbAxes);//retrieve tabular of specular beam from class OTF & create 3D OTF;
 
    // interp_lin3D(mon_OTF.Valeur);
-    SAV3D_Tiff(mon_OTF.Valeur,"Re",m1.chemin_result+"/OTF_simule_Re.tif",m1.Tp_Tomo);
+    //SAV3D_Tiff(mon_OTF.Valeur,"Re",m1.chemin_result+"/OTF_simule_Re.tif",m1.Tp_Tomo);
+    cout<<"Tp_tomo"<<m1.Tp_Tomo<<endl;
+    write3D_Tiff(mon_OTF.Valeur,dim, "Re",m1.chemin_result+"/OTF_simule_Re.tif",m1.Tp_Tomo,"OTF partie reelle");
+
+
+
     ///calcul objet convolué
     for(int cpt=0; cpt<pow(m1.dim_final,3); cpt++){
      //SpectreObjConv[cpt]=mon_OTF.Valeur[cpt]*TF_bille[cpt];
-     SpectreObjConv[cpt].real(mon_OTF.Valeur[cpt].real()*TF_bille[cpt].real());
-     SpectreObjConv[cpt].imag(mon_OTF.Valeur[cpt].imag()*TF_bille[cpt].imag());
+     SpectreObjConv[cpt].real(mon_OTF.Valeur[cpt].real()*TF_obj[cpt].real());
+     SpectreObjConv[cpt].imag(mon_OTF.Valeur[cpt].imag()*TF_obj[cpt].imag());
     }
 
     vector<complex<double>>().swap(mon_OTF.Valeur);
     TF3Dcplx_INV(tf3D.in,tf3D.out,fftshift3D(SpectreObjConv),obj_conv,tf3D.p_forward_OUT,m1.Delta_f_tomo);
     vector<complex<double>>().swap(SpectreObjConv);
-    SAV3D_Tiff(fftshift3D(obj_conv),"Re",m1.chemin_result+"obj_conv_Re.tif",m1.Tp_Tomo);
-    SAV3D_Tiff(fftshift3D(obj_conv),"Im",m1.chemin_result+"obj_conv_Im.tif",m1.Tp_Tomo);
+    string description="partie réeelle convoluée,carre 30 µm, Δz=3.5, Δn=0.12\n";
+    double energy_conv=computeEnergy(obj_conv);
+    cout<<"Energie avant convolution="<<energy/nbPix3D<<endl;
+    cout<<"Energie après convolution="<<energy_conv/obj_conv.size()<<endl;
+    cout<<"ratio energie après/avant="<<energy_conv/energy<<endl;
+    write3D_Tiff(fftshift3D(obj_conv),dim, "Re",m1.chemin_result+"/obj_conv_Re.tif",m1.Tp_Tomo,description.c_str());
+    write3D_Tiff(fftshift3D(obj_conv),dim, "Im",m1.chemin_result+"/obj_conv_Im.tif",m1.Tp_Tomo,description.c_str());
+
     vector<complex<double>>().swap(obj_conv);
 
     vector<double> wrappedPhase(nbPix2D);
@@ -125,6 +158,7 @@ int main( int argc, char** argv )
 
     cout<<"extraction hologramme"<<endl;
     ///extract complex field from 3D spectrum
+    /*
     for(int holo_numero=0; holo_numero<m1.nbHolo; holo_numero++){
 
         spec_H.x=CoordSpec_H[holo_numero].x;//the old code use spec, so we convert OTF.centre to spec
@@ -134,7 +168,7 @@ int main( int argc, char** argv )
         centres[spec_H.coordI().cpt2D()]=holo_numero;//used save centres in a image file, for quick visualisation
 
         ///Calcul des TF2D  des hologrammes à partir du spectre 3D de l'objet.
-        calcHolo(spec_H,TF_bille,TF_holo,m1);//extract Ewald spheres + projection on a 2D plane
+        calcHolo(spec_H,TF_obj,TF_holo,m1);//extract Ewald spheres + projection on a 2D plane
         // SAV2D_Tiff(TF_holo,"Im",dir_sav+"Tf_holo_Im.tif",m1.Tp_Uborn);
         //SAVCplx(TF_holo,"Re",m1.chemin_result+"TF_holo_H_Re_208x208x600.raw",t_float,"a+b");
         Var2D decal2centreI= {-spec_H.x+m1.dim_Uborn/2,spec_H.y+m1.dim_Uborn/2};///centering all the spectrum in "computer axes"
@@ -174,5 +208,6 @@ int main( int argc, char** argv )
     SAV2(tabPosSpec_I,m1.chemin_result+"/tab_posSpec.raw",t_double,"wb");
     vector<double> param{m1.NXMAX,m1.nbHolo,m1.R_EwaldPix,dimROI,m1.Tp_holo};//devenu inutile avec fichier de config
     SAV2(param,m1.chemin_result+"/parametres.raw", t_double, "wb");
+    */
     return 0;
 }

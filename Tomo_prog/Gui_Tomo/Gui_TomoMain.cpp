@@ -183,11 +183,11 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     this->init_tab_val(home+fin_chemin_gui_tomo,r_tab_val_gui_conf);
     // this->init_tab_val(chemin_config_manip_pc_acquis,r_tab_val_manip_pc_acquis);///tableau si on est sur un pc acquisition
 
-     bool b_DARK_THEME=stof(extract_string("DARK_THEME",home+fin_chemin_gui_tomo,"1"));
-        ///color bright theme
-        wxColor *backgroundColor = new wxColor(200,200,200);
-       wxColor *panelColor = new wxColor(235,235,220);
-        wxColor *staticTxtColor =  new wxColor(23,42,70);
+    bool b_DARK_THEME=stof(extract_string("DARK_THEME",home+fin_chemin_gui_tomo,"1"));
+    ///color bright theme
+    wxColor *backgroundColor = new wxColor(200,200,200);
+    wxColor *panelColor = new wxColor(235,235,220);
+    wxColor *staticTxtColor =  new wxColor(23,42,70);
     ///dark theme
     if(b_DARK_THEME==1){
      *backgroundColor =  wxColor(5,10,20);
@@ -215,7 +215,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     panel_gauche->SetBackgroundColour(*backgroundColor);///background color for  the left panel
     panel_gauche->SetForegroundColour(*staticTxtColor);//font color for this panel
     //le panneau gauche sera géré par le sizer horizontal global
-    sizer_horizontal->Add(panel_gauche, 1, wxALL | wxEXPAND, 2);
+    sizer_horizontal->Add(panel_gauche, 1, wxEXPAND | wxALL,  1);
     //->Add(parent, etirable horizontablement,bordure=2 pixels )
     //sans l'option d'étirement, la pnneau gauche se limite à la partie affichée
     ///sizer vertical partie gauche
@@ -225,19 +225,19 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     wxPanel *zone10 = new wxPanel(panel_gauche,wxID_ANY );
 
     //wxPanel *zone10 = new wxPanel(panel_gauche);
-    sizer_vertical0->Add(zone10, 1, wxALL | wxEXPAND, 1);
+    sizer_vertical0->Add(zone10, 1, wxEXPAND, 1);
     zone10->SetBackgroundColour(*panelColor);
     zone10->SetSize(180,10);//ne fonctionne pas en hauteur?
     ///Titre
     // titre_Acquis=new wxStaticText(zone10,0,"Acquisition",wxPoint(2,2),wxSize(100,40));
-    titre_Acquis=new wxStaticText(zone10,0,"Acquisition",wxPoint(2,2),wxSize(100,40));
+    titre_Acquis=new wxStaticText(zone10,0,"Acquisition",wxPoint(2,2),wxSize(120,40));
     titre_Acquis->SetFont( wxFont(12, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL) );
     ///--------------------NB HOLO+N0
     wxPanel *zone11 = new wxPanel(panel_gauche);
     // sizer->Add(leftPanel, true, wxEXPAND | wxTOP | wxBOTTOM | wxLEFT, 20);
-    sizer_vertical0->Add(zone11, 0, wxALL | wxEXPAND | wxALIGN_CENTER, 1);// Ajout de cette zone au sizer vertical    //
+    sizer_vertical0->Add(zone11, 0, wxEXPAND, 1);// Ajout de cette zone au sizer vertical    //
     zone11->SetBackgroundColour(*panelColor);//fond gris clair
-    zone11->SetSize(180,40);
+    zone11->SetSize(180,30);
     ///NB_HOLO-----
     textNbHolo=new wxStaticText(zone11,1,"Nombre d'hologrammes  : ",wxPoint(2,2),wxSize(98,50));
     //édition du champ
@@ -261,7 +261,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     ///--------------------------SCHEMA BALAYAGE
     wxPanel *zone11b = new wxPanel(panel_gauche);
     zone11b->SetSize(200,50);
-    sizer_vertical0->Add(zone11b, 1, wxALL | wxEXPAND | wxALIGN_BOTTOM, 1);// Ajout de cette zone au sizer vertical    //
+    sizer_vertical0->Add(zone11b, 1,  wxEXPAND, 1);// Ajout de cette zone au sizer vertical    //
     zone11b->SetBackgroundColour(*panelColor);
 
     textScanPattern=new wxStaticText(zone11b,1,wxT("&Schéma"),wxPoint(2,10),wxSize(98,50));
@@ -285,7 +285,8 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     int Nb_circles_annular=stof(  extract_string("NB_CIRCLES_ANNULAR", chemin_config_manip, "8")  );//stof=string to float
     editnbCirclesAnnular=new wxTextCtrl(zone11b,1,"",wxPoint(120,40),wxSize(36,24));
     editnbCirclesAnnular->SetToolTip(wxT("Nombre de cercles concentriques si ANNULAR"));
-    if(ComboBox_Scan->GetString(ComboBox_Scan->GetSelection())==wxT("ANNULAR")) editnbCirclesAnnular->Enable(true);
+ //cout<<"combo_scan selection="<<ComboBox_Scan->GetSelection()<<endl;
+    if(Nb_circles_annular==true) editnbCirclesAnnular->Enable(true);
     else    editnbCirclesAnnular->Enable(false);
 
     wxString string_NbCirclesAnnular = wxString::Format(wxT("%i"),Nb_circles_annular);
@@ -294,14 +295,15 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     wxString defaultPattern=extract_string("SCAN_PATTERN",chemin_config_manip,"ROSACE");//lire le pattern du fichier de config, défaut sur Rosace
     cout<<"listeScanPattern.Index(defaultPattern)="<<listeScanPattern.Index(defaultPattern)<<endl;
     ComboBox_Scan->SetSelection(listeScanPattern.Index(defaultPattern));//par defaut, mettre le pattern du fichier de config
+//    wxStaticLine* line = new wxStaticLine(parent, wxID_ANY, wxDefaultPosition, wxSize(200, 2));
 
     ///--------------------INTERVALLE de BALAYAGE------------------
     wxPanel *zone12 = new wxPanel(panel_gauche);
-    sizer_vertical0->Add(zone12, 0, wxALL | wxEXPAND | wxALIGN_CENTER, 1);// Ajout de cette zone au sizer vertical    //
+    sizer_vertical0->Add(zone12, 0,  wxEXPAND , 1);// Ajout de cette zone au sizer vertical    //
     //  zone12->SetBackgroundColour(*panelColor);
     zone12->SetBackgroundColour(*panelColor);
 
-    titre_Interval_Balayage=new wxStaticText(zone12,-1," Intervalle de Balayage",wxPoint(0,0),wxSize(100,40));
+    titre_Interval_Balayage=new wxStaticText(zone12,-1," Intervalle de Balayage",wxPoint(0,0),wxSize(200,40));
     titre_Interval_Balayage->SetFont(wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD) );
 
     textVxmin=new wxStaticText(zone12,-1,"Vxm ",wxPoint(10,30),wxSize(30,40));
@@ -342,7 +344,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     ////-------------------------
     ///--------------------LANCER ACQUISITION------------------
     wxPanel *zone13 = new wxPanel(panel_gauche);
-    sizer_vertical0->Add(zone13, 1, wxALL | wxEXPAND | wxALIGN_CENTER, 1);// Ajout de cette zone au sizer vertical    //
+    sizer_vertical0->Add(zone13, 1, wxEXPAND , 5);// Ajout de cette zone au sizer vertical    //
     zone13->SetBackgroundColour(*panelColor);
     /// Dialog fichier de données;
     BoutonOpenDir=new wxButton(zone13, idBoutonOpenDir, wxT("&Données"), wxPoint(5,10), wxDefaultSize, 0);
@@ -369,22 +371,23 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     ///Le panneau central a pour parent le page onglet 1
     wxPanel *panel_centre = new wxPanel(panel_tab1,wxID_ANY);
     //le panneau gauche sera géré par le sizer horizontal global
-    sizer_horizontal->Add(panel_centre, 1, wxALL | wxEXPAND, 2);
+    sizer_horizontal->Add(panel_centre, 1,  wxEXPAND | wxALL, 1);
     wxBoxSizer *sizer_vertical1 = new wxBoxSizer(wxVERTICAL);
     panel_centre->SetBackgroundColour(*backgroundColor);
     panel_centre->SetForegroundColour(*staticTxtColor);
     //-------------zone du haut -------------------------------------------------------------------------------------
     wxPanel *zone20 = new wxPanel(panel_centre);
     zone20->SetBackgroundColour(*panelColor);                                  //
-    sizer_vertical1->Add(zone20, 0, wxALL | wxEXPAND | wxALIGN_CENTER, 1);// Ajout de cette zone au sizer vertical    //
-    titre_Pretraitement=new wxStaticText(zone20,-1,wxT(" Prétraitement"),wxPoint(0,0),wxSize(100,40));               //
+   // sizer_vertical1->Add(zone20, 0, wxEXPAND | wxALIGN_CENTER, 1);// Ajout de cette zone au sizer vertical    //
+    sizer_vertical1->Add(zone20, 0, wxEXPAND, 1);// Ajout de cette zone au sizer vertical    //
+    titre_Pretraitement=new wxStaticText(zone20,-1,wxT(" Prétraitement"),wxPoint(0,0),wxSize(150,40));               //
     titre_Pretraitement->SetFont(wxFont(12, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL) );      //
     //-------------zone du milieu ------------------------------------------------------------------------------------
     wxPanel *zone21 = new wxPanel(panel_centre, wxID_ANY, wxDefaultPosition, wxSize(-1, 160));
     zone21->SetBackgroundColour(*panelColor);
 
     // Ajout de cette zone au sizer vertical
-    sizer_vertical1->Add(zone21, 0, wxALL | wxEXPAND, 1);
+    sizer_vertical1->Add(zone21, 0,  wxEXPAND, 1);
 
     m_born = new wxCheckBox(zone21, id_boolBorn, wxT("Utiliser Born"), wxPoint(20, 11));
     m_born->SetToolTip(wxT("0=Rytov"));
@@ -396,7 +399,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     //m_born->SetValue(true);
     m_Deroul = new wxCheckBox(zone21, idBoolDeroul, wxT("Déroulement"), wxPoint(20, 71));
     m_Deroul->SetValue(stof(extract_string("DEROUL",chemin_recon,"1")));
-    m_Aber = new wxCheckBox(zone21, idBoolAber, wxT("Correction aberration"), wxPoint(20, 101));
+    m_Aber = new wxCheckBox(zone21, idBoolAber, wxT("Correction aberration ui"), wxPoint(20, 101));
     m_Aber->SetValue(stof(extract_string("C_ABER",chemin_recon)));
 
     m_AmpliRef = new wxCheckBox(zone21, idBoolAmpliRef, wxT("Division ampli_ref"), wxPoint(20, 131));
@@ -406,7 +409,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     wxPanel *zone22 = new wxPanel(panel_centre);
     zone22->SetBackgroundColour(*panelColor);
     // Ajout de cette zone au sizer vertical
-    sizer_vertical1->Add(zone22, 2, wxALL | wxEXPAND, 1);
+    sizer_vertical1->Add(zone22, 2,  wxEXPAND, 1);
     /// Dialog fichier;
     BoutonOpenMask=new wxButton(zone22, idBoutonOpenMask, wxT("&Masque"), wxPoint(5,10), wxSize(70,30), 0);
     editFicMask=new wxTextCtrl(zone22,-1,chemin_rep_acquis+"/Mask.png",wxPoint(85,6), wxSize(200,40));
@@ -425,20 +428,20 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     wxPanel *panel_droit = new wxPanel(panel_tab1,wxID_ANY);
     panel_droit->SetBackgroundColour(*backgroundColor);
     panel_droit->SetForegroundColour(*staticTxtColor);
-    sizer_horizontal->Add(panel_droit, 1, wxALL | wxEXPAND, 2); //le panneau gauche sera géré par le sizer horizontal global
+    sizer_horizontal->Add(panel_droit, 1,  wxEXPAND, 2); //le panneau gauche sera géré par le sizer horizontal global
 
     wxBoxSizer *sizer_vertical2 = new wxBoxSizer(wxVERTICAL);
 
     wxPanel *zone30= new wxPanel(panel_droit);
     zone30->SetBackgroundColour(*panelColor);
     // Ajout de cette zone au sizer vertical
-    sizer_vertical2->Add(zone30, 0, wxALL | wxEXPAND | wxALIGN_CENTER, 1);
-    titre_Recons=new wxStaticText(zone30,-1,wxT(" Reconstruction"),wxPoint(0,0),wxSize(100,40));
+    sizer_vertical2->Add(zone30, 0,  wxEXPAND, 1);
+    titre_Recons=new wxStaticText(zone30,-1,wxT(" Reconstruction"),wxPoint(0,0),wxSize(150,40));
     titre_Recons->SetFont(wxFont(12, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL) );
     //-------------zone Hors axe -------------------------------------------------------------------------------------
     wxPanel *zone31 = new wxPanel(panel_droit);
     zone31->SetBackgroundColour(*panelColor);
-    sizer_vertical2->Add(zone31, 0, wxALL | wxEXPAND | wxALIGN_CENTER, 1);
+    sizer_vertical2->Add(zone31, 0,  wxEXPAND, 1);
     titre_HorsAxe=new wxStaticText(zone31,-1,wxT(" Hors-axe"),wxPoint(0,0),wxSize(100,40));
     titre_HorsAxe->SetFont(wxFont(10, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD) );
 
@@ -476,7 +479,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     wxPanel *zone32 = new wxPanel(panel_droit);
     zone32->SetBackgroundColour(*panelColor);
     // Ajout de cette zone au sizer vertical
-    sizer_vertical2->Add(zone32, 1, wxALL | wxEXPAND | wxALIGN_CENTER, 1);
+    sizer_vertical2->Add(zone32, 1, wxEXPAND, 1);
 
 
     m_export_OTF = new wxCheckBox(zone32, idBoolExportOTF, wxT("Exporter OTF"), wxPoint(5, 50));
@@ -509,7 +512,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     wxPanel *panel_gauche_tabB = new wxPanel(panel_tab2,wxID_ANY,wxPoint(1,1),wxSize(200,40));
     panel_gauche_tabB->SetBackgroundColour(wxColor(10, 25, 50));
     //le panneau gauche sera géré par le sizer horizontal global
-    sizer_horizontalB->Add(panel_gauche_tabB, 0, wxALL | wxEXPAND, 2);
+    sizer_horizontalB->Add(panel_gauche_tabB, 0,  wxEXPAND, 2);
     //->Add(parent, etirable horizontablement,bordure=2 pixels )
     //sans l'option d'étirement, la pnneau gauche se limite à la partie affichée
 
@@ -518,7 +521,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
     wxBoxSizer *sizer_vertical_tabB_0 = new wxBoxSizer(wxVERTICAL);
     //  sizer_horizontal->Add(sizer_vertical0, 1, wxALL | wxEXPAND, 10);
     wxPanel *zoneB10 = new wxPanel(panel_gauche_tabB,wxID_ANY, wxPoint(1,1),wxSize(200,30) );
-    sizer_vertical_tabB_0->Add(zoneB10, 0, wxALL |wxALIGN_LEFT, 1);//zoneB10, non étirable verticalement
+    sizer_vertical_tabB_0->Add(zoneB10, 0, wxALIGN_LEFT, 1);//zoneB10, non étirable verticalement
     zoneB10->SetBackgroundColour(*panelColor);
     //zoneB10->SetBor
     ///Titre
@@ -527,7 +530,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
 
     ///--------------------Intervalle indice------------------
     wxPanel *zoneB11 = new wxPanel(panel_gauche_tabB, wxID_ANY, wxPoint(1,1),wxSize(200,40));
-    sizer_vertical_tabB_0->Add(zoneB11, 1, wxALL |wxALIGN_LEFT, 1);// Ajout de cette zone au sizer vertical    //
+    sizer_vertical_tabB_0->Add(zoneB11, 1,wxALIGN_LEFT, 1);// Ajout de cette zone au sizer vertical    //
     zoneB11->SetBackgroundColour(*panelColor);
 
     titre_interval_indice=new wxStaticText(zoneB11,-1,"Gamme d'indice",wxPoint(0,0),wxSize(100,40));
@@ -552,7 +555,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
 
     ///--------------------Intervalle coefficient extinction ------------------
     wxPanel *zoneB12 = new wxPanel(panel_gauche_tabB, wxID_ANY, wxPoint(1,1),wxSize(200,40));
-    sizer_vertical_tabB_0->Add(zoneB12, 1, wxALL |wxALIGN_LEFT, 1);// Ajout de cette zone au sizer vertical    //
+    sizer_vertical_tabB_0->Add(zoneB12, 1, wxALIGN_LEFT, 1);// Ajout de cette zone au sizer vertical    //
     zoneB12->SetBackgroundColour(*panelColor);
 
     titre_interval_kappa=new wxStaticText(zoneB12,-1,"Coefficient d'extinction",wxPoint(0,0),wxSize(100,40));
@@ -577,7 +580,7 @@ Gui_TomoFrame::Gui_TomoFrame(wxFrame *frame, const wxString& title)
 
     ///----------NB ITERATION GPS-----------------
     wxPanel *zoneB13 = new wxPanel(panel_gauche_tabB, wxID_ANY, wxPoint(1,1),wxSize(200,40));
-    sizer_vertical_tabB_0->Add(zoneB13, 1, wxALL |wxALIGN_LEFT, 1);// Ajout de cette zone au sizer vertical    //
+    sizer_vertical_tabB_0->Add(zoneB13, 1, wxALIGN_LEFT, 1);// Ajout de cette zone au sizer vertical    //
     zoneB13->SetBackgroundColour(*panelColor);
 
     titre_iterationGPS=new wxStaticText(zoneB13,-1,wxT("Nombre d'itérations"),wxPoint(4,6),wxSize(200,40));
@@ -1163,7 +1166,7 @@ float Gui_TomoFrame::extract_val(std::string token,  std::string chemin_fic)
 void Gui_TomoFrame::OnComboScan(wxCommandEvent &even)
 {
     modif_tab_val("SCAN_PATTERN", ComboBox_Scan->GetString(ComboBox_Scan->GetSelection()).ToStdString(),tab_val_manip);
-    cout<<"Schéma: "<<ComboBox_Scan->GetString(ComboBox_Scan->GetSelection())<<endl;
+   // cout<<"Schéma: "<<ComboBox_Scan->GetString(ComboBox_Scan->GetSelection())<<endl;
     if(ComboBox_Scan->GetString(ComboBox_Scan->GetSelection())==wxT("ANNULAR"))
     {
 

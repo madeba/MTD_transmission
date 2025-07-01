@@ -46,11 +46,11 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-Wall `pkg-config --cflags opencv` -fopenmp -fexceptions -std=c++14" />
+			<Add option="-Wall `pkg-config --cflags opencv` -fopenmp -fexceptions -std=c++17" />
 			<Add directory="/usr/include/opencv2/" />
 		</Compiler>
 		<Linker>
-			<Add option="-lpthread -lX11 -lfftw3_threads -lfftw3 -lm -ltiff  `pkg-config --libs opencv`" />
+			<Add option="-lpthread -lX11 -lgomp -lfftw3_threads -lfftw3 -lm -ltiff  `pkg-config --libs opencv`" />
 		</Linker>
 		<Unit filename="include/FFTW_init.h" />
 		<Unit filename="include/FFT_fonctions.h" />
@@ -58,10 +58,12 @@
 		<Unit filename="include/Obj3D.h" />
 		<Unit filename="include/Point2D.h" />
 		<Unit filename="include/Point3D.h" />
+		<Unit filename="include/champCplx_functions.h" />
 		<Unit filename="include/fonctions.h" />
 		<Unit filename="include/manip.h" />
 		<Unit filename="include/projet.h" />
 		<Unit filename="include/struct.h" />
+		<Unit filename="include/tiff_functions.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/FFTW_init.cpp" />
 		<Unit filename="src/FFT_fonctions.cpp" />
@@ -69,8 +71,10 @@
 		<Unit filename="src/Obj3D.cpp" />
 		<Unit filename="src/Point2D.cpp" />
 		<Unit filename="src/Point3D.cpp" />
+		<Unit filename="src/champCplx_functions.cpp" />
 		<Unit filename="src/fonctions.cpp" />
 		<Unit filename="src/manip.cpp" />
+		<Unit filename="src/tiff_functions.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

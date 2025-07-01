@@ -2,7 +2,7 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="Reconstruction" />
+		<Option title="Reconstruction_2025" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
@@ -55,14 +55,18 @@
 			<Add directory="include" />
 			<Add directory="." />
 			<Add directory="/usr/include/opencv4" />
+			<Add directory="/usr/include/hdf5/serial/" />
+			<Add directory="/usr/lib/x86_64-linux-gnu/hdf5/serial" />
 		</Compiler>
 		<Linker>
-			<Add option="`pkg-config --cflags --libs opencv` -lpthread -lgomp -ltiff" />
+			<Add option="`pkg-config --cflags --libs opencv` -lpthread -lgomp -ltiff -lhdf5_cpp -lhdf5" />
 			<Add library="/usr/lib/x86_64-linux-gnu/libfftw3.so" />
 			<Add library="/usr/lib/x86_64-linux-gnu/libfftw3_threads.so" />
+			<Add directory="/usr/lib/x86_64-linux-gnu/hdf5/serial" />
 		</Linker>
 		<Unit filename="include/FFT_encaps.h" />
 		<Unit filename="include/FFT_fonctions.h" />
+		<Unit filename="include/IO_functions.h" />
 		<Unit filename="include/Point2D.h" />
 		<Unit filename="include/Point3D.h" />
 		<Unit filename="include/fonctions.h" />
@@ -72,6 +76,7 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="src/FFT_encaps.cpp" />
 		<Unit filename="src/FFT_fonctions.cpp" />
+		<Unit filename="src/IO_functions.cpp" />
 		<Unit filename="src/Point2D.cpp" />
 		<Unit filename="src/Point3D.cpp" />
 		<Unit filename="src/fonctions.cpp" />

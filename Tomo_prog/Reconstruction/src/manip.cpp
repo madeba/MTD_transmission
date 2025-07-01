@@ -2,25 +2,36 @@
 #include <iostream>
 #include "fonctions.h"
 #include "projet.h"
+///this class handle all the set up parameters
 
 using namespace std;
 
 
-manip::manip()
+manip::manip(string str_nom_gui_tomo_conf, string etat_polar, bool b_polar)//param 2 and 3 are useless if not polar
 {
     string home=getenv("HOME");
-    string fin_chemin_gui_tomo="/.config/gui_tomo.conf";
+    string fin_chemin_gui_tomo="/.config/"+str_nom_gui_tomo_conf;
     string chemin_config_GUI=getenv("HOME")+fin_chemin_gui_tomo;
-    chemin_result=extract_string("CHEMIN_RESULT",home+fin_chemin_gui_tomo);
+    cout<<"chemin_config_gui="<<chemin_config_GUI<<endl;
+    string repertoire_config;
+    chemin_acquis=extract_string("CHEMIN_ACQUIS",chemin_config_GUI);
+    //si polar, modifions les repertoires de config et result.
+       if(b_polar){
+        chemin_racine=extract_string("CHEMIN_RACINE",chemin_config_GUI);
+        repertoire_config=chemin_racine+"/demosaic/"+etat_polar+"UBorn/";
+        chemin_result=chemin_racine+"/demosaic/"+etat_polar+"UBorn/";//chemin_result et chemin_config sont identiques en polar
+        }
+        else{
+    chemin_result=extract_string("CHEMIN_RESULT",chemin_config_GUI);
     cout<<"chemin resultat="<<chemin_result<<endl;
-    string repertoire_config=extract_string("CHEMIN_CONFIG",home+fin_chemin_gui_tomo);
-    chemin_acquis=extract_string("CHEMIN_ACQUIS",home+fin_chemin_gui_tomo);
+    repertoire_config=extract_string("CHEMIN_CONFIG",chemin_config_GUI);
+    }
     string fic_cfg_recon=repertoire_config+"/recon.txt";
     cout<<"fichier recon="<<fic_cfg_recon<<endl;
     string fic_cfg_manip=repertoire_config+"/config_manip.txt";
     cout<<"chemin config="<<fic_cfg_manip<<endl;
     chemin_config=fic_cfg_manip;
-    chemin_config_defaut=extract_string("CHEMIN_CONFIG_PC_ACQUIS",home+fin_chemin_gui_tomo)+"/";
+    chemin_config_defaut=extract_string("CHEMIN_CONFIG_PC_ACQUIS",chemin_config_GUI)+"/";
 
 
         cout<<"##################"<<endl;

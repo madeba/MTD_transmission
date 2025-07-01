@@ -94,6 +94,7 @@ void SAV2(double *var_sav, int NbPix2D, std::string chemin, enum PRECISION2 prec
 void SAV3D_Tiff(std::vector<std::complex <double>> var_sav, std::string partie, std::string chemin, double taille_pixel);
 void SAV3D_Tiff(std::vector<std::complex <double>> var_sav, Var3D const dim, std::string partie, std::string chemin, double taille_pixel);
 void SAV3D_Tiff(std::vector<double> var_sav, std::string chemin, double taille_pixel);
+void SAV3D_Tiff_Optimized(const std::vector<std::complex<double>> &var_sav, const std::string &partie, const std::string &chemin, double taille_pixel);
 void SAV_Tiff2D(double *var_sav, std::string chemin, const size_t dim);
 
 void SAV_Tiff2D(std::vector<double> var_sav, std::string chemin, double taille_pixel);

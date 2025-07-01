@@ -1,0 +1,74 @@
+\documentclass[	french,DIV=calc,%
+							paper=a4,%
+							fontsize=11pt,%
+							twocolumn]{scrartcl}	 					% KOMA-article class
+%%% Custom sectioning (sectsty package)
+%\usepackage{svg}
+\usepackage{sectsty}													% Custom sectioning (see below)
+\allsectionsfont{%															% Change font of al section commands
+	\usefont{OT1}{phv}{b}{n}%										% bch-b-n: CharterBT-Bold font
+	}
+
+\sectionfont{%																% Change font of \section command
+	\usefont{OT1}{phv}{b}{n}%										% bch-b-n: CharterBT-Bold font
+	}
+
+\input{new_command}
+\include{package_list}
+\input{param_listings}
+
+
+%%% Creating an initial of the very first character of the content
+\usepackage{lettrine}
+\usepackage[
+labelfont=sf,
+%labelfont=sc, %Kapitälchen, passt nicht wg. nicht-osf Ziffern
+%%%%labelfont=it, %italics, 
+%%%labelfont=sl, %slanted,
+hypcap=false,
+format=hang,
+%margin={2cm,2cm}
+width=0.8\columnwidth
+]{caption}
+
+
+%%% Title, author and date metadata
+\usepackage{titling}															% For custom titles
+
+\newcommand{\HorRule}{\color{DarkGoldenrod}%			% Creating a horizontal rule
+									  	\rule{\linewidth}{1pt}%
+										}
+
+\input{entete}	%titre, auteur dans entete.tex																		
+
+
+
+
+\thispagestyle{fancy} 			% Enabling the custom headers/footers 
+
+
+
+\title{Correction d'aberration}
+\date{}
+\author{Matthieu Debailleul}
+\begin{document}
+	\maketitle
+\section{Principe}
+on jette des points sur l'arrière plan et on en tire un polynôme de fond, qu'on soustrait à l'onde totale. Le code est compliqué par une astuce pour économiser du temps CPU : on sous échantillonne le fond pour que le moindre carré soit calculé sur moins de point.
+
+
+\section{Problème lié à un signal très faible.}
+
+L'amplitude de l'onde est strictement positive, mais l'ajustement polynomial peut néanmoins tomber dans les valeurs négatives si les valeurs de l'amplitude de l'onde sont proches de zéro (ce qui ne devrait pas arriver avec de bonnes acquisition...). En outre, les valeur proches de zéro dans le polynôme peuvent faire exploser les valeur d'amplitude corrigée après division. 
+Des valeurs sont anormalement amplifiées et des points "chauds "apparaissent, créant de gros artéfacts dans l'image (\textsc{Fig. }\ref{indice_perturbe}). 
+\begin{figure}
+	\includegraphics[scale=0.7]{images/indice_perturbe_division.pdf}
+	\caption{Indice d'une bille de silice reconstruite en Born. A gauche, image avec juste un masque d'aberration sur les  bords. À Gauche, en enlevant toutes les valeurs supérieures à 100}\label{indice_perturbe}
+\end{figure}
+La meilleure méthode est de refaire les acquisitions, mais le cas échéant, on peut utiliser une méthode brutale : fixer à une valeur arbitraire (mais proche de 1) les valeurs qui dépassent un certain seuil.
+	\begin{thebibliography}{widestlabel}
+		
+		contenu...
+	\end{thebibliography}
+\end{document}
+

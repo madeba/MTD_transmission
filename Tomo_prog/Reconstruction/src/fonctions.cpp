@@ -19,32 +19,35 @@ vector<complex<double>> extractSliceZ(vector<complex<double>> &index3D, string a
 {
     int dim=cbrt(index3D.size());///cbrt calculate cube root
     size_t cpt2D,cpt3D;
-    vector<complex<double>> slice2D(dim*dim);
+    int nbPixPlan=dim*dim;//nb pixel in a plane, to avoid calculation inside the loop
+    vector<complex<double>> slice2D(nbPixPlan);
     if(axis=="z"){
         for(int y=0;y<dim;y++)
         for(int x=0;x<dim;x++){
                 cpt2D=x+y*dim;
-                cpt3D=x+y*dim+height*dim*dim;
+                cpt3D=x+y*dim+height*nbPixPlan;
                 slice2D[cpt2D]=index3D[cpt3D];
         }
     }
-    if(axis=="y"){
+    else if(axis=="y"){
         for(int z=0;z<dim;z++)
         for(int x=0;x<dim;x++){
                 cpt2D=x+z*dim;
-                cpt3D=x+height*dim+z*dim*dim;
+                cpt3D=x+height*dim+z*nbPixPlan;
                 slice2D[cpt2D]=index3D[cpt3D];
         }
     }
-    if(axis=="x"){
+    else if(axis=="x"){
         for(int z=0;z<dim;z++)
         for(int y=0;y<dim;y++){
                 cpt2D=y+z*dim;
-                cpt3D=height+y*dim+z*dim*dim;
+                cpt3D=height+y*dim+z*nbPixPlan;
                 slice2D[cpt2D]=index3D[cpt3D];
         }
     }
-
+    else {
+        throw invalid_argument("Invalid axis: must be 'x', 'y', or 'z'");
+    }
     return slice2D;
 }
 
@@ -884,6 +887,7 @@ void retroPropag_Born(vector <complex<double>> &TF3D_PotObj, vector<complex<doub
     k0=kv*n0; //wavevector in the background medium
 
     //création de variable pour éviter N calculs dans la boucle sur le volume 3D
+    //create variable before loop
     int cptPot=0; //indice tableau 1d des données du potentiel3D
     double cteNorm=-2*PI;
     double r2=rayon*rayon, fzm0, fzm0_carre = rayon*rayon-fxm0*fxm0-fym0*fym0;
@@ -921,7 +925,7 @@ void retroPropag_Born(vector <complex<double>> &TF3D_PotObj, vector<complex<doub
                    // cout<<"dimPlanFinal="<<dimPlanFinal<<endl;
                     cptPot=(-fxm0+fdx+decal3D.x)+(-fym0+fdy+decal3D.y)*dimVolX+round(altitude);//indice du tableau 1D du volume 3D
                     TF3D_PotObj[cptPot]+=cteUb2Pot*cteNorm*sdz*TF_Uborn_norm[cpt];
-                    sup_redon[cptPot]+=1;//pour calculer le support
+                    sup_redon[cptPot]+=1;//redundacy in frequency support.
                 }
                 else points_faux++;
             }
@@ -2190,10 +2194,14 @@ void SAV3D_Tiff(vector<complex <double>> var_sav, string partie, string chemin, 
     uint16 spp, bpp, res_unit;//photo, zpage;
     TIFF *out;
     size_t x, y;// z;
-    float *buffer2D=new float[dim * dim];
+
+    //float *buffer2D=new float[dim * dim];
+    std::vector<float> buffer2D(dim * dim);
     out = TIFFOpen(chemin.c_str(), "w");
-    if (!out)
+    if (!out){
         fprintf (stderr, "Can't open  for writing\n");
+        return;
+    }
     image_width = dim;
     image_height = dim;
     dimz=dim;
@@ -2203,12 +2211,12 @@ void SAV3D_Tiff(vector<complex <double>> var_sav, string partie, string chemin, 
   //  size_t num_page=0;
     for(size_t num_page = 0; num_page < dim; num_page++) //z=page
     {
-
         int nbPix_plan=num_page*dim*dim;
         ///reel
         if(partie=="Re" || partie=="re")
         {
             //  #pragma omp parallel for private(y)
+            #pragma omp parallel for
             for (y = 0; y < dim; y++)
             {
                 size_t num_lgn=y*dim;
@@ -2236,9 +2244,6 @@ void SAV3D_Tiff(vector<complex <double>> var_sav, string partie, string chemin, 
             else
                 cout<<"Partie non identifiée : Re || re, Im, || im"<<endl;
         }
-
-
-
 //z=page
         TIFFSetField(out, TIFFTAG_IMAGEWIDTH, image_width / spp);
         //TIFFSetField(out, TIFFTAG_COMPRESSION, LZW_SUPPORT);
@@ -2260,9 +2265,6 @@ void SAV3D_Tiff(vector<complex <double>> var_sav, string partie, string chemin, 
         /* Set the page number */
         TIFFSetField(out, TIFFTAG_PAGENUMBER, num_page, dimz);
 //auto start_tiff = std::chrono::system_clock::now();
-
-
-
         for (y = 0; y < image_height; y++) //écriture d'une page numérotée num_page, ligne par ligne (y).
         {
             TIFFWriteScanline(out, &buffer2D[y * image_width], y, 0);
@@ -2278,10 +2280,81 @@ void SAV3D_Tiff(vector<complex <double>> var_sav, string partie, string chemin, 
 
     }
 
-    delete[] buffer2D;
+//    delete[] buffer2D;
     TIFFClose(out);
 }
+void SAV3D_Tiff_Optimized(const std::vector<std::complex<double>>& var_sav, const std::string& partie, const std::string& chemin, double taille_pixel)
+{
+    const size_t dim = std::round(std::cbrt(var_sav.size()));
+    if (dim * dim * dim != var_sav.size()) {
+        std::cerr << "Erreur : la taille du volume n'est pas un cube parfait." << std::endl;
+        return;
+    }
 
+    const uint32 image_width = static_cast<uint32>(dim);
+    const uint32 image_height = static_cast<uint32>(dim);
+    const uint16 spp = 1;               // Samples per pixel
+    const uint16 bpp = 32;              // Bits per sample
+    const uint16 res_unit = RESUNIT_CENTIMETER;
+    const float resolution = 0.01f / static_cast<float>(taille_pixel); // pixels/mètre -> pixels/cm
+
+    std::vector<float> buffer2D(dim * dim);
+
+    TIFF* out = TIFFOpen(chemin.c_str(), "w");
+    if (!out) {
+        std::cerr << "Erreur : impossible d'ouvrir le fichier TIFF en écriture." << std::endl;
+        return;
+    }
+
+    for (uint32 z = 0; z < dim; ++z)
+    {
+        const size_t offset = z * dim * dim;
+
+        // Préparation du plan en parallèle
+        #pragma omp parallel for
+        for (size_t y = 0; y < dim; ++y) {
+            for (size_t x = 0; x < dim; ++x) {
+                size_t index = y * dim + x;
+                const std::complex<double>& pixel = var_sav[offset + index];
+                buffer2D[index] = (partie == "Re" || partie == "re") ? static_cast<float>(pixel.real())
+                                 : (partie == "Im" || partie == "im") ? static_cast<float>(pixel.imag())
+                                 : 0.0f;
+            }
+        }
+
+        if (partie != "Re" && partie != "re" && partie != "Im" && partie != "im") {
+            std::cerr << "Erreur : partie non reconnue (" << partie << "), utilisez 'Re' ou 'Im'." << std::endl;
+            TIFFClose(out);
+            return;
+        }
+
+        TIFFSetField(out, TIFFTAG_IMAGEWIDTH, image_width);
+        TIFFSetField(out, TIFFTAG_IMAGELENGTH, image_height);
+        TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, bpp);
+        TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, spp);
+        TIFFSetField(out, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+        TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_BOTLEFT);
+        TIFFSetField(out, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP);
+        TIFFSetField(out, TIFFTAG_XRESOLUTION, resolution);
+        TIFFSetField(out, TIFFTAG_YRESOLUTION, resolution);
+        TIFFSetField(out, TIFFTAG_RESOLUTIONUNIT, res_unit);
+        TIFFSetField(out, TIFFTAG_SUBFILETYPE, FILETYPE_PAGE);
+        TIFFSetField(out, TIFFTAG_PAGENUMBER, z, dim);
+        //TIFFSetField(out, TIFFTAG_COMPRESSION, COMPRESSION_LZW);
+       // TIFFSetField(out, TIFFTAG_COMPRESSION, COMPRESSION_DEFLATE);
+        for (uint32 y = 0; y < image_height; ++y) {
+            if (TIFFWriteScanline(out, &buffer2D[y * image_width], y, 0) < 0) {
+                std::cerr << "Erreur : écriture scanline échouée à z=" << z << ", y=" << y << std::endl;
+                TIFFClose(out);
+                return;
+            }
+        }
+
+        TIFFWriteDirectory(out);
+    }
+
+    TIFFClose(out);
+}
 
 void Import3D_Tiff(vector<double> &imgTiff, string chemin, double taille_pixel)
 {

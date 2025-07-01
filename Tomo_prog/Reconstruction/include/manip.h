@@ -3,7 +3,8 @@
 
 #include <cstdlib>
 #include <iostream>
-struct manip {
+class manip {
+public :
         double NA_obj;
         double coef_NA_obj_limit;
         double Tp;
@@ -25,6 +26,7 @@ struct manip {
         bool b_Deroul=false;
         bool b_Born=true;
         bool b_Export_OTF=true;
+        bool b_polar=false;
         size_t dim_final;
         double TpCam;
         double R_th;
@@ -35,9 +37,11 @@ struct manip {
         size_t circle_cx,circle_cy;
         std::string chemin_result;
         std::string chemin_acquis;
+        std::string chemin_racine; //polar only
         std::string chemin_config;
         std::string chemin_config_defaut;
-        manip();
+        manip(std::string str_config_manip,std::string etat_polar, bool b_polar);//You can guess that the param 2 & 3 are polar only
+
        //void init();
 } ;
 

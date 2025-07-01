@@ -406,11 +406,11 @@ coordMaxPix( round(coordMax.x/m1.Tp_Tomo),round(coordMax.y/m1.Tp_Tomo),round(coo
 
 cout<<"dim="<<dim<<endl;
 cout<<"génération bloc rectangulaire, coordMin=("<<coordMin.x<<","<<coordMin.y<<","<<coordMin.z<<")"<<endl;
-cout<<"coordMax="<<coordMax.x<<","<<coordMax.y<<","<<coordMax.z<<")"<<endl;
+cout<<"coordMax=("<<coordMax.x<<","<<coordMax.y<<","<<coordMax.z<<")"<<endl;
 cout<<"taille pixel="<<m1.Tp_Tomo<<endl;
 cout<<"génération bloc rectangulaire, coordMinPix=("<<coordMinPix.x<<","<<coordMinPix.y<<","<<coordMinPix.z<<")"<<endl;
 cout<<"coordMaxPix="<<coordMaxPix.x<<","<<coordMaxPix.y<<","<<coordMaxPix.z<<")"<<endl;
-if(coordMax.y>dim/2) cout<<"problem coordonnées"<<endl;
+if(coordMax.y>dim/2) cout<<"problemes coordonnées"<<endl;
     for(int x=coordMinPix.x+round(dim/2);x<coordMaxPix.x+round(dim/2);x++){
         for(int y=coordMinPix.y+round(dim/2);y<coordMaxPix.y+round(dim/2);y++){
             for(int z=coordMinPix.z+round(dim/2);z<coordMaxPix.z+round(dim/2);z++){

@@ -14,7 +14,7 @@ manip::manip(unsigned short int dimROI)
 
     string home=getenv("HOME");
     //string sav_param=home+"/tomo_test/SAV_param_manip.txt";
-    string fin_chemin_gui_tomo="/.config/gui_tomo.conf";
+    string fin_chemin_gui_tomo="/.config/gui_tomo_polar.conf";
     string chemin_config_GUI=getenv("HOME")+fin_chemin_gui_tomo;
     string repertoire_config=extract_string("CHEMIN_CONFIG",home+fin_chemin_gui_tomo);
     chemin_result=extract_string("CHEMIN_RESULT",home+fin_chemin_gui_tomo);
@@ -27,9 +27,9 @@ manip::manip(unsigned short int dimROI)
     cout<<"\n##################### INFO MANIP ##################\n"<<endl;
     nbAxesRosace=extract_val("NB_AXES_FLEUR",fic_cfg_manip);//indice de l'huile
     n0=extract_val("N0",fic_cfg_manip);//indice de l'huile
-    NACond=extract_val("NA_COND",fic_cfg_manip,1.4);
+    NACond=extract_val("NA_COND",fic_cfg_manip,1.3);
 
-    NAObj=extract_val("NA_OBJ",fic_cfg_manip,1.4);	//ouverture numerique de l'objectif? (celle du condenseur intervient sur la forme, la taille, du papillon)
+    NAObj=extract_val("NA_OBJ",fic_cfg_manip,1.3);	//ouverture numerique de l'objectif? (celle du condenseur intervient sur la forme, la taille, du papillon)
     lambda_v=extract_val("LAMBDA",fic_cfg_manip);
     f_tube=extract_val("F_TUBE",fic_cfg_manip);
     f_obj=extract_val("F_OBJ",fic_cfg_manip);
@@ -48,7 +48,7 @@ manip::manip(unsigned short int dimROI)
     cout<<"Rayon Ewald calcule via lambda="<<n0/(lambda_v*Delta_f_holo)<<endl;
 
     //double tailleTheoPixelUborn=Tp_holo*dimROI/(2*NXMAX);
-  //  double tailleTheoPixelTomo=tailleTheoPixelUborn*(2*NXMAX)/dim_final;
+    //double tailleTheoPixelTomo=tailleTheoPixelUborn*(2*NXMAX)/dim_final;
 
     R_EwaldPix=round(NXMAX/sin(theta_max));//R_Ewald pixels
     R_EwaldMet=round(NXMAX/sin(theta_max)*Delta_f_holo);//R_Ewald metric
