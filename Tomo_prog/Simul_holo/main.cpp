@@ -158,7 +158,7 @@ int main( int argc, char** argv )
 
     cout<<"extraction hologramme"<<endl;
     ///extract complex field from 3D spectrum
-    /*
+
     for(int holo_numero=0; holo_numero<m1.nbHolo; holo_numero++){
 
         spec_H.x=CoordSpec_H[holo_numero].x;//the old code use spec, so we convert OTF.centre to spec
@@ -208,6 +208,6 @@ int main( int argc, char** argv )
     SAV2(tabPosSpec_I,m1.chemin_result+"/tab_posSpec.raw",t_double,"wb");
     vector<double> param{m1.NXMAX,m1.nbHolo,m1.R_EwaldPix,dimROI,m1.Tp_holo};//devenu inutile avec fichier de config
     SAV2(param,m1.chemin_result+"/parametres.raw", t_double, "wb");
-    */
+
     return 0;
 }
