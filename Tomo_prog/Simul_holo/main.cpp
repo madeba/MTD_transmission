@@ -3,7 +3,7 @@
 #include <cmath>
 #include <fstream>
 #include <iomanip>  //setprecision
-#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/imgproc.hpp"
 #include "opencv2/highgui.hpp"
 #include <stdlib.h>
 #include <stdio.h>
@@ -59,9 +59,9 @@ int main( int argc, char** argv )
     double y1=y0+y_width;
     double z_width=5*pow(10,-6);*/
 
-    double x0=-15*pow(10,-6),delta_x=10*pow(10,-6),x_width=30*pow(10,-6);
+    double x0=-2.5*pow(10,-6),delta_x=10*pow(10,-6),x_width=5*pow(10,-6);
     double x1=x0+x_width;
-    double y0=-15*pow(10,-6),delta_y=0*pow(10,-6),y_width= 30*pow(10,-6);
+    double y0=-2.5*pow(10,-6),delta_y=0*pow(10,-6),y_width= 5*pow(10,-6);
     double y1=y0+y_width;
     double z_width=5*pow(10,-6);
 

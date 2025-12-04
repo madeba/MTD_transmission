@@ -4384,3 +4384,46 @@
 	"fonctions.h"
 	"projet.h"
 
+1594905254 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/utilTomo/show_fourier_PP/src/fonctions.cpp
+	"fonctions.h"
+	<tiffio.h>
+	<chrono>
+
+1593697759 /home/mat/Dropbox/projet_c/2025/Projet_tomo/utilTomo/show_fourier_PP/include/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	<vector>
+	"projet.h"
+
+1593697759 /home/mat/Dropbox/projet_c/2025/Projet_tomo/utilTomo/show_fourier_PP/include/struct.h
+
+1593697759 /home/mat/Dropbox/projet_c/2025/Projet_tomo/utilTomo/show_fourier_PP/include/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1646645193 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/utilTomo/show_fourier_PP/src/manip.cpp
+	"manip.h"
+	<iostream>
+	"fonctions.h"
+	"projet.h"
+
+1617964075 /home/mat/Dropbox/projet_c/2025/Projet_tomo/utilTomo/show_fourier_PP/include/manip.h
+	<cstdlib>
+	<iostream>
+

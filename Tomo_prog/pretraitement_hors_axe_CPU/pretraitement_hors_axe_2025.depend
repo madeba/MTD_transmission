@@ -2301,3 +2301,445 @@
 	<cstring>
 	<string>
 
+1747853862 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/Correction_aberration.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	"fonctions.h"
+	<chrono>
+	"Correction_aberration.h"
+	"FFT_fonctions.h"
+
+1747753884 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<fftw3.h>
+	"FFTW_init.h"
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	"projet.h"
+	"IO_fonctions.h"
+	"Point2D.h"
+	"vecteur.h"
+	<vector>
+	<complex>
+	<tiffio.h>
+
+1586696834 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/struct.h
+
+1588950682 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/FFTW_init.h
+	"Point3D.h"
+	"Point2D.h"
+	<fftw3.h>
+	"struct.h"
+
+1586696834 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/Point3D.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	<iostream>
+	"Point2D.h"
+
+1586696834 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/Point2D.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	<vector>
+	<complex>
+
+1752575479 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/projet.h
+
+1721228584 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/IO_fonctions.h
+	"FFTW_init.h"
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+	<vector>
+	<complex>
+	<tiffio.h>
+	"projet.h"
+
+1591619506 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/vecteur.h
+	<iostream>
+
+1604951822 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/Correction_aberration.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<opencv2/core.hpp>
+	<opencv2/highgui.hpp>
+
+1748272100 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/FFT_fonctions.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	"vecteur.h"
+	"FFTW_init.h"
+
+1586696834 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/deroulement_herraez.cpp
+	"deroulement_herraez.h"
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	<vector>
+	<math.h>
+
+1586696834 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/deroulement_herraez.h
+	"struct.h"
+	<vector>
+
+1748272099 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/FFT_fonctions.cpp
+	"FFT_fonctions.h"
+	"fonctions.h"
+	"omp.h"
+	<vector>
+	<cmath>
+	<type_traits>
+
+1738856004 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/fonctions.cpp
+	<fstream>
+	<vector>
+	<chrono>
+	<complex>
+	<fftw3.h>
+	"struct.h"
+	"projet.h"
+	"FFT_fonctions.h"
+	"fonctions.h"
+	"IO_fonctions.h"
+
+1764857064 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/manip.cpp
+	"manip.h"
+	<iostream>
+	"fonctions.h"
+	"projet.h"
+
+1747925586 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/manip.h
+	<cstdlib>
+	<iostream>
+	"struct.h"
+
+1595514040 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/deroulement_volkov2.cpp
+	<vector>
+	<complex>
+	"fonctions.h"
+	"FFT_fonctions.h"
+	"vecteur.h"
+	"deroulement_volkov2.h"
+	<chrono>
+
+1588332462 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/deroulement_volkov2.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"FFTW_init.h"
+
+1726242296 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/deroulement_volkov3.cpp
+	<vector>
+	<complex>
+	"fonctions.h"
+	"FFT_fonctions.h"
+	"vecteur.h"
+	"deroulement_volkov3.h"
+	<chrono>
+
+1637252094 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/deroulement_volkov3.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"vecteur.h"
+	"FFTW_init.h"
+
+1747853812 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/deroulement_volkov4.cpp
+	<vector>
+	<complex>
+	"fonctions.h"
+	"FFT_fonctions.h"
+	"vecteur.h"
+	"deroulement_volkov4.h"
+	<chrono>
+
+1726577870 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/deroulement_volkov4.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"vecteur.h"
+	"FFTW_init.h"
+
+1589031446 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/FFTW_init.cpp
+	"FFTW_init.h"
+	"struct.h"
+
+1748614436 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/IO_fonctions.cpp
+	"IO_fonctions.h"
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+	<fstream>
+
+1587120874 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/Point2D.cpp
+	"Point2D.h"
+
+1764856888 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/main.cpp
+	<iostream>
+	<vector>
+	"struct.h"
+	<complex>
+	"manip.h"
+	<string>
+	"projet.h"
+	"fonctions.h"
+	"FFT_fonctions.h"
+	"deroulement_volkov4.h"
+	"deroulement_volkov3.h"
+	"deroulement_herraez.h"
+	"Correction_aberration.h"
+	<chrono>
+	<opencv2/core/utility.hpp>
+	"opencv2/imgproc.hpp"
+	"opencv2/highgui.hpp"
+	"opencv2/core.hpp"
+	<filesystem>
+	<cmath>
+
+1587120892 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/vecteur.cpp
+	"vecteur.h"
+	<cmath>
+	<cstdlib>
+	<iostream>
+	<cstring>
+	<string>
+
+1586696834 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/deroulement_herraez.cpp
+	"deroulement_herraez.h"
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	<vector>
+	<math.h>
+
+1586696834 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/deroulement_herraez.h
+	"struct.h"
+	<vector>
+
+1586696834 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/struct.h
+
+1738856004 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/fonctions.cpp
+	<fstream>
+	<vector>
+	<chrono>
+	<complex>
+	<fftw3.h>
+	"struct.h"
+	"projet.h"
+	"FFT_fonctions.h"
+	"fonctions.h"
+	"IO_fonctions.h"
+
+1752575479 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/projet.h
+
+1748272100 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/FFT_fonctions.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	"vecteur.h"
+	"FFTW_init.h"
+
+1591619506 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/vecteur.h
+	<iostream>
+
+1588950682 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/FFTW_init.h
+	"Point3D.h"
+	"Point2D.h"
+	<fftw3.h>
+	"struct.h"
+
+1586696834 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/Point3D.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	<iostream>
+	"Point2D.h"
+
+1586696834 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/Point2D.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	<vector>
+	<complex>
+
+1747753884 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<fftw3.h>
+	"FFTW_init.h"
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	"projet.h"
+	"IO_fonctions.h"
+	"Point2D.h"
+	"vecteur.h"
+	<vector>
+	<complex>
+	<tiffio.h>
+
+1721228584 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/IO_fonctions.h
+	"FFTW_init.h"
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+	<vector>
+	<complex>
+	<tiffio.h>
+	"projet.h"
+
+1595514040 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/deroulement_volkov2.cpp
+	<vector>
+	<complex>
+	"fonctions.h"
+	"FFT_fonctions.h"
+	"vecteur.h"
+	"deroulement_volkov2.h"
+	<chrono>
+
+1588332462 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/deroulement_volkov2.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"FFTW_init.h"
+
+1726242296 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/deroulement_volkov3.cpp
+	<vector>
+	<complex>
+	"fonctions.h"
+	"FFT_fonctions.h"
+	"vecteur.h"
+	"deroulement_volkov3.h"
+	<chrono>
+
+1637252094 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/deroulement_volkov3.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"vecteur.h"
+	"FFTW_init.h"
+
+1589031446 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/FFTW_init.cpp
+	"FFTW_init.h"
+	"struct.h"
+
+1587120874 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/Point2D.cpp
+	"Point2D.h"
+
+1587120892 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/vecteur.cpp
+	"vecteur.h"
+	<cmath>
+	<cstdlib>
+	<iostream>
+	<cstring>
+	<string>
+
+1747853862 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/Correction_aberration.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	"fonctions.h"
+	<chrono>
+	"Correction_aberration.h"
+	"FFT_fonctions.h"
+
+1604951822 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/Correction_aberration.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<opencv2/core.hpp>
+	<opencv2/highgui.hpp>
+
+1748272099 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/FFT_fonctions.cpp
+	"FFT_fonctions.h"
+	"fonctions.h"
+	"omp.h"
+	<vector>
+	<cmath>
+	<type_traits>
+
+1753360876 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/main.cpp
+	<iostream>
+	<vector>
+	"struct.h"
+	<complex>
+	"manip.h"
+	<string>
+	"projet.h"
+	"fonctions.h"
+	"FFT_fonctions.h"
+	"deroulement_volkov4.h"
+	"deroulement_volkov3.h"
+	"deroulement_herraez.h"
+	"Correction_aberration.h"
+	<chrono>
+	<opencv2/core/utility.hpp>
+	"opencv2/imgproc.hpp"
+	"opencv2/highgui.hpp"
+	"opencv2/core.hpp"
+	<filesystem>
+	<cmath>
+
+1747925586 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/manip.h
+	<cstdlib>
+	<iostream>
+	"struct.h"
+
+1726577870 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/deroulement_volkov4.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"vecteur.h"
+	"FFTW_init.h"
+
+1755634856 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/manip.cpp
+	"manip.h"
+	<iostream>
+	"fonctions.h"
+	"projet.h"
+
+1747853812 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/deroulement_volkov4.cpp
+	<vector>
+	<complex>
+	"fonctions.h"
+	"FFT_fonctions.h"
+	"vecteur.h"
+	"deroulement_volkov4.h"
+	<chrono>
+
+1748614436 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/IO_fonctions.cpp
+	"IO_fonctions.h"
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+	<fstream>
+

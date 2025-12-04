@@ -47,10 +47,10 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall `pkg-config --cflags opencv` -fopenmp -fexceptions -std=c++17" />
-			<Add directory="/usr/include/opencv2/" />
+			<Add directory="/usr/include/opencv4/" />
 		</Compiler>
 		<Linker>
-			<Add option="-lpthread -lX11 -lgomp -lfftw3_threads -lfftw3 -lm -ltiff  `pkg-config --libs opencv`" />
+			<Add option="-lpthread -lX11 -lgomp -lfftw3_threads -lfftw3 -lm -ltiff  `pkg-config --libs opencv4`" />
 		</Linker>
 		<Unit filename="include/FFTW_init.h" />
 		<Unit filename="include/FFT_fonctions.h" />

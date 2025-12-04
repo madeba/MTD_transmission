@@ -2993,16 +2993,17 @@
 1607166287 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Simul_holo/src/Point3D.cpp
 	"Point3D.h"
 
-1721228584 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/main.cpp
+1752585522 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/main.cpp
 	<iostream>
 	<cmath>
 	<fstream>
 	<iomanip>
-	"opencv2/imgproc/imgproc.hpp"
+	"opencv2/imgproc.hpp"
 	"opencv2/highgui.hpp"
 	<stdlib.h>
 	<stdio.h>
 	"fonctions.h"
+	"tiff_functions.h"
 	<complex>
 	"include/Point3D.h"
 	<fftw3.h>
@@ -3011,8 +3012,9 @@
 	"FFT_fonctions.h"
 	"FFTW_init.h"
 	"manip.h"
+	"champCplx_functions.h"
 
-1721228584 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/include/fonctions.h
+1752585529 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/include/fonctions.h
 	"struct.h"
 	<time.h>
 	<math.h>
@@ -3022,7 +3024,7 @@
 	<pthread.h>
 	<omp.h>
 	<fftw3.h>
-	<opencv2/core/core.hpp>
+	<opencv2/core.hpp>
 	<opencv2/highgui/highgui.hpp>
 	<opencv2/imgproc/imgproc.hpp>
 	<opencv2/objdetect/objdetect.hpp>
@@ -3102,14 +3104,14 @@
 1664871566 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/FFTW_init.cpp
 	"FFTW_init.h"
 
-1721228584 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/fonctions.cpp
+1750935352 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/fonctions.cpp
 	"fonctions.h"
 	<tiffio.h>
 	<chrono>
 	"projet.h"
 	"OTF.h"
 
-1721228584 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/manip.cpp
+1750949193 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/manip.cpp
 	"manip.h"
 	<iostream>
 	"fonctions.h"
@@ -3131,7 +3133,7 @@
 	"manip.h"
 	"struct.h"
 
-1606907058 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/OTF.cpp
+1752585937 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/OTF.cpp
 	"OTF.h"
 	"fonctions.h"
 	<fstream>
@@ -3495,5 +3497,29 @@
 	"omp.h"
 
 1751101511 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/2025/Simul_holo/src/tiff_functions.cpp
+	"tiff_functions.h"
+
+1751196757 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/champCplx_functions.cpp
+	<iostream>
+	<vector>
+	<complex>
+	<omp.h>
+	"champCplx_functions.h"
+	"omp.h"
+
+1751192600 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/include/champCplx_functions.h
+
+1751293390 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/include/tiff_functions.h
+	<iostream>
+	<vector>
+	<complex>
+	<string>
+	<stdexcept>
+	<type_traits>
+	<tiffio.h>
+	"projet.h"
+	"omp.h"
+
+1751101511 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/tiff_functions.cpp
 	"tiff_functions.h"
 

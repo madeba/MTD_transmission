@@ -1,13 +1,6 @@
 #ifndef __PROJET__
 #define __PROJET__
 
-// résolution des images d'entrée
-#define IMAGE_DIMX 1024
-#define IMAGE_DIMY 1024
-// taille de la fenêtre utile
-#define WINDOW_X 1024
-#define WINDOW_Y 1024
-
 /* --------------------------------------------------------------------------- */
 // Types
 /* --------------------------------------------------------------------------- */

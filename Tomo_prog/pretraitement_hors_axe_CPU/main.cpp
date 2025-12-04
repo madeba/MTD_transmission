@@ -23,6 +23,7 @@
 #include "opencv2/highgui.hpp"
 #include "opencv2/core.hpp"
 #include <filesystem>
+#include <cmath>
 namespace fs = std::filesystem;
 //#include <cv.h>
 using namespace std;
@@ -31,7 +32,7 @@ int main(int argc,char *argv[]){
     //std::cout << "Nombre d'arguments : " << argc << "\n";
     string etat_polar;
     string gui_config_name;
-    bool b_polar=false;
+    bool b_polar=false;//test if data are from polarisation tomography
    // cout<<"b_polar="<<b_polar<<endl;
     for (int i = 0; i < argc; ++i) {
         //std::cout << "Argument " << i << " : " << argv[i] << "\n";
@@ -70,12 +71,16 @@ int main(int argc,char *argv[]){
             cout<<"modification du chemin resultats : "<<chemin_result<<endl;
     }
     else chemin_acquis=m1.chemin_acquis;
-
     string Chemin_mask=chemin_acquis+"/Image_mask.pgm";
+    if(b_polar==true)//if polar set up, pick up the root folder for aberration mask
+    {
+        Chemin_mask=m1.chemin_racine+"Image_mask.pgm";
+    }
+
     cout<<"dans main"<<chemin_acquis<<endl;
     string str_sav_param_path=chemin_result+"/SAV_param_manip.txt";
 
-    cout<<"camdimROI"<<m1.CamDimROI;
+    cout<<"camdimROI="<<m1.CamDimROI<<endl;
     Var2D const dimROI= {m1.CamDimROI,m1.CamDimROI}, coin= {0,0};
     Point2D const dimHolo(m1.CamDimROI,m1.CamDimROI,m1.CamDimROI);
     size_t const NbPixROI2d=dimROI.x*dimROI.y;
@@ -158,11 +163,13 @@ for(cptAngle=0; cptAngle<NbAngle; cptAngle++){
     }
     else cout<<"fichier "<<cptAngle<<" inexistant\n";
 }
+
 auto end_decoupeHA = std::chrono::system_clock::now();
 auto elapsed = end_decoupeHA - start_decoupeHA;
 std::cout <<"Temps pour FFT holo+découpe Spectre= "<< elapsed.count()/(pow(10,9)) << '\n';
  //SAVCplx(TF_UBornTot,"Re",chemin_result+"/TF_Uborn_Tot_GPU_250x250x599x64_orig.raw",t_float,"wb");
 m1.dimImg=to_string(dim2DHA.x)+"x"+to_string(dim2DHA.y)+"x"+to_string(NbAngleOk);
+cout<<"m1.dimImg="<<m1.dimImg<<endl;
 deleteCplxField(chemin_result, m1.dimImg);
 ///initialiser les variables de champ, phase, amplitude etc.
 
@@ -181,12 +188,16 @@ FFTW_init param_fftw2D_c2r_HA(TF_UBorn,m1.nbThreads);//OUTPLACE
 vector<double> phase_2Pi_vec_double(4*NbPixUBorn);//variable created only to init param_fftw2D_r2c_HA_double
 FFTW_init param_fftw2D_c2r_HA_double(phase_2Pi_vec_double,m1.nbThreads);//OUTPLACE
 ///variable pour correction aberration
+cout<<"chemin_mask==============="<<Chemin_mask<<endl;
 Mat src=Mat(1, ampli_ref.size(), CV_64F, ampli_ref.data()), mask_aber=init_mask_aber(Chemin_mask,chemin_acquis,dim2DHA);
+
+
 if(fs::exists(Chemin_mask)){
-        string info="un masque d'aberration a été utilisé";
+        string info="un masque d'aberration a été utilisé----------------------------------------------------------------";
 sav_param2D(info,str_sav_param_path);
 }
-
+//imshow("Image",mask_aber);
+//waitKey(0);
 size_t NbPtOk=countM(mask_aber),  degre_poly=4, nbCoef = sizePoly2D(degre_poly);//Nb coef poly
 Mat polynomeUs_to_fit(Size(nbCoef,NbPtOk), CV_64F);///(undersampled) Polynome to fit= function to fit (We use a polynome). we have to generate a table containing polynome_to_fit=[1,x,x^2,xy,y^2] for each coordinate (x,y)
 Mat polynome_to_fit(Size(nbCoef,dim2DHA.x*dim2DHA.y), CV_64F);
@@ -195,12 +206,14 @@ string str_degre_poly="degré poly aberration="+to_string(degre_poly);
 sav_param2D(str_degre_poly,str_sav_param_path);
 
 initCorrAber(Chemin_mask, mask_aber, degre_poly,dim2DHA,polynome_to_fit,polynomeUs_to_fit);
-
+cout<<"COUCOU"<<endl;
 
 cout<<"\n#########################Calcul champs cplx 2D Uborn/Rytov + eventuelle Correction aberrations#############################"<<endl;
-
+cout<<"NbPixUborn="<<NbPixUBorn<<endl;
 vector<complex<double>> UBornFinal(NbPixUBorn), UBornFinalDecal(NbPixUBorn), TF_UBorn_norm(NbPixUBorn);
+cout<<"COUCOU3"<<endl;
 vector<double> UBornAmpFinal(NbPixUBorn),  UBornAmp(NbPixUBorn);
+cout<<"COUCOU4"<<endl;
 vector<double> tabPosSpec(NbAngleOk*2);  ///stockage des spéculaires pour exportation vers reconstruction
 vector<vecteur>  kvect_shift(init_kvect_shift(dim2DHA));///init opérateur differentiation kvect
 vector<double> kvect_mod2Shift(init_kvect_mod2Shift(kvect_shift));
@@ -209,26 +222,35 @@ vector<vecteur>  double_kvect_shift(4*dim2DHA.x);
 double_kvect_shift=init_kvect_shift({2*dim2DHA.x,2*dim2DHA.y});
 
 
-
+cout<<"COUCOU4"<<endl;
 auto start_part2= std::chrono::system_clock::now();
 //#pragma omp parallel for
 
-
+cout<<"avant boucle"<<endl;
 for(size_t cpt_angle=0; cpt_angle<NbAngleOk; cpt_angle++){ //boucle sur tous les angles : correction aberrations
-  TF_UBorn.assign(TF_UBornTot.begin()+NbPixUBorn*cpt_angle, TF_UBornTot.begin()+NbPixUBorn*(cpt_angle+1));  ///Récupérer la TF2D dans la pile de spectre2D
+  TF_UBorn.assign(TF_UBornTot.begin()+NbPixUBorn*cpt_angle, TF_UBornTot.begin()+NbPixUBorn*(cpt_angle+1));  ///Récupérer la TF2D dans la pile de spectre2D//get back 2D spectrum in the stack (dimxdimxNumber_holograms)
  // SAVCplx(TF_UBorn,"Re",chemin_result+"/TF_Uborn_iterateur_Re_220x220x599x32.raw",t_float,"a+b");
  // SAVCplx(TF_UBorn,"Im",chemin_result+"/TF_Uborn_iterateur_Im_220x220x599x32.raw",t_float,"a+b");
   //Recherche de la valeur maximum du module dans ref non centré-----------------------------------------
   size_t cpt_max=coordSpec(TF_UBorn, TF_champMod,decal2DHA);
-  double  max_part_reel = TF_UBorn[cpt_max].real(),///sauvegarde de la valeur cplx des  spéculaires
+  double  max_part_reel = TF_UBorn[cpt_max].real(),///sauvegarde de la valeur cplx du spéculaire/save complex value of the specular beam
   max_part_imag = TF_UBorn[cpt_max].imag(),
   max_module = sqrt(TF_UBorn[cpt_max].imag()*TF_UBorn[cpt_max].imag()+TF_UBorn[cpt_max].real()*TF_UBorn[cpt_max].real());
   const int kxmi=cpt_max%(2*m1.NXMAX), kymi=cpt_max/(2*m1.NXMAX);
   posSpec= {kxmi,kymi}; ///coord informatique speculaire
+
+  ///calculate phi and theta (angles of illumination)
+  Var2D posSpecH={kxmi-m1.NXMAX,kymi-m1.NXMAX};
+  float kiz=sqrt(pow(m1.rayon,2)-pow(posSpecH.x,2)-pow(posSpecH.y,2));
+  float theta=acos(kiz/m1.rayon)*180/M_PI;
+  // cout<<"theta="<<theta<<endl;
+  float phi=atan2(static_cast<double>(posSpecH.y),static_cast<double>(posSpecH.x));
+  // cout<<"(kixs,kiy,kiz)=("<<posSpecH.x<<","<<posSpecH.y<<","<<kiz<<")"<<endl;
+ // cout<<"num angle="<<cpt_angle<<", phi="<<phi*180/M_PI<<endl;
   tabPosSpec[cpt_angle]=(double)posSpec.x;
   tabPosSpec[cpt_angle+NbAngleOk]=(double)posSpec.y;
   centre[kxmi*2*m1.NXMAX+kymi]=cpt_angle;
-   ///calculer la phase, déouler, corriger les barreations
+///calculer la phase, dérouler, corriger les aberrations
   if(m1.b_CorrAber==true){
     calc_Uborn2(TF_UBorn,UBorn,dim2DHA,posSpec,param_fftw2D_c2r_HA);
   //  SAVCplx(UBorn,"Re",chemin_result+"/ampli_UBorn_debut_extract.raw",t_float,"a+b");
@@ -281,12 +303,13 @@ int flag=0;
        // if(UBornAmpFinal[cpt]<-1 && flag==0) { cout<<"Holo numero"<<cpt_angle<<endl;flag=1;}
         if(m1.b_Born==true){ //UBORN=U_tot-U_inc=u_tot_norm-1
          // UBornFinal[cpt].real( (sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt])- 1 )*cos(PhaseFinal[cpt]) );//*masqueTukeyHolo[cpt]);///correction amplitude
-         // UBornFinal[cpt].imag( (sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt]) - 1)*sin(PhaseFinal[cpt]) );//*masqueTukeyHolo[cpt]);
+         // UBornFinal[cpt].imag( (sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt]) )*sin(PhaseFinal[cpt]) );//*masqueTukeyHolo[cpt]);
           UBornFinal[cpt].real( (sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt]))*cos(PhaseFinal[cpt]) -1);//*masqueTukeyHolo[cpt]);///correction amplitude
-          UBornFinal[cpt].imag( (sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt]))*sin(PhaseFinal[cpt]) -1);//*masqueTukeyHolo[cpt]);
+         // UBornFinal[cpt].imag( (sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt]))*sin(PhaseFinal[cpt]) -1);//*masqueTukeyHolo[cpt]);
+          UBornFinal[cpt].imag( (sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt]))*sin(PhaseFinal[cpt]));
         }
         else{ //RYTOV URytov = log a_t/a_i (=log a_t après correction AmpliCorr)
-          UBornFinal[cpt].real(log(sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt])));///racine(U^2) pour éliminer les éventuelles amplitudes négatives
+          UBornFinal[cpt].real(log(sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt])));///racine(U^2) pour éliminer les éventuelles amplitudes négatives liées au bruit
           UBornFinal[cpt].imag(PhaseFinal[cpt]);
         }
       }
@@ -315,7 +338,6 @@ int flag=0;
 
     SAVCplx(UBorn,"Re", chemin_result+"/UBornfinal_Re"+m1.dimImg+".raw", t_double, "a+b");
     SAVCplx(UBorn,"Im", chemin_result+"/UBornfinal_Im"+m1.dimImg+".raw", t_double, "a+b");
-
   }
 }//fin de boucle for sur tous les angles
 //SAV2(UBornAmpFinal,chemin_result+"/UBornAmpFinal.raw",t_float,"a+b");

@@ -3,7 +3,7 @@
 #include <fstream>
 
 using namespace std;
-///class OTF : use to generate different OTF, corresponding to different scanning pattern : rosace, spiral, Annular etc.
+///class OTF : use to generate different OTF, corresponding to different scanning pattern : rosace ("fleur"), spiral, Annular etc.
 
 //OTF::OTF(manip m1):manipOTF(m1.dim_final),Obj3D::Obj3D(m1.dim_final)
 //constructor : init 3D OTF.
@@ -391,6 +391,7 @@ return CoordSpec;
 }
 */
 
+
 vector<Point2D> OTF::bFleur(short unsigned int const nbAxes){
 int Nmax=manipOTF.NXMAX;
 int dim_Uborn=manipOTF.dim_Uborn;
@@ -420,7 +421,7 @@ for(double theta=0;theta<2*M_PI;theta=theta+delta_theta){
             CoordSpec[num_holo].x=round(spec.x);
             CoordSpec[num_holo].y=round(spec.y);
           //  cout<<"num_holo"<< num_holo<<", "<<CoordSpec[num_holo].dim2D<<endl;
-            retropropag(spec);
+            retropropag(spec);///project 2D pattern into a 3D OTF
           /*  if(num_holo>20 && num_holo<30){
            cout<<"num_holo="<<num_holo<<" : specOTF=("<<spec.x<<","<<spec.y<<")"<<endl;
            cout<<" : CoordOTF=("<<CoordSpec[num_holo].x<<","<<CoordSpec[num_holo].y<<")"<<endl;
@@ -482,6 +483,7 @@ for(double theta=0;theta<2*M_PI/K_attenuation;theta=theta+delta_theta){
 //cout<<"nbspec="<<nbSpec<<endl;
 }
 */
+
 void OTF::bFleur(vector<Point2D> &CoordSpec, size_t const nbAxes){
 size_t Nmax=manipOTF.NXMAX;
 size_t dim_Uborn=manipOTF.dim_Uborn;
