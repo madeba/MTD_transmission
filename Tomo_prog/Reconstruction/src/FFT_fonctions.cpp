@@ -3,6 +3,35 @@
 #include "manip.h"
 #include "omp.h"
 using namespace std;
+
+void prepare_wisdom2D(Var2D dim, const char *chemin)
+{
+    fftw_plan_with_nthreads(4);
+    int N=dim.x*dim.y;
+
+    fftw_complex *in, *out;//Déclaration des variables pour la FFT : entree,sortie et "fftplan"
+    fftw_plan p;
+    //Réservation memoire
+    in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
+    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
+    p=fftw_plan_dft_2d( dim.x,  dim.y, in, out,FFTW_BACKWARD, FFTW_EXHAUSTIVE);
+    fftw_export_wisdom_to_filename(chemin);
+    fftw_destroy_plan(p);
+}
+void prepare_wisdom3D(Var3D dim, char *chemin)
+{
+    fftw_plan_with_nthreads(4);
+    int N=dim.x*dim.y*dim.z;
+
+    fftw_complex *in, *out;//Déclaration des variables pour la FFT : entree,sortie et "fftplan"
+    fftw_plan p;
+    //Réservation memoire
+    in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
+    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
+    p=fftw_plan_dft_3d( dim.x,  dim.y, dim.z,in, out,FFTW_BACKWARD, FFTW_EXHAUSTIVE);
+    fftw_export_wisdom_to_filename(chemin);
+    fftw_destroy_plan(p);
+}
 ///Set of functions to calculate FFT with fftw : c2c, r2c, r2c symetric, fftshift
  vector<complex<double>> fftshift3D(vector<complex<double>> &entree)
 {       //si décalage supérieure à dim, on fait plus d'un tour, donc on prend le modulo
@@ -12,7 +41,7 @@ using namespace std;
     int nbPix2D=dimFinale*dimFinale;//taille d'un plan 2D
     Var3D  decal={(int)round(dimFinale/2),(int)round(dimFinale/2),(int)round(dimFinale/2)}, dim={dimFinale,dimFinale,dimFinale};
     vector<complex<double>> result(nbPix);
-    register size_t yi,xi,zi;
+    size_t yi,xi,zi;
     int nbPix_z=0, nbPix_zdecal=0,nbPixy=0;
    #pragma omp parallel for private(zi)
     for(zi=0;zi<dim.z/2;zi++){

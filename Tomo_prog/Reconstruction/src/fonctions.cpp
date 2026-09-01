@@ -5,12 +5,9 @@
 #include <algorithm>
 #include "FFT_encaps.h"
 #include "FFT_fonctions.h"
-/*
- *  This Quickselect routine is based on the algorithm described in
- *  "Numerical recipes in C", Second Edition,
- *  Cambridge University Press, 1992, Section 8.5, ISBN 0-521-43108-5
- *  This code by Nicolas Devillard - 1998. Public domain.
- */
+#include <fstream>
+#include <stdexcept>
+
 using namespace std::chrono;
 using namespace std;
 
@@ -180,39 +177,6 @@ float extract_val(string token,  string chemin_fic, double defaut)
 }
 
 
-
-
-
-
-
-void prepare_wisdom2D(Var2D dim, const char *chemin)
-{
-    fftw_plan_with_nthreads(4);
-    int N=dim.x*dim.y;
-
-    fftw_complex *in, *out;//Déclaration des variables pour la FFT : entree,sortie et "fftplan"
-    fftw_plan p;
-    //Réservation memoire
-    in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
-    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
-    p=fftw_plan_dft_2d( dim.x,  dim.y, in, out,FFTW_BACKWARD, FFTW_EXHAUSTIVE);
-    fftw_export_wisdom_to_filename(chemin);
-    fftw_destroy_plan(p);
-}
-void prepare_wisdom3D(Var3D dim, char *chemin)
-{
-    fftw_plan_with_nthreads(4);
-    int N=dim.x*dim.y*dim.z;
-
-    fftw_complex *in, *out;//Déclaration des variables pour la FFT : entree,sortie et "fftplan"
-    fftw_plan p;
-    //Réservation memoire
-    in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
-    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
-    p=fftw_plan_dft_3d( dim.x,  dim.y, dim.z,in, out,FFTW_BACKWARD, FFTW_EXHAUSTIVE);
-    fftw_export_wisdom_to_filename(chemin);
-    fftw_destroy_plan(p);
-}
 int coordSpec(nbCplx* TF_UBorn, double *TF_champMod,Var2D NMAX)
 {
     int cpt_max=0;
@@ -833,12 +797,12 @@ void InitTabCplx(nbCplx *z,int taille)//initailiser un tableau (taille totale="t
                         int points_faux=0;
                         rayon=rayon;
                         int dimVolX=round(dim_final), dimPlanFinal=round(dim_final*dim_final);
-                        float n0=1.515, lambda=pow(633,10^(-9)),kv=2*3.1416/lambda;
+                        float nM=1.515, lambda=pow(633,10^(-9)),kv=2*3.1416/lambda;
 
                                 //création de variable pou-9r éviter N calculs dans la boucle sur le volume 3D
                                 int cptPot=0; //indice tableau 1d des données du potentiel3D
                                 double r2=rayon*rayon, kzm0, kzm0_carre = rayon*rayon-kxm0*kxm0-kym0*kym0;
-                               // double r2=rayon*rayon, kzm0, kzm0_carre = n0*rayon*rayon-kxm0*kxm0-kym0*kym0;
+                               // double r2=rayon*rayon, kzm0, kzm0_carre = nM*rayon*rayon-kxm0*kxm0-kym0*kym0;
                                 //printf("round(rayon*rayon-(xm0)^2-(ym0)^2: %i\n",round(rayon*rayon-(xm0)^2-(ym0)^2));
 
                                 if(round(kzm0_carre)>-1) {
@@ -855,7 +819,7 @@ void InitTabCplx(nbCplx *z,int taille)//initailiser un tableau (taille totale="t
                                                         if(kdx*kdx+fdy_carre<NMAX_CARRE) { //ne pas depasser l'ouverture numérique pour 1 hologramme
                                                                 double kdz_carre=r2-kdx*kdx-fdy_carre; //altitude au carré des données
                                                                 double koz=round(sqrt(kdz_carre)-kzm0);
-                                                                 //double kz=n0*round(sqrt(kz_carre)-kzm0);
+                                                                 //double kz=nM*round(sqrt(kz_carre)-kzm0);
                                                                  double m=sqrt(rayon*rayon-kdx*kdx-fdy*fdy);
                                                                 double altitude=(koz+decal3D.z)*dimPlanFinal; //donne n'importequoi sans l'arrondi sur z!!
 
@@ -878,35 +842,34 @@ void retroPropag_Born(vector <complex<double>> &TF3D_PotObj, vector<complex<doub
     int fxmi=posSpec.x, fymi=posSpec.y;
     //  cout<<"fi : "<<fxmi<<","<<fymi<<endl;
     int fxm0=(fxmi-NMAX.x), fym0=(fymi-NMAX.x);//coordonnée dans le repère humain (xm0,ym0)=(0,0)=au centre de l'image
-    // cout<<"fm0 : "<<fxm0<<","<<fym0<<endl;
+    // cout<<"fxm0 : "<<fxm0<<", fym0="<<fym0<<endl;
     int points_faux=0;
 
     int dimVolX=round(dim_final), dimPlanFinal=round(dim_final*dim_final);
-    float n0=m1.n0, //refractive index of the background medium
-    kv=2*PI/m1.lambda0, //wavevector in vaccuum
-    k0=kv*n0; //wavevector in the background medium
+    float nM=m1.nM, //refractive index of the background medium
+    kv=2*M_PI/m1.lambda0, //wavevector in vaccuum
+    k0=kv*nM; //wavevector in the background medium
 
     //création de variable pour éviter N calculs dans la boucle sur le volume 3D
     //create variable before loop
     int cptPot=0; //indice tableau 1d des données du potentiel3D
-    double cteNorm=-2*PI;
+    double cteNorm=-2*M_PI;
     double r2=rayon*rayon, fzm0, fzm0_carre = rayon*rayon-fxm0*fxm0-fym0*fym0;
     double norm_altitude=1.0/rayon;//normaliser fdz pour passer en  sdz;
    // if(sqrt(fxm0*fxm0+fym0*fym0)<Nmax_obj){
-
+if(m1.b_reflex==0)///transmission
+{//cout<<"Reconstruction with Transmission signal"<<endl;
     if(round(fzm0_carre)>=0)
     {
         fzm0=sqrt(fzm0_carre);
+       /// cout<<"fzm0="<<fzm0<<endl;
         int NMAX_CARRE=NMAX.x*NMAX.x;
 
         complex<double> cteUb2Pot(0,k0/PI);//
-
         //#pragma omp parallel for
         // cout<<"NMAX.y="<<NMAX.y<<endl;
-        for(short int fdy = -NMAX.y; fdy < NMAX.y; fdy++)    //X cscan of the filed Uborn2D, origin (0,0) in the middle of the picture
-        {
-
-            //cout<<"-----------------------"<<fdy<<endl;
+        for(short int fdy = -NMAX.y; fdy < NMAX.y; fdy++)    //X scan of the filed Uborn2D, origin (0,0) in the middle of the picture
+        {   //cout<<"-----------------------"<<fdy<<endl;
             //  cout<<"fdy haut="<<fdy<<endl;
             int fdy_carre=fdy*fdy;
             for (int fdx = -NMAX.x; fdx < NMAX.x; fdx++)    //on balaye l'image 2D en y, centre au milieu
@@ -916,14 +879,16 @@ void retroPropag_Born(vector <complex<double>> &TF3D_PotObj, vector<complex<doub
                 {
                     // cout<<"---------------------"<<endl;
                    //  cout<<"fxm0,fym0="<<fxm0<<","<<fym0<<endl;
-                    // cout<<"fdx,fdy="<<fdx<<","<<fdy<<endl;
+                   //  cout<<"fdx,fdy="<<fdx<<","<<fdy<<endl;
                     double fdz_carre=r2-fdx*fdx-fdy_carre; //altitude au carré des données
-                    double koz=round(sqrt(fdz_carre)-fzm0);
+                 //  cout<<"fdz="<<sqrt(fdz_carre)<<endl;
+                    double foz=round(sqrt(fdz_carre)-fzm0);
                     double sdz=sqrt(rayon*rayon-fdx*fdx-fdy*fdy)*norm_altitude;
-                    double altitude=(koz+decal3D.z)*dimPlanFinal; //donne n'importequoi sans l'arrondi sur koz!!
-                   // cout<<"fxm0="<<fxm0<<endl;
+                    double altitude=(foz+decal3D.z)*dimPlanFinal; //donne n'importequoi sans l'arrondi sur foz car dimPLanfinal très grand.
+                                     // cout<<"fxm0="<<fxm0<<endl;
                    // cout<<"dimPlanFinal="<<dimPlanFinal<<endl;
                     cptPot=(-fxm0+fdx+decal3D.x)+(-fym0+fdy+decal3D.y)*dimVolX+round(altitude);//indice du tableau 1D du volume 3D
+                   // cout<<"cptPot="<<cptPot<<endl;
                     TF3D_PotObj[cptPot]+=cteUb2Pot*cteNorm*sdz*TF_Uborn_norm[cpt];
                     sup_redon[cptPot]+=1;//redundacy in frequency support.
                 }
@@ -931,10 +896,172 @@ void retroPropag_Born(vector <complex<double>> &TF3D_PotObj, vector<complex<doub
             }
         }
     }
+}
+else  ///reflexion
+{//cout<<"Reconstruction with Reflexion signal"<<endl;
+    int signReflex=-1;
+    if(round(fzm0_carre)>=0)
+    {
+        fzm0=sqrt(fzm0_carre);
+       // cout<<"fzm0="<<fzm0<<endl;
+        int NMAX_CARRE=NMAX.x*NMAX.x;
+
+        complex<double> cteUb2Pot(0,k0/PI);//
+
+        //#pragma omp parallel for
+        // cout<<"NMAX.y="<<NMAX.y<<endl;
+        for(short int fdy = -NMAX.y; fdy < NMAX.y; fdy++)    //X scan of the filed Uborn2D, origin (0,0) in the middle of the picture
+        {   //cout<<"-----------------------"<<fdy<<endl;
+            //  cout<<"fdy haut="<<fdy<<endl;
+            int fdy_carre=fdy*fdy;
+            for (int fdx = -NMAX.x; fdx < NMAX.x; fdx++)    //on balaye l'image 2D en y, centre au milieu
+            {
+                int cpt=(fdy+NMAX.y)*2*NMAX.x+fdx+NMAX.x;//cpt tableau 1D de l'image 2D.Warning : fdy and fdx sign must not be multiplied by -1 here (because they are used on the hologram)
+
+                if(fdx*fdx+fdy_carre<m1.coef_NA_obj_limit*NMAX_CARRE)    //ne pas depasser l'ouverture numérique pour 1 hologramme
+                {
+                    // cout<<"---------------------"<<endl;
+                    // cout<<"fxm0,fym0="<<fxm0<<","<<fym0<<endl;
+                    // cout<<"fdx,fdy="<<fdx<<","<<fdy<<endl;
+                    double fdz_carre=r2-fdx*fdx-fdy_carre; //altitude au carré des données
+                    double foz=round(signReflex*sqrt(fdz_carre)-fzm0);
+                    //   cout<<"foz="<<foz<<endl;
+                    double sdz=sqrt(rayon*rayon-fdx*fdx-fdy*fdy)*norm_altitude;///sdz is not changed in reflexion ?
+                    double altitude=(foz+decal3D.z)*dimPlanFinal; //donne n'importequoi sans l'arrondi sur koz!!
+                    // cout<<"fxm0="<<fxm0<<endl;
+                    // cout<<"dimPlanFinal="<<dimPlanFinal<<endl;
+                     cptPot=(-fxm0+signReflex*fdx+decal3D.x)+(-fym0+signReflex*fdy+decal3D.y)*dimVolX+round(altitude);//indice du tableau 1D du volume 3D
+                    ///test with an sign inversion on x and Y (no multiplication by signreflex=-1)
+                   // cptPot=(-fxm0+fdx+decal3D.x)+(-fym0+fdy+decal3D.y)*dimVolX+round(altitude);//indice du tableau 1D du volume 3D
+
+                    TF3D_PotObj[cptPot]+=cteUb2Pot*cteNorm*sdz*TF_Uborn_norm[cpt];
+                    sup_redon[cptPot]+=1;//redundacy in frequency support.
+                }
+                else points_faux++;
+            }
+        }
+    }
+}
    // }
 }
 
+void retroPropag_Born_V2(vector <complex<double>> &TF3D_PotObj, vector<complex<double>> const &TF_Uborn_norm, vector<double>  &sup_redon, int dim_final, Var2D posSpec, Var3D decal3D, Var2D NMAX, double rayon, manip m1)
+{ //int Nmax_obj=m1.NXMAX_OBJ;
+//cout<<"Nmax_obj="<<Nmax_obj<<endl;
+    int fxmi=posSpec.x, fymi=posSpec.y;
+    //  cout<<"fi : "<<fxmi<<","<<fymi<<endl;
+    int fxm0=(fxmi-NMAX.x), fym0=(fymi-NMAX.x);//coordonnée dans le repère humain (xm0,ym0)=(0,0)=au centre de l'image
+    // cout<<"fxm0 : "<<fxm0<<", fym0="<<fym0<<endl;
+    int points_faux=0;
 
+    int dimVolX=round(dim_final), dimPlanFinal=round(dim_final*dim_final);
+    float nM=m1.nM, //refractive index of the background medium
+    kv=2*M_PI/m1.lambda0, //wavevector in vaccuum
+    k0=kv*nM; //wavevector in the background medium (mounting medium)
+
+    //création de variable pour éviter N calculs dans la boucle sur le volume 3D
+    //create variable before loop
+    int cptPot=0; //indice tableau 1d des données du potentiel3D
+    double cteNorm=-2*M_PI;
+    double r2=rayon*rayon, fzm0, fzm0_carre = rayon*rayon-fxm0*fxm0-fym0*fym0;
+    double norm_altitude=1.0/rayon;//normaliser fdz pour passer en  sdz;
+   // if(sqrt(fxm0*fxm0+fym0*fym0)<Nmax_obj){
+   if(m1.b_reflex==0) // ---- Transmission ----
+{
+    if(round(fzm0_carre)>=0)
+    {
+        fzm0 = sqrt(fzm0_carre);
+        const int NMAX_CARRE = NMAX.x*NMAX.x;
+        const double NALimitSq = m1.coef_NA_obj_limit * NMAX_CARRE; // hoisté hors boucle
+
+        // constant sur toute la boucle -> précalculé une seule fois
+        const complex<double> cteUb2PotNorm = complex<double>(0, k0/PI) * cteNorm;
+
+        const size_t volSize = TF3D_PotObj.size(); // pour le garde-fou
+
+        for (int fdy = -NMAX.y; fdy < NMAX.y; fdy++)
+        {
+            const int fdy_carre = fdy*fdy;
+            //const int rowOffsetHolo = (fdy+NMAX.y)*2*NMAX.x;
+            int cptHoloY = (fdy+NMAX.y)*2*NMAX.x; //conversion 2D coord in hologram -> 1D counter for Y
+            int posY_tomo = -fym0 + fdy + decal3D.y; //Y position in tomographic volume
+            int idxY3D     = posY_tomo * dimVolX;        // Y contribution to 1D index in volume
+
+            for (int fdx = -NMAX.x; fdx < NMAX.x; fdx++)
+            {
+                if (fdx*fdx + fdy_carre >= NALimitSq)
+                    continue; // hors ouverture numérique
+
+                const double fdz_carre = r2 - fdx*fdx - fdy_carre;
+                if (fdz_carre < 0.0)
+                    continue; // hors sphère d'Ewald réelle -> évite le sqrt(négatif)
+
+                const double fdz = sqrt(fdz_carre);   // un seul sqrt, réutilisé pour foz et sdz
+                const double foz = round(fdz - fzm0);
+                const double sdz = fdz * norm_altitude;
+
+                const int posX_tomo = -fxm0 + fdx + decal3D.x;    // position  frequence objet X dans le volume
+                const int altitude = static_cast<int>(round((foz + decal3D.z) * dimPlanFinal));
+               const int idx = posX_tomo + idxY3D + altitude;      // indice 1D final dans TF3D_PotObj / sup_redon
+
+                if (idx < 0 || static_cast<size_t>(idx) >= volSize)
+                    continue; // garde-fou anti hors-limites
+                const int cptHolo = cptHoloY + fdx + NMAX.x;
+                TF3D_PotObj[idx] += cteUb2PotNorm * sdz * TF_Uborn_norm[cptHolo];
+                sup_redon[idx]   += 1;
+            }
+        }
+    }
+}
+else // ---- Réflexion ----
+{
+    if (round(fzm0_carre) >= 0)
+    {
+        const int signReflex = -1;
+        fzm0 = sqrt(fzm0_carre);
+        const int NMAX_CARRE = NMAX.x*NMAX.x;
+        const double NALimitSq = m1.coef_NA_obj_limit * NMAX_CARRE;
+        const complex<double> cteUb2PotNorm = complex<double>(0, k0/PI) * cteNorm;
+        const size_t volSize = TF3D_PotObj.size();
+
+        for (int fdy = -NMAX.y; fdy < NMAX.y; fdy++)
+        {
+            const int fdy_carre = fdy*fdy;
+            int cptHoloY = (fdy+NMAX.y)*2*NMAX.x; // conversion 2D coord hologram -> 1D, PAS de signReflex ici
+            int posY_tomo = -fym0 + signReflex*fdy + decal3D.y; // position Y reprojetée dans le volume (inversée)
+            int idxY3D    = posY_tomo * dimVolX;
+
+            for (int fdx = -NMAX.x; fdx < NMAX.x; fdx++)
+            {
+                if (fdx*fdx + fdy_carre >= NALimitSq)
+                    continue; // hors ouverture numérique
+
+                const double fdz_carre = r2 - fdx*fdx - fdy_carre;
+                if (fdz_carre < 0.0)
+                    continue; // hors sphère d'Ewald réelle -> évite le sqrt(négatif)
+
+                const double fdz = sqrt(fdz_carre);
+                const double foz = round(signReflex*fdz - fzm0); // inversion du signe ici (spécifique réflexion)
+                const double sdz = fdz * norm_altitude;
+
+                const int posX_tomo = -fxm0 + signReflex*fdx + decal3D.x; // position X reprojetée (inversée)
+                const int altitude = static_cast<int>(round((foz + decal3D.z) * dimPlanFinal));
+                const int idx = posX_tomo + idxY3D + altitude;
+
+                if (idx < 0 || static_cast<size_t>(idx) >= volSize)
+                    continue; // garde-fou anti hors-limites
+
+                const int cptHolo = cptHoloY + fdx + NMAX.x; // Pas de signReflex ici : coord non-inversée sur l'hologramme
+
+                TF3D_PotObj[idx] += cteUb2PotNorm * sdz * TF_Uborn_norm[cptHolo];
+                sup_redon[idx]   += 1;
+            }
+        }
+    }
+}
+
+   // }
+}
 double max(double *entree, int tailleTab)
 {
     double valMax=0;
@@ -1521,36 +1648,6 @@ void multiplier_masque2(double image[], double masque[], int t_image, int t_mask
 }
 
 
-/*
-void recal_obj(nbCplx *a, nbCplx *b,nbCplx *objRecal, Var3D dimVol)
-{
-    int NPix3D=dimVol.x*dimVol.y*dimVol.z;
-    nbCplx *A=new nbCplx[NPix3D];
-    nbCplx *B=new nbCplx[NPix3D];
-
-
-
-    TF3DCplx(a, A,dimVol);
-    TF3DCplx(b, B,dimVol);
-
-
-    nbCplx BConj[NPix3D];
-    nbCplx prodAB[NPix3D];
-    nbCplx decalPhi[NPix3D];
-    conj_cplx(B, BConj, NPix3D);
-
-    nbCplx produitABconj[NPix3D];
-
-    AXB_cplx(A, BConj, prodAB, NPix3D);
-
-for(int cpt=0;cpt<NPix3D;cpt++)
-        {
-            decalPhi[cpt].Re=prodAB[cpt].Re/sqrt(pow(A[cpt].Re,2))+sqrt(pow(BConj[cpt].Re,2));
-            decalPhi[cpt].Im=prodAB[cpt].Im/sqrt(pow(A[cpt].Re,2))+sqrt(pow(BConj[cpt].Re,2));
-        }
-
-}
-*/
 void multiplier_masque2Cplx(nbCplx *image, double masque[], int t_image, int t_mask, Var2D Centre)
 {
     int t_imageX=t_image;
@@ -1583,32 +1680,6 @@ void multiplier_masque2Cplx(nbCplx *image, double masque[], int t_image, int t_m
     }
 }
 
-///découpe une une fenetre de dimension dim_dest, coin haut gauche coin, dans src de taille dim_src.
-void coupeCplx(nbCplx *src, nbCplx *dest, Var2D dim_src, Var2D dim_dest, Var2D coin)
-{
-//    size_t nbPixSrc=dim_src.x*dim_src.y;
-    size_t cpt_destX,cpt_destY, cpt_dest1D,
-           cpt_srcX,cpt_srcY, cpt_src1D;
-
-    for(cpt_destX=0; cpt_destX<dim_dest.x; cpt_destX++)
-    {
-        for(cpt_destY=0; cpt_destY<dim_dest.y; cpt_destY++)
-        {
-
-            cpt_dest1D=cpt_destX+cpt_destY*dim_dest.x;///coord 1D destination
-
-            cpt_srcX=coin.x+cpt_destX;///coord X src
-            cpt_srcY=coin.y+cpt_destY;///coord Y src
-            cpt_src1D=cpt_srcX+cpt_srcY*dim_src.x;///coord 1D source
-
-            dest[cpt_dest1D].Re=src[cpt_src1D].Re;
-            dest[cpt_dest1D].Im=src[cpt_src1D].Im;
-
-        }
-
-    }
-
-}
 
 /*
 void methodeCarre(int NbPixROI2d, double *holo1,  double *holo2,  double *holo3,  double *holo4)
@@ -1782,64 +1853,6 @@ int CreerZoneFresnel(double *FresnelRe,double * FresnelIm, Var2D dim, Var2D cent
     }
     return 1;
 }
-///#########lecture  d'un fichire binaire 3D, connaissant sa taille et son type de données
-///read a  binary file. (path, 3D table, data format (double=64), Nbpixels to be read). for data format, can use enum PRECISION, cf "projet.h"
-int get_bin_file_size(string chemin)
-{
-    size_t lTaille, nb_elmnt_lu;//size and number of elements
-    //unsigned short int dimData=precision/8;//taille en octet d'un element.
-    FILE* pFichier = NULL;
-    pFichier = fopen(chemin.c_str(), "r");  //ouverture de ce fichier en écriture binaire
-
-    if(pFichier==NULL){
-        fputs("Impossible d'ouvrir le fichier\n",stderr);
-        cout<<chemin<<endl;
-        exit (1);// obtenir la longueur du fichier, comparer avec donnée entrée.
-    }
-    else{
-        fseek(pFichier,0,SEEK_END);//trouver la fin de fichier
-        lTaille = ftell (pFichier);//retourne la position courante (en octet) du curseur de fichier : ici, position de la fin du fichier
-        rewind(pFichier);
-        fclose(pFichier);
-    }
-return lTaille;
-}
-
-///#########lecture  d'un fichire binaire 3D, connaissant sa taille et son type de données
-///read a  binary file. (path, 3D table, data format (double=64), Nbpixels to be read). for data format, can use enum PRECISION, cf "projet.h"
-void lire_bin(string chemin, double resultat[], short int precision, const size_t NbPix)
-{
-    size_t lTaille, nb_elmnt_lu;//size and number of elements
-    unsigned short int dimData=precision/8;//taille en octet d'un element.
-    FILE* pFichier = NULL;
-    pFichier = fopen(chemin.c_str(), "r");  //ouverture de ce fichier en écriture binaire
-
-    if(pFichier==NULL){
-        fputs("Impossible d'ouvrir le fichier\n",stderr);
-        cout<<chemin<<endl;
-        exit (1);// obtenir la longueur du fichier, comparer avec donnée entrée.
-    }
-    else{
-        fseek(pFichier,0,SEEK_END);//trouver la fin de fichier
-        lTaille = ftell (pFichier);//retourne la position courante (en octet) du curseur de fichier : ici, position de la fin du fichier->taille du fichier
-        cout<<"Fichier "<<chemin<<endl;
-         printf("taille trouvée en octet par ftell %li, taille estimée : %i\n",lTaille, NbPix*dimData);//
-        rewind(pFichier);
-
-        if(NbPix*dimData!=lTaille)
-            cout<<"Taille du fichier "<<chemin <<" incompatible avec les dimensions\n"<<endl;
-
-        nb_elmnt_lu = fread (resultat,1,lTaille,pFichier);//lecture
-        //nb_elmnt_lu = fread (&resultat_vector[0], 1,lTaille,pFichier);
-
-        if(nb_elmnt_lu!=lTaille){
-            cout<<"Problème lors de la lecture du fichier "<<chemin<<endl;
-            cout<<"Nombre d'éléments lus="<<nb_elmnt_lu<<endl;
-        }
-        fclose(pFichier);
-    }
-
-}
 
 void SAV_Tiff2D(double *var_sav, string chemin, const size_t dim)
 {
@@ -1872,70 +1885,7 @@ void SAV_Tiff2D(double *var_sav, string chemin, const size_t dim)
     TIFFWriteDirectory(tif);
     TIFFClose(tif);
 }
-/*
-void SAVCplx(std::vector<complex<double> > var_sav, string partie, std::string chemin, enum PRECISION2 precision, char options[])
-{
-    //double* var_sav = &v[0];
-    unsigned int cpt;
-    unsigned int NbPix=var_sav.size();
-    // cout<<"taille volume="<<NbPix<<endl;
-    FILE *fichier_ID;
-    fichier_ID= fopen(chemin.c_str(), options);
-    if(fichier_ID==0)
-        cout<<"Erreur d'ouverture du fichier "<<chemin<<endl;
 
-    switch(precision)
-    {
-    case t_double:  //64 bit
-    {
-        double tampon=0;
-        if(partie=="Re"|| partie=="re")
-        {
-            for(cpt=0; cpt<NbPix; cpt++)
-            {
-                tampon=var_sav[cpt].real();
-
-                fwrite(&tampon,sizeof(tampon),1,fichier_ID);
-            }
-        }
-        if(partie=="Im"|| partie=="im")
-        {
-            for(cpt=0; cpt<NbPix; cpt++)
-            {
-                tampon=var_sav[cpt].imag();
-                fwrite(&tampon,sizeof(tampon),1,fichier_ID);
-            }
-        }
-        break;
-    }
-    case t_float: //32 bits float
-    {
-        float tampon=0;
-
-        if(partie=="Re"|| partie=="re")
-        {
-
-            for(cpt=0; cpt<NbPix; cpt++)
-            {
-                tampon=var_sav[cpt].real();
-                //cout<<"tampon="<<tampon<<endl;
-                fwrite(&tampon,sizeof(tampon),1,fichier_ID);
-            }
-        }
-        if(partie=="Im"|| partie=="im")
-        {
-            for(cpt=0; cpt<NbPix; cpt++)
-            {
-                tampon=var_sav[cpt].imag();
-                fwrite(&tampon,sizeof(tampon),1,fichier_ID);
-            }
-        }
-        break;
-    }
-    }
-    fclose(fichier_ID);
-}
-*/
 
 void SAV_Tiff2D(std::vector<double> var_sav, string chemin, double taille_pixel)
 {
@@ -2046,7 +1996,6 @@ void SAV3D_Tiff(vector<double> var_sav, string chemin, double taille_pixel)
     dimz=dim;
     spp = 1; /* Samples per pixel */
     bpp = 32; /* Bits per sample */
-    // photo = PHOTOMETRIC_MINISBLACK;
 
     for (int num_page = 0; num_page < dim; num_page++)//z=page
     {
@@ -2056,8 +2005,6 @@ void SAV3D_Tiff(vector<double> var_sav, string chemin, double taille_pixel)
                 buffer2D[y * dim + x] = (float)var_sav[y * dim + x+num_page*dim*dim];
 
             }
-
-
         TIFFSetField(out, TIFFTAG_IMAGEWIDTH, image_width / spp);
         TIFFSetField(out, TIFFTAG_IMAGELENGTH, image_height);
         TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, bpp);
@@ -2087,7 +2034,6 @@ void SAV3D_Tiff(vector<double> var_sav, string chemin, double taille_pixel)
 }
 void SAV3D_Tiff(vector<complex <double>> var_sav, Var3D const dim, string partie, string chemin, double taille_pixel)
 {
-//    int dim=round(std::pow(var_sav.size(), 1.0/3.0));
     uint32 image_width, image_height;// dimz;
     float xres, yres;
     uint16 spp, bpp,  res_unit;//photo,zpage;
@@ -2139,9 +2085,6 @@ void SAV3D_Tiff(vector<complex <double>> var_sav, Var3D const dim, string partie
             else
                 cout<<"Partie non identifiée : Re || re, Im, || im"<<endl;
         }
-
-
-
 //z=page
         TIFFSetField(out, TIFFTAG_IMAGEWIDTH, image_width / spp);
         //TIFFSetField(out, TIFFTAG_COMPRESSION, LZW_SUPPORT);
@@ -2162,128 +2105,24 @@ void SAV3D_Tiff(vector<complex <double>> var_sav, Var3D const dim, string partie
         TIFFSetField(out, TIFFTAG_SUBFILETYPE, FILETYPE_PAGE);
         /* Set the page number */
         TIFFSetField(out, TIFFTAG_PAGENUMBER, num_page, dim.z);
-//auto start_tiff = std::chrono::system_clock::now();
-
-
 
         for (y = 0; y < image_height; y++) //écriture d'une page numérotée num_page, ligne par ligne (y).
         {
             TIFFWriteScanline(out, &buffer2D[y * image_width], y, 0);
         }
-        // auto end_tiff = std::chrono::system_clock::now();
-        //  auto elapsed_tiff = end_tiff - start_tiff;
-
-        //  cout<<"numpage="<<num_page<<endl;
-
-//   std::cout <<"Temps ecriture 1 plan tiff= "<< elapsed_tiff.count()/(pow(10,9)) << '\n';
 
         TIFFWriteDirectory(out);
-
     }
-
     delete[] buffer2D;
     TIFFClose(out);
 }
 
 
-void SAV3D_Tiff(vector<complex <double>> var_sav, string partie, string chemin, double taille_pixel)
-{
-    const size_t dim=round(std::pow(var_sav.size(), 1.0/3.0));
-    uint32 image_width, image_height, dimz;
-    float xres, yres;
-    uint16 spp, bpp, res_unit;//photo, zpage;
-    TIFF *out;
-    size_t x, y;// z;
-
-    //float *buffer2D=new float[dim * dim];
-    std::vector<float> buffer2D(dim * dim);
-    out = TIFFOpen(chemin.c_str(), "w");
-    if (!out){
-        fprintf (stderr, "Can't open  for writing\n");
-        return;
-    }
-    image_width = dim;
-    image_height = dim;
-    dimz=dim;
-    spp = 1; /* Samples per pixel */
-    bpp = 32; /* Bits per sample */
-    // photo = PHOTOMETRIC_MINISBLACK;
-  //  size_t num_page=0;
-    for(size_t num_page = 0; num_page < dim; num_page++) //z=page
-    {
-        int nbPix_plan=num_page*dim*dim;
-        ///reel
-        if(partie=="Re" || partie=="re")
-        {
-            //  #pragma omp parallel for private(y)
-            #pragma omp parallel for
-            for (y = 0; y < dim; y++)
-            {
-                size_t num_lgn=y*dim;
-                for(x = 0; x < dim; x++)
-                {
-                    buffer2D[num_lgn + x] = (float)var_sav[num_lgn + x+nbPix_plan].real();
-                }
-            }
-        }
-        ///imag
-        else
-        {
-            if(partie=="Im" || partie=="im")
-            {
-                //  #pragma omp parallel for private(y)
-                for (y = 0; y < dim; y++)
-                {
-                    size_t num_lgn=y*dim;
-                    for(x = 0; x < dim; x++)
-                    {
-                        buffer2D[num_lgn + x] = (float)var_sav[num_lgn + x+nbPix_plan].imag();
-                    }
-                }
-            }
-            else
-                cout<<"Partie non identifiée : Re || re, Im, || im"<<endl;
-        }
-//z=page
-        TIFFSetField(out, TIFFTAG_IMAGEWIDTH, image_width / spp);
-        //TIFFSetField(out, TIFFTAG_COMPRESSION, LZW_SUPPORT);
-        TIFFSetField(out, TIFFTAG_IMAGELENGTH, image_height);
-        TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, bpp);
-        TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, spp);
-        TIFFSetField(out, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-        // TIFFSetField(out, TIFFTAG_PHOTOMETRIC, photo);
-        TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_BOTLEFT);
-        TIFFSetField (out, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP); //image en Floating point
-        /* It is good to set resolutions too (but it is not nesessary) */
-        xres = yres = 0.01/taille_pixel; //nbpixel par resunit (par centimetre, on multiplie par 0.01 pour tout passer en mètre)
-        res_unit = RESUNIT_CENTIMETER;
-        TIFFSetField(out, TIFFTAG_XRESOLUTION, xres);
-        TIFFSetField(out, TIFFTAG_YRESOLUTION, yres);
-        TIFFSetField(out, TIFFTAG_RESOLUTIONUNIT, res_unit);
-        /* We are writing single page of the multipage file */
-        TIFFSetField(out, TIFFTAG_SUBFILETYPE, FILETYPE_PAGE);
-        /* Set the page number */
-        TIFFSetField(out, TIFFTAG_PAGENUMBER, num_page, dimz);
-//auto start_tiff = std::chrono::system_clock::now();
-        for (y = 0; y < image_height; y++) //écriture d'une page numérotée num_page, ligne par ligne (y).
-        {
-            TIFFWriteScanline(out, &buffer2D[y * image_width], y, 0);
-        }
-        // auto end_tiff = std::chrono::system_clock::now();
-        //  auto elapsed_tiff = end_tiff - start_tiff;
-
-        //  cout<<"numpage="<<num_page<<endl;
-
-//   std::cout <<"Temps ecriture 1 plan tiff= "<< elapsed_tiff.count()/(pow(10,9)) << '\n';
-
-        TIFFWriteDirectory(out);
-
-    }
-
-//    delete[] buffer2D;
-    TIFFClose(out);
-}
-void SAV3D_Tiff_Optimized(const std::vector<std::complex<double>>& var_sav, const std::string& partie, const std::string& chemin, double taille_pixel)
+void SAV3D_Tiff_Optimized(const std::vector<std::complex<double>>& var_sav,
+                          const std::string& partie,
+                          const std::string& chemin,
+                          double taille_pixel
+                          )  // Nouveau paramètre
 {
     const size_t dim = std::round(std::cbrt(var_sav.size()));
     if (dim * dim * dim != var_sav.size()) {
@@ -2291,12 +2130,12 @@ void SAV3D_Tiff_Optimized(const std::vector<std::complex<double>>& var_sav, cons
         return;
     }
 
-    const uint32 image_width = static_cast<uint32>(dim);
+    const uint32 image_width = static_cast<uint32>(dim);//static_cast to avcoid compiler warning and ensure portability between different architecture.
     const uint32 image_height = static_cast<uint32>(dim);
-    const uint16 spp = 1;               // Samples per pixel
-    const uint16 bpp = 32;              // Bits per sample
+    const uint16 spp = 1;
+    const uint16 bpp = 32;
     const uint16 res_unit = RESUNIT_CENTIMETER;
-    const float resolution = 0.01f / static_cast<float>(taille_pixel); // pixels/mètre -> pixels/cm
+    const float resolution = 0.01f / static_cast<float>(taille_pixel);
 
     std::vector<float> buffer2D(dim * dim);
 
@@ -2306,11 +2145,21 @@ void SAV3D_Tiff_Optimized(const std::vector<std::complex<double>>& var_sav, cons
         return;
     }
 
+    // Création des métadonnées ImageJ
+    std::ostringstream ij_metadata;
+    ij_metadata << "ImageJ=1.53\n"
+                << "images=" << dim << "\n"
+                << "slices=" << dim << "\n"
+                << "unit=um\n"  // ou votre unité
+                << "spacing=" << taille_pixel*pow(10,6)<< "\n"  // Espacement Z
+                << "loop=false\n";
+
+    std::string metadata_str = ij_metadata.str();
+
     for (uint32 z = 0; z < dim; ++z)
     {
         const size_t offset = z * dim * dim;
 
-        // Préparation du plan en parallèle
         #pragma omp parallel for
         for (size_t y = 0; y < dim; ++y) {
             for (size_t x = 0; x < dim; ++x) {
@@ -2340,8 +2189,12 @@ void SAV3D_Tiff_Optimized(const std::vector<std::complex<double>>& var_sav, cons
         TIFFSetField(out, TIFFTAG_RESOLUTIONUNIT, res_unit);
         TIFFSetField(out, TIFFTAG_SUBFILETYPE, FILETYPE_PAGE);
         TIFFSetField(out, TIFFTAG_PAGENUMBER, z, dim);
-        //TIFFSetField(out, TIFFTAG_COMPRESSION, COMPRESSION_LZW);
-       // TIFFSetField(out, TIFFTAG_COMPRESSION, COMPRESSION_DEFLATE);
+
+        // Ajouter les métadonnées ImageJ dans la première page
+        if (z == 0) {
+            TIFFSetField(out, TIFFTAG_IMAGEDESCRIPTION, metadata_str.c_str());
+        }
+
         for (uint32 y = 0; y < image_height; ++y) {
             if (TIFFWriteScanline(out, &buffer2D[y * image_width], y, 0) < 0) {
                 std::cerr << "Erreur : écriture scanline échouée à z=" << z << ", y=" << y << std::endl;
@@ -2356,87 +2209,6 @@ void SAV3D_Tiff_Optimized(const std::vector<std::complex<double>>& var_sav, cons
     TIFFClose(out);
 }
 
-void Import3D_Tiff(vector<double> &imgTiff, string chemin, double taille_pixel)
-{
-    const size_t dim=round(std::pow(imgTiff.size(), 1.0/3.0));
-    uint32 image_width, image_height, dimz;
-//    float xres, yres;
-    uint16 spp; //autres arguments : photo, res_unit, zpage, bpp
-    TIFF *Tiff_id;
-    size_t x, y; //z;
-    float *buffer2D=new float[dim * dim];
-    Tiff_id = TIFFOpen(chemin.c_str(), "r");
-    if (!Tiff_id)
-        fprintf (stderr, "Can't open  for writing\n");
 
-    image_width = dim;
-    image_height = dim;
-    dimz=dim;
-    spp = 1; /* Samples per pixel */
-//    bpp = 32; /* Bits per sample */
-    // photo = PHOTOMETRIC_MINISBLACK;
-    size_t num_page=0;
 
-    for(num_page = 0; num_page < dim; num_page++) //z=page
-    {
-//z=page
-        TIFFGetField(Tiff_id, TIFFTAG_IMAGEWIDTH, image_width / spp);
-        TIFFGetField(Tiff_id, TIFFTAG_IMAGELENGTH, image_height);
-        /*  TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, bpp);
-          TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, spp);
-          TIFFSetField(out, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-         // TIFFSetField(out, TIFFTAG_PHOTOMETRIC, photo);
-          TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_BOTLEFT);
-          TIFFSetField (out, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP); //image en Floating point
-          // It is good to set resolutions too (but it is not nesessary) */
-        /* xres = yres = 0.01/taille_pixel; //nbpixel par resunit (par centimetre, on multiplie par 0.01 pour tout passer en mètre)
-         res_unit = RESUNIT_CENTIMETER;
-         TIFFSetField(out, TIFFTAG_XRESOLUTION, xres);
-         TIFFSetField(out, TIFFTAG_YRESOLUTION, yres);
-         TIFFSetField(out, TIFFTAG_RESOLUTIONUNIT, res_unit);
-         // We are writing single page of the multipage file
-        // TIFFSetField(out, TIFFTAG_SUBFILETYPE, FILETYPE_PAGE);
-         // Set the page number
-        //  TIFFSetField(out, TIFFTAG_PAGENUMBER, num_page, dimz);*/
-
-        for (y = 0; y < image_height; y++) //écriture d'une page numérotée num_page, ligne par ligne (y).
-        {
-            TIFFReadScanline(Tiff_id, &buffer2D[y * image_width], y, 0);
-        }
-        int nbPix_plan=num_page*dim*dim;
-        for (y = 0; y < dim; y++)
-        {
-            size_t num_lgn=y*dim;
-            for(x = 0; x < dim; x++)
-            {
-                imgTiff[num_lgn + x+nbPix_plan]=buffer2D[num_lgn + x];
-            }
-        }
-    }
-    delete[] buffer2D;
-    TIFFClose(Tiff_id);
-}
-
-void SAV_Tiff3D(nbCplx *var_sav, string chemin_ind, string chemin_abs, int dim)
-{
-    double *bufferRe=new double[dim*dim];
-    double *bufferIm=new double[dim*dim];
-    for(int z=0; z < dim; z++)
-    {
-        for(int y=0; y < dim; y++)
-        {
-            for(int x=0; x < dim; x++)
-            {
-                int cpt1= x + y * dim + z * dim * dim;
-                int cpt2= x + y * dim;
-                bufferRe[cpt2]=var_sav[cpt1].Re;
-                bufferIm[cpt2]=var_sav[cpt1].Im;
-            }
-        }
-        SAV_Tiff2D(bufferRe, chemin_ind, dim);
-        SAV_Tiff2D(bufferIm, chemin_abs, dim);
-    }
-    delete[] bufferRe;
-    delete[] bufferIm;
-}
 

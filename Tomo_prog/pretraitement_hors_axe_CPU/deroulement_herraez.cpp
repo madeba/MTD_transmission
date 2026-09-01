@@ -6,6 +6,7 @@
 #include <math.h>
 using namespace std;
 ///#################################################algo déroulement de phase########################################################################
+///phase unwrapping using path, can create artifacts on noisy data
 static float PI = 3.141592654;
 static float TWOPI = 6.283185307;
 
@@ -25,7 +26,7 @@ void phase2pi(nbCplx* obj, Var2D taille,double* WrappedImage)///calcul phase -PI
                     }
                     else{
                         double racine=sqrt(pow(numeraPhase,2)+pow(denominPhase,2));
-                        WrappedImage[pixel]=PI-asin(numeraPhase/racine);
+                        WrappedImage[pixel]=M_PI-asin(numeraPhase/racine);
                     }
      }
 }

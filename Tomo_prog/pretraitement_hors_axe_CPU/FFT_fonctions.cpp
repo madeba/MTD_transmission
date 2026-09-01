@@ -10,9 +10,10 @@ std::vector<vecteur> init_kvect_shift(Var2D dim2DHA)
   vector<vecteur> kvect(nbPix),kvect_shift(nbPix);
   for(size_t cpt=0;cpt<nbPix;cpt++){
     kvect[cpt].setx((cpt%dim2DHA.x-round(dim2DHA.x/2))/(dim2DHA.x));
-    kvect[cpt].sety((cpt/dim2DHA.y-round(dim2DHA.y/2))/(dim2DHA.y));
+    kvect[cpt].sety((cpt/dim2DHA.x-round(dim2DHA.y/2))/(dim2DHA.y));
+    // kvect[cpt].sety((cpt/dim2DHA.y-round(dim2DHA.y/2))/(dim2DHA.y));
   }
-  kvect_shift=fftshift2D(kvect);
+  kvect_shift=fftshift2Dnew(kvect);
   return kvect_shift;
 }
 ///calculate the kvector square modulus field (array whose value a simply  kx^2+ky^2)
@@ -56,6 +57,26 @@ size_t xi=0;
                 }
         }
         return result;
+}
+///simplified version of fftshift for "vecteur" (maybe delete the other version after test).
+vector<vecteur> fftshift2Dnew(const vector<vecteur>& in)
+{
+    int dim = sqrt(in.size());
+    vector<vecteur> out(dim * dim);
+
+    int half = dim / 2;
+
+    for (int y = 0; y < dim; ++y) {
+        for (int x = 0; x < dim; ++x) {
+
+            int new_x = (x + half) % dim;
+            int new_y = (y + half) % dim;
+
+            out[new_y * dim + new_x] = in[y * dim + x];
+        }
+    }
+
+    return out;
 }
 ///calculate 2D Tukey window whose width is controled by alpha (to be applied before fft)
 vector<double> tukey2D(int dimx,int dimy, float alpha)

@@ -7,7 +7,8 @@
 class manip {
 public :
         double NA, Tp;
-        double n0;
+        double n0;//oil refractive index
+        double nM;//mounting medium refractive index. gives delta n=nM-nObject
         double rayon;
         double lambda0;
         size_t NXMAX;
@@ -20,9 +21,11 @@ public :
         double f_tube;
         double f_obj;
         double G,Gt,Rf;
+        bool b_ampliRef=false;
         bool b_volkov=false;
         bool b_CorrAber=false;
         bool b_Deroul=false;
+        bool b_deroul_exact=true;//deroulement avec grad U/u
         bool b_Born=true;
         size_t dim_final;
         double TpCam;
@@ -36,6 +39,7 @@ public :
         std::string chemin_result;
         std::string chemin_acquis;
         std::string chemin_racine;
+        std::string home;
         //manip();
         manip(std::string str_config_manip);
 

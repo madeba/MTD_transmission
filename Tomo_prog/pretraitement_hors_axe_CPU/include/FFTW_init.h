@@ -7,14 +7,22 @@
 class FFTW_init{
 
 private:
-
+    void init_threads(size_t nbThread);
 public:
+
+    fftw_complex* in = nullptr;
+    fftw_complex* out = nullptr;
+    double* in_double = nullptr;
+    fftw_plan p_forward_OUT = nullptr;
+    fftw_plan p_backward_OUT = nullptr;
+    fftw_plan p_forward_IN = nullptr;
+    fftw_plan p_backward_IN = nullptr;
     size_t m_Nthread;
-    fftw_plan p_forward_IN, p_backward_IN, p_forward_OUT, p_backward_OUT;
+//    fftw_plan p_forward_IN, p_backward_IN, p_forward_OUT, p_backward_OUT;
     int fftwThreadInit;
 
-    fftw_complex *in=nullptr,*out=nullptr;
-    double *in_double=nullptr;// fftw r2c
+   // fftw_complex *in=nullptr,*out=nullptr;
+   // double *in_double=nullptr;// fftw r2c
 
 
     FFTW_init(Point3D dim,size_t nbThread);

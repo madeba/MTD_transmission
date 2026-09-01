@@ -34,10 +34,15 @@
 
 //*calculate the wrapped phase from -pi to pi*/
 Var2D coord_to_coordShift(Var2D coord2D, Var2D dimROI);
+
+void holo2TF_UBornSym(std::vector<double> holo1, std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle, std::vector<double> tukeyHA, fftw_complex *in,fftw_complex *out,fftw_plan p_forward_holo);
 void calcPhase_mpi_pi_atan2(std::vector<std::complex<double>> const& cplx_field, std::vector<double> &phaseMod2pi);
 void  decal2DCplxGen2(std::vector<std::complex<double>> const &entree,std::vector<std::complex<double>>  &result, Var2D &decalGen);
-std::vector<double> initRef(std::string chemin_ref,Var2D coin, Var2D dimROI);
+std::vector<double> initRef(std::string chemin_ref,Var2D coin, Var2D dimROI,Var2D dim2DHA);
 void calc_Uborn2(std::vector<std::complex<double>> const &TF_UBorn,std::vector<std::complex<double>> &UBorn,Var2D dim2DHA,Var2D PosSpec,FFTW_init &param_c2c);
+//calc Uborn with TFUborn I exported to calculate later  grad  u /u
+std::vector<std::complex<double>> calc_Uborn2exportTF(std::vector<std::complex<double>> const &TF_UBorn,std::vector<std::complex<double>> &UBorn, Var2D dim2DHA,Var2D PosSpec,FFTW_init &param_c2c);
+std::vector<std::complex<double>> Symcalc_Uborn2exportTF(std::vector<std::complex<double>> const &TF_UBorn,std::vector<std::complex<double>> &UBorn, Var2D dim2DHA,Var2D PosSpec,FFTW_init &doubled_param_c2c);
 int coordSpec(std::vector<std::complex<double>> const &TF_UBorn, std::vector<double> &TF_champMod,Var2D NMAX);
 ///extract complex field form off-axis hologram
 void holo2TF_UBorn2(std::vector<double>  &holo1,std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA, size_t NbAngleOk, std::vector<double> const &tukeyHolo,FFTW_init  &FFTparam_fftw2DHolo);
@@ -45,28 +50,16 @@ void holo2TF_UBorn2(std::vector<double>  &holo1,std::vector<std::complex<double>
 void holo2TF_UBorn2_shift(std::vector<double>  &holo1,std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA_shift, size_t NbAngleOk, std::vector<double> const &tukeyHolo,FFTW_init  &FFTparam_fftw2DHolo);
 void holo2TF_UBorn2_shift_r2c(std::vector<double>  &holo1,std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA_shift, size_t NbAngleOk, std::vector<double> const &tukeyHolo,FFTW_init  &param_fftw2D_r2c_Holo);
 //ancienne fonction
-void holo2TF_UBorn_old(std::vector<double> holo1, std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle, std::vector<double> tukey_holo);
+//void holo2TF_UBorn_old(std::vector<double> holo1, std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle, std::vector<double> tukey_holo);
 void holo2TF_UBorn(std::vector<double> holo1, std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle, std::vector<double> tukey_holo, fftw_complex *in,fftw_complex *out,fftw_plan p_forward_holo);
+void holo2TF_UBornTukeyHA(std::vector<double> holo1, std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle, std::vector<double> tukeyHA, fftw_complex *in,fftw_complex *out,fftw_plan p_forward_holo);
+void holo2TF_UBornTukeyHA_r2c(std::vector<double>  &holo1,std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA, size_t NbAngleOk, std::vector<double> const &tukeyHA,FFTW_init  &param_fftw2DHolo);
 void coupeCplx(std::vector<std::complex<double>> const &src, Var2D dim_src, std::vector<std::complex<double>> &dest, Var2D dim_dest, Var2D coin,size_t NumAngle);
+void coupeCplxTukey(std::vector<std::complex<double>> const &src, std::vector<std::complex<double>> &dest, Var2D dim_src, Var2D dim_dest, Var2D coin, size_t NumAngle, std::vector<double> &tukey);
 void coupe2D_RefI_to3D(std::vector<std::complex<double>> const &src, std::vector<std::complex<double>> &dest, Var2D dim_dest, unsigned short int numAngle);
 void coupe2D_I_to_H3D(std::vector<std::complex<double>> const &src2D, std::vector<std::complex<double>> &dest3D,Var2D dim_dest2D, unsigned short int numAngle);
 void sav_param2D(std::string texte,std::string file_path);
-///-----------entree/sortie+parseur---------------------------------
-/*float extract_val(std::string token,  std::string chemin_fic);
-std::string extract_string(std::string token,  std::string chemin_fic);
-bool is_readable( const std::string & file )  ;
 
-void charger_image2D_OCV(std::vector<double> &imgTab, std::string imgFile, Var2D coin,Var2D taille);
-
-void SAV2(std::vector<double>  &v, std::string chemin, enum PRECISION2 precision, char options[]);
-void SAV2(double *var_sav, int NbPix2D, std::string chemin, enum PRECISION2 precision, char options[]);
-void SAVCplx(std::vector<std::complex<double>> const &v, std::string partie, std::string chemin, enum PRECISION2 precision, char options[]);
-
-void SAV3D_Tiff(std::vector<std::complex <double>> const &var_sav, std::string partie, std::string chemin, double taille_pixel);
-void SAV_Tiff2D(std::vector<double> const &var_sav, std::string chemin, double taille_pixel);
-void SAV_Tiff2D(std::vector<std::complex<double>> const &var_sav, std::string partie, std::string chemin, double taille_pixel);
-
-*/
 
 
 #endif

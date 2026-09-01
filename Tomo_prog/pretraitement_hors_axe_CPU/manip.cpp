@@ -11,7 +11,7 @@ manip::manip(string str_nom_gui_tomo_conf)
 
     cout<<"dans la classe manip"<<endl;
     cout<<"str_nom_gui_tomo_conf="<<str_nom_gui_tomo_conf<<endl;
-    string home=getenv("HOME");
+    home=getenv("HOME");
    // cout<<"HOME="<<home<<endl;
     string fin_chemin_gui_tomo="/.config/"+str_nom_gui_tomo_conf;
     string chemin_config_GUI=getenv("HOME")+fin_chemin_gui_tomo;
@@ -30,6 +30,7 @@ manip::manip(string str_nom_gui_tomo_conf)
 
     cout<<"\n##################### information about setup paramaters ##################\n"<<endl;
     n0=extract_val("N0",fic_cfg_manip);	//indice de l'huile
+    nM=extract_val("NM",fic_cfg_manip);
     NA=extract_val("NA",fic_cfg_manip);	/// NA=Numerical aperture of the objective///ouverture numerique de l'objectif? (celle du condenseur intervient sur la forme, la taille, du papillon)
     lambda0=extract_val("LAMBDA",fic_cfg_manip);///lambda0 = laser wavelength
     f_tube=extract_val("F_TUBE",fic_cfg_manip), ///f_tube = tube lens focal length
@@ -58,7 +59,22 @@ manip::manip(string str_nom_gui_tomo_conf)
     ///---fréquence porteuse/coordinates of the off-axis career---
     circle_cx=extract_val("CIRCLE_CX",fic_cfg_manip);
     circle_cy=extract_val("CIRCLE_CY",fic_cfg_manip);
+    //Test for invalid values
+    long diff_x = static_cast<long>(circle_cx) - static_cast<long>(NXMAX);
+    long diff_y = static_cast<long>(circle_cy) - static_cast<long>(NXMAX);
+
+    if(circle_cx+NXMAX>dimROI.x || diff_x<0 ||
+            circle_cy+NXMAX>dimROI.y || diff_y<0)
+    {
+        cerr << "Off axis crop exceed image size! "
+             << "circle=(" << circle_cx << "," << circle_cy << "), "
+             << "NXMAX=" << NXMAX << ", "
+             << "dimROI=(" << dimROI.x << "," << dimROI.y << ")" << endl;
+        exit(EXIT_FAILURE);
+    }
+
     fPort={circle_cx,circle_cy};
+
     fPortShift=coord_to_coordShift(fPort,dimROI);//porteuse espace décalé informatique
     cout<<"fPortShift="<<fPortShift.x<<","<<fPortShift.y<<endl;
     cout<<"fPort="<<fPort.x<<","<<fPort.y<<endl;
@@ -73,8 +89,10 @@ manip::manip(string str_nom_gui_tomo_conf)
 
     cout<<"\n##################### Options  RECONSTRUCTION ##################\n"<<endl;
     ///boolean used to choose the type of reconstruction/phase unwrapping
+    b_ampliRef=extract_val("AMPLI_REF",fic_cfg_recon);///corriger les aberrations? Correct aberrations ?
     b_CorrAber=extract_val("C_ABER",fic_cfg_recon);///corriger les aberrations? Correct aberrations ?
     b_Deroul=extract_val("DEROUL",fic_cfg_recon);///Dérouler la phase? Unwrap phase ?
+    b_deroul_exact=extract_val("DEROUL_EXACT",fic_cfg_recon);///phase unwrapping with grad U/U
     b_Born=extract_val("BORN",fic_cfg_recon);///Born vrai ? Sinon Rytov
     b_volkov=extract_val("VOLKOV",fic_cfg_recon);///VOLKOV vrai ? Sinon Herraez
     if(b_Born==true)
@@ -101,9 +119,11 @@ manip::manip(string str_nom_gui_tomo_conf)
         if( remove(result.c_str()) == 0 )
         perror( "Fichier UBornfinal_Re impossible à effacer" );*/
 
-      rayon=round(NXMAX*n0/NA);//calcul du rayon Ewald à partir de la fréquence NXMAX defini pare l'utlisateur
-      double R_Ewald=CamDimROI*tailleTheoPixelHolo*n0/(lambda0); //vraie valeur de R_Ewald.
-      double NXMAX_theo=R_Ewald*NA/n0;
+
+      double R_Ewald=CamDimROI*tailleTheoPixelHolo*nM/(lambda0); //"vraie" valeur de R_Ewald. Rewald pix=2*pi/lambda_m*delta_f
+      //rayon=round(NXMAX*nM/NA);//calcul du rayon Ewald à partir de la fréquence NXMAX defini pare l'utlisateur
+      rayon=R_Ewald;
+      double NXMAX_theo=R_Ewald*NA/nM;
     ///-------------enregistrer les paramètres dans un fichier log.--------------------------------------
     string sav_param=chemin_result+"/SAV_param_manip.txt";
     cout<<sav_param<<endl;
@@ -119,9 +139,13 @@ manip::manip(string str_nom_gui_tomo_conf)
     cout<<"|---------------------------------|"<<endl;
     cout<<"|     R_Ewald    |     "<<round(R_Ewald)<<" pixels |"<<endl;
     cout<<"|---------------------------------|"<<endl;
-    cout<<"|     NXMAX_theo |     "<<round(R_Ewald*NA/n0)<<" pixels |"<<endl;
+    cout<<"|     Rayon (via nxmax)      |     "<<rayon<<" pixels |"<<endl;
     cout<<"|---------------------------------|"<<endl;
-    cout<<"| Taille chp cplx|     "<<2*round(R_Ewald*NA/n0)<<" pixels |"<<endl;
+    cout<<"|     NXMAX_theo |     "<<round(R_Ewald*NA/nM)<<" pixels |"<<endl;
+    cout<<"|---------------------------------|"<<endl;
+    cout<<"|     NXMAX utilisé|     "<<NXMAX<<" pixels |"<<endl;
+    cout<<"|---------------------------------|"<<endl;
+    cout<<"| Taille chp cplx|     "<<2*round(R_Ewald*NA/nM)<<" pixels |"<<endl;
     cout<<"|---------------------------------|"<<endl;
     cout<<"|    Tp Chp cplx |     "<<(tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI.x)*1e9<<" nm |"<<endl;
     cout<<"|---------------------------------|"<<endl;
@@ -134,17 +158,23 @@ manip::manip(string str_nom_gui_tomo_conf)
     fichier_sav_parametre<<"+----------------+----------------+"<<endl;
     fichier_sav_parametre<<"|    Grandeur    |    Valeur      |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
+    fichier_sav_parametre<<"|    NA          |      "<<NA<<"      |"<<endl;
+    fichier_sav_parametre<<"|---------------------------------|"<<endl;
+    fichier_sav_parametre<<"|    nM          |      "<<nM<<"      |"<<endl;
+    fichier_sav_parametre<<"|---------------------------------|"<<endl;
     fichier_sav_parametre<<"|    Tp Holo     |     "<<tailleTheoPixelHolo<<" nm      |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
-    fichier_sav_parametre<<"|     Champ      |     "<<round(CamDimROI*tailleTheoPixelHolo)<<" µm      |"<<endl;
+    fichier_sav_parametre<<"|     Champ      |     "<<(CamDimROI*tailleTheoPixelHolo)*1e6<<" µm      |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
     fichier_sav_parametre<<"|     R_Ewald    |     "<<round(R_Ewald)<<" pixels |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
-    fichier_sav_parametre<<"|     NXMAX_theo |     "<<round(R_Ewald*NA/n0)<<" pixels |"<<endl;
+    fichier_sav_parametre<<"|     NXMAX_theo |     "<<round(R_Ewald*NA/nM)<<" pixels |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
-    fichier_sav_parametre<<"| Taille chp cplx|     "<<2*round(R_Ewald*NA/n0)<<" pixels |"<<endl;
+    fichier_sav_parametre<<"|     NXMAX utilisé|     "<<NXMAX<<" pixels |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
-    fichier_sav_parametre<<"|    Tp Chp cplx |     "<<round(tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI.x)<<" nm     |"<<endl;
+    fichier_sav_parametre<<"| Taille chp cplx|     "<<2*round(R_Ewald*NA/nM)<<" pixels |"<<endl;
+    fichier_sav_parametre<<"|---------------------------------|"<<endl;
+    fichier_sav_parametre<<"|    Tp Chp cplx |     "<<(tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI.x)*1e9<<" nm     |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
     fichier_sav_parametre<<"|    Tp Tomo theo|     "<<(2*NXMAX_theo)/dim_final*tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI.x<<" nm      |"<<endl;
     fichier_sav_parametre<<"+---------------------------------+"<<endl;

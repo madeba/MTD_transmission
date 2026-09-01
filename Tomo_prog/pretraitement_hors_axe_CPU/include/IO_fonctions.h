@@ -38,8 +38,11 @@ float extract_val(std::string token,  std::string chemin_fic);
 std::string extract_string(std::string token,  std::string chemin_fic);
 bool is_readable( const std::string & file);
 void charger_image2D_OCV(std::vector<double> &imgTab, std::string imgFile, Var2D coin,Var2D taille);
-
+void charger_image2D_OCV16(std::vector<double>& imgTab, std::string imgFile, Var2D coin, Var2D dimROI);
+void charger_image2D_OCV16Bits(std::vector<double> &imgTab, std::string imgFile, Var2D coin, Var2D dimROI);
+void charger_image2D_OCV_UNI(std::vector<double>& imgTab, std::string imgFile, Var2D coin, Var2D dimROI);
 void SAV2(std::vector<double>  &v, std::string chemin, enum PRECISION2 precision, char options[]);
+void charger_image2D_OCV_UNI(std::vector<double>& imgTab, std::string imgFile, Var2D coin, Var2D dimROI, Var2D dim2DHA);//overload with resize to dim2DHA
 void SAV2(cv::Mat &imgCrop, std::string chemin, enum PRECISION2 precision, char options[]);
 void SAV2(double *var_sav, int NbPix2D, std::string chemin, enum PRECISION2 precision, char options[]);
 

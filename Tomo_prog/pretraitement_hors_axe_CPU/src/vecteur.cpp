@@ -40,22 +40,30 @@ void vecteur :: sety(double vy){
 void vecteur :: setz(double vz){
     this->z=vz;
 }
-
-double vecteur :: norm(){
+void vecteur :: setNorm(int newNormValue)
+{
+this->norm=newNormValue;
+}
+double vecteur :: calc_norm(){
+     if(this->z==0){
+        std::cout<<"warning : kz=0"<<std::endl;
+     }
     return sqrt(this->x*this->x+this->y*this->y+this->z*this->z);
 }
 
-double vecteur::calc_angle(vecteur const &vec2){
-    //double prod_scal=this->x*vec2.x+this->y*vec2.y+this->z*vec2.z;
-//   double prod_scal=(*this)*vec2;//this->x*vec2.x+this->y*vec2.y+this->z*vec2.z;
-double angle = atan2(  (*this^vec2).norm(), (*this)*vec2  );
-return angle;
-   // angle = atan(norm(cross(a,b)), dot(a,b))
-   // std::cout<<"norme vec 1="<<this->norm()<<std::endl;
-    //std::cout<<"norm vec2="<<vec2.norm()<<std::endl;
-    //double angle=acos(prod_scal/(this->norm()*vec2.norm()));
+void vecteur::calc_angle(){
 
+    if(this->norm==0.0)
+        {
+        throw std::runtime_error("Vecteur nul : impossible de calculer les angles.");
+    }
+//kz is known inside the class, but is caculated again to avoid rounded error due to component being integer
+//it may create differences betwwen float and integer calculations.
+double kz=sqrt(this->norm*this->norm-this->x*this->x-this->y*this->y);
+theta=acos(kz/this->norm);
+this->phi=atan2(this->y,this->x);
 }
+
 
 ///--------------Opérateurs---
 ///surcharge : produit scalaire

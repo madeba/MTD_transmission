@@ -1,6 +1,7 @@
 #ifndef DEF_STRUCT// Si la constante n'a pas été définie` le fichier n'a jamais été inclus
 #define DEF_STRUCT
 
+enum PRECISION2 {t_char, t_uint, t_int, t_float, t_double};
 //Nombre complexe
 
 

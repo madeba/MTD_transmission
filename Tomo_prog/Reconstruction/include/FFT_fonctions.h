@@ -6,6 +6,7 @@
 #include <fftw3.h>
 #include "manip.h"
 #include "FFT_encaps.h"
+#include "struct.h"
 //std::vector<std::complex<double> >  fftshift2D(std::vector<std::complex<double> > &entree);
 std::vector<double>  fftshift2D(std::vector<double> &entree);
 std::vector<std::complex<double>> fftshift2D(std::vector<std::complex<double>> &entree);
@@ -18,7 +19,8 @@ void TF2Dcplx(std::vector<std::complex<double> > entree, std::vector<std::comple
 
 void TF2Dcplx_INV(std::vector<std::complex<double> > entree, std::vector<std::complex<double> > &sortie, FFT_encaps &tf2D, double Delta_f);
 
-
+void prepare_wisdom2D(Var2D dim, const char *chemin);
+void prepare_wisdom3D(Var3D dim, char *chemin);
 
 void TF2Dcplx_INPLACE(fftw_complex *in_out, std::vector<double> entree,  std::vector< std::complex<double> > sortie, fftw_plan p, double delta_x);
 

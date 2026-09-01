@@ -1,6 +1,7 @@
 #include "IO_fonctions.h"
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc.hpp>//resize
 #include <fstream>
 
 using namespace std;
@@ -20,14 +21,42 @@ void deleteCplxField(string chemin_result, string dimImg){
         if( remove(result.c_str()) == 0 )
         perror( "Fichier UBornfinal_Re impossible à effacer" );
 }
-///load picture into a vector C++ thanks to opencv
+
+void charger_image2D_OCV16Bits(std::vector<double> &imgTab, string imgFile, Var2D coin, Var2D dimROI)
+{
+    // CORRECTIF 1 : -1 (ou cv::IMREAD_UNCHANGED) préserve le format 16 bits d'origine
+    Mat img = imread(imgFile, -1);
+
+    if(!img.data){
+        cout << "##################### /!\\ ##############################" << endl;
+        cout << "Impossible d'ouvrir " << imgFile << endl;
+        cout << "#########################################################" << endl;
+        return; // Important pour éviter un crash juste après
+    }
+
+    // Sécurité : vérifier que l'image est bien lue en 16 bits (CV_16U)
+    if(img.type() != CV_16UC1) {
+        cout << "/!\\ Attention : L'image n'est pas au format 16 bits non signé !" << endl;
+    }
+
+    // Définition de la zone d'intérêt (ROI) et découpage
+    Rect myROI(coin.x, coin.y, dimROI.x, dimROI.y);
+    Mat imgCrop = img(myROI);
+
+    //  Utiliser <ushort> (le type C++ pour le 16 bits non signé)
+    // .assign va automatiquement transtyper (cast) chaque ushort en double dans imgTab
+    imgTab.assign(imgCrop.begin<ushort>(), imgCrop.end<ushort>());
+}
+///load picture into a vector C++ thanks to opencv (8 bits images)
 void charger_image2D_OCV(std::vector<double> &imgTab, string imgFile, Var2D coin, Var2D dimROI)
 {
         Mat img=imread(imgFile, 0);//0=grayscale
+
         if(! img.data ){  // Check for invalid input
               cout <<  "##################### /!\\ ##############################"<<endl;
               cout <<  "Impossible d'ouvrir" <<imgFile<< endl ;
               cout <<  "#########################################################"<<endl;
+              return;
        }
         Var2D taille={img.cols,img.rows};
         Rect myROI(coin.x, coin.y, dimROI.x, dimROI.y);
@@ -39,6 +68,72 @@ void charger_image2D_OCV(std::vector<double> &imgTab, string imgFile, Var2D coin
         imgTab.assign(imgCrop.begin<uchar>(), imgCrop.end<uchar>());
 }
 
+///load picture into a vector C++ thanks to opencv, from 16 bits PGM
+void charger_image2D_OCV16(std::vector<double>& imgTab, std::string imgFile, Var2D coin, Var2D dimROI)
+{
+    Mat img = imread(imgFile, cv::IMREAD_ANYDEPTH);  // conserve le 16 bits
+    if (!img.data) {
+        cout << "Impossible d'ouvrir " << imgFile << endl;
+        return;
+    }
+
+    Rect myROI(coin.x, coin.y, dimROI.x, dimROI.y);
+    Mat imgCrop = img(myROI);
+
+    // uint16_t → double
+    imgTab.assign(imgCrop.begin<uint16_t>(), imgCrop.end<uint16_t>());
+}
+//load images with openCV, can handle any input format (8,16,32).
+void charger_image2D_OCV_UNI(std::vector<double>& imgTab, std::string imgFile, Var2D coin, Var2D dimROI)
+{
+    // 1. Lecture universelle (Gris + n'importe quelle profondeur)
+    Mat img = imread(imgFile, cv::IMREAD_ANYDEPTH | cv::IMREAD_GRAYSCALE);
+    if (!img.data) {
+        cout << "Impossible d'ouvrir " << imgFile << endl;
+        return;
+    }
+
+    // 2. Découpage de la ROI
+    Rect myROI(coin.x, coin.y, dimROI.x, dimROI.y);
+    Mat imgCrop = img(myROI);
+
+    // 3. Conversion universelle en double (64 bits flottant)
+    Mat imgDouble;
+    imgCrop.convertTo(imgDouble, CV_64F);
+
+    // 4.COPIE SÉCURISÉE : L'utilisation des itérateurs <double> gère
+    // parfaitement les éventuels sauts de ligne (pas de contrainte de contiguïté binaire)
+    imgTab.assign(imgDouble.begin<double>(), imgDouble.end<double>());
+}
+//load images with openCV, can handle any input format (8,16,32), then downscale to dim2DHA
+void charger_image2D_OCV_UNI(std::vector<double>& imgTab, std::string imgFile, Var2D coin, Var2D dimROI, Var2D dim2DHA)
+{
+    // 1. Lecture universelle (Gris + n'importe quelle profondeur)
+    Mat img = imread(imgFile, cv::IMREAD_ANYDEPTH | cv::IMREAD_GRAYSCALE);
+    if (!img.data) {
+        cout << "Impossible d'ouvrir " << imgFile << endl;
+        return;
+    }
+
+    // 2. Découpage de la ROI
+    Rect myROI(coin.x, coin.y, dimROI.x, dimROI.y);
+    Mat imgCrop = img(myROI);
+
+    // 3. Réduction à la taille dim2DHA (avant conversion, pour bosser sur le type natif)
+    Mat imgResized;
+    if (dim2DHA.x != dimROI.x || dim2DHA.y != dimROI.y) {
+        cv::resize(imgCrop, imgResized, cv::Size(dim2DHA.x, dim2DHA.y), 0, 0, cv::INTER_AREA);//rééchantillonnage par moyennage de zones (area averaging)
+    } else {
+        imgResized = imgCrop;
+    }
+
+    // 4. Conversion universelle en double (64 bits flottant)
+    Mat imgDouble;
+    imgResized.convertTo(imgDouble, CV_64F);
+
+    // 5. Copie sécurisée via itérateurs
+    imgTab.assign(imgDouble.begin<double>(), imgDouble.end<double>());
+}
 
 ///extract string matching a given token (ex : token ="SCAN_PATTERN", output string="ROSACE")
 string extract_string(std::string token,  std::string chemin_fic)

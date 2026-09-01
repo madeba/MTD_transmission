@@ -5,30 +5,32 @@
 #include <iostream>
 class manip {
 public :
-        double NA_obj;
+        double NA_obj;//objective numerical aperture
         double coef_NA_obj_limit;
-        double Tp;
-        double n0;
+        double Tp;//pixel size
+        double n0,nM;//oil index and mounting medium (background)
         double rayon;
         double lambda0;
-        int dimROI;
-        size_t NXMAX, NYMAX;
+        int dimROI; //region of interest dimension cropped on camera
+        size_t NXMAX, NYMAX; //maxium frequency for measured complex field
         //size_t NXMAX_OBJ;
         size_t premier_plan;
         size_t Num_Angle_final;
         size_t NbAngle;//peut différer de premier_angle-Num_angle_final  si des angles ont été enlevés dans le prétraitement
         size_t nbThreads;
         double theta;
-        double f_tube;
-        double f_obj;
-        double G,Gt,Rf;
+        double f_tube; //Tube lens focal length
+        double f_obj;//objective focal length
+        double G_obj,Gt,Rf;
         bool b_CorrAber=false;
         bool b_Deroul=false;
         bool b_Born=true;
+
         bool b_Export_OTF=true;
         bool b_polar=false;
+        bool b_reflex=false;
         size_t dim_final;
-        double TpCam;
+        double TpCam;//pixel size (camera)
         double R_th;
         double tailleTheoPixelHolo;
         double tailleTheoPixelUborn;

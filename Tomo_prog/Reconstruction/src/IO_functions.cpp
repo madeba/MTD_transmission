@@ -2,7 +2,7 @@
 
 #include "IO_functions.h"
 using namespace H5;
-
+using namespace std;
 #include <H5Cpp.h>
 
 std::vector<std::complex<double>> load_complex_volume_hdf5(const std::string &filename,
@@ -97,8 +97,8 @@ void save_real_hdf5_volume(const std::vector<std::complex<double>>& volume,
     std::vector<float> data_real(Nx * Ny * Nz);
     for (size_t i = 0; i < volume.size(); ++i) {
         data_real[i] = static_cast<float>(volume[i].real());
-    }
 
+    }
     // Dimensions du dataset
     hsize_t dims[3] = { Nz, Ny, Nx };  // Fiji attend ZYX
 
@@ -112,4 +112,100 @@ void save_real_hdf5_volume(const std::vector<std::complex<double>>& volume,
     } catch (H5::Exception& e) {
         std::cerr << "Erreur HDF5 : " << e.getCDetailMsg() << std::endl;
     }
+}
+
+
+///#########lecture  d'un fichier binaire 3D, connaissant sa taille et son type de données
+///read a  binary file. (path, 3D table, data format (double=64), Nbpixels to be read). for data format, can use enum PRECISION, cf "projet.h"
+int get_bin_file_size(string chemin)
+{
+    size_t lTaille, nb_elmnt_lu;//size and number of elements
+    //unsigned short int dimData=precision/8;//taille en octet d'un element.
+    FILE* pFichier = NULL;
+    pFichier = fopen(chemin.c_str(), "r");  //ouverture de ce fichier en écriture binaire
+
+    if(pFichier==NULL){
+        fputs("Impossible d'ouvrir le fichier\n",stderr);
+        cout<<chemin<<endl;
+        exit (1);// obtenir la longueur du fichier, comparer avec donnée entrée.
+    }
+    else{
+        fseek(pFichier,0,SEEK_END);//trouver la fin de fichier
+        lTaille = ftell (pFichier);//retourne la position courante (en octet) du curseur de fichier : ici, position de la fin du fichier
+        rewind(pFichier);
+        fclose(pFichier);
+    }
+return lTaille;
+}
+
+///#########lecture  d'un fichire binaire 3D, connaissant sa taille et son type de données
+///read a  binary file. (path, 3D table, data format (double=64), Nbpixels to be read). for data format, can use enum PRECISION, cf "projet.h"
+void lire_bin(string chemin, double resultat[], short int precision, const size_t NbPix)
+{
+    size_t lTaille, nb_elmnt_lu;//size and number of elements
+    unsigned short int dimData=precision/8;//taille en octet d'un element.
+    FILE* pFichier = NULL;
+    pFichier = fopen(chemin.c_str(), "r");  //ouverture de ce fichier en écriture binaire
+
+    if(pFichier==NULL){
+        fputs("Impossible d'ouvrir le fichier\n",stderr);
+        cout<<chemin<<endl;
+        exit (1);// obtenir la longueur du fichier, comparer avec donnée entrée.
+    }
+    else{
+        fseek(pFichier,0,SEEK_END);//trouver la fin de fichier
+        lTaille = ftell (pFichier);//retourne la position courante (en octet) du curseur de fichier : ici, position de la fin du fichier->taille du fichier
+        cout<<"Fichier "<<chemin<<endl;
+         printf("taille trouvée en octet par ftell %li, taille estimée : %i\n",lTaille, NbPix*dimData);//
+        rewind(pFichier);
+
+        if(NbPix*dimData!=lTaille)
+            cout<<"Taille du fichier "<<chemin <<" incompatible avec les dimensions\n"<<endl;
+
+        nb_elmnt_lu = fread (resultat,1,lTaille,pFichier);//lecture
+        //nb_elmnt_lu = fread (&resultat_vector[0], 1,lTaille,pFichier);
+
+        if(nb_elmnt_lu!=lTaille){
+            cout<<"Problème lors de la lecture du fichier "<<chemin<<endl;
+            cout<<"Nombre d'éléments lus="<<nb_elmnt_lu<<endl;
+        }
+        fclose(pFichier);
+    }
+
+}
+///surcharge RAII
+vector<double> lire_bin(const string& chemin, short int precision, size_t NbPix)
+{
+    ifstream fichier(chemin, ios::binary | ios::ate);
+
+    if (!fichier) {
+        throw runtime_error("Impossible d'ouvrir le fichier: " + chemin);
+    }
+
+    size_t tailleFichier = fichier.tellg();
+    size_t tailleAttendue = NbPix * (precision / 8);
+
+    if (tailleFichier != tailleAttendue) {
+        throw runtime_error("Taille incompatible: " + to_string(tailleFichier)
+                          + " vs " + to_string(tailleAttendue));
+    }
+    fichier.seekg(0);
+    vector<unsigned char> buffer(tailleFichier);
+    fichier.read(reinterpret_cast<char*>(buffer.data()), tailleFichier);
+
+    vector<double> resultat(NbPix);
+
+    // Conversion selon la précision
+    for (size_t i = 0; i < NbPix; i++) {
+        if (precision == 8) {
+            resultat[i] = buffer[i];
+        }
+        else if (precision == 16) {
+            resultat[i] = *reinterpret_cast<unsigned short*>(&buffer[i * 2]);
+        }
+        else if (precision == 32) {
+            resultat[i] = *reinterpret_cast<float*>(&buffer[i * 4]);
+        }
+    }
+    return resultat;
 }

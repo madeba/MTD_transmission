@@ -1,0 +1,3 @@
+# Exclut les dossiers bin et obj où qu'ils soient dans l'arborescence
+**/bin/
+**/obj/

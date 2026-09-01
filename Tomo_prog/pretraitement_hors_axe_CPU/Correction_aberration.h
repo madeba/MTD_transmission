@@ -34,13 +34,17 @@
 using namespace cv;
 
 /// Function header
+void correctAmpliRef(std::vector<std::complex<double>> &UBorn,std::vector<double> const &ampli_ref);
 Mat init_mask_aber(std::string Chemin_mask, std::string Chemin_acquis, Var2D dim2DHA);
 int sizePoly2D(int deg);
 int countM(Mat mask);
+int countM(Mat mask, int margin);
 void compuBackgr2(Mat const &coefficients, Mat const & polynome_to_fit, Mat &PolyBackgr);
 Mat  aberCorr2(Mat const &image, Mat const &mask, Mat const &polynomeUs_to_fit,Mat const &polynome_to_fit);
 Mat  ampliCorr2(Mat const & image,  Mat const &polynomeUs_to_fit, Mat const &polynome_to_fit, Mat mask);
+Mat  ampliCorr3(Mat const & image,  Mat const &polynomeUs_to_fit, Mat const &polynome_to_fit, Mat mask, double gamma_ampli);
 void compuCoefPoly2(Mat const &imagebrut, Mat const & mask, Mat& coef_polynomial, Mat const &polynome_to_fit, bool method);
+void compuCoefPoly2_regul(Mat const &imagebrut, Mat const & mask, Mat& coef_polynomial, Mat const &polynomeUs_to_fit, bool method);
 void CalcPolyUs_xy(int degre_poly, Mat const & mask, Var2D dimChpCplx,Mat &polynome_to_fit);
 void CalcPoly_xy(int degre_poly, Var2D dimImg, Mat &polynome_to_fit);
 void initCorrAber(std::string Chemin_mask, Mat const &mask, size_t degre_poly, Var2D dim2DHA,Mat &polynome_to_fit, Mat &polynomeUs_to_fit);

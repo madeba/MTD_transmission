@@ -2,6 +2,7 @@
 #include <iostream>
 #include "fonctions.h"
 #include "projet.h"
+#include "IO_functions.h"
 ///this class handle all the set up parameters
 
 using namespace std;
@@ -50,50 +51,59 @@ manip::manip(string str_nom_gui_tomo_conf, string etat_polar, bool b_polar)//par
     cout<<"dimROIparam="<<dimROI<<endl;
     cout<<"\n##################### INFO MANIP ##################\n"<<endl;
     n0=extract_val("N0",fic_cfg_manip);	//indice de l'huile
+    nM=extract_val("NM",fic_cfg_manip);//milieu de montage
     NA_obj=extract_val("NA",fic_cfg_manip);	//ouverture numerique de l'objectif? (celle du condenseur intervient sur la forme, la taille, du papillon)
     coef_NA_obj_limit=extract_val("COEF_NA_OBJ_LIMIT",fic_cfg_recon,1);
     lambda0=extract_val("LAMBDA",fic_cfg_manip);
     f_tube=extract_val("F_TUBE",fic_cfg_manip), ///focale lentille tube
     f_obj=extract_val("F_OBJ",fic_cfg_manip),///focale objectif
-    G=f_tube/f_obj,	//grossissement telan+objectif
+    G_obj=f_tube/f_obj,	//grossissement telan+objectif
     TpCam=extract_val("TPCAM",fic_cfg_manip),//cam. photon focus
     //NXMAX_OBJ=extract_val("NXMAX_OBJ",fic_cfg_manip);
     Rf=extract_val("RF",fic_cfg_manip),//1.2;=1/facteur grossissement
-    Gt=G/Rf;
+    Gt=G_obj/Rf;//total magnification (objectve+telan)*"sampling" lenses
     cout<<"Gt="<<Gt<<endl;
     tailleTheoPixelHolo=TpCam/Gt;//Pour info, taille des pixels sur un hologramme=Tpcam/GT
     cout<<"taille theorique pixel holo="<<tailleTheoPixelHolo*pow(10,9)<<"nm"<<endl;
-    theta=asin(NA_obj/n0);
+    theta=asin(NA_obj/nM);
  //   circle_cx=extract_val("CIRCLE_CX",fic_cfg_manip);
    // circle_cy=extract_val("CIRCLE_CY",fic_cfg_manip);
   //  NXMAX=extract_val("NXMAX",fic_cfg_manip);
 
     if(NXMAX==0)
         cout<<"----- ERREUR : NXMAX absent du fichier de configuration" <<fic_cfg_manip<<endl;
-    dim_final=extract_val("DIM_FINAL",fic_cfg_recon);
+    dim_final=extract_val("DIM_FINAL",fic_cfg_recon);//dimension in the final 3D volume
+
     if(dim_final<4*NXMAX) cout<<"Attention, dim_final<4*NXMAX"<<endl;
-    tailleTheoPixelUborn=tailleTheoPixelHolo*dimROI/(2*NXMAX);
+    tailleTheoPixelUborn=tailleTheoPixelHolo*dimROI/(2*NXMAX); //sampling for the 2D measured complex field
     Delta_fUborn=1/(tailleTheoPixelUborn*2*NXMAX);//echantillonnage fréquentiel Uborn, utile pour repasser le rayon en métrique dans le volume 3D final
-    tailleTheoPixelTomo=tailleTheoPixelUborn*(2*NXMAX)/dim_final;
+    tailleTheoPixelTomo=tailleTheoPixelUborn*(2*NXMAX)/dim_final;//sampling in the final  tomographic volume
 
     premier_plan=extract_val("PREMIER_ANGLE",fic_cfg_recon),
     Num_Angle_final=extract_val("NB_HOLO",fic_cfg_manip),//
     nbThreads=extract_val("NB_THREADS",fic_cfg_recon);
     cout<<"\n##################### Options de RECONSTRUCTION ##################\n"<<endl;
-    b_CorrAber=extract_val("C_ABER",fic_cfg_recon);///corriger les aberrations?
-    b_Deroul=extract_val("DEROUL",fic_cfg_recon);///Dérouler la phase?
-    b_Born=extract_val("BORN",fic_cfg_recon);///Born vrai ? Sinon Rytov
+    b_CorrAber=extract_val("C_ABER",fic_cfg_recon);///correct  aberrations?
+    b_Deroul=extract_val("DEROUL",fic_cfg_recon);///unwrap  phase?
+    b_Born=extract_val("BORN",fic_cfg_recon);///Born true ? Otherwise Rytov
+
     if(b_Born==true)
         cout<<"RYTOV=0"<<endl;
     else
         cout<<"RYTOV=1"<<endl;
+//    b_Reflexion=extract_val("REFLEXION",fic_cfg_manip);///
+    b_reflex=extract_val("REFLEX",fic_cfg_recon);///signal Reflexion ?
 
     b_Export_OTF=extract_val("EXPORT_OTF",fic_cfg_recon);///Exporter OTF ?
     cout<<"\n##########################################################"<<endl;
 
-      rayon=round(NXMAX*n0/NA_obj);//calcul du rayon à partir de la fréquence NXMAX defini pare l'utlisateur
-      double R_Ewald=IMAGE_DIMX*tailleTheoPixelHolo*n0/(lambda0); //vraie valeur de R_Ewald.
-      double NXMAX_theo=R_Ewald*NA_obj/n0;
+    rayon=round(NXMAX*nM/NA_obj);//Force R_Ewald from maximum frequency defined by user in the config_manip.txt file
+    double R_Ewald=IMAGE_DIMX*tailleTheoPixelHolo*nM/(lambda0); //theoritical value of R_Ewald.
+    if(dim_final<=4*R_Ewald && b_reflex==1){
+    cout<<"Attention, dim_final="<<dim_final<<"<4*Rewald="<<4*R_Ewald<<endl;
+    }
+    double NXMAX_theo=R_Ewald*NA_obj/nM; //theoritical maximum frequency for complex field
+    cout<<"NXMAX_theo"<<NXMAX_theo<<endl;
     string sav_param=chemin_result+"/SAV_param_manip.txt";
     cout<<sav_param<<endl;
     ofstream fichier_sav_parametre(sav_param);
@@ -112,13 +122,13 @@ manip::manip(string str_nom_gui_tomo_conf, string etat_polar, bool b_polar)//par
     cout<<"|---------------------------------|"<<endl;
     cout<<"|     R_Ewald    |     "<<round(R_Ewald)<<" pixels |"<<endl;
     cout<<"|---------------------------------|"<<endl;
-    cout<<"|     NXMAX_theo |     "<<round(R_Ewald*NA_obj/n0)<<" pixels |"<<endl;
+    cout<<"|     NXMAX_theo |     "<<round(R_Ewald*NA_obj/nM)<<" pixels |"<<endl;
     cout<<"|---------------------------------|"<<endl;
-    cout<<"| chp UBorn pix  |     "<<2*round(R_Ewald*NA_obj/n0)<<" pixels |"<<endl;
+    cout<<"| chp UBorn pix  |     "<<2*round(R_Ewald*NA_obj/nM)<<" pixels |"<<endl;
     cout<<"|---------------------------------|"<<endl;
     cout<<"|    Tp UBorn    |     "<<(tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI)*pow(10,9)<<" nm     |"<<endl;
     cout<<"|---------------------------------|"<<endl;
-    cout<<"| chp UBorn µm   |     "<<2*round(R_Ewald*NA_obj/n0)*(tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI)*pow(10,6) <<" µm    |"<<endl;
+    cout<<"| chp UBorn µm   |     "<<2*round(R_Ewald*NA_obj/nM)*(tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI)*pow(10,6) <<" µm    |"<<endl;
     cout<<"|---------------------------------|"<<endl;
     cout<<"| Chp tomo pixel |     "<<dim_final<<" pix^3  |" <<endl;
     cout<<"|---------------------------------|"<<endl;
@@ -142,13 +152,13 @@ manip::manip(string str_nom_gui_tomo_conf, string etat_polar, bool b_polar)//par
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
     fichier_sav_parametre<<"|     R_Ewald    |     "<<round(R_Ewald)<<" pixels |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
-    fichier_sav_parametre<<"|     NXMAX_theo |     "<<round(R_Ewald*NA_obj/n0)<<" pixels |"<<endl;
+    fichier_sav_parametre<<"|     NXMAX_theo |     "<<round(R_Ewald*NA_obj/nM)<<" pixels |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
-    fichier_sav_parametre<<"| chp UBorn pix  |     "<<2*round(R_Ewald*NA_obj/n0)<<" pixels |"<<endl;
+    fichier_sav_parametre<<"| chp UBorn pix  |     "<<2*round(R_Ewald*NA_obj/nM)<<" pixels |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
     fichier_sav_parametre<<"|    Tp UBorn    |     "<<(tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI)*pow(10,9)<<" nm     |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
-    fichier_sav_parametre<<"| chp UBorn µm   |     "<<2*round(R_Ewald*NA_obj/n0)*(tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI)*pow(10,6) <<" µm    |"<<endl;
+    fichier_sav_parametre<<"| chp UBorn µm   |     "<<2*round(R_Ewald*NA_obj/nM)*(tailleTheoPixelHolo/(2*NXMAX_theo)*dimROI)*pow(10,6) <<" µm    |"<<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
     fichier_sav_parametre<<"| Chp tomo pixel |     "<<dim_final<<" pix^3  |" <<endl;
     fichier_sav_parametre<<"|---------------------------------|"<<endl;
