@@ -11,7 +11,7 @@ to install them in the system path (root/sudo privileges required)
 
 # C++ Dependencies
 
-The following libraries are needed tu compile the code : 
+The following libraries are needed to compile the code : 
 OpenCV 4, FFTW3, libtiff, libboost-thread, libboost-chrono, libboost-system, and wxWidgets (graphical user interface).
 
 For GPU code, the API Arrayfire and a backend (CUDA or OpenCL), must be installed. 
