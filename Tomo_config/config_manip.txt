@@ -1,119 +1,42 @@
-# Ouverture numérique objectif/Numerical aperture of the objective
+#Numerical aperture of the objective / Ouverture numérique objectif
 NA 1.40
-#indice d'immersion/index immersion oil
+#index immersion oil / indice d'immersion
 N0 1.515
-#longueur d'onde/wavelength (m)
+#mounting medium refractive index
+NM 1.50
+#/wavelength / longueur d'onde (m)
 LAMBDA 0.000000632
-#focale lentille de tube objectif/focal length of the tube lens (m)
+#focal length of the tube lens / focale lentille de tube objectif (m)
 F_TUBE 0.15
-#focale objectif/focal length of the objective (m)
+#focal length of the objective/ focale objectif (m)
 F_OBJ 0.0020
-#taille des pixels caméra/size of the camera pixel (m)
+#size of the camera pixel/taille des pixels caméra (m)
 TPCAM 0.0000055
-#Rapport focale des lentilles d'échantillonnage
+#focal ratio of the afocal system used to fix the sampling
 RF 0.75
-#fréquence maximum accessible dans Fourier
+#maximum frequency in Fourier space/ fréquence maximum accessible dans Fourier
 NXMAX 125
-#Paramètres de hors-axe : position du centre et rayon
-
+#coordinate of the off-axis career
 CIRCLE_CX 247
 CIRCLE_CY 777
-
+#holograms dimension (pixel)
 DIM_ROI 1024
-#Nombre d'hologrammes
+#number of hologramms / Nombre d'hologrammes
 NB_HOLO 500
-
 #tension min max du miroir de balayage
-#VXMIN -4.20
-#VXMAX 4.2
-#VYMIN -2.8
-#VYMAX 2.8
-SCAN_PATTERN ROSACE
-
-
+#max voltage for the scan mirror [-10V;+10V]->[-0.7°;+0.7°]
 VXMIN -8.50
 VXMAX 8.50
 VYMIN -6.50
 VYMAX 6.00
+#scan pattern (rosace, star, fermat, annular, uniform3D)
+SCAN_PATTERN ROSACE
+#use a dark theme for TOMO_GUI
 DARK_THEME 1
-
+#coefficient used to limit the real numerical aperture
 NA_COND_LIM 0.90
+#name of the DAC used to acquire data
 LJ_DAC 67
-
-
+#Use the reference to correct amplitude
 AMPLI_REF 0
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<<<<<<<<< Temporary merge branch 1
-
-
-
-
-
-
-
-
-
-
-=========
->>>>>>>>> Temporary merge branch 2
-
-
-
-
-
-
-
-
-
 
