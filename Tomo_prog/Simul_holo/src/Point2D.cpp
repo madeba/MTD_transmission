@@ -45,7 +45,8 @@ size_t Point2D::cpt2D()
 //cpt repère humain centré vers repère informatique
 Point2D Point2D::coordI()
 {
-    Point2D coordI(this->x+dim2D/2,-this->y+dim2D/2, dim2D);
+    Point2D coordI(this->x+dim2D/2,-this->y+dim2D/2, dim2D);//inversion axe Y en coord informatique
+   // Point2D coordI(this->x+dim2D/2,this->y+dim2D/2, dim2D);
     return coordI;
 }
 

@@ -236,6 +236,7 @@ Mat  ampliCorr3(Mat const & image,  Mat const &polynomeUs_to_fit, Mat const &pol
     Mat coefsolve;
     compuCoefPoly2(image, mask, coefsolve, polynomeUs_to_fit, true); /// Compute the coef of polynomial (Least Squares method)
     Mat resultatpoly(image.rows, image.cols, CV_64F), result(image.rows, image.cols, CV_64F);
+    SAV2(resultatpoly, "/home/mat/tomo_test/resultat_poly_208x208.raw", t_float,"a+b");
     compuBackgr2(coefsolve, polynome_to_fit,  resultatpoly);/// Compute the background image with the coef of polynomial
     double minVal, maxVal;
     cv::Point minLoc, maxLoc;

@@ -2,7 +2,7 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="Reconstruction_2025" />
+		<Option title="Reconstruction_2026" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
@@ -50,7 +50,7 @@
 			<Add option="-fexpensive-optimizations" />
 			<Add option="-O3" />
 			<Add option="-std=gnu++14" />
-			<Add option="-fexceptions  -std=c++11 -fopenmp `pkg-config --cflags opencv4`" />
+			<Add option="-fexceptions  -std=c++17 -fopenmp `pkg-config --cflags opencv4`" />
 			<Add directory="/usr/include/opencv" />
 			<Add directory="include" />
 			<Add directory="." />
@@ -71,8 +71,10 @@
 		<Unit filename="include/Point3D.h" />
 		<Unit filename="include/fonctions.h" />
 		<Unit filename="include/manip.h" />
+		<Unit filename="include/math_functions.h" />
 		<Unit filename="include/projet.h" />
 		<Unit filename="include/struct.h" />
+		<Unit filename="include/tiff_functions.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/FFT_encaps.cpp" />
 		<Unit filename="src/FFT_fonctions.cpp" />
@@ -81,6 +83,8 @@
 		<Unit filename="src/Point3D.cpp" />
 		<Unit filename="src/fonctions.cpp" />
 		<Unit filename="src/manip.cpp" />
+		<Unit filename="src/math_functions.cpp" />
+		<Unit filename="src/tiff_functions.cpp" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

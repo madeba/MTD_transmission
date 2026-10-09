@@ -623,3 +623,42 @@ bool is_readable( const std::string & file )
     std::ifstream fichier( file.c_str() );
     return !fichier.fail();
 }
+///surcharge RAII
+vector<double> lire_bin(const string& chemin, short int precision, size_t NbPix)
+{
+    ifstream fichier(chemin, ios::binary | ios::ate);
+
+    if (!fichier) {
+        throw runtime_error("Impossible d'ouvrir le fichier: " + chemin);
+    }
+
+    size_t tailleFichier = fichier.tellg();
+    size_t tailleAttendue = NbPix * (precision / 8);
+
+    if (tailleFichier != tailleAttendue) {
+        throw runtime_error("Taille incompatible: " + to_string(tailleFichier)
+                          + " vs " + to_string(tailleAttendue));
+    }
+    fichier.seekg(0);
+    vector<unsigned char> buffer(tailleFichier);
+    fichier.read(reinterpret_cast<char*>(buffer.data()), tailleFichier);
+
+    vector<double> resultat(NbPix);
+
+    // Conversion selon la précision
+    for (size_t i = 0; i < NbPix; i++) {
+        if (precision == 8) {
+            resultat[i] = buffer[i];
+        }
+        else if (precision == 16) {
+            resultat[i] = *reinterpret_cast<unsigned short*>(&buffer[i * 2]);
+        }
+        else if (precision == 32) {
+            resultat[i] = *reinterpret_cast<float*>(&buffer[i * 4]);
+        }
+        else if (precision == 64) {
+            resultat[i] = *reinterpret_cast<double*>(&buffer[i * 8]);
+        }
+    }
+    return resultat;
+}

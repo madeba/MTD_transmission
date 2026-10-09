@@ -30,6 +30,7 @@ public :
         size_t dim_final;
         double TpCam;
         double R_th;
+        double minVisibility=0;
         double tailleTheoPixelHolo;
         double tailleTheoPixelUborn;
         double tailleTheoPixelTomo;

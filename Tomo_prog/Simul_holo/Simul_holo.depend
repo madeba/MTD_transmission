@@ -1124,15 +1124,15 @@
 1605361705 source:/home/mat/Dropbox/projet_c/2020/Projet_tomo/Tomo_prog/Simul_holo/src/FFTW_init.cpp
 	"FFTW_init.h"
 
-1576849456 /usr/include/opencv4//opencv2/imgproc/imgproc.hpp
+1654443164 /usr/include/opencv4//opencv2/imgproc/imgproc.hpp
 	"opencv2/imgproc.hpp"
 
-1576849456 /usr/include/opencv4//opencv2/imgproc.hpp
+1654443164 /usr/include/opencv4//opencv2/imgproc.hpp
 	"opencv2/core.hpp"
+	"./imgproc/segmentation.hpp"
 
-1576849456 /usr/include/opencv4//opencv2/core.hpp
+1654443164 /usr/include/opencv4//opencv2/core.hpp
 	"opencv2/core/cvdef.h"
-	"opencv2/core/version.hpp"
 	"opencv2/core/base.hpp"
 	"opencv2/core/cvstd.hpp"
 	"opencv2/core/traits.hpp"
@@ -1146,8 +1146,10 @@
 	"opencv2/core/optim.hpp"
 	"opencv2/core/ovx.hpp"
 
-1576849456 /usr/include/opencv4//opencv2/core/cvdef.h
+1654443164 /usr/include/opencv4//opencv2/core/cvdef.h
+	"opencv2/core/version.hpp"
 	"cvconfig.h"
+	<limits>
 	<limits.h>
 	"opencv2/core/hal/interface.h"
 	"cv_cpu_dispatch.h"
@@ -1158,14 +1160,14 @@
 	<stdint.h>
 	"opencv2/core/fast_math.hpp"
 
-1576849456 /usr/include/opencv4//opencv2/core/hal/interface.h
+1654443164 /usr/include/opencv4//opencv2/core/hal/interface.h
 	<cstddef>
 	<stddef.h>
 	<stdbool.h>
 	<cstdint>
 	<stdint.h>
 
-1576849456 /usr/include/opencv4//opencv2/core/cv_cpu_dispatch.h
+1654443164 /usr/include/opencv4//opencv2/core/cv_cpu_dispatch.h
 	"cv_cpu_config.h"
 	"cv_cpu_helper.h"
 	<emmintrin.h>
@@ -1183,23 +1185,26 @@
 	<Intrin.h>
 	<arm_neon.h>
 	<arm_neon.h>
+	<riscv-vector.h>
 	<arm_neon.h>
 	<altivec.h>
 	"hal/msa_macros.h"
 	<wasm_simd128.h>
+	<riscv_vector.h>
 	<emmintrin.h>
 	<Intrin.h>
 	<arm_neon.h>
 	<arm_neon.h>
 	<altivec.h>
+	<immintrin.h>
 
-1576849456 /usr/include/opencv4//opencv2/core/cv_cpu_helper.h
+1654443164 /usr/include/opencv4//opencv2/core/cv_cpu_helper.h
 
-1576849456 /usr/include/opencv4//opencv2/core/hal/msa_macros.h
+1654443164 /usr/include/opencv4//opencv2/core/hal/msa_macros.h
 	"msa.h"
 	<stdint.h>
 
-1576849456 /usr/include/opencv4//opencv2/core/fast_math.hpp
+1654443164 /usr/include/opencv4//opencv2/core/fast_math.hpp
 	"opencv2/core/cvdef.h"
 	<cmath>
 	<fastmath.h>
@@ -1207,9 +1212,9 @@
 	<emmintrin.h>
 	<altivec.h>
 
-1576849456 /usr/include/opencv4//opencv2/core/version.hpp
+1654443164 /usr/include/opencv4//opencv2/core/version.hpp
 
-1576849456 /usr/include/opencv4//opencv2/core/base.hpp
+1654443164 /usr/include/opencv4//opencv2/core/base.hpp
 	"opencv2/opencv_modules.hpp"
 	<climits>
 	<algorithm>
@@ -1219,9 +1224,9 @@
 	"opencv2/core/vsx_utils.hpp"
 	"opencv2/core/check.hpp"
 
-1581996685 /usr/include/opencv4//opencv2/opencv_modules.hpp
+1712171327 /usr/include/opencv4//opencv2/opencv_modules.hpp
 
-1576849456 /usr/include/opencv4//opencv2/core/cvstd.hpp
+1654443164 /usr/include/opencv4//opencv2/core/cvstd.hpp
 	"opencv2/core/cvdef.h"
 	<cstddef>
 	<cstring>
@@ -1233,37 +1238,37 @@
 	<cmath>
 	"cvstd_wrapper.hpp"
 
-1576849456 /usr/include/opencv4//opencv2/core/cvstd_wrapper.hpp
+1654443164 /usr/include/opencv4//opencv2/core/cvstd_wrapper.hpp
 	"opencv2/core/cvdef.h"
 	<string>
 	<memory>
 	<type_traits>
 
-1576849456 /usr/include/opencv4//opencv2/core/neon_utils.hpp
+1654443164 /usr/include/opencv4//opencv2/core/neon_utils.hpp
 	"opencv2/core/cvdef.h"
 
-1576849456 /usr/include/opencv4//opencv2/core/vsx_utils.hpp
+1654443164 /usr/include/opencv4//opencv2/core/vsx_utils.hpp
 	"opencv2/core/cvdef.h"
 	<assert.h>
 
-1576849456 /usr/include/opencv4//opencv2/core/check.hpp
+1654443164 /usr/include/opencv4//opencv2/core/check.hpp
 	<opencv2/core/base.hpp>
 
-1576849456 /usr/include/opencv4//opencv2/core/traits.hpp
+1654443164 /usr/include/opencv4//opencv2/core/traits.hpp
 	"opencv2/core/cvdef.h"
 
-1576849456 /usr/include/opencv4//opencv2/core/matx.hpp
+1654443164 /usr/include/opencv4//opencv2/core/matx.hpp
 	"opencv2/core/cvdef.h"
 	"opencv2/core/base.hpp"
 	"opencv2/core/traits.hpp"
 	"opencv2/core/saturate.hpp"
 	<initializer_list>
 
-1576849456 /usr/include/opencv4//opencv2/core/saturate.hpp
+1654443164 /usr/include/opencv4//opencv2/core/saturate.hpp
 	"opencv2/core/cvdef.h"
 	"opencv2/core/fast_math.hpp"
 
-1576849456 /usr/include/opencv4//opencv2/core/types.hpp
+1654443164 /usr/include/opencv4//opencv2/core/types.hpp
 	<climits>
 	<cfloat>
 	<vector>
@@ -1272,21 +1277,21 @@
 	"opencv2/core/cvstd.hpp"
 	"opencv2/core/matx.hpp"
 
-1576849456 /usr/include/opencv4//opencv2/core/mat.hpp
+1654443164 /usr/include/opencv4//opencv2/core/mat.hpp
 	"opencv2/core/matx.hpp"
 	"opencv2/core/types.hpp"
 	"opencv2/core/bufferpool.hpp"
 	<type_traits>
 	"opencv2/core/mat.inl.hpp"
 
-1576849456 /usr/include/opencv4//opencv2/core/bufferpool.hpp
+1654443164 /usr/include/opencv4//opencv2/core/bufferpool.hpp
 
-1576849456 /usr/include/opencv4//opencv2/core/mat.inl.hpp
+1654443164 /usr/include/opencv4//opencv2/core/mat.inl.hpp
 
-1576849456 /usr/include/opencv4//opencv2/core/persistence.hpp
+1654443164 /usr/include/opencv4//opencv2/core/persistence.hpp
 	"opencv2/core/types.hpp"
 	"opencv2/core/mat.hpp"
-	"opencv2/opencv.hpp"
+	"opencv2/core.hpp"
 	<time.h>
 
 1576849456 /usr/include/opencv4//opencv2/opencv.hpp
@@ -1608,33 +1613,32 @@
 	"opencv2/core.hpp"
 	"opencv2/core/utility.hpp"
 
-1576849456 /usr/include/opencv4//opencv2/core/utility.hpp
+1712171327 /usr/include/opencv4//opencv2/core/utility.hpp
 	"opencv2/core.hpp"
 	<ostream>
 	<functional>
 	<mutex>
 	"opencv2/core/utils/instrumentation.hpp"
 
-1576849456 /usr/include/opencv4//opencv2/core/utils/instrumentation.hpp
+1654443164 /usr/include/opencv4//opencv2/core/utils/instrumentation.hpp
 	<opencv2/core/utility.hpp>
 	<opencv2/core/utils/tls.hpp>
 
-1576849456 /usr/include/opencv4//opencv2/core/utils/tls.hpp
-	<opencv2/core/utility.hpp>
+1654443164 /usr/include/opencv4//opencv2/core/utils/tls.hpp
 
 1576849456 /usr/include/opencv4//opencv2/flann/sampling.h
 	"matrix.h"
 	"random.h"
 
-1576849456 /usr/include/opencv4//opencv2/highgui.hpp
+1654443164 /usr/include/opencv4//opencv2/highgui.hpp
 	"opencv2/core.hpp"
 	"opencv2/imgcodecs.hpp"
 	"opencv2/videoio.hpp"
 
-1576849456 /usr/include/opencv4//opencv2/imgcodecs.hpp
+1654443164 /usr/include/opencv4//opencv2/imgcodecs.hpp
 	"opencv2/core.hpp"
 
-1576849456 /usr/include/opencv4//opencv2/videoio.hpp
+1654443164 /usr/include/opencv4//opencv2/videoio.hpp
 	"opencv2/core.hpp"
 
 1576849456 /usr/include/opencv4//opencv2/ml.hpp
@@ -1646,11 +1650,12 @@
 
 1576849456 /usr/include/opencv4//opencv2/ml/ml.inl.hpp
 
-1576849456 /usr/include/opencv4//opencv2/objdetect.hpp
+1654443164 /usr/include/opencv4//opencv2/objdetect.hpp
 	"opencv2/core.hpp"
 	"opencv2/objdetect/detection_based_tracker.hpp"
+	"opencv2/objdetect/face.hpp"
 
-1576849456 /usr/include/opencv4//opencv2/objdetect/detection_based_tracker.hpp
+1654443164 /usr/include/opencv4//opencv2/objdetect/detection_based_tracker.hpp
 	<opencv2/core.hpp>
 	<vector>
 
@@ -1884,26 +1889,27 @@
 	<opencv2/viz/widgets.hpp>
 	<opencv2/viz/viz3d.hpp>
 
-1576849456 /usr/include/opencv4//opencv2/core/operations.hpp
+1654443164 /usr/include/opencv4//opencv2/core/operations.hpp
 	<cstdio>
 
-1576849456 /usr/include/opencv4//opencv2/core/cvstd.inl.hpp
+1654443164 /usr/include/opencv4//opencv2/core/cvstd.inl.hpp
 	<complex>
 	<ostream>
+	<sstream>
 
-1576849456 /usr/include/opencv4//opencv2/core/optim.hpp
+1654443164 /usr/include/opencv4//opencv2/core/optim.hpp
 	"opencv2/core.hpp"
 
-1576849456 /usr/include/opencv4//opencv2/core/ovx.hpp
+1654443164 /usr/include/opencv4//opencv2/core/ovx.hpp
 	"cvdef.h"
 
-1576849456 /usr/include/opencv4//opencv2/highgui/highgui.hpp
+1654443164 /usr/include/opencv4//opencv2/highgui/highgui.hpp
 	"opencv2/highgui.hpp"
 
 1576849456 /usr/include/opencv4//opencv2/core/core.hpp
 	"opencv2/core.hpp"
 
-1576849456 /usr/include/opencv4//opencv2/objdetect/objdetect.hpp
+1654443164 /usr/include/opencv4//opencv2/objdetect/objdetect.hpp
 	"opencv2/objdetect.hpp"
 
 1576849456 /usr/include/opencv4/opencv2/imgproc/imgproc.hpp
@@ -2993,7 +2999,7 @@
 1607166287 source:/home/mat/Dropbox/projet_c/2022/Projet_tomo/Tomo_prog/Simul_holo/src/Point3D.cpp
 	"Point3D.h"
 
-1752585522 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/main.cpp
+1767733208 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/main.cpp
 	<iostream>
 	<cmath>
 	<fstream>
@@ -3072,14 +3078,14 @@
 	<vector>
 	<complex>
 
-1606907013 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/include/OTF.h
+1767470127 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/include/OTF.h
 	<vector>
 	<complex>
 	<fftw3.h>
 	"Point2D.h"
 	"manip.h"
 
-1721228584 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/include/manip.h
+1767967677 /home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/include/manip.h
 	<cstdlib>
 	<iostream>
 	<stdint.h>
@@ -3104,14 +3110,14 @@
 1664871566 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/FFTW_init.cpp
 	"FFTW_init.h"
 
-1750935352 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/fonctions.cpp
+1767963762 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/fonctions.cpp
 	"fonctions.h"
 	<tiffio.h>
 	<chrono>
 	"projet.h"
 	"OTF.h"
 
-1750949193 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/manip.cpp
+1767967709 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/manip.cpp
 	"manip.h"
 	<iostream>
 	"fonctions.h"
@@ -3133,7 +3139,7 @@
 	"manip.h"
 	"struct.h"
 
-1752585937 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/OTF.cpp
+1767869525 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/OTF.cpp
 	"OTF.h"
 	"fonctions.h"
 	<fstream>
@@ -3522,4 +3528,2239 @@
 
 1751101511 source:/home/mat/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/tiff_functions.cpp
 	"tiff_functions.h"
+
+1767733208 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/main.cpp
+	<iostream>
+	<cmath>
+	<fstream>
+	<iomanip>
+	"opencv2/imgproc.hpp"
+	"opencv2/highgui.hpp"
+	<stdlib.h>
+	<stdio.h>
+	"fonctions.h"
+	"tiff_functions.h"
+	<complex>
+	"include/Point3D.h"
+	<fftw3.h>
+	"include/OTF.h"
+	"Point3D.h"
+	"FFT_fonctions.h"
+	"FFTW_init.h"
+	"manip.h"
+	"champCplx_functions.h"
+
+1654443164 /usr/include/opencv4//opencv2/imgproc/segmentation.hpp
+	"opencv2/imgproc.hpp"
+
+1752585529 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/include/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<pthread.h>
+	<omp.h>
+	<fftw3.h>
+	<opencv2/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+	<opencv2/imgproc/imgproc.hpp>
+	<opencv2/objdetect/objdetect.hpp>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	"projet.h"
+	"vecteur.h"
+	<vector>
+	<complex>
+	"Point3D.h"
+	"OTF.h"
+	"manip.h"
+
+1589983533 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/include/struct.h
+
+1654443164 /usr/include/opencv4//opencv2/objdetect/face.hpp
+	<opencv2/core.hpp>
+
+1589983533 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/include/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1589983533 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/include/vecteur.h
+	<iostream>
+
+1607166323 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/include/Point3D.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	<iostream>
+	"Point2D.h"
+
+1590150915 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/include/Point2D.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	<vector>
+	<complex>
+
+1767470127 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/include/OTF.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	"Point2D.h"
+	"manip.h"
+
+1767450415 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/include/manip.h
+	<cstdlib>
+	<iostream>
+	<stdint.h>
+
+1751293390 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/include/tiff_functions.h
+	<iostream>
+	<vector>
+	<complex>
+	<string>
+	<stdexcept>
+	<type_traits>
+	<tiffio.h>
+	"projet.h"
+	"omp.h"
+
+1589983533 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/include/FFT_fonctions.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	"manip.h"
+	"FFTW_init.h"
+
+1589983533 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/include/FFTW_init.h
+	"Point3D.h"
+	"Point2D.h"
+	<fftw3.h>
+
+1751192600 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/include/champCplx_functions.h
+
+1751196757 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/champCplx_functions.cpp
+	<iostream>
+	<vector>
+	<complex>
+	<omp.h>
+	"champCplx_functions.h"
+	"omp.h"
+
+1589983533 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/FFT_fonctions.cpp
+	"FFT_fonctions.h"
+	"fonctions.h"
+	"manip.h"
+
+1664871566 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/FFTW_init.cpp
+	"FFTW_init.h"
+
+1767719217 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/fonctions.cpp
+	"fonctions.h"
+	<tiffio.h>
+	<chrono>
+	"projet.h"
+	"OTF.h"
+
+1767441496 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/manip.cpp
+	"manip.h"
+	<iostream>
+	"fonctions.h"
+	"projet.h"
+	<iomanip>
+
+1589983533 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/Obj3D.cpp
+	"Obj3D.h"
+	<vector>
+	<complex>
+	<fftw3.h>
+	"Point3D.h"
+
+1589983533 /home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/include/Obj3D.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"Point3D.h"
+	"manip.h"
+	"struct.h"
+
+1767621613 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/OTF.cpp
+	"OTF.h"
+	"fonctions.h"
+	<fstream>
+
+1590150915 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/Point2D.cpp
+	"Point2D.h"
+
+1607166287 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/Point3D.cpp
+	"Point3D.h"
+
+1767733208 source:/home/madeba/Dropbox/projet_c/2025/Projet_tomo/Tomo_prog/Simul_holo/src/tiff_functions.cpp
+	"tiff_functions.h"
+
+1769699410 source:/home/madeba/Kdrive/projet_c/2026/Simul_holo/main.cpp
+	<iostream>
+	<cmath>
+	<fstream>
+	<iomanip>
+	"opencv2/imgproc.hpp"
+	"opencv2/highgui.hpp"
+	<cstdlib>
+	<cstdio>
+	"fonctions.h"
+	"tiff_functions.h"
+	<complex>
+	"include/Point3D.h"
+	<fftw3.h>
+	"include/OTF.h"
+	"Point3D.h"
+	"FFT_fonctions.h"
+	"FFTW_init.h"
+	"manip.h"
+	"champCplx_functions.h"
+	"bruit.h"
+	"deroulement_volkov4.h"
+
+1769699523 /home/madeba/Kdrive/projet_c/2026/Simul_holo/include/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<pthread.h>
+	<omp.h>
+	<fftw3.h>
+	<opencv2/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+	<opencv2/imgproc/imgproc.hpp>
+	<opencv2/objdetect/objdetect.hpp>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	"projet.h"
+	"vecteur.h"
+	<vector>
+	<complex>
+	"Point3D.h"
+	"OTF.h"
+	"manip.h"
+
+1589983533 /home/madeba/Kdrive/projet_c/2026/Simul_holo/include/struct.h
+
+1589983533 /home/madeba/Kdrive/projet_c/2026/Simul_holo/include/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1769683487 /home/madeba/Kdrive/projet_c/2026/Simul_holo/include/vecteur.h
+	<iostream>
+
+1607166323 /home/madeba/Kdrive/projet_c/2026/Simul_holo/include/Point3D.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	<iostream>
+	"Point2D.h"
+
+1590150915 /home/madeba/Kdrive/projet_c/2026/Simul_holo/include/Point2D.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	<vector>
+	<complex>
+
+1767470127 /home/madeba/Kdrive/projet_c/2026/Simul_holo/include/OTF.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	"Point2D.h"
+	"manip.h"
+
+1767967677 /home/madeba/Kdrive/projet_c/2026/Simul_holo/include/manip.h
+	<cstdlib>
+	<iostream>
+	<stdint.h>
+
+1751293390 /home/madeba/Kdrive/projet_c/2026/Simul_holo/include/tiff_functions.h
+	<iostream>
+	<vector>
+	<complex>
+	<string>
+	<stdexcept>
+	<type_traits>
+	<tiffio.h>
+	"projet.h"
+	"omp.h"
+
+1769699216 /home/madeba/Kdrive/projet_c/2026/Simul_holo/include/FFT_fonctions.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	"manip.h"
+	"FFTW_init.h"
+	"vecteur.h"
+	"struct.h"
+
+1589983533 /home/madeba/Kdrive/projet_c/2026/Simul_holo/include/FFTW_init.h
+	"Point3D.h"
+	"Point2D.h"
+	<fftw3.h>
+
+1751192600 /home/madeba/Kdrive/projet_c/2026/Simul_holo/include/champCplx_functions.h
+
+1751196757 source:/home/madeba/Kdrive/projet_c/2026/Simul_holo/src/champCplx_functions.cpp
+	<iostream>
+	<vector>
+	<complex>
+	<omp.h>
+	"champCplx_functions.h"
+	"omp.h"
+
+1769699040 source:/home/madeba/Kdrive/projet_c/2026/Simul_holo/src/FFT_fonctions.cpp
+	"FFT_fonctions.h"
+	"fonctions.h"
+	"manip.h"
+
+1664871566 source:/home/madeba/Kdrive/projet_c/2026/Simul_holo/src/FFTW_init.cpp
+	"FFTW_init.h"
+
+1769700031 source:/home/madeba/Kdrive/projet_c/2026/Simul_holo/src/fonctions.cpp
+	"fonctions.h"
+	<tiffio.h>
+	<chrono>
+	"projet.h"
+	"OTF.h"
+
+1767967891 source:/home/madeba/Kdrive/projet_c/2026/Simul_holo/src/manip.cpp
+	"manip.h"
+	<iostream>
+	"fonctions.h"
+	"projet.h"
+	<iomanip>
+
+1589983533 source:/home/madeba/Kdrive/projet_c/2026/Simul_holo/src/Obj3D.cpp
+	"Obj3D.h"
+	<vector>
+	<complex>
+	<fftw3.h>
+	"Point3D.h"
+
+1589983533 /home/madeba/Kdrive/projet_c/2026/Simul_holo/include/Obj3D.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"Point3D.h"
+	"manip.h"
+	"struct.h"
+
+1767869525 source:/home/madeba/Kdrive/projet_c/2026/Simul_holo/src/OTF.cpp
+	"OTF.h"
+	"fonctions.h"
+	<fstream>
+
+1590150915 source:/home/madeba/Kdrive/projet_c/2026/Simul_holo/src/Point2D.cpp
+	"Point2D.h"
+
+1607166287 source:/home/madeba/Kdrive/projet_c/2026/Simul_holo/src/Point3D.cpp
+	"Point3D.h"
+
+1767733208 source:/home/madeba/Kdrive/projet_c/2026/Simul_holo/src/tiff_functions.cpp
+	"tiff_functions.h"
+
+1769597956 source:/home/madeba/Kdrive/projet_c/2026/Simul_holo/src/bruit.cpp
+	"bruit.h"
+
+1769597936 /home/madeba/Kdrive/projet_c/2026/Simul_holo/include/bruit.h
+	<random>
+
+1770913889 source:/home/mat/kDrive/projet_c/2026/Simul_holo/main.cpp
+	<iostream>
+	<cmath>
+	<fstream>
+	<iomanip>
+	"opencv2/imgproc.hpp"
+	"opencv2/highgui.hpp"
+	<cstdlib>
+	<cstdio>
+	"fonctions.h"
+	"tiff_functions.h"
+	<complex>
+	"include/Point3D.h"
+	<fftw3.h>
+	"include/OTF.h"
+	"Point3D.h"
+	"FFT_fonctions.h"
+	"FFTW_init.h"
+	"manip.h"
+	"champCplx_functions.h"
+	"bruit.h"
+	"deroulement_volkov4.h"
+	"Correction_aberration.h"
+	<filesystem>
+
+1770046363 /home/mat/kDrive/projet_c/2026/Simul_holo/include/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<pthread.h>
+	<omp.h>
+	<fftw3.h>
+	<opencv2/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+	<opencv2/imgproc/imgproc.hpp>
+	<opencv2/objdetect/objdetect.hpp>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	"projet.h"
+	"vecteur.h"
+	<vector>
+	<complex>
+	"Point3D.h"
+	"OTF.h"
+	"manip.h"
+
+1589983533 /home/mat/kDrive/projet_c/2026/Simul_holo/include/struct.h
+
+1589983533 /home/mat/kDrive/projet_c/2026/Simul_holo/include/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1769683487 /home/mat/kDrive/projet_c/2026/Simul_holo/include/vecteur.h
+	<iostream>
+
+1607166323 /home/mat/kDrive/projet_c/2026/Simul_holo/include/Point3D.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	<iostream>
+	"Point2D.h"
+
+1590150915 /home/mat/kDrive/projet_c/2026/Simul_holo/include/Point2D.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	<vector>
+	<complex>
+
+1767470127 /home/mat/kDrive/projet_c/2026/Simul_holo/include/OTF.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	"Point2D.h"
+	"manip.h"
+
+1770135889 /home/mat/kDrive/projet_c/2026/Simul_holo/include/manip.h
+	<cstdlib>
+	<iostream>
+	<stdint.h>
+
+1751293390 /home/mat/kDrive/projet_c/2026/Simul_holo/include/tiff_functions.h
+	<iostream>
+	<vector>
+	<complex>
+	<string>
+	<stdexcept>
+	<type_traits>
+	<tiffio.h>
+	"projet.h"
+	"omp.h"
+
+1769699216 /home/mat/kDrive/projet_c/2026/Simul_holo/include/FFT_fonctions.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	"manip.h"
+	"FFTW_init.h"
+	"vecteur.h"
+	"struct.h"
+
+1770288496 /home/mat/kDrive/projet_c/2026/Simul_holo/include/FFTW_init.h
+	"Point3D.h"
+	"Point2D.h"
+	<fftw3.h>
+
+1751192600 /home/mat/kDrive/projet_c/2026/Simul_holo/include/champCplx_functions.h
+
+1769597936 /home/mat/kDrive/projet_c/2026/Simul_holo/include/bruit.h
+	<random>
+
+1751196757 source:/home/mat/kDrive/projet_c/2026/Simul_holo/src/champCplx_functions.cpp
+	<iostream>
+	<vector>
+	<complex>
+	<omp.h>
+	"champCplx_functions.h"
+	"omp.h"
+
+1770216496 source:/home/mat/kDrive/projet_c/2026/Simul_holo/src/FFT_fonctions.cpp
+	"FFT_fonctions.h"
+	"fonctions.h"
+	"manip.h"
+
+1770218579 source:/home/mat/kDrive/projet_c/2026/Simul_holo/src/FFTW_init.cpp
+	"FFTW_init.h"
+
+1770195358 source:/home/mat/kDrive/projet_c/2026/Simul_holo/src/manip.cpp
+	"manip.h"
+	<iostream>
+	"fonctions.h"
+	"projet.h"
+	<iomanip>
+
+1589983533 source:/home/mat/kDrive/projet_c/2026/Simul_holo/src/Obj3D.cpp
+	"Obj3D.h"
+	<vector>
+	<complex>
+	<fftw3.h>
+	"Point3D.h"
+
+1589983533 /home/mat/kDrive/projet_c/2026/Simul_holo/include/Obj3D.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"Point3D.h"
+	"manip.h"
+	"struct.h"
+
+1769788723 source:/home/mat/kDrive/projet_c/2026/Simul_holo/src/OTF.cpp
+	"OTF.h"
+	"fonctions.h"
+	<fstream>
+
+1769788933 source:/home/mat/kDrive/projet_c/2026/Simul_holo/src/Point2D.cpp
+	"Point2D.h"
+
+1769788839 source:/home/mat/kDrive/projet_c/2026/Simul_holo/src/Point3D.cpp
+	"Point3D.h"
+
+1767733208 source:/home/mat/kDrive/projet_c/2026/Simul_holo/src/tiff_functions.cpp
+	"tiff_functions.h"
+
+1769778771 source:/home/mat/kDrive/projet_c/2026/Simul_holo/src/bruit.cpp
+	"bruit.h"
+
+1770648645 source:/home/mat/kDrive/projet_c/2026/Simul_holo/src/fonctions.cpp
+	"fonctions.h"
+	<tiffio.h>
+	<chrono>
+	"projet.h"
+	"OTF.h"
+
+1587120892 source:/home/mat/kDrive/projet_c/2026/Simul_holo/src/vecteur.cpp
+	"vecteur.h"
+	<cmath>
+	<cstdlib>
+	<iostream>
+	<cstring>
+	<string>
+
+1770216607 source:/home/mat/kDrive/projet_c/2026/Simul_holo/src/deroulement_volkov4.cpp
+	<vector>
+	<complex>
+	"fonctions.h"
+	"FFT_fonctions.h"
+	"vecteur.h"
+	"deroulement_volkov4.h"
+	<chrono>
+
+1726577870 /home/mat/kDrive/projet_c/2026/Simul_holo/include/deroulement_volkov4.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"vecteur.h"
+	"FFTW_init.h"
+
+1726577870 /home/madeba/Kdrive/projet_c/2026/Simul_holo/include/deroulement_volkov4.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"vecteur.h"
+	"FFTW_init.h"
+
+1587120892 source:/home/madeba/Kdrive/projet_c/2026/Simul_holo/src/vecteur.cpp
+	"vecteur.h"
+	<cmath>
+	<cstdlib>
+	<iostream>
+	<cstring>
+	<string>
+
+1747853812 source:/home/madeba/Kdrive/projet_c/2026/Simul_holo/src/deroulement_volkov4.cpp
+	<vector>
+	<complex>
+	"fonctions.h"
+	"FFT_fonctions.h"
+	"vecteur.h"
+	"deroulement_volkov4.h"
+	<chrono>
+
+1747853862 source:/home/mat/kDrive/projet_c/2026/Simul_holo/src/Correction_aberration.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	"fonctions.h"
+	<chrono>
+	"Correction_aberration.h"
+	"FFT_fonctions.h"
+
+1604951822 /home/mat/kDrive/projet_c/2026/Simul_holo/include/Correction_aberration.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<opencv2/core.hpp>
+	<opencv2/highgui.hpp>
+
+1778057622 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/main.cpp
+	<iostream>
+	<cmath>
+	<fstream>
+	<iomanip>
+	"opencv2/imgproc.hpp"
+	"opencv2/highgui.hpp"
+	<cstdlib>
+	<cstdio>
+	"fonctions.h"
+	"tiff_functions.h"
+	<complex>
+	"include/Point3D.h"
+	<fftw3.h>
+	"include/OTF.h"
+	"Point3D.h"
+	"FFT_fonctions.h"
+	"FFTW_init.h"
+	"manip.h"
+	"champCplx_functions.h"
+	"bruit.h"
+	"deroulement_volkov4.h"
+	"Correction_aberration.h"
+	<filesystem>
+
+1770046363 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/include/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<pthread.h>
+	<omp.h>
+	<fftw3.h>
+	<opencv2/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+	<opencv2/imgproc/imgproc.hpp>
+	<opencv2/objdetect/objdetect.hpp>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	"projet.h"
+	"vecteur.h"
+	<vector>
+	<complex>
+	"Point3D.h"
+	"OTF.h"
+	"manip.h"
+
+1589983533 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/include/struct.h
+
+1589983533 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/include/projet.h
+	"fonctions.h"
+	<config.h>
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1769683487 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/include/vecteur.h
+	<iostream>
+
+1607166323 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/include/Point3D.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	<iostream>
+	"Point2D.h"
+
+1590150915 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/include/Point2D.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	<vector>
+	<complex>
+
+1767470127 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/include/OTF.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	"Point2D.h"
+	"manip.h"
+
+1770135889 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/include/manip.h
+	<cstdlib>
+	<iostream>
+	<stdint.h>
+
+1751293390 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/include/tiff_functions.h
+	<iostream>
+	<vector>
+	<complex>
+	<string>
+	<stdexcept>
+	<type_traits>
+	<tiffio.h>
+	"projet.h"
+	"omp.h"
+
+1769699216 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/include/FFT_fonctions.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	"manip.h"
+	"FFTW_init.h"
+	"vecteur.h"
+	"struct.h"
+
+1770288496 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/include/FFTW_init.h
+	"Point3D.h"
+	"Point2D.h"
+	<fftw3.h>
+
+1751192600 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/include/champCplx_functions.h
+
+1769597936 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/include/bruit.h
+	<random>
+
+1726577870 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/include/deroulement_volkov4.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"vecteur.h"
+	"FFTW_init.h"
+
+1604951822 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/include/Correction_aberration.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<opencv2/core.hpp>
+	<opencv2/highgui.hpp>
+
+1769778771 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/src/bruit.cpp
+	"bruit.h"
+
+1751196757 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/src/champCplx_functions.cpp
+	<iostream>
+	<vector>
+	<complex>
+	<omp.h>
+	"champCplx_functions.h"
+	"omp.h"
+
+1747853862 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/src/Correction_aberration.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	"fonctions.h"
+	<chrono>
+	"Correction_aberration.h"
+	"FFT_fonctions.h"
+
+1770216607 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/src/deroulement_volkov4.cpp
+	<vector>
+	<complex>
+	"fonctions.h"
+	"FFT_fonctions.h"
+	"vecteur.h"
+	"deroulement_volkov4.h"
+	<chrono>
+
+1770216496 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/src/FFT_fonctions.cpp
+	"FFT_fonctions.h"
+	"fonctions.h"
+	"manip.h"
+
+1770218579 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/src/FFTW_init.cpp
+	"FFTW_init.h"
+
+1770648645 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/src/fonctions.cpp
+	"fonctions.h"
+	<tiffio.h>
+	<chrono>
+	"projet.h"
+	"OTF.h"
+
+1777466404 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/src/manip.cpp
+	"manip.h"
+	<iostream>
+	"fonctions.h"
+	"projet.h"
+	<iomanip>
+
+1589983533 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/src/Obj3D.cpp
+	"Obj3D.h"
+	<vector>
+	<complex>
+	<fftw3.h>
+	"Point3D.h"
+
+1589983533 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/include/Obj3D.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"Point3D.h"
+	"manip.h"
+	"struct.h"
+
+1769788723 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/src/OTF.cpp
+	"OTF.h"
+	"fonctions.h"
+	<fstream>
+
+1769788933 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/src/Point2D.cpp
+	"Point2D.h"
+
+1769788839 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/src/Point3D.cpp
+	"Point3D.h"
+
+1767733208 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/src/tiff_functions.cpp
+	"tiff_functions.h"
+
+1587120892 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/src/vecteur.cpp
+	"vecteur.h"
+	<cmath>
+	<cstdlib>
+	<iostream>
+	<cstring>
+	<string>
+
+1779183716 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/src/zernike.cpp
+	"zernike.h"
+
+1779183687 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Simul_holo/include/zernike.h
+
+1783674962 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/main.cpp
+	<iostream>
+	<cmath>
+	<fstream>
+	<iomanip>
+	"opencv2/imgproc.hpp"
+	"opencv2/highgui.hpp"
+	<cstdlib>
+	<cstdio>
+	"fonctions.h"
+	"tiff_functions.h"
+	<complex>
+	"include/Point3D.h"
+	<fftw3.h>
+	"include/OTF.h"
+	"Point3D.h"
+	"FFT_fonctions.h"
+	"FFTW_init.h"
+	"manip.h"
+	"champCplx_functions.h"
+	"bruit.h"
+	"deroulement_volkov4.h"
+	"Correction_aberration.h"
+	<filesystem>
+
+1783604710 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<pthread.h>
+	<omp.h>
+	<fftw3.h>
+	<opencv2/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+	<opencv2/imgproc/imgproc.hpp>
+	<opencv2/objdetect/objdetect.hpp>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	"projet.h"
+	"vecteur.h"
+	<vector>
+	<complex>
+	"Point3D.h"
+	"OTF.h"
+	"manip.h"
+
+1589983533 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/struct.h
+
+1783604870 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/projet.h
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1769683487 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/vecteur.h
+	<iostream>
+
+1607166323 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/Point3D.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	<iostream>
+	"Point2D.h"
+
+1590150915 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/Point2D.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	<vector>
+	<complex>
+
+1767470127 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/OTF.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	"Point2D.h"
+	"manip.h"
+
+1770135889 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/manip.h
+	<cstdlib>
+	<iostream>
+	<stdint.h>
+
+1783604902 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/tiff_functions.h
+	<iostream>
+	<vector>
+	<complex>
+	<string>
+	<stdexcept>
+	<type_traits>
+	<tiffio.h>
+	"projet.h"
+	"omp.h"
+	"struct.h"
+
+1769699216 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/FFT_fonctions.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	"manip.h"
+	"FFTW_init.h"
+	"vecteur.h"
+	"struct.h"
+
+1770288496 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/FFTW_init.h
+	"Point3D.h"
+	"Point2D.h"
+	<fftw3.h>
+
+1751192600 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/champCplx_functions.h
+
+1769597936 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/bruit.h
+	<random>
+
+1726577870 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/deroulement_volkov4.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"vecteur.h"
+	"FFTW_init.h"
+
+1604951822 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/Correction_aberration.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<opencv2/core.hpp>
+	<opencv2/highgui.hpp>
+
+1769778771 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/bruit.cpp
+	"bruit.h"
+
+1751196757 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/champCplx_functions.cpp
+	<iostream>
+	<vector>
+	<complex>
+	<omp.h>
+	"champCplx_functions.h"
+	"omp.h"
+
+1747853862 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/Correction_aberration.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	"fonctions.h"
+	<chrono>
+	"Correction_aberration.h"
+	"FFT_fonctions.h"
+
+1782463039 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/deroulement_volkov4.cpp
+	<vector>
+	<complex>
+	"fonctions.h"
+	"FFT_fonctions.h"
+	"vecteur.h"
+	"deroulement_volkov4.h"
+	<chrono>
+
+1770216496 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/FFT_fonctions.cpp
+	"FFT_fonctions.h"
+	"fonctions.h"
+	"manip.h"
+
+1770218579 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/FFTW_init.cpp
+	"FFTW_init.h"
+
+1783604346 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/fonctions.cpp
+	"fonctions.h"
+	<tiffio.h>
+	<chrono>
+	"projet.h"
+	"OTF.h"
+
+1783676145 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/manip.cpp
+	"manip.h"
+	<iostream>
+	"fonctions.h"
+	"projet.h"
+	<iomanip>
+
+1589983533 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/Obj3D.cpp
+	"Obj3D.h"
+	<vector>
+	<complex>
+	<fftw3.h>
+	"Point3D.h"
+
+1589983533 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/Obj3D.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"Point3D.h"
+	"manip.h"
+	"struct.h"
+
+1769788723 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/OTF.cpp
+	"OTF.h"
+	"fonctions.h"
+	<fstream>
+
+1769788933 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/Point2D.cpp
+	"Point2D.h"
+
+1769788839 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/Point3D.cpp
+	"Point3D.h"
+
+1767733208 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/tiff_functions.cpp
+	"tiff_functions.h"
+
+1587120892 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/vecteur.cpp
+	"vecteur.h"
+	<cmath>
+	<cstdlib>
+	<iostream>
+	<cstring>
+	<string>
+
+1781514261 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/zernike.cpp
+	"zernike.h"
+	<cmath>
+	<iostream>
+	<Eigen/Core>
+	<Eigen/Cholesky>
+
+1779184817 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/zernike.h
+	<vector>
+	<complex>
+	<Eigen/Sparse>
+	<Eigen/IterativeLinearSolvers>
+
+1629319318 /usr/include/eigen3/Eigen/Sparse
+	<Eigen/Sparse>
+	"SparseCore"
+	"OrderingMethods"
+	"SparseCholesky"
+	"SparseLU"
+	"SparseQR"
+	"IterativeLinearSolvers"
+
+1629319318 /usr/include/eigen3/Eigen/SparseCore
+	"Core"
+	"src/Core/util/DisableStupidWarnings.h"
+	<vector>
+	<map>
+	<cstdlib>
+	<cstring>
+	<algorithm>
+	"src/SparseCore/SparseUtil.h"
+	"src/SparseCore/SparseMatrixBase.h"
+	"src/SparseCore/SparseAssign.h"
+	"src/SparseCore/CompressedStorage.h"
+	"src/SparseCore/AmbiVector.h"
+	"src/SparseCore/SparseCompressedBase.h"
+	"src/SparseCore/SparseMatrix.h"
+	"src/SparseCore/SparseMap.h"
+	"src/SparseCore/MappedSparseMatrix.h"
+	"src/SparseCore/SparseVector.h"
+	"src/SparseCore/SparseRef.h"
+	"src/SparseCore/SparseCwiseUnaryOp.h"
+	"src/SparseCore/SparseCwiseBinaryOp.h"
+	"src/SparseCore/SparseTranspose.h"
+	"src/SparseCore/SparseBlock.h"
+	"src/SparseCore/SparseDot.h"
+	"src/SparseCore/SparseRedux.h"
+	"src/SparseCore/SparseView.h"
+	"src/SparseCore/SparseDiagonalProduct.h"
+	"src/SparseCore/ConservativeSparseSparseProduct.h"
+	"src/SparseCore/SparseSparseProductWithPruning.h"
+	"src/SparseCore/SparseProduct.h"
+	"src/SparseCore/SparseDenseProduct.h"
+	"src/SparseCore/SparseSelfAdjointView.h"
+	"src/SparseCore/SparseTriangularView.h"
+	"src/SparseCore/TriangularSolver.h"
+	"src/SparseCore/SparsePermutation.h"
+	"src/SparseCore/SparseFuzzy.h"
+	"src/SparseCore/SparseSolverBase.h"
+	"src/Core/util/ReenableStupidWarnings.h"
+
+1629319318 /usr/include/eigen3/Eigen/Core
+	"src/Core/util/DisableStupidWarnings.h"
+	"src/Core/util/Macros.h"
+	"src/Core/util/ConfigureVectorization.h"
+	<cuda_runtime.h>
+	<hip/hip_runtime.h>
+	<new>
+	<complex>
+	"src/Core/util/MKL_support.h"
+	<omp.h>
+	<cerrno>
+	<cstddef>
+	<cstdlib>
+	<cmath>
+	<cassert>
+	<functional>
+	<sstream>
+	<iosfwd>
+	<cstring>
+	<string>
+	<limits>
+	<climits>
+	<algorithm>
+	<array>
+	<type_traits>
+	<iostream>
+	<intrin.h>
+	<CL/sycl.hpp>
+	<map>
+	<memory>
+	<utility>
+	<thread>
+	"src/Core/util/Constants.h"
+	"src/Core/util/Meta.h"
+	"src/Core/util/ForwardDeclarations.h"
+	"src/Core/util/StaticAssert.h"
+	"src/Core/util/XprHelper.h"
+	"src/Core/util/Memory.h"
+	"src/Core/util/IntegralConstant.h"
+	"src/Core/util/SymbolicIndex.h"
+	"src/Core/NumTraits.h"
+	"src/Core/MathFunctions.h"
+	"src/Core/GenericPacketMath.h"
+	"src/Core/MathFunctionsImpl.h"
+	"src/Core/arch/Default/ConjHelper.h"
+	"src/Core/arch/Default/Half.h"
+	"src/Core/arch/Default/BFloat16.h"
+	"src/Core/arch/Default/TypeCasting.h"
+	"src/Core/arch/Default/GenericPacketMathFunctionsFwd.h"
+	"src/Core/arch/SSE/PacketMath.h"
+	"src/Core/arch/SSE/TypeCasting.h"
+	"src/Core/arch/SSE/Complex.h"
+	"src/Core/arch/AVX/PacketMath.h"
+	"src/Core/arch/AVX/TypeCasting.h"
+	"src/Core/arch/AVX/Complex.h"
+	"src/Core/arch/AVX512/PacketMath.h"
+	"src/Core/arch/AVX512/TypeCasting.h"
+	"src/Core/arch/AVX512/Complex.h"
+	"src/Core/arch/SSE/MathFunctions.h"
+	"src/Core/arch/AVX/MathFunctions.h"
+	"src/Core/arch/AVX512/MathFunctions.h"
+	"src/Core/arch/SSE/PacketMath.h"
+	"src/Core/arch/SSE/TypeCasting.h"
+	"src/Core/arch/SSE/Complex.h"
+	"src/Core/arch/AVX/PacketMath.h"
+	"src/Core/arch/AVX/TypeCasting.h"
+	"src/Core/arch/AVX/Complex.h"
+	"src/Core/arch/SSE/MathFunctions.h"
+	"src/Core/arch/AVX/MathFunctions.h"
+	"src/Core/arch/SSE/PacketMath.h"
+	"src/Core/arch/SSE/TypeCasting.h"
+	"src/Core/arch/SSE/MathFunctions.h"
+	"src/Core/arch/SSE/Complex.h"
+	"src/Core/arch/AltiVec/PacketMath.h"
+	"src/Core/arch/AltiVec/MathFunctions.h"
+	"src/Core/arch/AltiVec/Complex.h"
+	"src/Core/arch/NEON/PacketMath.h"
+	"src/Core/arch/NEON/TypeCasting.h"
+	"src/Core/arch/NEON/MathFunctions.h"
+	"src/Core/arch/NEON/Complex.h"
+	"src/Core/arch/SVE/PacketMath.h"
+	"src/Core/arch/SVE/TypeCasting.h"
+	"src/Core/arch/SVE/MathFunctions.h"
+	"src/Core/arch/ZVector/PacketMath.h"
+	"src/Core/arch/ZVector/MathFunctions.h"
+	"src/Core/arch/ZVector/Complex.h"
+	"src/Core/arch/MSA/PacketMath.h"
+	"src/Core/arch/MSA/MathFunctions.h"
+	"src/Core/arch/MSA/Complex.h"
+	"src/Core/arch/GPU/PacketMath.h"
+	"src/Core/arch/GPU/MathFunctions.h"
+	"src/Core/arch/GPU/TypeCasting.h"
+	"src/Core/arch/SYCL/SyclMemoryModel.h"
+	"src/Core/arch/SYCL/InteropHeaders.h"
+	"src/Core/arch/SYCL/PacketMath.h"
+	"src/Core/arch/SYCL/MathFunctions.h"
+	"src/Core/arch/SYCL/TypeCasting.h"
+	"src/Core/arch/Default/Settings.h"
+	"src/Core/arch/Default/GenericPacketMathFunctions.h"
+	"src/Core/functors/TernaryFunctors.h"
+	"src/Core/functors/BinaryFunctors.h"
+	"src/Core/functors/UnaryFunctors.h"
+	"src/Core/functors/NullaryFunctors.h"
+	"src/Core/functors/StlFunctors.h"
+	"src/Core/functors/AssignmentFunctors.h"
+	"src/Core/arch/CUDA/Complex.h"
+	"src/Core/util/IndexedViewHelper.h"
+	"src/Core/util/ReshapedHelper.h"
+	"src/Core/ArithmeticSequence.h"
+	"src/Core/IO.h"
+	"src/Core/DenseCoeffsBase.h"
+	"src/Core/DenseBase.h"
+	"src/Core/MatrixBase.h"
+	"src/Core/EigenBase.h"
+	"src/Core/Product.h"
+	"src/Core/CoreEvaluators.h"
+	"src/Core/AssignEvaluator.h"
+	"src/Core/Assign.h"
+	"src/Core/ArrayBase.h"
+	"src/Core/util/BlasUtil.h"
+	"src/Core/DenseStorage.h"
+	"src/Core/NestByValue.h"
+	"src/Core/ReturnByValue.h"
+	"src/Core/NoAlias.h"
+	"src/Core/PlainObjectBase.h"
+	"src/Core/Matrix.h"
+	"src/Core/Array.h"
+	"src/Core/CwiseTernaryOp.h"
+	"src/Core/CwiseBinaryOp.h"
+	"src/Core/CwiseUnaryOp.h"
+	"src/Core/CwiseNullaryOp.h"
+	"src/Core/CwiseUnaryView.h"
+	"src/Core/SelfCwiseBinaryOp.h"
+	"src/Core/Dot.h"
+	"src/Core/StableNorm.h"
+	"src/Core/Stride.h"
+	"src/Core/MapBase.h"
+	"src/Core/Map.h"
+	"src/Core/Ref.h"
+	"src/Core/Block.h"
+	"src/Core/VectorBlock.h"
+	"src/Core/IndexedView.h"
+	"src/Core/Reshaped.h"
+	"src/Core/Transpose.h"
+	"src/Core/DiagonalMatrix.h"
+	"src/Core/Diagonal.h"
+	"src/Core/DiagonalProduct.h"
+	"src/Core/Redux.h"
+	"src/Core/Visitor.h"
+	"src/Core/Fuzzy.h"
+	"src/Core/Swap.h"
+	"src/Core/CommaInitializer.h"
+	"src/Core/GeneralProduct.h"
+	"src/Core/Solve.h"
+	"src/Core/Inverse.h"
+	"src/Core/SolverBase.h"
+	"src/Core/PermutationMatrix.h"
+	"src/Core/Transpositions.h"
+	"src/Core/TriangularMatrix.h"
+	"src/Core/SelfAdjointView.h"
+	"src/Core/products/GeneralBlockPanelKernel.h"
+	"src/Core/products/Parallelizer.h"
+	"src/Core/ProductEvaluators.h"
+	"src/Core/products/GeneralMatrixVector.h"
+	"src/Core/products/GeneralMatrixMatrix.h"
+	"src/Core/SolveTriangular.h"
+	"src/Core/products/GeneralMatrixMatrixTriangular.h"
+	"src/Core/products/SelfadjointMatrixVector.h"
+	"src/Core/products/SelfadjointMatrixMatrix.h"
+	"src/Core/products/SelfadjointProduct.h"
+	"src/Core/products/SelfadjointRank2Update.h"
+	"src/Core/products/TriangularMatrixVector.h"
+	"src/Core/products/TriangularMatrixMatrix.h"
+	"src/Core/products/TriangularSolverMatrix.h"
+	"src/Core/products/TriangularSolverVector.h"
+	"src/Core/BandMatrix.h"
+	"src/Core/CoreIterators.h"
+	"src/Core/ConditionEstimator.h"
+	"src/Core/arch/AltiVec/MatrixProduct.h"
+	"src/Core/arch/NEON/GeneralBlockPanelKernel.h"
+	"src/Core/BooleanRedux.h"
+	"src/Core/Select.h"
+	"src/Core/VectorwiseOp.h"
+	"src/Core/PartialReduxEvaluator.h"
+	"src/Core/Random.h"
+	"src/Core/Replicate.h"
+	"src/Core/Reverse.h"
+	"src/Core/ArrayWrapper.h"
+	"src/Core/StlIterators.h"
+	"src/Core/products/GeneralMatrixMatrix_BLAS.h"
+	"src/Core/products/GeneralMatrixVector_BLAS.h"
+	"src/Core/products/GeneralMatrixMatrixTriangular_BLAS.h"
+	"src/Core/products/SelfadjointMatrixMatrix_BLAS.h"
+	"src/Core/products/SelfadjointMatrixVector_BLAS.h"
+	"src/Core/products/TriangularMatrixMatrix_BLAS.h"
+	"src/Core/products/TriangularMatrixVector_BLAS.h"
+	"src/Core/products/TriangularSolverMatrix_BLAS.h"
+	"src/Core/Assign_MKL.h"
+	"src/Core/GlobalFunctions.h"
+	"src/Core/util/ReenableStupidWarnings.h"
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/util/DisableStupidWarnings.h
+
+1727872851 /usr/include/eigen3/Eigen/src/Core/util/Macros.h
+	<cuda.h>
+	<hip/hip_runtime.h>
+	<cmath>
+	<cstdlib>
+	<iostream>
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/util/ConfigureVectorization.h
+	<malloc.h>
+	<immintrin.h>
+	<mmintrin.h>
+	<emmintrin.h>
+	<xmmintrin.h>
+	<pmmintrin.h>
+	<tmmintrin.h>
+	<smmintrin.h>
+	<nmmintrin.h>
+	<immintrin.h>
+	<altivec.h>
+	<altivec.h>
+	<arm_neon.h>
+	<arm_sve.h>
+	<vecintrin.h>
+	<msa.h>
+	<arm_fp16.h>
+	<immintrin.h>
+	<vector_types.h>
+	<cuda_runtime_api.h>
+	<cuda_fp16.h>
+	<hip/hip_vector_types.h>
+	<hip/hip_fp16.h>
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/util/MKL_support.h
+	<mkl.h>
+	"../../misc/blas.h"
+
+1629319318 /usr/include/eigen3/Eigen/src/misc/blas.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/util/Constants.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/util/Meta.h
+	<cfloat>
+	<math_constants.h>
+	"Eigen/src/Core/arch/HIP/hcc/math_constants.h"
+	<cstdint>
+	<stdint.h>
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/HIP/hcc/math_constants.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/util/ForwardDeclarations.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/util/StaticAssert.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/util/XprHelper.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/util/Memory.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/util/IntegralConstant.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/util/SymbolicIndex.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/NumTraits.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/MathFunctions.h
+
+1727872851 /usr/include/eigen3/Eigen/src/Core/GenericPacketMath.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/MathFunctionsImpl.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/Default/ConjHelper.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/Default/Half.h
+	<sstream>
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/Default/BFloat16.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/Default/TypeCasting.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/Default/GenericPacketMathFunctionsFwd.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/SSE/PacketMath.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/SSE/TypeCasting.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/SSE/Complex.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/AVX/PacketMath.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/AVX/TypeCasting.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/AVX/Complex.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/AVX512/PacketMath.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/AVX512/TypeCasting.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/AVX512/Complex.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/SSE/MathFunctions.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/AVX/MathFunctions.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/AVX512/MathFunctions.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/AltiVec/PacketMath.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/AltiVec/MathFunctions.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/AltiVec/Complex.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/NEON/PacketMath.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/NEON/TypeCasting.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/NEON/MathFunctions.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/NEON/Complex.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/SVE/PacketMath.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/SVE/TypeCasting.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/SVE/MathFunctions.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/ZVector/PacketMath.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/ZVector/MathFunctions.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/ZVector/Complex.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/MSA/PacketMath.h
+	<iostream>
+	<string>
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/MSA/MathFunctions.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/MSA/Complex.h
+	<iostream>
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/GPU/PacketMath.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/GPU/MathFunctions.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/GPU/TypeCasting.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/SYCL/SyclMemoryModel.h
+	<CL/sycl.hpp>
+	<stdexcept>
+	<cstddef>
+	<queue>
+	<set>
+	<unordered_map>
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/SYCL/InteropHeaders.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/SYCL/PacketMath.h
+	<type_traits>
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/SYCL/MathFunctions.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/SYCL/TypeCasting.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/Default/Settings.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/Default/GenericPacketMathFunctions.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/functors/TernaryFunctors.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/functors/BinaryFunctors.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/functors/UnaryFunctors.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/functors/NullaryFunctors.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/functors/StlFunctors.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/functors/AssignmentFunctors.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/CUDA/Complex.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/util/IndexedViewHelper.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/util/ReshapedHelper.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/ArithmeticSequence.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/IO.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/DenseCoeffsBase.h
+
+1727872851 /usr/include/eigen3/Eigen/src/Core/DenseBase.h
+	"../plugins/CommonCwiseUnaryOps.h"
+	"../plugins/BlockMethods.h"
+	"../plugins/IndexedViewMethods.h"
+	"../plugins/ReshapedMethods.h"
+
+1629319318 /usr/include/eigen3/Eigen/src/plugins/CommonCwiseUnaryOps.h
+
+1629319318 /usr/include/eigen3/Eigen/src/plugins/BlockMethods.h
+
+1629319318 /usr/include/eigen3/Eigen/src/plugins/IndexedViewMethods.h
+	"IndexedViewMethods.h"
+
+1629319318 /usr/include/eigen3/Eigen/src/plugins/ReshapedMethods.h
+	"ReshapedMethods.h"
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/MatrixBase.h
+	"../plugins/CommonCwiseBinaryOps.h"
+	"../plugins/MatrixCwiseUnaryOps.h"
+	"../plugins/MatrixCwiseBinaryOps.h"
+
+1629319318 /usr/include/eigen3/Eigen/src/plugins/CommonCwiseBinaryOps.h
+
+1629319318 /usr/include/eigen3/Eigen/src/plugins/MatrixCwiseUnaryOps.h
+
+1629319318 /usr/include/eigen3/Eigen/src/plugins/MatrixCwiseBinaryOps.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/EigenBase.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Product.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/CoreEvaluators.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/AssignEvaluator.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Assign.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/ArrayBase.h
+	"../plugins/MatrixCwiseUnaryOps.h"
+	"../plugins/ArrayCwiseUnaryOps.h"
+	"../plugins/CommonCwiseBinaryOps.h"
+	"../plugins/MatrixCwiseBinaryOps.h"
+	"../plugins/ArrayCwiseBinaryOps.h"
+
+1629319318 /usr/include/eigen3/Eigen/src/plugins/ArrayCwiseUnaryOps.h
+
+1629319318 /usr/include/eigen3/Eigen/src/plugins/ArrayCwiseBinaryOps.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/util/BlasUtil.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/DenseStorage.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/NestByValue.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/ReturnByValue.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/NoAlias.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/PlainObjectBase.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Matrix.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Array.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/CwiseTernaryOp.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/CwiseBinaryOp.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/CwiseUnaryOp.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/CwiseNullaryOp.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/CwiseUnaryView.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/SelfCwiseBinaryOp.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Dot.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/StableNorm.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Stride.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/MapBase.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Map.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Ref.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Block.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/VectorBlock.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/IndexedView.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Reshaped.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Transpose.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/DiagonalMatrix.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Diagonal.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/DiagonalProduct.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Redux.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Visitor.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Fuzzy.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Swap.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/CommaInitializer.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/GeneralProduct.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Solve.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Inverse.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/SolverBase.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/PermutationMatrix.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Transpositions.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/TriangularMatrix.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/SelfAdjointView.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/products/GeneralBlockPanelKernel.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/products/Parallelizer.h
+	<atomic>
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/ProductEvaluators.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/products/GeneralMatrixVector.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/products/GeneralMatrixMatrix.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/SolveTriangular.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/products/GeneralMatrixMatrixTriangular.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/products/SelfadjointMatrixVector.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/products/SelfadjointMatrixMatrix.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/products/SelfadjointProduct.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/products/SelfadjointRank2Update.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/products/TriangularMatrixVector.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/products/TriangularMatrixMatrix.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/products/TriangularSolverMatrix.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/products/TriangularSolverVector.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/BandMatrix.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/CoreIterators.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/ConditionEstimator.h
+
+1727872851 /usr/include/eigen3/Eigen/src/Core/arch/AltiVec/MatrixProduct.h
+	"MatrixProductCommon.h"
+	"MatrixProductMMA.h"
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/AltiVec/MatrixProductCommon.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/AltiVec/MatrixProductMMA.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/arch/NEON/GeneralBlockPanelKernel.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/BooleanRedux.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Select.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/VectorwiseOp.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/PartialReduxEvaluator.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Random.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Replicate.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Reverse.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/ArrayWrapper.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/StlIterators.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/products/GeneralMatrixMatrix_BLAS.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/products/GeneralMatrixVector_BLAS.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/products/GeneralMatrixMatrixTriangular_BLAS.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/products/SelfadjointMatrixMatrix_BLAS.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/products/SelfadjointMatrixVector_BLAS.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/products/TriangularMatrixMatrix_BLAS.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/products/TriangularMatrixVector_BLAS.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/products/TriangularSolverMatrix_BLAS.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/Assign_MKL.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/GlobalFunctions.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Core/util/ReenableStupidWarnings.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseUtil.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseMatrixBase.h
+	"../plugins/CommonCwiseUnaryOps.h"
+	"../plugins/CommonCwiseBinaryOps.h"
+	"../plugins/MatrixCwiseUnaryOps.h"
+	"../plugins/MatrixCwiseBinaryOps.h"
+	"../plugins/BlockMethods.h"
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseAssign.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/CompressedStorage.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/AmbiVector.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseCompressedBase.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseMatrix.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseMap.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/MappedSparseMatrix.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseVector.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseRef.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseCwiseUnaryOp.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseCwiseBinaryOp.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseTranspose.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseBlock.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseDot.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseRedux.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseView.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseDiagonalProduct.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/ConservativeSparseSparseProduct.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseSparseProductWithPruning.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseProduct.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseDenseProduct.h
+
+1727872851 /usr/include/eigen3/Eigen/src/SparseCore/SparseSelfAdjointView.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseTriangularView.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/TriangularSolver.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparsePermutation.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseFuzzy.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseSolverBase.h
+
+1629319318 /usr/include/eigen3/Eigen/OrderingMethods
+	"SparseCore"
+	"src/Core/util/DisableStupidWarnings.h"
+	"src/OrderingMethods/Amd.h"
+	"src/OrderingMethods/Ordering.h"
+	"src/Core/util/ReenableStupidWarnings.h"
+
+1629319318 /usr/include/eigen3/Eigen/src/OrderingMethods/Amd.h
+
+1629319318 /usr/include/eigen3/Eigen/src/OrderingMethods/Ordering.h
+	"Eigen_Colamd.h"
+
+1629319318 /usr/include/eigen3/Eigen/src/OrderingMethods/Eigen_Colamd.h
+
+1629319318 /usr/include/eigen3/Eigen/SparseCholesky
+	"SparseCore"
+	"OrderingMethods"
+	"src/Core/util/DisableStupidWarnings.h"
+	"src/SparseCholesky/SimplicialCholesky.h"
+	"src/SparseCholesky/SimplicialCholesky_impl.h"
+	"src/Core/util/ReenableStupidWarnings.h"
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCholesky/SimplicialCholesky.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCholesky/SimplicialCholesky_impl.h
+
+1629319318 /usr/include/eigen3/Eigen/SparseLU
+	"SparseCore"
+	"OrderingMethods"
+	"src/Core/util/DisableStupidWarnings.h"
+	"src/SparseLU/SparseLU_gemm_kernel.h"
+	"src/SparseLU/SparseLU_Structs.h"
+	"src/SparseLU/SparseLU_SupernodalMatrix.h"
+	"src/SparseLU/SparseLUImpl.h"
+	"src/SparseCore/SparseColEtree.h"
+	"src/SparseLU/SparseLU_Memory.h"
+	"src/SparseLU/SparseLU_heap_relax_snode.h"
+	"src/SparseLU/SparseLU_relax_snode.h"
+	"src/SparseLU/SparseLU_pivotL.h"
+	"src/SparseLU/SparseLU_panel_dfs.h"
+	"src/SparseLU/SparseLU_kernel_bmod.h"
+	"src/SparseLU/SparseLU_panel_bmod.h"
+	"src/SparseLU/SparseLU_column_dfs.h"
+	"src/SparseLU/SparseLU_column_bmod.h"
+	"src/SparseLU/SparseLU_copy_to_ucol.h"
+	"src/SparseLU/SparseLU_pruneL.h"
+	"src/SparseLU/SparseLU_Utils.h"
+	"src/SparseLU/SparseLU.h"
+	"src/Core/util/ReenableStupidWarnings.h"
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseLU/SparseLU_gemm_kernel.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseLU/SparseLU_Structs.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseLU/SparseLU_SupernodalMatrix.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseLU/SparseLUImpl.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseCore/SparseColEtree.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseLU/SparseLU_Memory.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseLU/SparseLU_heap_relax_snode.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseLU/SparseLU_relax_snode.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseLU/SparseLU_pivotL.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseLU/SparseLU_panel_dfs.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseLU/SparseLU_kernel_bmod.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseLU/SparseLU_panel_bmod.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseLU/SparseLU_column_dfs.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseLU/SparseLU_column_bmod.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseLU/SparseLU_copy_to_ucol.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseLU/SparseLU_pruneL.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseLU/SparseLU_Utils.h
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseLU/SparseLU.h
+
+1629319318 /usr/include/eigen3/Eigen/SparseQR
+	"SparseCore"
+	"OrderingMethods"
+	"src/Core/util/DisableStupidWarnings.h"
+	"src/SparseCore/SparseColEtree.h"
+	"src/SparseQR/SparseQR.h"
+	"src/Core/util/ReenableStupidWarnings.h"
+
+1629319318 /usr/include/eigen3/Eigen/src/SparseQR/SparseQR.h
+
+1629319318 /usr/include/eigen3/Eigen/IterativeLinearSolvers
+	"SparseCore"
+	"OrderingMethods"
+	"src/Core/util/DisableStupidWarnings.h"
+	<Eigen/IterativeLinearSolvers>
+	"src/IterativeLinearSolvers/SolveWithGuess.h"
+	"src/IterativeLinearSolvers/IterativeSolverBase.h"
+	"src/IterativeLinearSolvers/BasicPreconditioners.h"
+	"src/IterativeLinearSolvers/ConjugateGradient.h"
+	"src/IterativeLinearSolvers/LeastSquareConjugateGradient.h"
+	"src/IterativeLinearSolvers/BiCGSTAB.h"
+	"src/IterativeLinearSolvers/IncompleteLUT.h"
+	"src/IterativeLinearSolvers/IncompleteCholesky.h"
+	"src/Core/util/ReenableStupidWarnings.h"
+
+1629319318 /usr/include/eigen3/Eigen/src/IterativeLinearSolvers/SolveWithGuess.h
+
+1629319318 /usr/include/eigen3/Eigen/src/IterativeLinearSolvers/IterativeSolverBase.h
+
+1629319318 /usr/include/eigen3/Eigen/src/IterativeLinearSolvers/BasicPreconditioners.h
+
+1629319318 /usr/include/eigen3/Eigen/src/IterativeLinearSolvers/ConjugateGradient.h
+
+1629319318 /usr/include/eigen3/Eigen/src/IterativeLinearSolvers/LeastSquareConjugateGradient.h
+
+1629319318 /usr/include/eigen3/Eigen/src/IterativeLinearSolvers/BiCGSTAB.h
+
+1629319318 /usr/include/eigen3/Eigen/src/IterativeLinearSolvers/IncompleteLUT.h
+
+1629319318 /usr/include/eigen3/Eigen/src/IterativeLinearSolvers/IncompleteCholesky.h
+	<vector>
+	<list>
+
+1629319318 /usr/include/eigen3/Eigen/Cholesky
+	"Core"
+	"Jacobi"
+	"src/Core/util/DisableStupidWarnings.h"
+	"src/Cholesky/LLT.h"
+	"src/Cholesky/LDLT.h"
+	"mkl_lapacke.h"
+	"src/misc/lapacke.h"
+	"src/Cholesky/LLT_LAPACKE.h"
+	"src/Core/util/ReenableStupidWarnings.h"
+
+1629319318 /usr/include/eigen3/Eigen/Jacobi
+	"Core"
+	"src/Core/util/DisableStupidWarnings.h"
+	"src/Jacobi/Jacobi.h"
+	"src/Core/util/ReenableStupidWarnings.h"
+
+1629319318 /usr/include/eigen3/Eigen/src/Jacobi/Jacobi.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Cholesky/LLT.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Cholesky/LDLT.h
+
+1629319318 /usr/include/eigen3/Eigen/src/misc/lapacke.h
+	"lapacke_config.h"
+	<stdlib.h>
+	<complex.h>
+	<complex.h>
+	"lapacke_mangling.h"
+
+1629319318 /usr/include/eigen3/Eigen/src/misc/lapacke_mangling.h
+
+1629319318 /usr/include/eigen3/Eigen/src/Cholesky/LLT_LAPACKE.h
+
+1769778771 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/bruit.cpp
+	"bruit.h"
+
+1769597936 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/bruit.h
+	<random>
+
+1751196757 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/champCplx_functions.cpp
+	<iostream>
+	<vector>
+	<complex>
+	<omp.h>
+	"champCplx_functions.h"
+	"omp.h"
+
+1751192600 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/champCplx_functions.h
+
+1747853862 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/Correction_aberration.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	"fonctions.h"
+	<chrono>
+	"Correction_aberration.h"
+	"FFT_fonctions.h"
+
+1783604710 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/fonctions.h
+	"struct.h"
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<strstream>
+	<pthread.h>
+	<omp.h>
+	<fftw3.h>
+	<opencv2/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+	<opencv2/imgproc/imgproc.hpp>
+	<opencv2/objdetect/objdetect.hpp>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+	"projet.h"
+	"vecteur.h"
+	<vector>
+	<complex>
+	"Point3D.h"
+	"OTF.h"
+	"manip.h"
+
+1589983533 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/struct.h
+
+1783604870 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/projet.h
+	<time.h>
+	<math.h>
+	<iostream>
+	<cstdlib>
+	<fftw3.h>
+	<cstring>
+	<fstream>
+	<sstream>
+	<assert.h>
+
+1769683487 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/vecteur.h
+	<iostream>
+
+1607166323 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/Point3D.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	<iostream>
+	"Point2D.h"
+
+1590150915 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/Point2D.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	<vector>
+	<complex>
+
+1767470127 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/OTF.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	"Point2D.h"
+	"manip.h"
+
+1770135889 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/manip.h
+	<cstdlib>
+	<iostream>
+	<stdint.h>
+
+1604951822 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/Correction_aberration.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<opencv2/core.hpp>
+	<opencv2/highgui.hpp>
+
+1769699216 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/FFT_fonctions.h
+	<vector>
+	<complex>
+	<fftw3.h>
+	"manip.h"
+	"FFTW_init.h"
+	"vecteur.h"
+	"struct.h"
+
+1770288496 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/FFTW_init.h
+	"Point3D.h"
+	"Point2D.h"
+	<fftw3.h>
+
+1782463039 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/deroulement_volkov4.cpp
+	<vector>
+	<complex>
+	"fonctions.h"
+	"FFT_fonctions.h"
+	"vecteur.h"
+	"deroulement_volkov4.h"
+	<chrono>
+
+1726577870 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/deroulement_volkov4.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"vecteur.h"
+	"FFTW_init.h"
+
+1770216496 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/FFT_fonctions.cpp
+	"FFT_fonctions.h"
+	"fonctions.h"
+	"manip.h"
+
+1770218579 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/FFTW_init.cpp
+	"FFTW_init.h"
+
+1783604346 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/fonctions.cpp
+	"fonctions.h"
+	<tiffio.h>
+	<chrono>
+	"projet.h"
+	"OTF.h"
+
+1783676145 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/manip.cpp
+	"manip.h"
+	<iostream>
+	"fonctions.h"
+	"projet.h"
+	<iomanip>
+
+1589983533 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/Obj3D.cpp
+	"Obj3D.h"
+	<vector>
+	<complex>
+	<fftw3.h>
+	"Point3D.h"
+
+1589983533 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/Obj3D.h
+	<fftw3.h>
+	<vector>
+	<complex>
+	"Point3D.h"
+	"manip.h"
+	"struct.h"
+
+1769788723 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/OTF.cpp
+	"OTF.h"
+	"fonctions.h"
+	<fstream>
+
+1769788933 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/Point2D.cpp
+	"Point2D.h"
+
+1769788839 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/Point3D.cpp
+	"Point3D.h"
+
+1767733208 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/tiff_functions.cpp
+	"tiff_functions.h"
+
+1783604902 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/tiff_functions.h
+	<iostream>
+	<vector>
+	<complex>
+	<string>
+	<stdexcept>
+	<type_traits>
+	<tiffio.h>
+	"projet.h"
+	"omp.h"
+	"struct.h"
+
+1587120892 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/vecteur.cpp
+	"vecteur.h"
+	<cmath>
+	<cstdlib>
+	<iostream>
+	<cstring>
+	<string>
+
+1781514261 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/src/zernike.cpp
+	"zernike.h"
+	<cmath>
+	<iostream>
+	<Eigen/Core>
+	<Eigen/Cholesky>
+
+1779184817 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/include/zernike.h
+	<vector>
+	<complex>
+	<Eigen/Sparse>
+	<Eigen/IterativeLinearSolvers>
+
+1784143935 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/Simul_holo/main.cpp
+	<iostream>
+	<cmath>
+	<fstream>
+	<iomanip>
+	"opencv2/imgproc.hpp"
+	"opencv2/highgui.hpp"
+	<cstdlib>
+	<cstdio>
+	"fonctions.h"
+	"tiff_functions.h"
+	<complex>
+	"include/Point3D.h"
+	<fftw3.h>
+	"include/OTF.h"
+	"Point3D.h"
+	"FFT_fonctions.h"
+	"FFTW_init.h"
+	"manip.h"
+	"champCplx_functions.h"
+	"bruit.h"
+	"deroulement_volkov4.h"
+	"Correction_aberration.h"
+	<filesystem>
 

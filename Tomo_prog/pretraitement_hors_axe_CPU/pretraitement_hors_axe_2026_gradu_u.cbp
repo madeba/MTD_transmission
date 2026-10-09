@@ -2,7 +2,7 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="pretraitement_hors_axe_2026_gradu_u" />
+		<Option title="pretraitement_hors_axe_2026_grad_u_u" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
@@ -60,8 +60,8 @@
 			<Add library="/usr/lib/x86_64-linux-gnu/libfftw3_threads.so" />
 			<Add directory="/usr/lib/x86_64-linux-gnu/" />
 		</Linker>
-		<Unit filename="Correction_aberration.cpp" />
-		<Unit filename="Correction_aberration.h" />
+		<Unit filename="Correction_aberration2.cpp" />
+		<Unit filename="Correction_aberration2.h" />
 		<Unit filename="FFT_fonctions.cpp" />
 		<Unit filename="FFT_fonctions.h" />
 		<Unit filename="deroulement_herraez.cpp" />
@@ -71,10 +71,10 @@
 		<Unit filename="include/FFTW_init.h" />
 		<Unit filename="include/IO_fonctions.h" />
 		<Unit filename="include/Point2D.h" />
-		<Unit filename="include/deroulement_volkov3.h" />
 		<Unit filename="include/deroulement_volkov4.h" />
 		<Unit filename="include/gradient.h" />
 		<Unit filename="include/integration.h" />
+		<Unit filename="include/math_functions.h" />
 		<Unit filename="include/regularized_division.h" />
 		<Unit filename="include/struct.h" />
 		<Unit filename="include/symetrisation.h" />
@@ -89,6 +89,7 @@
 		<Unit filename="src/deroulement_volkov4.cpp" />
 		<Unit filename="src/gradient.cpp" />
 		<Unit filename="src/integration.cpp" />
+		<Unit filename="src/math_functions.cpp" />
 		<Unit filename="src/regularized_division.cpp" />
 		<Unit filename="src/symetrisation.cpp" />
 		<Unit filename="src/vecteur.cpp" />

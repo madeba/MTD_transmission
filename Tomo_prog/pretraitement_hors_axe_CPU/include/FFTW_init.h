@@ -18,12 +18,11 @@ public:
     fftw_plan p_forward_IN = nullptr;
     fftw_plan p_backward_IN = nullptr;
     size_t m_Nthread;
-//    fftw_plan p_forward_IN, p_backward_IN, p_forward_OUT, p_backward_OUT;
+    //fftw_plan p_forward_IN, p_backward_IN, p_forward_OUT, p_backward_OUT;
     int fftwThreadInit;
 
-   // fftw_complex *in=nullptr,*out=nullptr;
-   // double *in_double=nullptr;// fftw r2c
-
+    // fftw_complex *in=nullptr,*out=nullptr;
+    // double *in_double=nullptr;// fftw r2c
 
     FFTW_init(Point3D dim,size_t nbThread);
     FFTW_init(std::vector<double> const &entree, Point2D dim, size_t nbThread);//init r2c (real input)
@@ -34,6 +33,10 @@ public:
     FFTW_init(std::vector<double> const &entree, size_t nbThread);///init c2r for real input
     FFTW_init(Var2D dim, size_t nbThread);
     FFTW_init(Var2D dim2D,bool b_inplace, size_t nbThread);///INIT  INPLACE or OUTPLACE with boolean
+   //les 2 commandes suivantes provoquent une erreur de compil si un FFTW_init est copié en valeur
+    //ce qui peut causer des problemes de double free, le pointeur original étant effacé avec la copie.
+    FFTW_init(const FFTW_init&) = delete;
+    FFTW_init& operator=(const FFTW_init&) = delete;
     ~FFTW_init();
  void prepare_wisdom2D(Var2D dim, std::string chemin);
 

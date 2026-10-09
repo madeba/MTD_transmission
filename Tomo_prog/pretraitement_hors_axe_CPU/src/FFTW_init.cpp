@@ -50,8 +50,16 @@ FFTW_init::FFTW_init(Point3D dim,size_t nbThread)
 ///init fftw for fft2D r2c
 FFTW_init::FFTW_init(vector<double>const &entree, string str_geometry,size_t nbThread)
 {
-    size_t dim=sqrt(entree.size());
+
+    const size_t dim = static_cast<size_t>(sqrt(static_cast<double>(entree.size())));
+    size_t m_nbPix = dim*dim;
     Var2D dim2D={dim,dim};
+
+    if (dim*dim != entree.size() || dim % 2 != 0)
+        throw std::invalid_argument("FFTW_init r2c: image non carree ou de cote impair");
+    if (str_geometry != "r2c")
+        throw std::invalid_argument("FFTW_init: geometrie inconnue: " + str_geometry);
+
     m_Nthread=nbThread;
      init_threads(m_Nthread);
    // fftwThreadInit=fftw_init_threads();
@@ -73,8 +81,14 @@ FFTW_init::FFTW_init(vector<double>const &entree, string str_geometry,size_t nbT
 ///init fftw c2c : input is a square complex matrix
 FFTW_init::FFTW_init(vector<complex<double>>const &entree,size_t nbThread)
 {
-    size_t nbPix=entree.size();
-    size_t dim=sqrt(nbPix);
+    const size_t dim = static_cast<size_t>(sqrt(static_cast<double>(entree.size())));
+    size_t nbPix = dim*dim;
+    Var2D dim2D={dim,dim};
+
+    if (dim*dim != entree.size() || dim % 2 != 0)
+        throw std::invalid_argument("FFTW_init r2c: image non carree ou de cote impair");
+
+
     m_Nthread=nbThread;
     init_threads(m_Nthread);
    // fftwThreadInit=fftw_init_threads();
@@ -89,9 +103,13 @@ FFTW_init::FFTW_init(vector<complex<double>>const &entree,size_t nbThread)
 FFTW_init::FFTW_init(Var2D dim, size_t nbThread)
 {
 
-    size_t nbPix=dim.x*dim.y;
+
+    size_t nbPix = dim.x*dim.y;
+   // Var2D dim2D={dim,dim};
+
+
     m_Nthread=nbThread;
-     init_threads(m_Nthread);
+    init_threads(m_Nthread);
   // fftwThreadInit=fftw_init_threads();
   // fftw_plan_with_nthreads(m_Nthread);
     in=(fftw_complex*) fftw_malloc(sizeof(fftw_complex) * nbPix);
@@ -118,8 +136,13 @@ FFTW_init::FFTW_init(Var2D dim, size_t nbThread)
 FFTW_init::FFTW_init(vector<double>const &entree,size_t nbThread)
 {
 
-    size_t nbPix=entree.size();
-     size_t dim=sqrt(nbPix);
+    const size_t dim = static_cast<size_t>(sqrt(static_cast<double>(entree.size())));
+    size_t nbPix = dim*dim;
+    Var2D dim2D={dim,dim};
+
+    if (dim*dim != entree.size() || dim % 2 != 0)
+        throw std::invalid_argument("FFTW_init r2c: image non carree ou de cote impair");
+
     m_Nthread=nbThread;
      init_threads(m_Nthread);
    // fftwThreadInit=fftw_init_threads();

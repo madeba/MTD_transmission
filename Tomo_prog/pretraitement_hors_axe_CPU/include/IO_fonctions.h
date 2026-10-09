@@ -51,6 +51,6 @@ void SAVCplx(std::vector<std::complex<double>> const &v, std::string partie, std
 void SAV3D_Tiff(std::vector<std::complex <double>> const &var_sav, std::string partie, std::string chemin, double taille_pixel);
 void SAV_Tiff2D(std::vector<double> const &var_sav, std::string chemin, double taille_pixel);
 void SAV_Tiff2D(std::vector<std::complex<double>> const &var_sav, std::string partie, std::string chemin, double taille_pixel);
-
+std::vector<double> lire_bin(const std::string& chemin, short int precision, size_t NbPix);
 
 #endif

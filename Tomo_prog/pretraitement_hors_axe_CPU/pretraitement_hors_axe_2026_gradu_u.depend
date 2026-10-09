@@ -5318,7 +5318,7 @@
 
 1629319318 /usr/include/eigen3/Eigen/src/Eigenvalues/SelfAdjointEigenSolver_LAPACKE.h
 
-1783761531 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/Correction_aberration.cpp
+1790343644 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/Correction_aberration.cpp
 	<iostream>
 	<fstream>
 	<sstream>
@@ -5330,7 +5330,7 @@
 	"Correction_aberration.h"
 	"FFT_fonctions.h"
 
-1784021058 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/fonctions.h
+1791556232 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/fonctions.h
 	"struct.h"
 	<time.h>
 	<math.h>
@@ -5352,10 +5352,11 @@
 	<vector>
 	<complex>
 	<tiffio.h>
+	"manip.h"
 
 1784024372 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/struct.h
 
-1774624953 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/FFTW_init.h
+1791377756 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/FFTW_init.h
 	"Point3D.h"
 	"Point2D.h"
 	<fftw3.h>
@@ -5378,7 +5379,7 @@
 1784124076 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/projet.h
 	<filesystem>
 
-1783086513 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/IO_fonctions.h
+1791296736 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/IO_fonctions.h
 	"FFTW_init.h"
 	<opencv2/core/core.hpp>
 	<opencv2/highgui/highgui.hpp>
@@ -5400,12 +5401,13 @@
 	<opencv2/core.hpp>
 	<opencv2/highgui.hpp>
 
-1775037594 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/FFT_fonctions.h
+1791458424 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/FFT_fonctions.h
 	<vector>
 	<complex>
 	<fftw3.h>
 	"vecteur.h"
 	"FFTW_init.h"
+	<stdexcept>
 
 1782464087 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/deroulement_herraez.cpp
 	"deroulement_herraez.h"
@@ -5419,7 +5421,7 @@
 	"struct.h"
 	<vector>
 
-1775037638 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/FFT_fonctions.cpp
+1791449965 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/FFT_fonctions.cpp
 	"FFT_fonctions.h"
 	"fonctions.h"
 	"omp.h"
@@ -5427,7 +5429,7 @@
 	<cmath>
 	<type_traits>
 
-1784137224 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/fonctions.cpp
+1791556456 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/fonctions.cpp
 	<fstream>
 	<vector>
 	<chrono>
@@ -5445,18 +5447,18 @@
 	<complex>
 	<iostream>
 
-1784144834 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/manip.cpp
+1791538367 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/manip.cpp
 	"manip.h"
 	<iostream>
 	"fonctions.h"
 	"projet.h"
 
-1784123729 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/manip.h
+1791538450 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/manip.h
 	<cstdlib>
 	<iostream>
 	"struct.h"
 
-1782993021 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/deroulement_volkov4.cpp
+1790244730 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/deroulement_volkov4.cpp
 	<vector>
 	<complex>
 	"fonctions.h"
@@ -5468,7 +5470,7 @@
 	"symetrisation.h"
 	"regularized_division.h"
 
-1775744003 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/deroulement_volkov4.h
+1790244174 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/deroulement_volkov4.h
 	<fftw3.h>
 	<vector>
 	<complex>
@@ -5490,12 +5492,12 @@
 	"vecteur.h"
 	"FFTW_init.h"
 
-1775823500 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/regularized_division.h
+1790246859 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/regularized_division.h
 	<vector>
 	<complex>
 	<iostream>
 
-1774625043 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/FFTW_init.cpp
+1791456681 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/FFTW_init.cpp
 	"FFTW_init.h"
 	"struct.h"
 
@@ -5514,7 +5516,7 @@
 	"FFTW_init.h"
 	"FFT_fonctions.h"
 
-1783760828 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/IO_fonctions.cpp
+1791538093 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/IO_fonctions.cpp
 	"IO_fonctions.h"
 	<opencv2/core/core.hpp>
 	<opencv2/highgui/highgui.hpp>
@@ -5524,7 +5526,7 @@
 1587120874 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/Point2D.cpp
 	"Point2D.h"
 
-1782464158 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/regularized_division.cpp
+1790255037 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/regularized_division.cpp
 	"regularized_division.h"
 	<assert.h>
 
@@ -5540,21 +5542,21 @@
 	<cstring>
 	<string>
 
-1784024469 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/main.cpp
+1791556232 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/main.cpp
 	<iostream>
 	"zernike.h"
 	<vector>
 	"struct.h"
 	<complex>
 	"manip.h"
+	"math_functions.h"
 	<string>
 	"projet.h"
 	"fonctions.h"
 	"FFT_fonctions.h"
 	"deroulement_volkov4.h"
-	"deroulement_volkov3.h"
 	"deroulement_herraez.h"
-	"Correction_aberration.h"
+	"Correction_aberration2.h"
 	<chrono>
 	<opencv2/core/utility.hpp>
 	"opencv2/imgproc.hpp"
@@ -5591,14 +5593,14 @@
 
 1784024372 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/struct.h
 
-1783760828 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/IO_fonctions.cpp
+1791296718 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/IO_fonctions.cpp
 	"IO_fonctions.h"
 	<opencv2/core/core.hpp>
 	<opencv2/highgui/highgui.hpp>
 	<opencv2/imgproc.hpp>
 	<fstream>
 
-1783086513 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/IO_fonctions.h
+1791296736 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/IO_fonctions.h
 	"FFTW_init.h"
 	<opencv2/core/core.hpp>
 	<opencv2/highgui/highgui.hpp>
@@ -5607,7 +5609,7 @@
 	<tiffio.h>
 	"projet.h"
 
-1774624953 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/FFTW_init.h
+1791377756 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/FFTW_init.h
 	"Point3D.h"
 	"Point2D.h"
 	<fftw3.h>
@@ -5645,7 +5647,7 @@
 	"Correction_aberration.h"
 	"FFT_fonctions.h"
 
-1784021058 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/fonctions.h
+1791486179 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/fonctions.h
 	"struct.h"
 	<time.h>
 	<math.h>
@@ -5667,6 +5669,7 @@
 	<vector>
 	<complex>
 	<tiffio.h>
+	"manip.h"
 
 1781871788 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/vecteur.h
 	<iostream>
@@ -5681,14 +5684,15 @@
 	<opencv2/core.hpp>
 	<opencv2/highgui.hpp>
 
-1775037594 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/FFT_fonctions.h
+1791458424 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/FFT_fonctions.h
 	<vector>
 	<complex>
 	<fftw3.h>
 	"vecteur.h"
 	"FFTW_init.h"
+	<stdexcept>
 
-1775037638 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/FFT_fonctions.cpp
+1791449965 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/FFT_fonctions.cpp
 	"FFT_fonctions.h"
 	"fonctions.h"
 	"omp.h"
@@ -5696,7 +5700,7 @@
 	<cmath>
 	<type_traits>
 
-1784137224 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/fonctions.cpp
+1791491196 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/fonctions.cpp
 	<fstream>
 	<vector>
 	<chrono>
@@ -5714,21 +5718,21 @@
 	<complex>
 	<iostream>
 
-1784024469 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/main.cpp
+1791490499 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/main.cpp
 	<iostream>
 	"zernike.h"
 	<vector>
 	"struct.h"
 	<complex>
 	"manip.h"
+	"math_functions.h"
 	<string>
 	"projet.h"
 	"fonctions.h"
 	"FFT_fonctions.h"
 	"deroulement_volkov4.h"
-	"deroulement_volkov3.h"
 	"deroulement_herraez.h"
-	"Correction_aberration.h"
+	"Correction_aberration2.h"
 	<chrono>
 	<opencv2/core/utility.hpp>
 	"opencv2/imgproc.hpp"
@@ -5749,7 +5753,7 @@
 	<iostream>
 	"struct.h"
 
-1775744003 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/deroulement_volkov4.h
+1790244174 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/deroulement_volkov4.h
 	<fftw3.h>
 	<vector>
 	<complex>
@@ -5777,7 +5781,7 @@
 	"fonctions.h"
 	"projet.h"
 
-1782993021 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/deroulement_volkov4.cpp
+1790244730 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/deroulement_volkov4.cpp
 	<vector>
 	<complex>
 	"fonctions.h"
@@ -5796,12 +5800,12 @@
 	"vecteur.h"
 	"FFTW_init.h"
 
-1775823500 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/regularized_division.h
+1790246859 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/regularized_division.h
 	<vector>
 	<complex>
 	<iostream>
 
-1774625043 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/FFTW_init.cpp
+1791456681 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/FFTW_init.cpp
 	"FFTW_init.h"
 	"struct.h"
 
@@ -5820,7 +5824,7 @@
 	"FFTW_init.h"
 	"FFT_fonctions.h"
 
-1782464158 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/regularized_division.cpp
+1790255037 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/regularized_division.cpp
 	"regularized_division.h"
 	<assert.h>
 
@@ -5835,4 +5839,68 @@
 	<iostream>
 	<cstring>
 	<string>
+
+1790346964 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/Correction_aberration2.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	"fonctions.h"
+	<chrono>
+	"Correction_aberration2.h"
+	"FFT_fonctions.h"
+
+1790346543 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/Correction_aberration2.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<opencv2/core.hpp>
+	<opencv2/highgui.hpp>
+
+1790346964 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/Correction_aberration2.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	"fonctions.h"
+	<chrono>
+	"Correction_aberration2.h"
+	"FFT_fonctions.h"
+
+1790346543 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/Correction_aberration2.h
+	<iostream>
+	<fstream>
+	<sstream>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<opencv2/core.hpp>
+	<opencv2/highgui.hpp>
+
+1791312929 source:/home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/math_functions.cpp
+	"math_functions.h"
+	<cmath>
+
+1791311307 /home/madeba/Kdrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/math_functions.h
+	<fstream>
+	<vector>
+	<algorithm>
+	<iostream>
+
+1791312929 source:/home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/src/math_functions.cpp
+	"math_functions.h"
+	<cmath>
+
+1791311307 /home/mat/kDrive/projet_c/2026/Projet_Tomo/Tomo_prog/pretraitement_hors_axe_CPU/include/math_functions.h
+	<fstream>
+	<vector>
+	<algorithm>
+	<iostream>
 

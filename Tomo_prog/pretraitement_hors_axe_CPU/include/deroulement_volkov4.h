@@ -17,7 +17,7 @@ void deroul_volkov4_total_sym_paire(std::vector<double>  &phase_enroul,std::vect
 //std::vector<double> deroul_volkov5_sym_paire_gradu(std::vector<std::complex<double>> const & UBorn, std::vector <vecteur> double_kvect_shift,FFTW_init &param_c2c_double);
 std::vector<double> deroul_volkov5_sym_paire_gradu(std::vector<std::complex<double>>  & UBorn,std::vector<vecteur> kvect_shift, std::vector <vecteur> double_kvect_shift,FFTW_init &param_c2c,FFTW_init &param_c2c_double);
 
-std::vector<double> deroul_volkov5_total_sym_paire_gradu(std::vector<std::complex<double>> & UBorn, std::vector<vecteur> double_kvect_shift,FFTW_init &param_c2c_double, double alpha_damp);
+std::vector<double> deroul_volkov6_total_sym_paire_gradu(std::vector<std::complex<double>> & UBorn, std::vector<vecteur> double_kvect_shift,FFTW_init &param_c2c_double, double alpha_damp);
 void gradient_fft4(std::vector<double>  &entree, std::vector<std::complex<double>> &gradx,std::vector<std::complex<double>> &grady, std::vector<vecteur>  &kvect_shift, FFTW_init &paramC2rHA);
 
 void gradient_fft4(std::vector<std::complex<double>>  &entree, std::vector<std::complex<double>> &gradx, std::vector<std::complex<double>> &grady,std::vector<vecteur>  &kvect_shift,FFTW_init &paramC2rHA);
@@ -25,9 +25,5 @@ void gradient_fft4(std::vector<std::complex<double>>  &entree, std::vector<std::
 std::vector<double>  SymetriseY(std::vector<double> const &monImg, std::vector<double> &monImgSymetricY);
 std::vector<double> SymetriseX(std::vector<double> const &monImg, std::vector<double> &monImgSymetricX);
 void Symetrise_mirror(std::vector<double> const &monImg, std::vector<double> &monImgSymetric);
-
-
-
-
 
 #endif

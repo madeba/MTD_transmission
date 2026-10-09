@@ -14,9 +14,10 @@ manip::manip(unsigned short int dimROI)
 
     string home=getenv("HOME");
     //string sav_param=home+"/tomo_test/SAV_param_manip.txt";
-    string fin_chemin_gui_tomo="/.config/gui_tomo_polar.conf";
+    string fin_chemin_gui_tomo="/.config/gui_tomo.conf";
     string chemin_config_GUI=getenv("HOME")+fin_chemin_gui_tomo;
     string repertoire_config=extract_string("CHEMIN_CONFIG",home+fin_chemin_gui_tomo);
+    chemin_acquis=extract_string("CHEMIN_ACQUIS",home+fin_chemin_gui_tomo);
     chemin_result=extract_string("CHEMIN_RESULT",home+fin_chemin_gui_tomo);
     string fic_cfg_recon=repertoire_config+"/recon.txt";
     cout<<"fichier recon="<<fic_cfg_recon<<endl;
@@ -27,8 +28,8 @@ manip::manip(unsigned short int dimROI)
     cout<<"\n##################### INFO MANIP ##################\n"<<endl;
     nbAxesRosace=extract_val("NB_AXES_FLEUR",fic_cfg_manip);//indice de l'huile
     n0=extract_val("N0",fic_cfg_manip);//indice de l'huile
+    nM=extract_val("NM",fic_cfg_manip);//indice du milieu de montage.
     NACond=extract_val("NA_COND",fic_cfg_manip,1.3);
-
     NAObj=extract_val("NA_OBJ",fic_cfg_manip,1.3);	//ouverture numerique de l'objectif? (celle du condenseur intervient sur la forme, la taille, du papillon)
     lambda_v=extract_val("LAMBDA",fic_cfg_manip);
     f_tube=extract_val("F_TUBE",fic_cfg_manip);
@@ -38,12 +39,17 @@ manip::manip(unsigned short int dimROI)
     TpCam=extract_val("TPCAM",fic_cfg_manip);//taille pixel caméra
     Tp_holo=TpCam/Gt;
     Delta_f_holo=1/(dimROI_Cam*Tp_holo);//echantillonnage dans Fourier = constante car aucun bourrage dans l'espace direct
+
     theta_max=asin(NAObj/n0);
     //NXMAX=dimROI*Tp_Uborn*n0/(lambda_v);
     NXMAX=NAObj/(lambda_v*Delta_f_holo);//pas de Gt car inclu dans Delta_f via Tp_holo
     NXMAX_cond=NACond/(lambda_v*Delta_f_holo);
-    dim_final=4*NXMAX;
+    b_Reflex=extract_val("REFLEX",fic_cfg_recon);//taille pixel caméra
+    b_no_absorption=extract_val("NO_ABSORPTION",fic_cfg_recon);
+    //dim_final=4*NXMAX;
+    dim_final=extract_val("DIM_FINAL",fic_cfg_recon);
     dim_Uborn=2*NXMAX;
+    nbThreads=extract_val("NB_THREAD",fic_cfg_recon,4);
     Var2D dim2DHA={2*NXMAX,2*NXMAX};
     cout<<"Rayon Ewald calcule via lambda="<<n0/(lambda_v*Delta_f_holo)<<endl;
 
@@ -108,6 +114,9 @@ manip::manip(unsigned short int dimROI)
         fichier_sav_parametre<<"+----------------+-------------------+"<<endl;
         fichier_sav_parametre<<"|    Grandeur    |    Valeur         |"<<endl;
         fichier_sav_parametre<<"|------------------------------------|"<<endl;
+        // fichier_sav_parametre<<"|     VOLKOV       |" <<b             <<"|"<<endl;
+        fichier_sav_parametre<<"|       NM       |" <<nM             <<"|"<<endl;
+        fichier_sav_parametre<<"|       NA       |" <<NAObj             <<"|"<<endl;
         fichier_sav_parametre<<"| champ en pixel |     "<<dimROI_Cam         <<" pix       |"<<endl;
         fichier_sav_parametre<<"|    Tp Holo     |     "<<Tp_Uborn<<" nm |"<<endl;
         fichier_sav_parametre<<"|    Delta_f     |     "<<Delta_f_tomo<<" µm-1  |"<<endl;

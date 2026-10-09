@@ -86,7 +86,7 @@ manip::manip(string str_nom_gui_tomo_conf)
     ///---fftw parameters
     nbThreads=extract_val("NB_THREADS",fic_cfg_recon),
     //chemin_wisdom=extract_string("WISDOM_PATH",fic_cfg_recon),
-
+    minVisibility=extract_val("MIN_VISIBILITY",fic_cfg_recon);
     cout<<"\n##################### Options  RECONSTRUCTION ##################\n"<<endl;
     ///boolean used to choose the type of reconstruction/phase unwrapping
     b_ampliRef=extract_val("AMPLI_REF",fic_cfg_recon);///corriger les aberrations? Correct aberrations ?

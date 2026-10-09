@@ -788,54 +788,138 @@ void InitTabCplx(nbCplx *z,int taille)//initailiser un tableau (taille totale="t
     }
 }
 
+void retroPropag_Born_FDR(vector <complex<double>> &TF3D_PotObj, vector<complex<double>> const &TF_Uborn_norm, vector<double>  &sup_redon, int dim_final, Var2D posSpec, Var3D decal3D, Var2D NMAX, double rayon, manip m1)
 
+{ //int Nmax_obj=m1.NXMAX_OBJ;
+//cout<<"Nmax_obj="<<Nmax_obj<<endl;
+    int fxmi=posSpec.x, fymi=posSpec.y;
+    //  cout<<"fi : "<<fxmi<<","<<fymi<<endl;
+    int fxm0=(fxmi-NMAX.x), fym0=(fymi-NMAX.x);//coordonnée dans le repère humain (xm0,ym0)=(0,0)=au centre de l'image
+    // cout<<"fxm0 : "<<fxm0<<", fym0="<<fym0<<endl;
+    int points_faux=0;
+    long N_tab=TF3D_PotObj.size();
+    int dimVolX=round(dim_final), dimPlanFinal=round(dim_final*dim_final);
+    float nM=m1.nM, //refractive index of the background medium
+    kv=2*M_PI/m1.lambda0, //wavevector in vaccuum
+    k0=kv*nM; //wavevector in the background medium
 
-/*int retroPropag_Born(nbCplx *TF3D_PotObj, nbCplx *TF_Uborn_norm, double * sup_redon, int dim_final, Var2D posSpec, Var3D decal3D, Var2D NMAX, double rayon)
-{
-                        int kxmi=posSpec.x, kymi=posSpec.y;
-                        int kxm0=(kxmi-NMAX.x), kym0=(kymi-NMAX.x);//coordonnée dans l'image2D centrée (xm0,ym0)=(0,0)=au centre de l'image
-                        int points_faux=0;
-                        rayon=rayon;
-                        int dimVolX=round(dim_final), dimPlanFinal=round(dim_final*dim_final);
-                        float nM=1.515, lambda=pow(633,10^(-9)),kv=2*3.1416/lambda;
+    //création de variable pour éviter N calculs dans la boucle sur le volume 3D
+    //create variable before loop
+    long cptPot=0,cptPot1=0,cptPot2=0; //indice tableau 1d des données du potentiel3D
+    double cteNorm=-2*M_PI;
+    double r2=rayon*rayon, fzm0, fzm0_carre = rayon*rayon-fxm0*fxm0-fym0*fym0;
+    double norm_altitude=1.0/rayon;//normaliser fdz pour passer en  sdz;
+   // if(sqrt(fxm0*fxm0+fym0*fym0)<Nmax_obj){
+if(m1.b_reflex==0)///transmission
+{//cout<<"Reconstruction with Transmission signal"<<endl;
+    if(round(fzm0_carre)>=0)
+    {
+        fzm0=sqrt(fzm0_carre);
+       /// cout<<"fzm0="<<fzm0<<endl;
+        int NMAX_CARRE=NMAX.x*NMAX.x;
 
-                                //création de variable pou-9r éviter N calculs dans la boucle sur le volume 3D
-                                int cptPot=0; //indice tableau 1d des données du potentiel3D
-                                double r2=rayon*rayon, kzm0, kzm0_carre = rayon*rayon-kxm0*kxm0-kym0*kym0;
-                               // double r2=rayon*rayon, kzm0, kzm0_carre = nM*rayon*rayon-kxm0*kxm0-kym0*kym0;
-                                //printf("round(rayon*rayon-(xm0)^2-(ym0)^2: %i\n",round(rayon*rayon-(xm0)^2-(ym0)^2));
+        complex<double> cteUb2Pot(0,k0/PI);//
+        //#pragma omp parallel for
+        // cout<<"NMAX.y="<<NMAX.y<<endl;
+        for(short int fdy = -NMAX.y; fdy < NMAX.y; fdy++)    //X scan of the filed Uborn2D, origin (0,0) in the middle of the picture
+        {   //cout<<"-----------------------"<<fdy<<endl;
+            //  cout<<"fdy haut="<<fdy<<endl;
+            int fdy_carre=fdy*fdy;
+            for (int fdx = -NMAX.x; fdx < NMAX.x; fdx++)    //on balaye l'image 2D en y, centre au milieu
+            {
+                int cpt=(fdy+NMAX.y)*2*NMAX.x+fdx+NMAX.x;//calcul du cpt du tableau 1D de l'image 2D
+                if(fdx*fdx+fdy_carre<m1.coef_NA_obj_limit*NMAX_CARRE)    //ne pas depasser l'ouverture numérique pour 1 hologramme
+                {
+                    // cout<<"---------------------"<<endl;
+                   //  cout<<"fxm0,fym0="<<fxm0<<","<<fym0<<endl;
+                   //  cout<<"fdx,fdy="<<fdx<<","<<fdy<<endl;
+                    double fdz_carre=r2-fdx*fdx-fdy_carre; //altitude au carré sur la sphere d'Ewald
+                    double fdz=sqrt(fdz_carre);
+                    double sdz=sqrt(rayon*rayon-fdx*fdx-fdy*fdy)*norm_altitude;//used for value->never rounded
+                    double foz=sqrt(fdz_carre)-fzm0;
 
-                                if(round(kzm0_carre)>-1) {
+                    ///weighted kdz
+                    double foz1=floor(fdz-fzm0);
+                    double foz2=foz1+1;
+                    double alpha2=foz-foz1;
+                    double alpha1=1.0-alpha2;
 
-                                        kzm0=sqrt(kzm0_carre);
+                    double altitude1=(foz1+decal3D.z)*dimPlanFinal;
+                    cptPot1=(-fxm0+fdx+decal3D.x)+(-fym0+fdy+decal3D.y)*dimVolX+(long)altitude1;//indice du tableau 1D du volume 3D
+                    double altitude2=(foz2+decal3D.z)*dimPlanFinal;
+                    cptPot2=(-fxm0+fdx+decal3D.x)+(-fym0+fdy+decal3D.y)*dimVolX+(long)altitude2;//indice du tableau 1D du volume 3D
 
-                                        int NMAX_CARRE=NMAX.x*NMAX.x;
+                    complex<double> valPot = cteUb2Pot * cteNorm * sdz * TF_Uborn_norm[cpt];
+                    if (cptPot1 >= 0 && cptPot1 < N_tab) {
+                    TF3D_PotObj[cptPot1] += alpha1 * valPot;
+                    sup_redon[cptPot1] += alpha1;
+                    }
+                    if (cptPot2 >= 0 && cptPot2 < N_tab) {
+                    TF3D_PotObj[cptPot2] += alpha2 * valPot;
+                    sup_redon[cptPot2] += alpha2;
+                    }
 
-                                        float ctePotUb=1;//2/lambda;
-                                        for (int fdy = -NMAX.y; fdy < NMAX.y; fdy++) { //on balaye le champ Uborn2D en x , origine (0,0) de l'image au milieu
-                                                int fdy_carre=fdy*fdy;
-                                                for (int kdx = -NMAX.x; kdx < NMAX.x; kdx++) { //on balaye l'image 2D en y, centre au milieu
-                                                        int cpt=(fdy+NMAX.y)*2*NMAX.x+kdx+NMAX.x;//calcul du cpt du tableau 1D de l'image 2D
-                                                        if(kdx*kdx+fdy_carre<NMAX_CARRE) { //ne pas depasser l'ouverture numérique pour 1 hologramme
-                                                                double kdz_carre=r2-kdx*kdx-fdy_carre; //altitude au carré des données
-                                                                double koz=round(sqrt(kdz_carre)-kzm0);
-                                                                 //double kz=nM*round(sqrt(kz_carre)-kzm0);
-                                                                 double m=sqrt(rayon*rayon-kdx*kdx-fdy*fdy);
-                                                                double altitude=(koz+decal3D.z)*dimPlanFinal; //donne n'importequoi sans l'arrondi sur z!!
+                }
+                else points_faux++;
+            }
+        }
+    }
+}
+else  ///reflexion
+{//cout<<"Reconstruction with Reflexion signal"<<endl;
+    int signReflex=-1;
+    if(round(fzm0_carre)>=0)
+    {
+        fzm0=sqrt(fzm0_carre);
+       // cout<<"fzm0="<<fzm0<<endl;
+        int NMAX_CARRE=NMAX.x*NMAX.x;
 
-                                                                cptPot=(-kxm0+kdx+decal3D.x)+(-kym0+fdy+decal3D.y)*dimVolX+round(altitude);//indice du tableau 1D du volume 3D
-                                                                //cout<<"k"<<k<<endl;
-                                                                TF3D_PotObj[cptPot].Re+=-ctePotUb*m*TF_Uborn_norm[cpt].Im;//Inversion Re->Im à cause du coefficient i entre potentiel et Uborn
-                                                                TF3D_PotObj[cptPot].Im+=ctePotUb*m*TF_Uborn_norm[cpt].Re;//
-                                                                sup_redon[cptPot]+=1;//pour calculer le support
-                                                        } else
-                                                                points_faux++;
-                                                } //fin for y
-                                        }
-                                }//fin if zm0>-1
-}*/
+        complex<double> cteUb2Pot(0,k0/PI);//
 
+        //#pragma omp parallel for
+        // cout<<"NMAX.y="<<NMAX.y<<endl;
+        for(short int fdy = -NMAX.y; fdy < NMAX.y; fdy++)    //X scan of the filed Uborn2D, origin (0,0) in the middle of the picture
+        {   //cout<<"-----------------------"<<fdy<<endl;
+            //  cout<<"fdy haut="<<fdy<<endl;
+            int fdy_carre=fdy*fdy;
+            for (int fdx = -NMAX.x; fdx < NMAX.x; fdx++)    //on balaye l'image 2D en y, centre au milieu
+            {
+                int cpt=(fdy+NMAX.y)*2*NMAX.x+fdx+NMAX.x;//cpt tableau 1D de l'image 2D.Warning : fdy and fdx sign must not be multiplied by -1 here (because they are used on the hologram)
 
+                if(fdx*fdx+fdy_carre<m1.coef_NA_obj_limit*NMAX_CARRE)    //ne pas depasser l'ouverture numérique pour 1 hologramme
+                {
+                    double fdz_carre=r2-fdx*fdx-fdy_carre; //altitude au carré sur la sphere d'Ewald
+                    double fdz=sqrt(fdz_carre);
+                    double sdz=sqrt(rayon*rayon-fdx*fdx-fdy*fdy)*norm_altitude;//used for value->never rounded
+                    double foz=sqrt(fdz_carre)-fzm0;
+
+                    ///weighted kdz
+                    double foz1=floor(fdz-fzm0);
+                    double foz2=foz1+1;
+                    double alpha2=foz-foz1;
+                    double alpha1=1.0-alpha2;
+
+                    double altitude1=(foz1+decal3D.z)*dimPlanFinal;
+                    cptPot1=(-fxm0+signReflex*fdx+decal3D.x)+(-fym0+signReflex*fdy+decal3D.y)*dimVolX+(long)altitude1;//indice du tableau 1D du volume 3D
+                    double altitude2=(foz2+decal3D.z)*dimPlanFinal;
+                    cptPot2=(-fxm0+signReflex*fdx+decal3D.x)+(-fym0+signReflex*fdy+decal3D.y)*dimVolX+(long)altitude2;//indice du tableau 1D du volume 3D
+
+                    complex<double> valPot = cteUb2Pot * cteNorm * sdz * TF_Uborn_norm[cpt];
+                    TF3D_PotObj[cptPot1] += alpha1 * valPot;
+                    TF3D_PotObj[cptPot2] += alpha2 * valPot;
+
+                    sup_redon[cptPot1] += alpha1;
+                    sup_redon[cptPot2] += alpha2;//redundancy in frequency support.
+
+                    ///test with an sign inversion on x and Y (no multiplication by signreflex=-1)
+                }
+                else points_faux++;
+            }
+        }
+    }
+}
+   // }
+}
 void retroPropag_Born(vector <complex<double>> &TF3D_PotObj, vector<complex<double>> const &TF_Uborn_norm, vector<double>  &sup_redon, int dim_final, Var2D posSpec, Var3D decal3D, Var2D NMAX, double rayon, manip m1)
 { //int Nmax_obj=m1.NXMAX_OBJ;
 //cout<<"Nmax_obj="<<Nmax_obj<<endl;

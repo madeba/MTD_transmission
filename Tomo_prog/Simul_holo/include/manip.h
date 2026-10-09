@@ -7,7 +7,7 @@
 struct manip {
 
         double NAObj=-1,NACond=-1; //ouverture numérique objectif et condenseur
-        double n0;         //indice du milieu d'immersion
+        double n0, nM;         //indice du milieu d'immersion
         double R_EwaldPix; //Rayon de la sphere d'Ewald en pixel
         double R_EwaldMet; //Rayon de la sphere d'Ewald métrique
         double lambda_v;   //longueur d'onde dans levide
@@ -18,7 +18,10 @@ struct manip {
         double theta_max;  //angle de collection max de l'objectif
         double f_tube,f_obj,Rf;
         double Gt;         //grandissemen total
-        size_t dim_final,dim_Uborn; //dimension epsace objet tomo et dimension champ complexe
+        bool b_Reflex=false; //flag used in recon.txt for reflexion acquistion
+        bool b_no_absorption=false;//if true, will force symetrisation of OTF.
+        size_t dim_final,dim_Uborn; //dimension espace objet tomo et dimension champ complexe
+        size_t nbThreads;
         double TpCam;               //---échantillonnage
         double Tp_Tomo;
         double Tp_holo;

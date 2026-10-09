@@ -3,7 +3,102 @@
 #include "manip.h"
 
 using namespace std;
+///calculate the kvector field (array whose value is simply  kx and ky) ; allow to calculate image gradient in Fourier space by a simple multiplication.
+std::vector<vecteur> init_kvect_shift(Var2D dim2DHA)
+{
+  size_t nbPix=dim2DHA.x*dim2DHA.y;
+  vector<vecteur> kvect(nbPix),kvect_shift(nbPix);
+  for(size_t cpt=0;cpt<nbPix;cpt++){
+    kvect[cpt].setx((cpt%dim2DHA.x-round(dim2DHA.x/2))/(dim2DHA.x));
+    kvect[cpt].sety((cpt/dim2DHA.y-round(dim2DHA.y/2))/(dim2DHA.y));
+  }
+  kvect_shift=fftshift2D(kvect);
+  return kvect_shift;
+}
+vector<vecteur>  fftshift2D(vector<vecteur> &entree)
+{
+unsigned int dim=sqrt(entree.size());
+vector<vecteur > result(dim*dim);
+size_t decal=dim/2;
+size_t yi=0;
+size_t xi=0;
+       // #pragma omp parallel for
+       for(yi=0; yi<decal; yi++) {
+            size_t num_ligne=yi*dim;
+                for(xi=0; xi<decal; xi++)
+                {
+                      int pixel=num_ligne+xi;
+                      int pixel_shift=(yi+decal)*dim+xi+decal;
+                      //1er quadrant vers 4 eme
+                      result[pixel_shift].setx(entree[pixel].getx());
+                      result[pixel_shift].sety(entree[pixel].gety());
+                      //4 eme quadrant vers 1er
+                      result[pixel].setx(entree[pixel_shift].getx());
+                      result[pixel].sety(entree[pixel_shift].gety());
+                      //2eme vers 3eme
+                      result[(yi+decal)*dim+xi].setx(entree[pixel+decal].getx());
+                      result[(yi+decal)*dim+xi].sety(entree[pixel+decal].gety());
+                      //3eme vers 2eme
+                      result[pixel+decal].setx(entree[(yi+decal)*dim+xi].getx());
+                      result[pixel+decal].sety(entree[(yi+decal)*dim+xi].gety());
+                }
+        }
+        return result;
+}
+// surcharge fftw_init+entree <double>+calcul fft
+void TF2Dcplx(vector<double> const &entree, vector<complex<double>> &sortie, FFTW_init &tf2D_c2r)
+{
+    size_t nbPix=entree.size();
+    for(size_t cpt=0; cpt<nbPix; cpt++) {
+        tf2D_c2r.in[cpt][0]=entree[cpt];
+        tf2D_c2r.in[cpt][1]=0;//
+    }
 
+    //in = reinterpret_cast<fftw_complex*>(&entree);
+    fftw_execute(tf2D_c2r.p_forward_OUT);
+
+    for(size_t cpt=0; cpt<(nbPix); cpt++) {
+        sortie[cpt].real(tf2D_c2r.out[cpt][0]/nbPix); //division par N (dim*dim) pour normaliser la fftw qui n'est pas normalisée
+        sortie[cpt].imag(tf2D_c2r.out[cpt][1]/nbPix);
+    }
+}
+///FFT2D complex c2c
+void TF2Dcplx(vector<complex<double>> const &entree, vector<complex<double>> &sortie,FFTW_init &param_c2c)
+{
+    size_t nbPix=entree.size();
+    for(size_t cpt=0; cpt<nbPix; cpt++) {
+        param_c2c.in[cpt][0]=entree[cpt].real();
+        param_c2c.in[cpt][1]=entree[cpt].imag();
+    }
+//in = reinterpret_cast<fftw_complex*>(&entree);
+//fftw_complex * in = reinterpret_cast<fftw_complex*>(entree.data().begin());
+//param_c2c.in = reinterpret_cast<fftw_complex*>(entree[0]);
+    fftw_execute(param_c2c.p_forward_OUT);
+
+    for(size_t cpt=0; cpt<(nbPix); cpt++) {
+        sortie[cpt].real(param_c2c.out[cpt][0]/nbPix); //division par N (dim*dim) pour normaliser la fftw qui n'est pas normalisée
+        sortie[cpt].imag(param_c2c.out[cpt][1]/nbPix);
+    }
+}
+void TF2Dcplx_INV(vector<complex<double>> const &entree, vector<complex<double> > &sortie, FFTW_init &tf2D)
+{
+    size_t nbPix=entree.size();
+//    int dim=sqrt(nbPix);
+
+   // cout<<"delta_f="<<delta_f<<endl;
+    size_t cpt=0;
+    for(size_t cpt=0; cpt<nbPix; cpt++) {
+        tf2D.in[cpt][0]=entree[cpt].real();
+        tf2D.in[cpt][1]=entree[cpt].imag();
+    }
+
+    fftw_execute(tf2D.p_backward_OUT);
+
+    for(cpt=0; cpt<(nbPix); cpt++) {///FFT inverse, no normalization
+        sortie[cpt].real(tf2D.out[cpt][0]); //division par N (dim*dim) pour normaliser l'énergie
+        sortie[cpt].imag(tf2D.out[cpt][1]);
+    }
+}
  vector<complex<double>> fftshift3D(vector<complex<double>> &entree)
 {       //si décalage supérieure à dim, on fait plus d'un tour, donc on prend le modulo
 

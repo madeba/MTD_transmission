@@ -85,9 +85,26 @@ void interp_lin3D(vector <complex<double>> &volume_interp_3D)
 //calcule le spectre d'hologramme à partir d'une sphere d'ewald de centre (Point2D spec) et du spectre de l'objet.
 void calcPhase_mpi_pi_atan2(vector<complex<double>> obj, vector<double> &phaseMod2pi)///calcul phase -PI-PI
 {
-for(int cpt=0;cpt<obj.size();cpt++)
-phaseMod2pi[cpt]=atan2(obj[cpt].imag(),obj[cpt].real());
+for(int cpt=0;cpt<obj.size();cpt++){
+    double epsilon=0;
+phaseMod2pi[cpt]=atan2(obj[cpt].imag(),obj[cpt].real()+epsilon);
+/*if (phi < 0) phi += 2*M_PI;
+phaseMod2pi[cpt] = phi;*/ //from 0 to 2pi
 }
+}
+void calcPhase_mpi_pi_atan2(vector<complex<double>> obj, double maxAmplitude, vector<double> &phaseMod2pi)///calcul phase -PI-PI
+{
+for(int cpt=0;cpt<obj.size();cpt++){
+       // if(abs(obj[cpt])>0.02*maxAmplitude)
+phaseMod2pi[cpt]=atan2(obj[cpt].imag(),obj[cpt].real());
+//else phaseMod2pi[cpt]=0;//the phase différence is 0 in the background without illumination angle
+}
+
+/*if (phi < 0) phi += 2*M_PI;
+phaseMod2pi[cpt] = phi;*/ //from 0 to 2pi
+}
+
+
 ///prend un point 2D en entrée et retourne le suivant le long de la rosace//
 ///pas optimale :  refait le calcul de tous les paramètres (dont dtheta) à chaque appel à la fonction...
 Point2D maj_fleur(Point2D Vin, float rho, int nbHolo, double *theta, manip m1)//tension x,y/rayon/nbHolo,/angle
@@ -105,19 +122,25 @@ Point2D maj_fleur(Point2D Vin, float rho, int nbHolo, double *theta, manip m1)//
     *theta=t;///maj theta prog principal
     return Vout;
 }
-///extraction d'une calotte centrée sur (spec.x,spec.y) d'Ewald dans le spectre 3D de l'objet
+///extraction d'une calotte centrée d'Ewald sur (spec.x,spec.y)  dans le spectre 3D de l'objet
+///extraction of  a cap of Ewald sphere centered on (spec.x,spec.y) in the 3d spectrum of the object
+//reflexion or tranmission are managhed with the variable 'int sign' : 1 for tranmission, -1 for reflexion
 void calcHolo(Point2D spec,std::vector<std::complex<double>> const &TF_vol3D,std::vector<std::complex<double>> &TF_hologramme, manip const &m1)
 {
+    int sign=1;
+    if(m1.b_Reflex==1){sign=-1;
+//    cout<<"extraction en reflexion"<<endl;
+    }
 int Nmax=m1.NXMAX,rayon=m1.R_EwaldPix, dim2D=m1.dim_Uborn, dim3D=m1.dim_final;
 double fmcarre=Nmax*Nmax;///frequence max
 double rcarre=rayon*rayon;///rayon Ewald au carré
-double kv=2*PI/m1.lambda_v, k0=kv*m1.n0;
+double kv=2*M_PI/m1.lambda_v, k0=kv*m1.n0;
 double sdz=0;
 complex<double> cteInd2Pot(-2*kv*kv*m1.n0,0);
-complex<double> ctePot2UBorn(0,-PI/k0);
+complex<double> ctePot2UBorn(0,-M_PI/k0);
 //complex <double> coef_global(0,-2*kv*PI);
 
-complex<double> cteNormalisation(-1/(2*PI),0);
+complex<double> cteNormalisation(-1/(2*M_PI),0);
 //std::vector<std::complex<double>> support_holo(dim*dim*dim);
     Point3D fi(spec,sqrt(rcarre-spec.x*spec.x-spec.y*spec.y),dim3D);
    // cout<<"fix="<<fi.x<<", fiy="<<fi.y<<", fiz="<<fi.z<<endl;
@@ -132,10 +155,11 @@ complex<double> cteNormalisation(-1/(2*PI),0);
                 fd.z=sqrt(rcarre-(fd.x)*(fd.x)-(fd.y)*(fd.y));
                 if(fd.x*fd.x+fd.y*fd.y<fmcarre){
                     //fobj=fd-fi;
-                    fobj.x=round(fd.x-fi.x);
-                    fobj.y=round(fd.y-fi.y);
-                    fobj.z=round(fd.z-fi.z);
-                    fLat.set_xy(fd.x,fd.y);
+                    fobj.x=round(sign*fd.x-fi.x);
+                    fobj.y=round(sign*fd.y-fi.y);
+                    fobj.z=round(sign*fd.z-fi.z);
+                   // cout<<fobj.z<<endl;
+                    fLat.set_xy(fd.x,fd.y);//don't inverse sign for holograms !
                     TF_hologramme[fLat.coordI().cpt2D()]=cteNormalisation*ctePot2UBorn*cteInd2Pot/(sdz)*TF_vol3D[fobj.coordI().cpt3D()];
             }
         }
@@ -243,7 +267,7 @@ void SAV3D_Tiff(vector<complex <double>> var_sav, string partie, string chemin, 
     //cout<<"dim savtiff3d ======"<<dim<<endl;
     uint32 image_width, image_height, dimz;
     float xres, yres;
-    uint16 spp, bpp, photo, res_unit,zpage;
+    uint16 spp, bpp, res_unit;//zpage;
     TIFF *out;
     int x, y;
     float buffer2D[dim * dim];
@@ -541,17 +565,13 @@ void decal2DCplxGen(vector<complex<double>> &entree, vector<complex<double>> &re
         }
 }
 
-
-
-
-void SAV2(vector<double> v, std::string chemin, enum PRECISION precision, char options[])
+void SAV2(vector<double> v, std::string chemin, enum PRECISION2 precision, string options)
 {
-
         unsigned int NbPix2D=v.size();
 
         double* var_sav = &v[0];
         FILE *fichier_ID;
-        fichier_ID= fopen(chemin.c_str(), options);
+        fichier_ID= fopen(chemin.c_str(), options.c_str());
         if(fichier_ID==0)
                 cout<<"Erreur d'ouverture du fichier "<<chemin<<endl;
 
@@ -596,17 +616,16 @@ void SAV2(vector<double> v, std::string chemin, enum PRECISION precision, char o
         default:
                 break;
         }
-
         fclose(fichier_ID);
 }
 
-void SAVCplx(std::vector<complex<double> > var_sav, string partie, std::string chemin, enum PRECISION precision, char options[])
+void SAVCplx(std::vector<complex<double> > var_sav, string partie, std::string chemin, enum PRECISION2 precision, string options)
 {        //double* var_sav = &v[0];
         unsigned int cpt;
         unsigned int NbPix=var_sav.size();
 //        cout<<"taille volume="<<NbPix<<endl;
         FILE *fichier_ID;
-        fichier_ID= fopen(chemin.c_str(), options);
+        fichier_ID= fopen(chemin.c_str(), options.c_str());
         if(fichier_ID==0)
                 cout<<"Erreur d'ouverture du fichier "<<chemin<<endl;
 
@@ -680,7 +699,7 @@ string type2str(int type) {
 void lire_bin_vector(string chemin, vector<double> &dst, unsigned short int dim, unsigned  int nbPix)
 {
        unsigned long lTaille;
-       size_t nb_elmnt_lu;
+
       //unsigned short int dimData=precision/8;//taille en octet d'un element.
 
        FILE* pFichier = NULL;
@@ -695,6 +714,7 @@ void lire_bin_vector(string chemin, vector<double> &dst, unsigned short int dim,
            exit (1);// obtenir la longueur du fichier, comparer avec donnée entrée.
        }
        else{
+            size_t nb_elmnt_lu=0;
            fseek(pFichier,0,SEEK_END);//trouver la fin de fichier
            lTaille = ftell (pFichier);//retourne la position courante (en octet) du curseur de fichier : ici, position de la fin du fichier
           // printf("taille trouvée en octet par ftell %li, taille estimée : %i\n",lTaille,NbPix*dimData);//
@@ -706,7 +726,7 @@ void lire_bin_vector(string chemin, vector<double> &dst, unsigned short int dim,
                 float resultat;
                 size_t taille_case=type_donnee/8;
 
-                for(int cpt=0;cpt<nbPix;cpt++){
+                for(size_t cpt=0;cpt<nbPix;cpt++){
                 nb_elmnt_lu = fread (&resultat,1,taille_case,pFichier);//lecture
                 dst[cpt]=(double)resultat;
                 }
@@ -715,7 +735,7 @@ void lire_bin_vector(string chemin, vector<double> &dst, unsigned short int dim,
                 double resultat;//pas important?
                 size_t taille_case=type_donnee/8;
 
-                for(int cpt=0;cpt<nbPix;cpt++){
+                for(size_t cpt=0;cpt<nbPix;cpt++){
                 nb_elmnt_lu = fread(&resultat,1,taille_case,pFichier);//lecture
                 dst[cpt]=resultat;
                 }

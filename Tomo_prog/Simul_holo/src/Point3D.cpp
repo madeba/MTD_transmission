@@ -55,6 +55,7 @@ size_t Point3D::cpt3D()
 Point3D Point3D::coordI()
 {
     Point3D coordI(this->x+dim3D/2,-this->y+dim3D/2,this->z+dim3D/2,dim3D);
+    //Point3D coordI(this->x+dim3D/2,this->y+dim3D/2,this->z+dim3D/2,dim3D);
     return coordI;
 }
 

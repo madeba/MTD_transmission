@@ -29,6 +29,7 @@ public :
         bool b_Export_OTF=true;
         bool b_polar=false;
         bool b_reflex=false;
+        bool b_fdr=false;//boolean for specular coordinate interpolation
         size_t dim_final;
         double TpCam;//pixel size (camera)
         double R_th;

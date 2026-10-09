@@ -1,6 +1,9 @@
 #include "FFT_fonctions.h"
 #include "fonctions.h"
 #include "omp.h"
+#include <vector>
+#include <cmath>
+#include <type_traits>
 
 using namespace std;
 ///calculate the kvector field (array whose value a simply  kx and ky)
@@ -13,7 +16,7 @@ std::vector<vecteur> init_kvect_shift(Var2D dim2DHA)
     kvect[cpt].sety((cpt/dim2DHA.x-round(dim2DHA.y/2))/(dim2DHA.y));
     // kvect[cpt].sety((cpt/dim2DHA.y-round(dim2DHA.y/2))/(dim2DHA.y));
   }
-  kvect_shift=fftshift2Dnew(kvect);
+  kvect_shift=fftshift2D(kvect);
   return kvect_shift;
 }
 ///calculate the kvector square modulus field (array whose value a simply  kx^2+ky^2)
@@ -28,7 +31,7 @@ std::vector<double> init_kvect_mod2Shift(vector<vecteur>  &kvect_shift)
   return kvect_mod_sq_shift;
 }
 
-vector<vecteur>  fftshift2D(vector<vecteur> &entree)
+/*vector<vecteur>  fftshift2D(vector<vecteur> &entree)
 {
 unsigned int dim=sqrt(entree.size());
 vector<vecteur > result(dim*dim);
@@ -57,9 +60,9 @@ size_t xi=0;
                 }
         }
         return result;
-}
+}*/
 ///simplified version of fftshift for "vecteur" (maybe delete the other version after test).
-vector<vecteur> fftshift2Dnew(const vector<vecteur>& in)
+/*vector<vecteur> fftshift2Dnew(const vector<vecteur>& in)
 {
     int dim = sqrt(in.size());
     vector<vecteur> out(dim * dim);
@@ -77,7 +80,7 @@ vector<vecteur> fftshift2Dnew(const vector<vecteur>& in)
     }
 
     return out;
-}
+}*/
 ///calculate 2D Tukey window whose width is controled by alpha (to be applied before fft)
 vector<double> tukey2D(int dimx,int dimy, float alpha)
 {
@@ -91,13 +94,13 @@ vector<double> tukey2D(int dimx,int dimy, float alpha)
         int borne2=round((N-1)*(1-alpha/2));
 
         for(int cpt=0; cpt<borne1+1; cpt++)
-                tuk1Dx[cpt]=0.5*(1+cos(3.1415*(2*cpt/(alpha*(N-1))-1)));
+                tuk1Dx[cpt]=0.5*(1+cos(M_PI*(2*cpt/(alpha*(N-1))-1)));
 
 
         for(int cpt=borne1+1; cpt<borne2+1; cpt++)
                 tuk1Dx[cpt]=1;
         for(int cpt=borne2+1; cpt<N; cpt++)
-                tuk1Dx[cpt]=0.5*(1+cos(3.1415*(2*cpt/(alpha*(N-1))-2/alpha+1)));
+                tuk1Dx[cpt]=0.5*(1+cos(M_PI*(2*cpt/(alpha*(N-1))-2/alpha+1)));
 
         for(int cpt=0; cpt<N*N; cpt++) {
                 int cptx=cpt%(N);
@@ -107,7 +110,7 @@ vector<double> tukey2D(int dimx,int dimy, float alpha)
         return tuk2D;
 }
 
-vector<complex<double> >  fftshift2D(vector<complex<double>> const &entree)
+/*vector<complex<double> >  fftshift2D(vector<complex<double>> const &entree)
 {
 unsigned int dim=sqrt(entree.size());
 vector<complex<double> > result(dim*dim);
@@ -133,9 +136,9 @@ size_t yi=0;
         }
         return result;
 }
+*/
 
-
-void  fftshift2D(vector<complex<double>> const &entree,vector<complex<double>>  &result)
+/*void  fftshift2D(vector<complex<double>> const &entree,vector<complex<double>>  &result)
 {
 unsigned int dim=sqrt(entree.size());
 size_t decal=dim/2;
@@ -157,9 +160,9 @@ size_t yi=0;
                       result[pixel+decal]=entree[(yi+decal)*dim+xi];
                 }
         }
-}
+}*/
 //surcharge avec passage par paramètre
-void  fftshift2D(vector<double> const &entree,vector<double>  &result)
+/*void  fftshift2D(vector<double> const &entree,vector<double>  &result)
 {
 unsigned int dim=sqrt(entree.size());
 size_t decal=dim/2;
@@ -182,8 +185,8 @@ size_t yi=0;
                 }
         }
      //   return result;
-}
-vector<complex<double>>  fftshift2D2(vector<complex<double>> const &entree)
+}*/
+/*vector<complex<double>>  fftshift2D2(vector<complex<double>> const &entree)
 {
 unsigned int dim=sqrt(entree.size());
 vector<complex<double>> result(dim*dim);
@@ -203,8 +206,8 @@ size_t yi=0;
             copy(entree.begin()+(yi+decal)*dim,   entree.begin()+(yi+decal)*dim+decal,   result.begin()+num_ligne+decal);
         }
         return result;
-}
-vector<double>  fftshift2D2(vector<double> const &entree)
+}*/
+/*vector<double>  fftshift2D2(vector<double> const &entree)
 {
 unsigned int dim=sqrt(entree.size());
 vector<double> result(dim*dim);
@@ -223,12 +226,10 @@ short unsigned int  yi=0,xi=0;
                       copy(entree.begin()+(yi+decal)*dim,   entree.begin()+(yi+decal)*dim+decal,   result.begin()+num_ligne+decal);
         }
         return result;
-}
-#include <vector>
-#include <cmath>
-#include <type_traits>
+}*/
 
-template<typename T>
+
+/*template<typename T>
 std::vector<T> fftshift2DGPT(const std::vector<T>& entree)
 {
     const size_t N = entree.size();
@@ -254,8 +255,8 @@ std::vector<T> fftshift2DGPT(const std::vector<T>& entree)
     }
 
     return result;
-}
-vector<double>  fftshift2D(vector<double> const &entree)///à récrire en template
+}*/
+/*vector<double>  fftshift2D(vector<double> const &entree)///à récrire en template
 {
 unsigned int dim=sqrt(entree.size());
 vector<double> result(dim*dim);
@@ -282,8 +283,9 @@ size_t yi=0;
                 }
         }
         return result;
-}
-void TF2D_vec(fftw_complex *in,fftw_complex *out, vector<double> entree, vector<complex<double> > &sortie, fftw_plan p){
+}*/
+//real input
+void TF2D_vec(fftw_complex *in,fftw_complex *out, vector<double> const & entree, vector<complex<double> > &sortie, fftw_plan p){
 
     int nbPix=entree.size();
     for(int cpt=0; cpt<nbPix; cpt++){
@@ -299,7 +301,7 @@ void TF2D_vec(fftw_complex *in,fftw_complex *out, vector<double> entree, vector<
 }
 
 ///FFT2D entree=vector complex
-void TF2Dcplx_vec(fftw_complex *in, fftw_complex *out, vector<complex<double> > entree, vector<complex<double> > &sortie,fftw_plan p)
+void TF2Dcplx_vec(fftw_complex *in, fftw_complex *out, vector<complex<double> > const & entree, vector<complex<double> > &sortie,fftw_plan p)
 {
     size_t nbPix=entree.size();
     for(size_t cpt=0; cpt<nbPix; cpt++) {
@@ -316,7 +318,7 @@ void TF2Dcplx_vec(fftw_complex *in, fftw_complex *out, vector<complex<double> > 
 }
 
 ///FFT2D entree=vector complex
-void TF2Dcplx_vec_INV(fftw_complex *in,fftw_complex *out, vector<complex<double> > entree, vector<complex<double> > &sortie, fftw_plan p_backward)
+void TF2Dcplx_vec_INV(fftw_complex *in,fftw_complex *out, vector<complex<double> > const & entree, vector<complex<double> > &sortie, fftw_plan p_backward)
 {
     size_t nbPix=entree.size();
 
@@ -334,7 +336,7 @@ void TF2Dcplx_vec_INV(fftw_complex *in,fftw_complex *out, vector<complex<double>
 
 }
 ///FFT2D entree=TF2D vector double
-void TF2Dcplx_vec(fftw_complex *in,fftw_complex *out, vector<double> entree, vector<complex<double> > &sortie, fftw_plan p_forward){
+void TF2Dcplx_vec(fftw_complex *in,fftw_complex *out, vector<double> const &entree, vector<complex<double> > &sortie, fftw_plan p_forward){
     size_t nbPix=entree.size();
     //size_t dim=sqrt(nbPix);
     for(size_t cpt=0; cpt<nbPix; cpt++){
@@ -351,7 +353,7 @@ void TF2Dcplx_vec(fftw_complex *in,fftw_complex *out, vector<double> entree, vec
 }
 
 ///FFT2D entree=TF2D vector double+inplace
-void TF2Dcplx_vec_INPLACE(fftw_complex *in_out,vector<double> entree, vector<complex<double> > &sortie, fftw_plan p){
+void TF2Dcplx_vec_INPLACE(fftw_complex *in_out,vector<double> const &entree, vector<complex<double> > &sortie, fftw_plan p){
     size_t nbPix=entree.size();
     for(size_t cpt=0; cpt<nbPix; cpt++)
         {
@@ -369,7 +371,7 @@ void TF2Dcplx_vec_INPLACE(fftw_complex *in_out,vector<double> entree, vector<com
     //SAVCplx(sortie,"Im",nbPix,"/home/mat/tomo_test/spectre_dans_tf2D.bin",t_float,"a+b");
 }
 
-void TF2Dcplx_vec_INV(fftw_complex *in, fftw_complex *out, vector<double> entree, vector<complex<double> > &sortie, fftw_plan p_backward){
+void TF2Dcplx_vec_INV(fftw_complex *in, fftw_complex *out, vector<double> const & entree, vector<complex<double> > &sortie, fftw_plan p_backward){
     size_t nbPix=entree.size();
     for(size_t cpt=0; cpt<nbPix; cpt++){
         in[cpt][0]=entree[cpt];
@@ -387,7 +389,7 @@ void TF2Dcplx_vec_INV(fftw_complex *in, fftw_complex *out, vector<double> entree
 void TF2Dcplx(vector<double> const &entree, vector<complex<double>> &sortie, FFTW_init &tf2D_c2r)
 {
     size_t nbPix=entree.size();
-    for(size_t cpt=0; cpt<nbPix; cpt++) {
+    for(size_t cpt=0; cpt<nbPix; cpt++){
         tf2D_c2r.in[cpt][0]=entree[cpt];
         tf2D_c2r.in[cpt][1]=0;//
     }
@@ -402,7 +404,7 @@ void TF2Dcplx(vector<double> const &entree, vector<complex<double>> &sortie, FFT
 
 // surcharge fftw_init+entree <complex double>+calcul fft
 ///FFT2D complex c2c
-void TF2Dcplx(vector<complex<double>> const &entree, vector<complex<double>> &sortie,FFTW_init &param_c2c)
+void TF2Dcplx(vector<complex<double>> const &entree, vector<complex<double>> &sortie, FFTW_init &param_c2c)
 {
     size_t nbPix=entree.size();
     for(size_t cpt=0; cpt<nbPix; cpt++) {
@@ -457,8 +459,9 @@ void TF2Dcplx_INV(vector<complex<double>> const &entree, vector<complex<double> 
         sortie[cpt].imag(tf2D.out[cpt][1]);
     }
 }
+
 //Surcharge avec echantillonnage pour calcul exact de la transformée fourier
-void TF2Dcplx_INV(vector<complex<double>> const &entree, vector<complex<double> > &sortie, FFTW_init &tf2D, double delta_f)
+void TF2Dcplx_INV(vector<complex<double>> const &entree, vector<complex<double>> &sortie, FFTW_init &tf2D, double delta_f)
 {
     size_t nbPix=entree.size();
 //    int dim=sqrt(nbPix);
@@ -479,29 +482,32 @@ void TF2Dcplx_INV(vector<complex<double>> const &entree, vector<complex<double> 
 }
 
 
-///-------TF2D purement reelle
-///fft2D avec entrée purement réelle, utilise r2c et exporte le demi-espace.
-void TF2D_r2c(vector<double> const &entree, vector<complex<double> > &sortie, FFTW_init  &tf2D_Re, double delta_x){
+///TF2D avec entrée purement réelle, utilise r2c et exporte le demi-espace.
+///Normalisation : division par nbPixCplx = dim*(dim/2+1) (comportement inchangé).
+void TF2D_r2c(vector<double> const &entree, vector<complex<double> > &sortie, FFTW_init &tf2D_Re){
 
-  size_t nbPix=entree.size(),   dim=sqrt(nbPix);
-  Var2D dimROI{dim,dim};
-  size_t nbPixCplx=dim*(dim/2+1);
-  // double Coef_norm=dim*m1.Tp_Uborn;
-  double Coef_norm=nbPixCplx;//ow(delta_x,2);
-  // #pragma omp parallel
-  for(size_t  cpt=0; cpt<nbPix; cpt++){tf2D_Re.in_double[cpt]=entree[cpt];}
-  std::copy (entree.begin(),entree.end(), tf2D_Re.in_double );
+  const size_t nbPix = entree.size();
+  const size_t dim = static_cast<size_t>(sqrt(static_cast<double>(nbPix)));
+  if (dim*dim != nbPix)
+    throw std::invalid_argument("TF2D_r2c: entree n'est pas une image carree");
+
+  const size_t nbPixCplx = dim*(dim/2+1);
+  const double Coef_norm = static_cast<double>(nbPixCplx);
+
+  sortie.resize(nbPixCplx);
+
+  std::copy(entree.begin(), entree.end(), tf2D_Re.in_double);
   fftw_execute(tf2D_Re.p_forward_OUT);
-  size_t cpt=0;
-  for( cpt=0; cpt<(nbPixCplx); cpt++){
-    sortie[cpt].real(tf2D_Re.out[cpt][0]/Coef_norm);
-    sortie[cpt].imag(tf2D_Re.out[cpt][1]/Coef_norm);
+
+  for (size_t cpt = 0; cpt < nbPixCplx; cpt++) {
+    sortie[cpt] = complex<double>(tf2D_Re.out[cpt][0]/Coef_norm,
+                                  tf2D_Re.out[cpt][1]/Coef_norm);
   }
 }
 
 ///fft2D avec entrée purement réelle, utilise r2c et exporte le demi-espace.
 ///crop the hologramm spectrum to complex field spectrum and add it to a stack containing all the fields.
-void TF2D_r2c_coupeHA_to_stack(vector<double> const &src2D, vector<complex<double>> &dest3D, Var2D dim2DHA, Var2D coinHA_r2c,  unsigned short int numAngle, FFTW_init tf2D_r2c){
+void TF2D_r2c_coupeHA_to_stack(vector<double> const &src2D, vector<complex<double>> &dest3D, Var2D dim2DHA, Var2D coinHA_r2c,  unsigned short int numAngle, FFTW_init  & tf2D_r2c){
 
   size_t nbPix=src2D.size();
   Var2D  dim_entree={sqrt(nbPix),sqrt(nbPix)};//inpout of the function
@@ -540,7 +546,7 @@ cpt_Z_dest=(dim_dest.x*dim_dest.y)*numAngle;
     }
 }
 
-
+/*
 void TF2D_r2c_symetric(vector<double> const &entree, vector<complex<double> > &sortie, FFTW_init  &tf2D_Re){
   size_t dim=sqrt(entree.size()),  nbPix=entree.size();
   Var2D dimROI{dim,dim};
@@ -583,6 +589,39 @@ void TF2D_r2c_symetric(vector<double> const &entree, vector<complex<double> > &s
     sortie[cptD].real(tf2D_Re.out[cptA][0]*Coef_norm);
     sortie[cptD].imag(-tf2D_Re.out[cptA][1]*Coef_norm);
   }
+}*/
+
+///fft2D avec entrée purement réelle (r2c), exporte le spectre COMPLET (dim x dim)
+///en reconstruisant la moitié manquante par symétrie hermitienne.
+///Image carrée, côté pair uniquement. Pas de normalisation par défaut (Coef_norm = 1).
+void TF2D_r2c_symetric(vector<double> const &entree, vector<complex<double> > &sortie,
+                       FFTW_init &tf2D_Re, double Coef_norm /* = 1.0 dans le .h */){
+
+  const size_t nbPix = entree.size();
+  const size_t dim = static_cast<size_t>(sqrt(static_cast<double>(nbPix)));
+  if (dim*dim != nbPix || dim % 2 != 0)
+    throw std::invalid_argument("TF2D_r2c_symetric: image non carree ou de cote impair");
+
+  const size_t dimHalf = dim/2 + 1;   // largeur d'une ligne du spectre r2c
+
+  //sortie.resize(nbPix);
+
+  std::copy(entree.begin(), entree.end(), tf2D_Re.in_double);
+  fftw_execute(tf2D_Re.p_forward_OUT);
+
+  // 1) moitié calculée par FFTW : colonnes 0..dim/2 de chaque ligne
+  for (size_t y = 0; y < dim; y++) {
+    const fftw_complex* src = tf2D_Re.out + y*dimHalf;
+    complex<double>*    dst = &sortie[y*dim];
+    for (size_t x = 0; x < dimHalf; x++)
+      dst[x] = complex<double>(src[x][0]*Coef_norm, src[x][1]*Coef_norm);
+  }
+
+  // 2) moitié manquante : X[y][dim-x] = conj(X[(dim-y)%dim][x]), pour x = 1..dim/2-1
+  //    (les colonnes 0 et dim/2 sont leur propre symétrique en colonne)
+  for (size_t y = 0; y < dim; y++) {
+    const size_t yS = (dim - y) % dim;
+    for (size_t x = 1; x < dim/2; x++)
+      sortie[yS*dim + (dim - x)] = std::conj(sortie[y*dim + x]);
+  }
 }
-
-

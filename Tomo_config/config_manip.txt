@@ -2,6 +2,8 @@
 NA 1.40
 #indice d'immersion/index immersion oil
 N0 1.515
+#mounting medium refractive index
+NM 1.50
 #longueur d'onde/wavelength (m)
 LAMBDA 0.000000632
 #focale lentille de tube objectif/focal length of the tube lens (m)
@@ -10,24 +12,25 @@ F_TUBE 0.15
 F_OBJ 0.0020
 #taille des pixels caméra/size of the camera pixel (m)
 TPCAM 0.0000055
-#Rapport focale des lentilles d'échantillonnage
+#focal ratio of the afocal system used to fix the sampling
 RF 0.75
-#fréquence maximum accessible dans Fourier
+#maximum frequency in Fourier space/ fréquence maximum accessible dans Fourier
 NXMAX 125
-#Paramètres de hors-axe : position du centre et rayon
-
+#Coordinate of the off axis career
 CIRCLE_CX 247
 CIRCLE_CY 777
-
+#holograms dimension (pixel)
 DIM_ROI 1024
 #Nombre d'hologrammes
 NB_HOLO 500
 
 #tension min max du miroir de balayage
+#max voltage for the fsm300 
 #VXMIN -4.20
 #VXMAX 4.2
 #VYMIN -2.8
 #VYMAX 2.8
+
 SCAN_PATTERN ROSACE
 
 

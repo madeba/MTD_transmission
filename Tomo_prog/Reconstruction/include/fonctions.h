@@ -96,7 +96,7 @@ double max(double* entree, int dim);
 
 void retroPropag_Born(std::vector <std::complex<double>> &TF3D_PotObj, std::vector<std::complex<double>> const &TF_Uborn_norm, std::vector<double> &sup_redon, int dim_final, Var2D posSpec, Var3D decal3D, Var2D NMAX, double rayon, manip m1);
 void retroPropag_Born_V2(std::vector <std::complex<double>> &TF3D_PotObj, std::vector<std::complex<double>> const &TF_Uborn_norm, std::vector<double> &sup_redon, int dim_final, Var2D posSpec, Var3D decal3D, Var2D NMAX, double rayon, manip m1);
-
+void retroPropag_Born_FDR(std::vector <std::complex<double>> &TF3D_PotObj, std::vector<std::complex<double>> const &TF_Uborn_norm, std::vector<double> &sup_redon, int dim_final, Var2D posSpec, Var3D decal3D, Var2D NMAX, double rayon, manip m1);
 void retroPropagSA(int deltaZ, nbCplx *fft_shift_norm, nbCplx *planObjet, Var3D decal, Var2D NMAX, double rayon);
 void decalCoupeCplx(nbCplx *fft, nbCplx *fft_tmp, Var2D NMAX,Var2D dimCCD);
 void Plan_ds_VolCplx(nbCplx *Vol3D, nbCplx *plan2D, Var3D dimVol, Var2D dimPlan, int z3Di);

@@ -209,3 +209,51 @@ vector<double> lire_bin(const string& chemin, short int precision, size_t NbPix)
     }
     return resultat;
 }
+///save a vector<complex double> into a binary file. partie : "Re"=real or "im"=imaginary. PRECISON=64 (double), 32 (float) etc.
+void SAVCplx(vector<complex<double>> const &var_sav, string partie, string chemin, enum PRECISION2 precision, const char options[])
+{        //double* var_sav = &v[0];
+
+        size_t NbPix2D=var_sav.size();
+        unsigned int cpt;
+        FILE *fichier_ID;
+        fichier_ID= fopen(chemin.c_str(), options);
+        if(fichier_ID==0)
+                cout<<"Erreur d'ouverture du fichier "<<chemin<<endl;
+
+        switch(precision){
+        case t_double:{ //64 bit
+                double tampon=0;
+                if(partie=="Re"||partie=="re"){
+                    for(cpt=0; cpt<NbPix2D; cpt++) {
+                        tampon=var_sav[cpt].real();
+                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
+                        }
+                }
+                if(partie=="Im"|| partie=="im"){
+                     for(cpt=0; cpt<NbPix2D; cpt++){
+                        tampon=var_sav[cpt].imag();
+                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
+                        }
+                }
+                break;
+                }
+        case t_float:{//32 bits float
+                float tampon=0;
+
+                if(partie=="Re"|| partie=="re"){
+                    for(cpt=0; cpt<NbPix2D; cpt++) {
+                        tampon=var_sav[cpt].real();
+                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
+                        }
+                }
+                if(partie=="Im"|| partie=="im"){
+                     for(cpt=0; cpt<NbPix2D; cpt++){
+                        tampon=var_sav[cpt].imag();
+                        fwrite(&tampon,sizeof(tampon),1,fichier_ID);
+                        }
+                }
+                break;
+            }
+        }
+        fclose(fichier_ID);
+}

@@ -30,8 +30,11 @@
 #include <vector>
 #include <complex>
 #include <tiffio.h>
+#include "manip.h"
 
-
+std::vector<double> checkVisibility(std::vector<double>  &holo1, manip const &m1, size_t &nbAngleOk, Var2D dim2DHA,Var2D coinHA,  std::vector<double> const &tukeyHolo, FFTW_init  &param_fftw2D_r2c_Holo);
+std::vector<double> calcVisibility(std::vector<double>  &holo1,manip const &m1, Var2D im2DHA,Var2D coinHA, std::vector<double> const &tukeyHolo,FFTW_init  &param_fftw2DHolo);
+void holo2TF_UBornTukeyHA_r2c(std::vector<double>  &holo1,std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA, size_t NbAngleOk, std::vector<double> const &tukeyHA,FFTW_init  &param_fftw2DHolo);
 //*calculate the wrapped phase from -pi to pi*/
 Var2D coord_to_coordShift(Var2D coord2D, Var2D dimROI);
 
@@ -51,15 +54,20 @@ void holo2TF_UBorn2_shift(std::vector<double>  &holo1,std::vector<std::complex<d
 void holo2TF_UBorn2_shift_r2c(std::vector<double>  &holo1,std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA_shift, size_t NbAngleOk, std::vector<double> const &tukeyHolo,FFTW_init  &param_fftw2D_r2c_Holo);
 //ancienne fonction
 //void holo2TF_UBorn_old(std::vector<double> holo1, std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle, std::vector<double> tukey_holo);
+
+//double  holo2TF_UBornTukeyHA_r2c_fftwinit(std::vector<double> holo1, std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle, std::vector<double> const & tukeyHA, FFTW_init &plan_r2c);
 void holo2TF_UBorn(std::vector<double> holo1, std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle, std::vector<double> tukey_holo, fftw_complex *in,fftw_complex *out,fftw_plan p_forward_holo);
-void holo2TF_UBornTukeyHA(std::vector<double> holo1, std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle, std::vector<double> tukeyHA, fftw_complex *in,fftw_complex *out,fftw_plan p_forward_holo);
-void holo2TF_UBornTukeyHA_r2c(std::vector<double>  &holo1,std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI,Var2D dim2DHA,Var2D coinHA, size_t NbAngleOk, std::vector<double> const &tukeyHA,FFTW_init  &param_fftw2DHolo);
+double  holo2TF_UBornTukeyHA(std::vector<double> holo1, std::vector<std::complex<double>> &TF_UBornTot,Var2D dimROI, Var2D dim2DHA, Var2D coinHA, size_t NumAngle, std::vector<double> tukeyHA, fftw_complex *in,fftw_complex *out,fftw_plan p_forward_holo);
+
 void coupeCplx(std::vector<std::complex<double>> const &src, Var2D dim_src, std::vector<std::complex<double>> &dest, Var2D dim_dest, Var2D coin,size_t NumAngle);
-void coupeCplxTukey(std::vector<std::complex<double>> const &src, std::vector<std::complex<double>> &dest, Var2D dim_src, Var2D dim_dest, Var2D coin, size_t NumAngle, std::vector<double> &tukey);
+void coupeCplxTukey(std::vector<std::complex<double>> const &src, std::vector<std::complex<double>> &dest, Var2D dim_src, Var2D dim_dest, Var2D coin, size_t NumAngle, std::vector<double> const &tukey);
 void coupe2D_RefI_to3D(std::vector<std::complex<double>> const &src, std::vector<std::complex<double>> &dest, Var2D dim_dest, unsigned short int numAngle);
 void coupe2D_I_to_H3D(std::vector<std::complex<double>> const &src2D, std::vector<std::complex<double>> &dest3D,Var2D dim_dest2D, unsigned short int numAngle);
 void sav_param2D(std::string texte,std::string file_path);
 
-
+double contrasteFranges(const std::vector<std::complex<double>> &spectre, Var2D dim,
+                        int kxi, int kyi, int search = 3);
+double contrasteFrangesSpectral(const std::vector<std::complex<double>> &spectre, Var2D dim,
+                        int kx_px, int ky_px, int search = 3);
 
 #endif

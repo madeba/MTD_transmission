@@ -280,10 +280,10 @@ int flag=0;
        // if(UBornAmpFinal[cpt]<-1 && flag==0) { cout<<"Holo numero"<<cpt_angle<<endl;flag=1;}
         if(m1.b_Born==true){ //UBORN=U_tot-U_inc=u_tot_norm-1
          // UBornFinal[cpt].real( (sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt])- 1 )*cos(PhaseFinal[cpt]) );//*masqueTukeyHolo[cpt]);///correction amplitude
-         // UBornFinal[cpt].imag( (sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt]) - 1)*sin(PhaseFinal[cpt]) );//*masqueTukeyHolo[cpt]);
+         // UBornFinal[cpt].imag( (sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt]))*sin(PhaseFinal[cpt]) );//*masqueTukeyHolo[cpt]);
 
           UBornFinal[cpt].real( (sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt]))*cos(PhaseFinal[cpt]) -1);//*masqueTukeyHolo[cpt]);///correction amplitude
-          UBornFinal[cpt].imag( (sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt]))*sin(PhaseFinal[cpt]) -1);//*masqueTukeyHolo[cpt]);
+          UBornFinal[cpt].imag( (sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt]))*sin(PhaseFinal[cpt]) );//*masqueTukeyHolo[cpt]);
         }
         else{ //RYTOV URytov = log a_t/a_i (=log a_t après correction AmpliCorr)
           UBornFinal[cpt].real(log(sqrt(UBornAmpFinal[cpt]*UBornAmpFinal[cpt])));///racine(U^2) pour éliminer les éventuelles amplitudes négatives

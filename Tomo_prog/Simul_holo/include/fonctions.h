@@ -41,27 +41,28 @@ void interp_lin3D(std::vector <std::complex<double>> &volume_interp_3D);
 Point2D maj_fleur(Point2D Vin, float rho, int nbHolo, double *theta, manip m1);
 void calcHolo(Point2D spec,std::vector<std::complex<double>> const& TF_vol3D,std::vector<std::complex<double>> &TF_hologramme,manip const &m1);
 void Conv_Ewald(Point2D spec,std::vector<std::complex<double>> TF_vol3D,std::vector<std::complex<double>> &TF_conv3D, manip m1);
-void calcPhase_mpi_pi_atan2(vector<complex<double>> obj, vector<double> &phaseMod2pi);///calcul phase -PI-PI
-void SAV2(std::vector<double> v, std::string chemin, enum PRECISION precision, char options[]);
-void SAVCplx(std::vector<complex<double> > v, std::string partie, std::string chemin, enum PRECISION precision, char options[]);
-void SAV3D_Tiff(vector <double> var_sav, string chemin, double taille_pixel);
-void SAV3D_Tiff(vector<complex <double>> var_sav, string partie,string chemin, double taille_pixel);
-void SAV2D_Tiff(std::vector<complex<double>> var_sav, string partie, string chemin,double taille_pixel);
-void SAV_Tiff2D(std::vector<double> var_sav, string chemin, double taille_pixel);
+void calcPhase_mpi_pi_atan2(std::vector<std::complex<double>> obj, std::vector<double> &phaseMod2pi);///calcul phase -PI-PI
+void calcPhase_mpi_pi_atan2(std::vector<std::complex<double>> obj, double maxAmplitude, std::vector<double> &phaseMod2pi);///calcul phase -PI-PI
+void SAV2(std::vector<double> v, std::string chemin, enum PRECISION2 precision, std::string options);
+void SAVCplx(std::vector<std::complex<double> > v, std::string partie, std::string chemin, enum PRECISION2 precision, std::string options);
+void SAV3D_Tiff(std::vector <double> var_sav, std::string chemin, double taille_pixel);
+void SAV3D_Tiff(std::vector<std::complex <double>> var_sav, std::string partie,std::string chemin, double taille_pixel);
+void SAV2D_Tiff(std::vector<std::complex<double>> var_sav, std::string partie, std::string chemin,double taille_pixel);
+void SAV_Tiff2D(std::vector<double> var_sav, std::string chemin, double taille_pixel);
 
-void decal2DCplxGen(vector<complex<double>> &entree, vector<complex<double>> &result, Var2D decal);
-string type2str(int type);
-void gradient(std::vector<double> src,std::vector<double> &grad, string direction, unsigned int dim);
-void gradient_central(std::vector<double> src, std::vector<double> &grad,string direction,unsigned short int dim);
-void mat2vector(cv::Mat src,vector<double> &dst);
+void decal2DCplxGen(std::vector<std::complex<double>> &entree, std::vector<std::complex<double>> &result, Var2D decal);
+std::string type2str(int type);
+void gradient(std::vector<double> src,std::vector<double> &grad, std::string direction, unsigned int dim);
+void gradient_central(std::vector<double> src, std::vector<double> &grad,std::string direction,unsigned short int dim);
+void mat2vector(cv::Mat src,std::vector<double> &dst);
 cv::Mat vector2mat(std::vector<double> &src, unsigned short dim);
-void sobel_filtre2D(cv::Mat src, std::vector<double> &grad, string direction);
-void lire_bin_vector(string chemin, vector<double> &dst, unsigned short int dim,  unsigned int NbPix);
-vector<complex<double> > fftshift2D(vector<complex<double> > &entree);
+void sobel_filtre2D(cv::Mat src, std::vector<double> &grad, std::string direction);
+void lire_bin_vector(std::string chemin, std::vector<double> &dst, unsigned short int dim,  unsigned int NbPix);
+std::vector<std::complex<double> > fftshift2D(std::vector<std::complex<double> > &entree);
 void genere_bille(std::vector <std::complex<double>> &vol_bille, Point3D centre, size_t rayon,std::complex<double> delta_indice,size_t dim_espace);
 
 void genere_barre(std::vector<std::complex<double>> &vol_obj,  Point3D coordMin, Point3D coordMax, std::complex<double> delta_indice, manip m1);
-float extract_val(string token,  string chemin_fic);
-float extract_val(string token,  string chemin_fic, double defaut);
-string extract_string(std::string token,  std::string chemin_fic);
+float extract_val(std::string token,  std::string chemin_fic);
+float extract_val(std::string token,  std::string chemin_fic, double defaut);
+std::string extract_string(std::string token,  std::string chemin_fic);
 #endif

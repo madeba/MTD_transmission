@@ -9,6 +9,7 @@
 #include <tiffio.h>
 #include "projet.h"
 #include "omp.h"
+#include "struct.h"
 ///SAV3Dtiff avec template
 std::string formatFijiMsgMicron(double pixelSize);
 

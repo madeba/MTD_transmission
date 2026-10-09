@@ -15,7 +15,7 @@ using namespace std;
 
 // symétrie paire sur la mesure + déroulement global i.e. calcul de grad phi =Im((grad uBorn)/uBorn)
 //this function is called "exact solution" in Volkov paper, but need a division by uborn, which must be properly  done (see damped_division function)
-vector<double> deroul_volkov5_total_sym_paire_gradu(vector<complex<double>> & UBorn, vector<vecteur> double_kvect_shift,FFTW_init &param_c2c_double, double alpha_damp)
+vector<double> deroul_volkov6_total_sym_paire_gradu(vector<complex<double>> & UBorn, vector<vecteur> double_kvect_shift,FFTW_init &param_c2c_double, double alpha_damp)
 {
     complex<double> I(0,1);
     size_t nbPix=UBorn.size();
@@ -42,9 +42,33 @@ vector<double> deroul_volkov5_total_sym_paire_gradu(vector<complex<double>> & UB
     // SAVCplx(Sym_phase_deroul,"Re","/home/mat/tomo_test/Sym_phase_deroul_Re_416x416x500.raw",t_float,"a+b");
     return cut_quad4(Sym_phase_deroul);//get back the right quadrant in the symmetrized image
 }
+///calculate the kvector field (array whose value a simply  kx and ky)
+/*std::vector<vecteur> init_kvect_shift(Var2D dim2DHA)
+{
+  size_t nbPix=dim2DHA.x*dim2DHA.y;
+  vector<vecteur> kvect(nbPix),kvect_shift(nbPix);
+  for(size_t cpt=0;cpt<nbPix;cpt++){
+    kvect[cpt].setx((cpt%dim2DHA.x-round(dim2DHA.x/2))/(dim2DHA.x));
+    kvect[cpt].sety((cpt/dim2DHA.x-round(dim2DHA.y/2))/(dim2DHA.y));
+    // kvect[cpt].sety((cpt/dim2DHA.y-round(dim2DHA.y/2))/(dim2DHA.y));
+  }
+  kvect_shift=fftshift2Dnew(kvect);
+  return kvect_shift;
+}*/
+///calculate the kvector square modulus field (array whose value a simply  kx^2+ky^2)
+/*std::vector<double> init_kvect_mod2Shift(vector<vecteur>  &kvect_shift)
+{
+  size_t nbPix=kvect_shift.size();
+  vector<double> kvect_mod_sq_shift(nbPix);
+  for(size_t cpt=0;cpt<nbPix;cpt++){
+        kvect_mod_sq_shift[cpt]=pow(kvect_shift[cpt].getx(),2)+pow(kvect_shift[cpt].gety(),2);
+  }
+
+  return kvect_mod_sq_shift;
+}*/
 
 ///antisymétrie avant intégration + calcul de grad phi= (grad uBorn)/uBorn
-vector<double> deroul_volkov5_sym_paire_gradu(vector<complex<double>> & UBorn, vector<vecteur> kvect_shift, vector<vecteur> double_kvect_shift,FFTW_init &param_c2c,FFTW_init &param_c2c_double)
+/*vector<double> deroul_volkov5_sym_paire_gradu(vector<complex<double>> & UBorn, vector<vecteur> kvect_shift, vector<vecteur> double_kvect_shift,FFTW_init &param_c2c,FFTW_init &param_c2c_double)
 {
     complex<double> I(0,1);
     size_t nbPix=UBorn.size();
@@ -52,7 +76,8 @@ vector<double> deroul_volkov5_sym_paire_gradu(vector<complex<double>> & UBorn, v
     vector<double> gradxPhi(nbPix),gradyPhi(nbPix);
 
     gradient_fft4(UBorn,gradxUBorn,gradyUBorn,kvect_shift,param_c2c);
-        /*  SAVCplx(gradxUBorn,"Im","/home/mat/tomo_test/gradxUBorn_Im_208x208x500.raw",t_float,"a+b");*/
+        // SAVCplx(gradxUBorn,"Im","/home/mat/tomo_test/gradxUBorn_Im_208x208x500.raw",t_float,"a+b");
+
 
     for(size_t cpt=0;cpt<nbPix;cpt++){
     gradxPhi[cpt]=std::imag(gradxUBorn[cpt]/UBorn[cpt]);
@@ -72,12 +97,12 @@ vector<double> deroul_volkov5_sym_paire_gradu(vector<complex<double>> & UBorn, v
    //SAVCplx(Sym_phase_deroul,"Re","/home/mat/tomo_test/Sym_phase_deroul_Re_416x416x500.raw",t_float,"a+b");
    //  SAVCplx(Sym_phase_deroul,"Im","/home/mat/tomo_test/Sym_phase_deroul_Im_416x416x500.raw",t_float,"a+b");
        return cut_quad4((Sym_phase_deroul));
-}
+}*/
 
 
 ///----------------déroulement avec symétrie miroir sur la phase enroulée d'entrée+calcul champ d'entiers, déroulement quaasi parfait à un très faible piston près.
 //Volkov mentionne 0.5 à 2% de bruit lié aux discontinuités du champ d'entier M
-void deroul_volkov4_total_sym_paire(vector<double>  &phase_enroul,vector<double> &phase_deroul,vector <vecteur> double_kvect_shift,FFTW_init &param_c2c_double)
+/*void deroul_volkov4_total_sym_paire(vector<double>  &phase_enroul,vector<double> &phase_deroul,vector <vecteur> double_kvect_shift,FFTW_init &param_c2c_double)
 {
     complex<double> I(0,1);
     unsigned int nbPix=phase_enroul.size();
@@ -127,4 +152,4 @@ void deroul_volkov4_total_sym_paire(vector<double>  &phase_enroul,vector<double>
     }
 }
 
-
+*/

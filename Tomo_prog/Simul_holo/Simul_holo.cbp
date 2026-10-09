@@ -46,35 +46,46 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-Wall `pkg-config --cflags opencv` -fopenmp -fexceptions -std=c++17" />
+			<Add option="`pkg-config --cflags opencv` -fopenmp -fexceptions -std=c++17" />
 			<Add directory="/usr/include/opencv4/" />
+			<Add directory="/usr/include/eigen3" />
 		</Compiler>
 		<Linker>
 			<Add option="-lpthread -lX11 -lgomp -lfftw3_threads -lfftw3 -lm -ltiff  `pkg-config --libs opencv4`" />
 		</Linker>
+		<Unit filename="include/Correction_aberration.h" />
 		<Unit filename="include/FFTW_init.h" />
 		<Unit filename="include/FFT_fonctions.h" />
 		<Unit filename="include/OTF.h" />
 		<Unit filename="include/Obj3D.h" />
 		<Unit filename="include/Point2D.h" />
 		<Unit filename="include/Point3D.h" />
+		<Unit filename="include/bruit.h" />
 		<Unit filename="include/champCplx_functions.h" />
+		<Unit filename="include/deroulement_volkov4.h" />
 		<Unit filename="include/fonctions.h" />
 		<Unit filename="include/manip.h" />
 		<Unit filename="include/projet.h" />
 		<Unit filename="include/struct.h" />
 		<Unit filename="include/tiff_functions.h" />
+		<Unit filename="include/vecteur.h" />
+		<Unit filename="include/zernike.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Correction_aberration.cpp" />
 		<Unit filename="src/FFTW_init.cpp" />
 		<Unit filename="src/FFT_fonctions.cpp" />
 		<Unit filename="src/OTF.cpp" />
 		<Unit filename="src/Obj3D.cpp" />
 		<Unit filename="src/Point2D.cpp" />
 		<Unit filename="src/Point3D.cpp" />
+		<Unit filename="src/bruit.cpp" />
 		<Unit filename="src/champCplx_functions.cpp" />
+		<Unit filename="src/deroulement_volkov4.cpp" />
 		<Unit filename="src/fonctions.cpp" />
 		<Unit filename="src/manip.cpp" />
 		<Unit filename="src/tiff_functions.cpp" />
+		<Unit filename="src/vecteur.cpp" />
+		<Unit filename="src/zernike.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

@@ -21,9 +21,11 @@
 #include <sstream>
 #include <assert.h>
 #include <omp.h>
+#include <math_functions.h>
 #include "manip.h"
 #include "IO_functions.h"
 #include "FFT_fonctions.h"
+#include "tiff_functions.h"
 //#include "IO_fonctions.h"
 #define PI M_PI
 //using namespace cimg_library;
@@ -133,8 +135,8 @@ cout<<"b_pôlar="<<b_polar<<endl;
 
     const  int dim_final=m1.dim_final;//peut être différent de 4*NXMAX, mais l'image final sera (dé)zoomée;
     cout<<"Dimension forcée à "<<dim_final<<endl;
-    float tailleTheoPixelTomo=m1.tailleTheoPixelTomo;
-    double zoom=double(dim_final)/double(4*NXMAX);//double(dim_final)/double(4*n0*TpCam*dimROI.x/(Gt*lambda)*NA/n0);//dim_final/4NXMAX
+    double tailleTheoPixelTomo=m1.tailleTheoPixelTomo;
+    double zoom=double(dim_final)/double(4*NXMAX);//double(dim_final)/double(4*nM*TpCam*dimROI.x/(Gt*lambda)*NA/nM);//dim_final/4NXMAX
     if(zoom!=1)
     {
         cout<<"dim_final forcée à "<<dim_final<<" au lieu de "<<4*NXMAX<<"-->facteur de zoom numérique="<<zoom<<endl;
@@ -182,7 +184,7 @@ cout<<"b_pôlar="<<b_polar<<endl;
           temps_total=0;
 
 
-    float alpha=0.1;//coeff pour le masque de tuckey
+    float alpha=0.01;//coeff pour le masque de tuckey
     mask_tukey2D=tukey2D(dim2DHA.x,dim2DHA.y,alpha); //  fenetre de Tukey,
 
     printf("*******************************************\n");
@@ -206,22 +208,30 @@ cout<<"b_pôlar="<<b_polar<<endl;
        // cout<<"posSpec.x,posSpec.y"<<posSpec.x<<","<<posSpec.y<<endl;
         for(int cpt=0; cpt<NbPixU_Born; cpt++)//retrieve complex fields in the stack
         {
-            UBornFinal2D[cpt].real(UBornFinal3D[cpt+cpt_angle*NbPixU_Born].real()*mask_tukey2D[cpt]);
-            UBornFinal2D[cpt].imag(UBornFinal3D[cpt+cpt_angle*NbPixU_Born].imag()*mask_tukey2D[cpt]);
+           // UBornFinal2D[cpt].real(UBornFinal3D[cpt+cpt_angle*NbPixU_Born].real()*mask_tukey2D[cpt]);
+           // UBornFinal2D[cpt].imag(UBornFinal3D[cpt+cpt_angle*NbPixU_Born].imag()*mask_tukey2D[cpt]);
+            UBornFinal2D[cpt].real(UBornFinal3D[cpt+cpt_angle*NbPixU_Born].real());
+            UBornFinal2D[cpt].imag(UBornFinal3D[cpt+cpt_angle*NbPixU_Born].imag());
         }
-
         decal2DCplxGen(UBornFinal2D,UBorn2DFinalDecal, dim2DHA,NMAX);
         TF2Dcplx(UBorn2DFinalDecal,TF_UBorn_normI, tf2D, m1.tailleTheoPixelUborn);
 
         recal= {posSpec.x,posSpec.y};
         decal2DCplxGen(TF_UBorn_normI,TF_UBorn_normC,dim2DHA,recal);  ///recaler le spectre à la position du spéculaire (la variable est attendue ainsi par la fonction retropropag)
+         //TF_norm_C spectre centré : cacluler l'energie
+         SAVCplx(TF_UBorn_normC,"Re",m1.chemin_result+"TF_UBorn_250x250_normC.raw",t_float,"a+b");
        string sav_options="a+b";
      //  SAVCplx(fftshift2D(TF_UBorn_normI),"Re",m1.chemin_result+"TF_UBorn_250x250_normI.raw",t_float,sav_options);
 
         if((cpt_angle-100*(cpt_angle/100))==0)
             printf("cpt_angle=%i\n",cpt_angle);
-
+     if(m1.b_fdr==true){
+          retroPropag_Born_FDR(TF3D_PotObj, TF_UBorn_normC, sup_redon, dim_final, posSpec, decal3DTF, NMAX, m1.rayon, m1);
+     }
+     else{
         retroPropag_Born(TF3D_PotObj, TF_UBorn_normC, sup_redon, dim_final, posSpec, decal3DTF, NMAX, m1.rayon, m1);  ///--Mapping 3D=retropropagation
+     }
+       // retroPropag_Born_V2(TF3D_PotObj, TF_UBorn_normC, sup_redon, dim_final, posSpec, decal3DTF, NMAX, m1.rayon, m1);  ///--Mapping 3D=retropropagation
     }//fin de boucle for sur tous les angles
 
     auto end_part1 = std::chrono::system_clock::now();
@@ -238,26 +248,38 @@ cout<<"b_pôlar="<<b_polar<<endl;
     temps_cpu = (temps_final - temps_initial) * 1e-6;
     printf("temps total pour %i angle(s): %f\n", NbAngle, temps_cpu);
     temps_initial=clock();//enclenchement du chronometre
-
+    Var3D  dim3Dfinal={dim_final,dim_final,dim_final};
     ///------------------moyennage par sup_redon------------------------------------------------
+    double medianeSupRedon = medianeSansZeros(sup_redon);
+    cout<<"medianeSupRedon="<<medianeSupRedon<<endl;
+    double eps = 0.1 * medianeSupRedon;
+    cout<<"epsilon sup_redon="<<eps<<endl;
+    if(m1.b_fdr==true){
+            cout<<"FDR  ACTIVE"<<endl;
+    for(size_t cpt=0; cpt<N_tab; cpt++)
+        {
+        TF3D_PotObj[cpt] = TF3D_PotObj[cpt] / (sup_redon[cpt] + eps);
+        }
+    }
+    else{cout<<"FDR  DESACTIVE"<<endl;
     for(size_t cpt=0; cpt<N_tab; cpt++)
     {
-        if (sup_redon[cpt]==0) {  ////////////////remplace les 0 de sup_redon par des 1---> evite la division par 0
-            sup_redon[cpt]=1;
+        if (sup_redon[cpt]!=0) {
+        TF3D_PotObj[cpt]= TF3D_PotObj[cpt]/(sup_redon[cpt]);//moyennage par sup_redon
         }
-        TF3D_PotObj[cpt]= TF3D_PotObj[cpt]/sup_redon[cpt];//moyennage par sup_redon
+    }
     }
 
+    write3D_Tiff(sup_redon,dim3Dfinal,m1.chemin_result+"/sup_redon_FDR.tif",tailleTheoPixelTomo,"sup_redon");
     vector<double>().swap(sup_redon);//forcer la libération mémoire de sup_redon
     ///interpolation 3D selon l'axe z
     //interp_lin3D(TF3D_PotObj);
-
     temps_final = clock ();
     temps_cpu = (temps_final - temps_initial) * 1e-6;
     printf("temps apres normalisation : %lf\n",temps_cpu);
-    //SAV(TF3D_PotObj_Re, N_tab, "/home/aziz/Projet_tomo/Tomo_Images/TF2d_apres_masquage/TF3D_PotObj_Re_norm_avant.bin", float,"wb");
-   //  SAV3D_Tiff(TF3D_PotObj,"Re", m1.chemin_result+"/TF3DPotObjRE.tif",tailleTheoPixelTomo);
 
+     //SAV3D_Tiff(,"Re", m1.chemin_result+"/TF3DPotObjRE.tif",tailleTheoPixelTomo);
+    write3D_Tiff(TF3D_PotObj,dim3Dfinal,"Re",m1.chemin_result+"/TF3DPotObjRE_FDR.tif",tailleTheoPixelTomo,"spectre objet");
     //////////////////////////////papillon binarisé
     vector<double> papillon_masque(N_tab,0);
     for(size_t compteur=0; compteur<N_tab; compteur++)
@@ -344,7 +366,7 @@ cout<<"b_pôlar="<<b_polar<<endl;
 
     vector <complex<double >> indice_cplx(N_tab);
     double k_v=2*PI/m1.lambda0;
-    complex<double>  ctePot2Ind(-1/(2*m1.n0*k_v*k_v),0);//toujours correct (et identique dans tous les papiers)
+    complex<double>  ctePot2Ind(-1/(2*m1.nM*k_v*k_v),0);//toujours correct (et identique dans tous les papiers)
 
     for(size_t cpt=0; cpt<N_tab; cpt++)
     {
@@ -362,8 +384,11 @@ cout<<"b_pôlar="<<b_polar<<endl;
    save_complex_volume_hdf5(indice_cplx, m1.chemin_result+"/indice_cplx_hdf5.hdf",Nx,Ny,Nz,tailleTheoPixelTomo);
    cout<<"sauvegarde HDF!"<<endl;
    }else{
-   SAV3D_Tiff_Optimized(indice_cplx,"Re", m1.chemin_result+"/indice.tif",tailleTheoPixelTomo);
-    SAV3D_Tiff_Optimized(indice_cplx,"Im", m1.chemin_result+"/absorption.tif",tailleTheoPixelTomo);
+        write3D_Tiff(indice_cplx,dim3Dfinal,"Re",m1.chemin_result+"/indice.tif",tailleTheoPixelTomo,"indice de refraction");
+        //  write3D_Tiff(mon_OTF.Valeur,dim, "Im",m1.chemin_result+"/OTF_simule_Im.tif",m1.Tp_Tomo,"OTF partie imag");
+        // SAV3D_Tiff_Optimized(indice_cplx,"Re", m1.chemin_result+"/indice.tif",tailleTheoPixelTomo);
+        // SAV3D_Tiff_Optimized(indice_cplx,"Im", m1.chemin_result+"/absorption.tif",tailleTheoPixelTomo);
+        write3D_Tiff(indice_cplx,dim3Dfinal,"Im",m1.chemin_result+"/absorption.tif",tailleTheoPixelTomo,"Absorption");
    }
    // save_real_hdf5_volume(indice_cplx, m1.chemin_result+"/indice_hdf5.hdf",Nx,Ny,Nz,"/volume_real");
 

@@ -86,7 +86,7 @@ manip::manip(string str_nom_gui_tomo_conf, string etat_polar, bool b_polar)//par
     b_CorrAber=extract_val("C_ABER",fic_cfg_recon);///correct  aberrations?
     b_Deroul=extract_val("DEROUL",fic_cfg_recon);///unwrap  phase?
     b_Born=extract_val("BORN",fic_cfg_recon);///Born true ? Otherwise Rytov
-
+    b_fdr=extract_val("FDR",fic_cfg_recon);///activate specular coordinate (koz) interpolation
     if(b_Born==true)
         cout<<"RYTOV=0"<<endl;
     else
